@@ -29,7 +29,7 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="CP3DRLauncher_VS2012.cpp">
+    <ClCompile Include="CP3DRenderingTests.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>

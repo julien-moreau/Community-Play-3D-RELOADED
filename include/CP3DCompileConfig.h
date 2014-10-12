@@ -1,7 +1,8 @@
 /// CP3D Compile Config file
 /// Extern methods + call methods
 
-#pragma once
+#ifndef __H_CP3D_COMPILE_CONFIG__
+#define __H_CP3D_COMPILE_CONFIG__
 
 #include <irrlicht.h>
 
@@ -17,8 +18,13 @@
 #endif
 
 namespace cp3d {
+
+	namespace rendering {
+		class ICP3DRenderingEngine;
+	}
+
 	#if defined(CP3DR_COMPILE_RENDERING_ENGINE)
-	extern "C" CP3DR_LIB_API void *createRenderingEngine();
+	extern "C" CP3DR_LIB_API rendering::ICP3DRenderingEngine *createRenderingEngine(irr::IrrlichtDevice *device);
 	#endif
 
 	#if defined(CP3DR_COMPILE_ENGINE)
@@ -28,4 +34,6 @@ namespace cp3d {
 	#if defined(CP3DR_COMPILE_EDITOR)
 	extern "C" CP3DR_LIB_API void *createEditor();
 	#endif
-}
+} /// End namespace cp3d
+
+#endif

@@ -60,7 +60,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>CP3DR_COMPILE_ENGINE;WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\Irrlicht181\include;$(SolutionDir)include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\Irrlicht181\include;$(SolutionDir)include\;$(SolutionDir)CP3DEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
@@ -97,6 +97,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\CP3DCompileConfig.h" />
+    <ClInclude Include="..\include\CP3DRenderingEngine.h" />
+    <ClInclude Include="..\include\ICP3DHandler.h" />
+    <ClInclude Include="..\include\ICP3DRenderingEngine.h" />
+    <ClInclude Include="..\include\SShadowLight.h" />
     <ClInclude Include="CP3DEngine.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stdafx.h" />
