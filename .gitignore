@@ -12,6 +12,7 @@
 *.so
 *.dylib
 *.dll
+*.exe
 
 # Fortran module files
 *.mod
@@ -26,3 +27,22 @@
 *.exe
 *.out
 *.app
+
+# Others
+*.ipch
+*.tlog
+*.log
+*.lastbuildstate
+*.bi
+*.pdb
+*.ilk
+*.exp
+*.metagen
+*.map
+*.idb
+*.sdf
+*.opensdf
+*.res
+*.suo
+*.cache
+
