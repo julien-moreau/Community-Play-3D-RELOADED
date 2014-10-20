@@ -507,7 +507,11 @@ CCP3DHandler::SPostProcessingPair CCP3DHandler::obtainScreenQuadMaterial(const i
 	CShaderPreprocessor sPP(driver);
 
 	sPP.addShaderDefine("SCREENX", core::stringc(ScreenRTTSize.Width));
-	sPP.addShaderDefine("SCREENY", core::stringc(ScreenRTTSize.Height));	
+	sPP.addShaderDefine("SCREENY", core::stringc(ScreenRTTSize.Height));
+	if (driver->getDriverType() == EDT_OPENGL)
+		sPP.addShaderDefine("OPENGL_DRIVER", "1");
+	else
+		sPP.addShaderDefine("DIRECT3D_DRIVER", "1");
 	
 	video::E_VERTEX_SHADER_TYPE VertexLevel = driver->queryFeature(video::EVDF_VERTEX_SHADER_3_0) ? EVST_VS_3_0 : EVST_VS_2_0;
 	video::E_PIXEL_SHADER_TYPE PixelLevel = driver->queryFeature(video::EVDF_PIXEL_SHADER_3_0) ? EPST_PS_3_0 : EPST_PS_2_0;
@@ -520,7 +524,7 @@ CCP3DHandler::SPostProcessingPair CCP3DHandler::obtainScreenQuadMaterial(const i
 	if (fromFile)
 		shaderString = sPP.ppShaderFF(data.c_str());
 	else
-		shaderString = data;
+		shaderString = sPP.ppShader(data.c_str());
 
 	ScreenQuadCB* SQCB = new ScreenQuadCB(this, true);
 

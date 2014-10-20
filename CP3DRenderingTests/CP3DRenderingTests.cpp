@@ -43,7 +43,8 @@ enum E_SHADER_EXTENSION
 	ESE_COUNT
 };
 
-const char* SHADOW_PASS_1V[ESE_COUNT] = {"uniform mat4 mWorldViewProj;\n"
+const char* DEPTH_PASS_V[ESE_COUNT] = {
+"uniform mat4 mWorldViewProj;\n"
 "uniform float MaxD;\n"
 ""
 "void main()"
@@ -78,7 +79,7 @@ const char* SHADOW_PASS_1V[ESE_COUNT] = {"uniform mat4 mWorldViewProj;\n"
 "	return(OUT);\n"
 "}"};
 
-const char* SHADOW_PASS_1P[ESE_COUNT] = {"void main() "
+const char* DEPTH_PASS_P[ESE_COUNT] = {"void main() "
 "{"
 "	vec4 vInfo = gl_TexCoord[0];\n"
 "	float depth = vInfo.z / vInfo.x;\n"
@@ -99,8 +100,8 @@ public:
 		E_SHADER_EXTENSION shaderExt = driver->getDriverType() == EDT_OPENGL ? ESE_GLSL : ESE_HLSL;
 		IGPUProgrammingServices *gpu = driver->getGPUProgrammingServices();
 		MaterialType = gpu->addHighLevelShaderMaterial(
-			SHADOW_PASS_1V[shaderExt], "vertexMain", video::EVST_VS_2_0,
-			SHADOW_PASS_1P[shaderExt], "pixelMain", video::EPST_PS_2_0,
+			DEPTH_PASS_V[shaderExt], "vertexMain", video::EVST_VS_2_0,
+			DEPTH_PASS_P[shaderExt], "pixelMain", video::EPST_PS_2_0,
 			this, video::EMT_SOLID);
 		DepthRTT = driver->addRenderTargetTexture(driver->getScreenSize(), "CustomDepthPassRTT", ECF_G32R32F); /// 32 bits
 	}
@@ -135,18 +136,23 @@ class CCustomPostProcess : public cp3d::rendering::IPostProcessingRenderCallback
 public:
 	CCustomPostProcess(cp3d::rendering::ICP3DHandler *handler, IVideoDriver *driver) {
 		E_SHADER_EXTENSION shaderExt = driver->getDriverType() == EDT_OPENGL ? ESE_GLSL : ESE_HLSL;
-		stringc shader[ESE_COUNT] = {
+		stringc shader =
+		"##ifdef OPENGL_DRIVER\n"
 		"uniform sampler2D UserMapSampler;\n"
+		"uniform sampler2D ColorMapSampler;\n"
 		"void main() {\n"
-		"	gl_FragColor = texture2D(UserMapSampler, gl_TexCoord[0].xy);\n"
+		"	gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0) - texture2D(UserMapSampler, gl_TexCoord[0].xy)\n"
+		"	+ texture2D(ColorMapSampler, gl_TexCoord[0].xy);\n"
 		"}\n"
-		,
+		"##else\n"
 		"sampler2D UserMapSampler : register(s3);\n"
+		"sampler2D ColorMapSampler : register(s0);\n"
 		"float4 pixelMain(float2 texCoord : TEXCOORD0) : COLOR0 {\n"
-		"	return tex2D(UserMapSampler, texCoord);\n"
+		"	return float4(1.0, 1.0, 1.0, 1.0) - tex2D(UserMapSampler, texCoord)\n"
+		"	+ tex2D(ColorMapSampler, texCoord);\n"
 		"}\n"
-		};
-		matType = handler->addPostProcessingEffectFromString(shader[shaderExt], this);
+		"##endif\n";
+		matType = handler->addPostProcessingEffectFromString(shader, this);
 		tex = driver->getTexture("CustomDepthPassRTT");
 	}
 
