@@ -2,10 +2,10 @@
 #define _H_ICP3D_HANDLER_INCLUDED__
 
 #include <irrlicht.h>
+#include <ICP3DCustomPass.h>
 #include <SShadowLight.h>
 
 namespace cp3d {
-
 namespace rendering {
 
 	//! Shadow mode. If the nodes should receive, cast or exclude
@@ -65,6 +65,13 @@ namespace rendering {
 		//! \param ambiantColour: the ambiant color of the scene
 		virtual void setAmbientColor(irr::video::SColor ambientColour) = 0;
 
+		//! Add a custom pass (see cp3d::rendering::ICP3DCustomPass)
+		//! Allow you to add custom passes like a depth pass, custom object-based depth-of-field etc.
+		//! \param pass: the custom pass derived from cp3d::rendering::ICP3DCustomPass
+		virtual void addCustomPass(ICP3DCustomPass *pass) = 0;
+
+		//! Remove a custom pass (see cp3d::rendering::ICP3DCustomPass)
+		virtual void removeCustomPass(ICP3DCustomPass *pass) = 0;
 	};
 
 } /// End rendering namespace

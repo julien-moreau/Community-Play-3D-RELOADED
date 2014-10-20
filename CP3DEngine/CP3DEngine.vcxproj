@@ -98,6 +98,7 @@
   <ItemGroup>
     <ClInclude Include="..\include\CP3DCompileConfig.h" />
     <ClInclude Include="..\include\CP3DRenderingEngine.h" />
+    <ClInclude Include="..\include\ICP3DCustomPass.h" />
     <ClInclude Include="..\include\ICP3DHandler.h" />
     <ClInclude Include="..\include\ICP3DRenderingEngine.h" />
     <ClInclude Include="..\include\SShadowLight.h" />

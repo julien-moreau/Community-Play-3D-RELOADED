@@ -27,6 +27,7 @@ class ScreenQuadCB;
 class CCP3DHandler : public ICP3DHandler {
 public:
 
+	/// Constructor, destructor & update
 	CCP3DHandler(irr::IrrlichtDevice* irrlichtDevice, 
 		const irr::core::dimension2du& screenRTTSize = irr::core::dimension2du(0, 0),
 		const bool useVSMShadows = false, const bool useRoundSpotLights = false,
@@ -34,24 +35,16 @@ public:
 	
 	~CCP3DHandler();
 
+	void update(irr::video::ITexture* outputTarget = 0);
+
+	/// Shadows
 	void addShadowLight(const SShadowLight& shadowLight) { LightList.push_back(shadowLight); }
-
 	SShadowLight& getShadowLight(irr::u32 index) { return LightList[index]; }
-
 	const irr::u32 getShadowLightCount() const {
 		return LightList.size();
 	}
 
 	irr::video::ITexture* getShadowMapTexture(const irr::u32 resolution, const bool secondary = false);
-
-	irr::video::ITexture* getDepthMapTexture() { return DepthRTT; }
-
-	void addNodeToDepthPass(irr::scene::ISceneNode *node);
-
-	void removeNodeFromDepthPass(irr::scene::ISceneNode *node);
-
-	void enableDepthPass(bool enableDepthPass);
-
 	void removeShadowFromNode(irr::scene::ISceneNode* node) {
 		SShadowNode tmpShadowNode = {node, ESM_RECEIVE, EFT_NONE};
 		irr::s32 i = ShadowNodeArray.binary_search(tmpShadowNode);
@@ -59,22 +52,20 @@ public:
 		if(i != -1)
 			ShadowNodeArray.erase(i);
 	}
-
 	void excludeNodeFromLightingCalculations(irr::scene::ISceneNode* node) {
 		SShadowNode tmpShadowNode = {node, ESM_EXCLUDE, EFT_NONE};
 		ShadowNodeArray.push_back(tmpShadowNode);
 	}
-
-	void update(irr::video::ITexture* outputTarget = 0);
-
 	void addShadowToNode(irr::scene::ISceneNode* node, E_FILTER_TYPE filterType = EFT_NONE, E_SHADOW_MODE shadowMode = ESM_BOTH);
-	
-	irr::f32 getTime() { return device->getTimer()->getTime() / 100.0f; }
-	
-	void setClearColour(irr::video::SColor ClearCol) { ClearColour = ClearCol; }
-	
-	void addPostProcessingEffect(irr::s32 MaterialType, IPostProcessingRenderCallback* callback = 0);
 
+	/// Depth pass
+	irr::video::ITexture* getDepthMapTexture() { return DepthRTT; }
+	void addNodeToDepthPass(irr::scene::ISceneNode *node);
+	void removeNodeFromDepthPass(irr::scene::ISceneNode *node);
+	void enableDepthPass(bool enableDepthPass);
+	
+	/// Post processes
+	void addPostProcessingEffect(irr::s32 MaterialType, IPostProcessingRenderCallback* callback = 0);
 	void setPostProcessingRenderCallback(irr::s32 MaterialType, IPostProcessingRenderCallback* callback = 0) {
 		SPostProcessingPair tempPair(MaterialType, 0);
 		irr::s32 i = PostProcessingRoutines.binary_search(tempPair);
@@ -86,7 +77,6 @@ public:
 			PostProcessingRoutines[i].renderCallback = callback;
 		}
 	}
-
 	void removePostProcessingEffect(irr::s32 MaterialType) {
 		SPostProcessingPair tempPair(MaterialType, 0);
 		irr::s32 i = PostProcessingRoutines.binary_search(tempPair);
@@ -98,28 +88,32 @@ public:
 			PostProcessingRoutines.erase(i);
 		}
 	}
-
 	irr::s32 addPostProcessingEffectFromFile(const irr::core::stringc& filename, IPostProcessingRenderCallback* callback = 0);
-
 	void setPostProcessingEffectConstant(const irr::s32 materialType, const irr::core::stringc& name, const irr::f32* data, const irr::u32 count);
-
 	const CScreenQuad& getScreenQuad() { return ScreenQuad; }
-
-	void setActiveSceneManager(irr::scene::ISceneManager* smgrIn) { smgr = smgrIn; }
-
-	irr::scene::ISceneManager* getActiveSceneManager() { return smgr; }
-	
 	void setPostProcessingUserTexture(irr::video::ITexture* userTexture) { ScreenQuad.getMaterial().setTexture(3, userTexture); }
 
+	/// Utils
 	void setAmbientColor(irr::video::SColor ambientColour) { AmbientColour = ambientColour; }
-
 	irr::video::SColor getAmbientColor() const { return AmbientColour; }
-
 	irr::video::ITexture* generateRandomVectorTexture(const irr::core::dimension2du& dimensions, const irr::core::stringc& name = "randVec");
-
 	void setScreenRenderTargetResolution(const irr::core::dimension2du& resolution);
+	irr::IrrlichtDevice* getIrrlichtDevice()  {return device; }
+	void setActiveSceneManager(irr::scene::ISceneManager* smgrIn) { smgr = smgrIn; }
+	irr::scene::ISceneManager* getActiveSceneManager() { return smgr; }
+	irr::f32 getTime() { return device->getTimer()->getTime() / 100.0f; }
+	void setClearColour(irr::video::SColor ClearCol) { ClearColour = ClearCol; }
 
-	irr::IrrlichtDevice* getIrrlichtDevice() {return device;}
+	/// Custom Passes
+	void addCustomPass(ICP3DCustomPass *pass) {
+		CustomPasses.push_back(pass);
+	}
+
+	void removeCustomPass(ICP3DCustomPass *pass) {
+		irr::s32 index = CustomPasses.binary_search(pass);
+		if (index != -1)
+			CustomPasses.erase(index);
+	}
 
 private:
 
@@ -168,6 +162,7 @@ private:
 	irr::s32 WhiteWashTAlpha;
 	irr::s32 VSMBlurH;
 	irr::s32 VSMBlurV;
+	irr::core::array<ICP3DCustomPass *> CustomPasses;
 	
 	DepthShaderCB* depthMC;
 	ShadowShaderCB* shadowMC;

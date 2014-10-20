@@ -392,7 +392,7 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 	ScreenQuad.render(driver);
 
 	// Perform depth pass after rendering, to ensure animations stay up to date. (will be replaced by a complete pass manager)
-	if(DepthPass) {
+	/*if(DepthPass) {
 		driver->setRenderTarget(DepthRTT, true, true, SColor(0xffffffff));
 
 		depthMC->FarLink = smgr->getActiveCamera()->getFarValue();
@@ -413,7 +413,31 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 		}
 
 		driver->setRenderTarget(0, false, false);
+	}*/
+	for (u32 i=0; i < CustomPasses.size(); i++) {
+		if (CustomPasses[i]->isEnabled()) {
+			CustomPasses[i]->setRenderTarget();
+
+			for (u32 j=0; j < CustomPasses[i]->getSceneNodes().size(); i++) {
+				CustomPasses[i]->onPreRender(CustomPasses[i]->getSceneNodes()[j]);
+
+				core::array<irr::s32> BufferMaterialList(CustomPasses[i]->getSceneNodes()[j]->getMaterialCount());
+				BufferMaterialList.set_used(0);
+				for(u32 g = 0;g < CustomPasses[i]->getSceneNodes()[j]->getMaterialCount(); ++g)
+					BufferMaterialList.push_back(CustomPasses[i]->getSceneNodes()[j]->getMaterial(g).MaterialType);
+
+				CustomPasses[i]->getSceneNodes()[j]->setMaterialType((E_MATERIAL_TYPE)Depth);
+				CustomPasses[i]->getSceneNodes()[j]->OnAnimate(device->getTimer()->getTime());
+				CustomPasses[i]->getSceneNodes()[j]->render();
+
+				for(u32 g = 0;g < CustomPasses[i]->getSceneNodes()[j]->getMaterialCount();++g)
+					CustomPasses[i]->getSceneNodes()[j]->getMaterial(g).MaterialType = (E_MATERIAL_TYPE)BufferMaterialList[g];
+			}
+		}
+
 	}
+
+	driver->setRenderTarget(0, false, false);
 	
 	if(PostProcessingRoutinesSize) {
 		bool Alter = false;
