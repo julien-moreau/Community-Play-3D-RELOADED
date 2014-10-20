@@ -418,23 +418,23 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 		if (CustomPasses[i]->isEnabled()) {
 			CustomPasses[i]->setRenderTarget();
 
-			for (u32 j=0; j < CustomPasses[i]->getSceneNodes().size(); i++) {
-				CustomPasses[i]->onPreRender(CustomPasses[i]->getSceneNodes()[j]);
-
+			for (u32 j=0; j < CustomPasses[i]->getSceneNodes().size(); j++) {
 				core::array<irr::s32> BufferMaterialList(CustomPasses[i]->getSceneNodes()[j]->getMaterialCount());
 				BufferMaterialList.set_used(0);
 				for(u32 g = 0;g < CustomPasses[i]->getSceneNodes()[j]->getMaterialCount(); ++g)
 					BufferMaterialList.push_back(CustomPasses[i]->getSceneNodes()[j]->getMaterial(g).MaterialType);
 
-				CustomPasses[i]->getSceneNodes()[j]->setMaterialType((E_MATERIAL_TYPE)Depth);
+				CustomPasses[i]->onPreRender(CustomPasses[i]->getSceneNodes()[j]);
+				CustomPasses[i]->getSceneNodes()[j]->setMaterialType((E_MATERIAL_TYPE)CustomPasses[i]->getMaterialType());
 				CustomPasses[i]->getSceneNodes()[j]->OnAnimate(device->getTimer()->getTime());
 				CustomPasses[i]->getSceneNodes()[j]->render();
+				CustomPasses[i]->onPostRender(CustomPasses[i]->getSceneNodes()[j]);
 
 				for(u32 g = 0;g < CustomPasses[i]->getSceneNodes()[j]->getMaterialCount();++g)
 					CustomPasses[i]->getSceneNodes()[j]->getMaterial(g).MaterialType = (E_MATERIAL_TYPE)BufferMaterialList[g];
 			}
-		}
 
+		}
 	}
 
 	driver->setRenderTarget(0, false, false);
@@ -503,7 +503,7 @@ irr::video::ITexture* CCP3DHandler::generateRandomVectorTexture(const irr::core:
 }
 
 
-CCP3DHandler::SPostProcessingPair CCP3DHandler::obtainScreenQuadMaterialFromFile(const irr::core::stringc& filename,  irr::video::E_MATERIAL_TYPE baseMaterial) {
+CCP3DHandler::SPostProcessingPair CCP3DHandler::obtainScreenQuadMaterial(const irr::core::stringc& data,  irr::video::E_MATERIAL_TYPE baseMaterial, bool fromFile) {
 	CShaderPreprocessor sPP(driver);
 
 	sPP.addShaderDefine("SCREENX", core::stringc(ScreenRTTSize.Width));
@@ -516,7 +516,11 @@ CCP3DHandler::SPostProcessingPair CCP3DHandler::obtainScreenQuadMaterialFromFile
 
 	video::IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
 
-	const stringc shaderString = sPP.ppShaderFF(filename.c_str());
+	stringc shaderString;
+	if (fromFile)
+		shaderString = sPP.ppShaderFF(data.c_str());
+	else
+		shaderString = data;
 
 	ScreenQuadCB* SQCB = new ScreenQuadCB(this, true);
 
@@ -540,8 +544,16 @@ void CCP3DHandler::setPostProcessingEffectConstant(const irr::s32 materialType, 
 		PostProcessingRoutines[matIndex].callback->uniformDescriptors[name] = ScreenQuadCB::SUniformDescriptor(data, count);
 }
 
+s32 CCP3DHandler::addPostProcessingEffectFromString(const irr::core::stringc &shader, IPostProcessingRenderCallback *callback) {
+	SPostProcessingPair pPair = obtainScreenQuadMaterial(shader, EMT_SOLID, false);
+	pPair.renderCallback = callback;
+	PostProcessingRoutines.push_back(pPair);
+
+	return pPair.materialType;
+}
+
 s32 CCP3DHandler::addPostProcessingEffectFromFile(const irr::core::stringc& filename, IPostProcessingRenderCallback* callback) {
-	SPostProcessingPair pPair = obtainScreenQuadMaterialFromFile(filename);
+	SPostProcessingPair pPair = obtainScreenQuadMaterial(filename);
 	pPair.renderCallback = callback;
 	PostProcessingRoutines.push_back(pPair);
 

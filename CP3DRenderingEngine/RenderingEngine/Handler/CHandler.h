@@ -10,16 +10,6 @@
 namespace cp3d {
 namespace rendering {
 
-class CCP3DHandler;
-class IPostProcessingRenderCallback {
-
-public:
-
-	virtual void OnPreRender(CCP3DHandler* effect) = 0;
-	virtual void OnPostRender(CCP3DHandler* effect) = 0;
-
-};
-
 class DepthShaderCB;
 class ShadowShaderCB;
 class ScreenQuadCB;
@@ -88,7 +78,8 @@ public:
 			PostProcessingRoutines.erase(i);
 		}
 	}
-	irr::s32 addPostProcessingEffectFromFile(const irr::core::stringc& filename, IPostProcessingRenderCallback* callback = 0);
+	irr::s32 addPostProcessingEffectFromFile(const irr::core::stringc &filename, IPostProcessingRenderCallback *callback = 0);
+	irr::s32 addPostProcessingEffectFromString(const irr::core::stringc &shader, IPostProcessingRenderCallback *callback = 0);
 	void setPostProcessingEffectConstant(const irr::s32 materialType, const irr::core::stringc& name, const irr::f32* data, const irr::u32 count);
 	const CScreenQuad& getScreenQuad() { return ScreenQuad; }
 	void setPostProcessingUserTexture(irr::video::ITexture* userTexture) { ScreenQuad.getMaterial().setTexture(3, userTexture); }
@@ -142,8 +133,9 @@ private:
 		irr::s32 materialType;
 	};
 
-	SPostProcessingPair obtainScreenQuadMaterialFromFile(const irr::core::stringc& filename, 
-		irr::video::E_MATERIAL_TYPE baseMaterial = irr::video::EMT_SOLID);
+	SPostProcessingPair obtainScreenQuadMaterial(const irr::core::stringc& data, 
+		irr::video::E_MATERIAL_TYPE baseMaterial = irr::video::EMT_SOLID,
+		bool fromFile = true);
 
 	irr::IrrlichtDevice* device;
 	irr::video::IVideoDriver* driver;

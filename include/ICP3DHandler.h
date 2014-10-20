@@ -27,6 +27,19 @@ namespace rendering {
 		EFT_COUNT
 	};
 
+	class ICP3DHandler;
+	//! Custom post-processing render callback
+	class IPostProcessingRenderCallback {
+	public:
+		//! on pre-render callback
+		//! \param effect: the handler rendering the post-process
+		virtual void OnPreRender(ICP3DHandler* handler) = 0;
+
+		//! on post-render callback
+		//! \param effect: the handler rendering the post-process
+		virtual void OnPostRender(ICP3DHandler* handler) = 0;
+	};
+
 	class ICP3DHandler {
 
 	public:
@@ -72,6 +85,20 @@ namespace rendering {
 
 		//! Remove a custom pass (see cp3d::rendering::ICP3DCustomPass)
 		virtual void removeCustomPass(ICP3DCustomPass *pass) = 0;
+
+		//! Adds a post-process from a file
+		//! \param filename: the file containing the shader's code
+		//! \param callback: the callback derived from cp3d::rendering::IPostProcessingRenderCallback
+		virtual irr::s32 addPostProcessingEffectFromFile(const irr::core::stringc &filename, IPostProcessingRenderCallback *callback = 0) = 0;
+
+		//! Adds a post-process from a string
+		//! \param shader: the string containing the shader's code
+		//! \param callback: the callback derived from cp3d::rendering::IPostProcessingRenderCallback
+		virtual irr::s32 addPostProcessingEffectFromString(const irr::core::stringc &shader, IPostProcessingRenderCallback *callback = 0) = 0;
+
+		//! Adds a custom UserMapSampler texture
+		//! \param userTexture: the texture to set at UserMapSampler
+		virtual void setPostProcessingUserTexture(irr::video::ITexture* userTexture) = 0;
 	};
 
 } /// End rendering namespace

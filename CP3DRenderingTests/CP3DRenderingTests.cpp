@@ -34,11 +34,139 @@ private:
 
 };
 
+/// Passes
+enum E_SHADER_EXTENSION
+{
+	ESE_GLSL,
+	ESE_HLSL,
+
+	ESE_COUNT
+};
+
+const char* SHADOW_PASS_1V[ESE_COUNT] = {"uniform mat4 mWorldViewProj;\n"
+"uniform float MaxD;\n"
+""
+"void main()"
+"{"
+"	vec4 tPos = mWorldViewProj * gl_Vertex;\n"
+"	gl_Position = tPos;\n"
+"	gl_TexCoord[0] = vec4(MaxD, tPos.y, tPos.z, tPos.w);\n"
+""
+"	gl_TexCoord[1].xy = gl_MultiTexCoord0.xy;\n"
+"}"
+,
+"float4x4 mWorldViewProj;\n"
+"float MaxD;\n"
+""
+"struct VS_OUTPUT "
+"{"
+"	float4 Position: POSITION0;\n"
+"	float4 ClipPos: TEXCOORD0;\n"
+"	float2 Texcoords: TEXCOORD1;\n"
+"	float4 VColor: TEXCOORD2;\n"
+"};\n"
+""
+"VS_OUTPUT vertexMain(float3 Position : POSITION0, float2 Texcoords : TEXCOORD0, float4 vColor : COLOR0)"
+"{"
+"	VS_OUTPUT  OUT;\n"
+"	float4 hpos = mul(float4(Position.x, Position.y, Position.z, 1.0), mWorldViewProj);\n"
+"   OUT.ClipPos = hpos;\n"
+"	OUT.ClipPos.x = MaxD;\n"
+"   OUT.Position = hpos;\n"
+"	OUT.Texcoords = Texcoords;\n"
+"	OUT.VColor = vColor;\n"
+"	return(OUT);\n"
+"}"};
+
+const char* SHADOW_PASS_1P[ESE_COUNT] = {"void main() "
+"{"
+"	vec4 vInfo = gl_TexCoord[0];\n"
+"	float depth = vInfo.z / vInfo.x;\n"
+"   gl_FragColor = vec4(depth, depth * depth, 0.0, 0.0);\n"
+"}"
+,
+"float4 pixelMain(float4 ClipPos: TEXCOORD0) : COLOR0"
+"{"
+"	float depth = ClipPos.z / ClipPos.x;\n"
+"	return float4(depth, depth * depth, 0.0, 0.0);\n"
+"}"};
+
+class CCustomPassDepth : public cp3d::rendering::ICP3DCustomPass, public IShaderConstantSetCallBack {
+public:
+
+	CCustomPassDepth(IVideoDriver *driver, stringc name) : cp3d::rendering::ICP3DCustomPass(driver, name)
+	{
+		E_SHADER_EXTENSION shaderExt = driver->getDriverType() == EDT_OPENGL ? ESE_GLSL : ESE_HLSL;
+		IGPUProgrammingServices *gpu = driver->getGPUProgrammingServices();
+		MaterialType = gpu->addHighLevelShaderMaterial(
+			SHADOW_PASS_1V[shaderExt], "vertexMain", video::EVST_VS_2_0,
+			SHADOW_PASS_1P[shaderExt], "pixelMain", video::EPST_PS_2_0,
+			this, video::EMT_SOLID);
+		DepthRTT = driver->addRenderTargetTexture(driver->getScreenSize(), "CustomDepthPassRTT", ECF_G32R32F); /// 32 bits
+	}
+
+	~CCustomPassDepth() { }
+
+	void setRenderTarget() {
+		Driver->setRenderTarget(DepthRTT, true, true, SColor(0xffffffff));
+	}
+
+	void OnSetConstants(IMaterialRendererServices* services, s32 userData) {
+		IVideoDriver* driver = services->getVideoDriver();
+
+		if (driver->getDriverType() == EDT_DIRECT3D9) {
+			core::matrix4 worldViewProj;
+			worldViewProj = driver->getTransform(video::ETS_PROJECTION);			
+			worldViewProj *= driver->getTransform(video::ETS_VIEW);
+			worldViewProj *= driver->getTransform(video::ETS_WORLD);
+
+			services->setVertexShaderConstant("mWorldViewProj", worldViewProj.pointer(), 16);
+		}
+		
+		f32 FarLink = 200.f;
+		services->setVertexShaderConstant("MaxD", &FarLink, 1);
+	}
+
+private:
+	ITexture *DepthRTT;
+
+};
+
+/// Custom post process
+class CCustomPostProcess : public cp3d::rendering::IPostProcessingRenderCallback {
+public:
+	CCustomPostProcess(cp3d::rendering::ICP3DHandler *handler, IVideoDriver *driver) {
+		E_SHADER_EXTENSION shaderExt = driver->getDriverType() == EDT_OPENGL ? ESE_GLSL : ESE_HLSL;
+		stringc shader[ESE_COUNT] = {
+		"uniform sampler2D UserMapSampler;\n"
+		"void main() {\n"
+		"	gl_FragColor = texture2D(UserMapSampler, gl_TexCoord[0].xy);\n"
+		"}\n"
+		,
+		"sampler2D UserMapSampler : register(s3);\n"
+		"float4 pixelMain(float2 texCoord : TEXCOORD0) : COLOR0 {\n"
+		"	return tex2D(UserMapSampler, texCoord);\n"
+		"}\n"
+		};
+		matType = handler->addPostProcessingEffectFromString(shader[shaderExt], this);
+		tex = driver->getTexture("CustomDepthPassRTT");
+	}
+
+	void OnPreRender(cp3d::rendering::ICP3DHandler* handler) {
+		handler->setPostProcessingUserTexture(tex);
+	}
+	void OnPostRender(cp3d::rendering::ICP3DHandler* handler) { }
+
+private:
+	s32 matType;
+	ITexture *tex;
+};
+
 /// Main function
 int main(int argc, char* argv[]) {
 
 	/// Create a device
-	IrrlichtDevice *device = createDevice(EDT_OPENGL, dimension2du(800, 600), 32, false, false, false, 0);
+	IrrlichtDevice *device = createDevice(EDT_DIRECT3D9, dimension2du(800, 600), 32, false, false, false, 0);
 	device->setEventReceiver(new CEventReceiver(device));
 	IVideoDriver *driver = device->getVideoDriver();
 	ISceneManager *smgr = device->getSceneManager();
@@ -66,6 +194,14 @@ int main(int argc, char* argv[]) {
 
 	cp3d::rendering::SShadowLight light1(1024, vector3df(0.f, 100.f, 100.f), vector3df(0.f), SColor(255, 255, 255, 255), 1.f, 400.f, 90.f * f32(irr::core::DEGTORAD64), false);
 	handler->addShadowLight(light1);
+
+	/// Add a custom pass
+	CCustomPassDepth *customDepthPass = new CCustomPassDepth(driver, "Custom Depth Pass");
+	customDepthPass->addNodeToPass(cubeNode);
+	handler->addCustomPass(customDepthPass);
+
+	/// Add a custom filter (rendering the custom depth pass result)
+	CCustomPostProcess *customPostProcess = new CCustomPostProcess(handler, driver);
 
 	/// Finish
 	handler->setAmbientColor(SColor(255, 32, 32, 32));
