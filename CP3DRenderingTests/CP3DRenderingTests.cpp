@@ -114,14 +114,12 @@ public:
 	void OnSetConstants(IMaterialRendererServices* services, s32 userData) {
 		IVideoDriver* driver = services->getVideoDriver();
 
-		if (driver->getDriverType() == EDT_DIRECT3D9) {
-			core::matrix4 worldViewProj;
-			worldViewProj = driver->getTransform(video::ETS_PROJECTION);			
-			worldViewProj *= driver->getTransform(video::ETS_VIEW);
-			worldViewProj *= driver->getTransform(video::ETS_WORLD);
+		core::matrix4 worldViewProj;
+		worldViewProj = driver->getTransform(video::ETS_PROJECTION);			
+		worldViewProj *= driver->getTransform(video::ETS_VIEW);
+		worldViewProj *= driver->getTransform(video::ETS_WORLD);
 
-			services->setVertexShaderConstant("mWorldViewProj", worldViewProj.pointer(), 16);
-		}
+		services->setVertexShaderConstant("mWorldViewProj", worldViewProj.pointer(), 16);
 		
 		f32 FarLink = 200.f;
 		services->setVertexShaderConstant("MaxD", &FarLink, 1);
@@ -166,7 +164,7 @@ private:
 int main(int argc, char* argv[]) {
 
 	/// Create a device
-	IrrlichtDevice *device = createDevice(EDT_DIRECT3D9, dimension2du(800, 600), 32, false, false, false, 0);
+	IrrlichtDevice *device = createDevice(EDT_OPENGL, dimension2du(800, 600), 32, false, false, false, 0);
 	device->setEventReceiver(new CEventReceiver(device));
 	IVideoDriver *driver = device->getVideoDriver();
 	ISceneManager *smgr = device->getSceneManager();
