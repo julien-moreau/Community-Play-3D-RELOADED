@@ -20,6 +20,11 @@ namespace rendering {
 		//! \param name: the name of the render target to add
 		virtual void addPass(irr::core::stringc name) = 0;
 
+		//! Sets depth of the pass named "name"
+		//! \param name: the name of the pass
+		//! \param farLink: the depth to set
+		virtual void setDepth(irr::core::stringc name, irr::f32 farLink) = 0;
+
 	};
 
 } /// End rendering namespace

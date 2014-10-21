@@ -20,7 +20,7 @@ CCP3DHandler::CCP3DHandler(IrrlichtDevice* dev, const irr::core::dimension2du& s
 	const bool useVSMShadows, const bool useRoundSpotLights, const bool use32BitDepthBuffers)
 : device(dev), smgr(dev->getSceneManager()), driver(dev->getVideoDriver()),
 ScreenRTTSize(screenRTTSize.getArea() == 0 ? dev->getVideoDriver()->getScreenSize() : screenRTTSize),
-ClearColour(0x0), shadowsUnsupported(false), DepthRTT(0), DepthPass(false), depthMC(0), shadowMC(0),
+ClearColour(0x0), shadowsUnsupported(false), depthMC(0), shadowMC(0),
 AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 {
 	bool tempTexFlagMipMaps = driver->getTextureCreationFlag(ETCF_CREATE_MIP_MAPS);
@@ -160,9 +160,6 @@ CCP3DHandler::~CCP3DHandler() {
 
 	if(ScreenQuad.rt[1])
 		driver->removeTexture(ScreenQuad.rt[1]);
-
-	if(DepthRTT)
-		driver->removeTexture(DepthRTT);
 }
 
 void CCP3DHandler::setScreenRenderTargetResolution(const irr::core::dimension2du& resolution) {
@@ -183,11 +180,6 @@ void CCP3DHandler::setScreenRenderTargetResolution(const irr::core::dimension2du
 		driver->removeTexture(ScreenQuad.rt[1]);
 
 	ScreenQuad.rt[1] = driver->addRenderTargetTexture(resolution);
-
-	if(DepthRTT != 0) {
-		driver->removeTexture(DepthRTT);
-		DepthRTT = driver->addRenderTargetTexture(resolution);
-	}
 
 	driver->setTextureCreationFlag(ETCF_CREATE_MIP_MAPS, tempTexFlagMipMaps);
 	driver->setTextureCreationFlag(ETCF_ALWAYS_32_BIT, tempTexFlag32);
@@ -231,45 +223,50 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 			driver->setTransform(ETS_PROJECTION, LightList[l].getProjectionMatrix());
 			
 			ITexture* currentShadowMapTexture = getShadowMapTexture(LightList[l].getShadowMapResolution());
-			driver->setRenderTarget(currentShadowMapTexture, true, true, SColor(0xffffffff));
-			
-			for(u32 i = 0;i < ShadowNodeArraySize;++i) {
-				if(ShadowNodeArray[i].shadowMode == ESM_RECEIVE || ShadowNodeArray[i].shadowMode == ESM_EXCLUDE)
-					continue;
 
-				const u32 CurrentMaterialCount = ShadowNodeArray[i].node->getMaterialCount();
-				core::array<irr::s32> BufferMaterialList(CurrentMaterialCount);
-				BufferMaterialList.set_used(0);
+			/// Recalculate the shadow map if the shadow light must be recalculated or auto recalculated
+			if (LightList[l].mustRecalculate() || LightList[l].mustAutoRecalculate()) {
+				driver->setRenderTarget(currentShadowMapTexture, true, true, SColor(0xffffffff));
+				for(u32 i = 0;i < ShadowNodeArraySize;++i) {
+					if(ShadowNodeArray[i].shadowMode == ESM_RECEIVE || ShadowNodeArray[i].shadowMode == ESM_EXCLUDE)
+						continue;
 
-				for(u32 m = 0;m < CurrentMaterialCount;++m) {
-					BufferMaterialList.push_back(ShadowNodeArray[i].node->getMaterial(m).MaterialType);
-					ShadowNodeArray[i].node->getMaterial(m).MaterialType = (E_MATERIAL_TYPE)
-						(BufferMaterialList[m] == video::EMT_TRANSPARENT_ALPHA_CHANNEL_REF ? DepthT : Depth);
+					const u32 CurrentMaterialCount = ShadowNodeArray[i].node->getMaterialCount();
+					core::array<irr::s32> BufferMaterialList(CurrentMaterialCount);
+					BufferMaterialList.set_used(0);
+
+					for(u32 m = 0;m < CurrentMaterialCount;++m) {
+						BufferMaterialList.push_back(ShadowNodeArray[i].node->getMaterial(m).MaterialType);
+						ShadowNodeArray[i].node->getMaterial(m).MaterialType = (E_MATERIAL_TYPE)
+							(BufferMaterialList[m] == video::EMT_TRANSPARENT_ALPHA_CHANNEL_REF ? DepthT : Depth);
+					}
+
+					ShadowNodeArray[i].node->OnAnimate(device->getTimer()->getTime());
+					ShadowNodeArray[i].node->render();
+
+					const u32 BufferMaterialListSize = BufferMaterialList.size();
+					for(u32 m = 0;m < BufferMaterialListSize;++m)
+						ShadowNodeArray[i].node->getMaterial(m).MaterialType = (E_MATERIAL_TYPE)BufferMaterialList[m];
 				}
 
-				ShadowNodeArray[i].node->OnAnimate(device->getTimer()->getTime());
-				ShadowNodeArray[i].node->render();
+				/// Blur the shadow map texture if we're using VSM filtering.
+				if(useVSM) {
+					ITexture* currentSecondaryShadowMap = getShadowMapTexture(LightList[l].getShadowMapResolution(), true);
 
-				const u32 BufferMaterialListSize = BufferMaterialList.size();
-				for(u32 m = 0;m < BufferMaterialListSize;++m)
-					ShadowNodeArray[i].node->getMaterial(m).MaterialType = (E_MATERIAL_TYPE)BufferMaterialList[m];
-			}
-
-			// Blur the shadow map texture if we're using VSM filtering.
-			if(useVSM) {
-				ITexture* currentSecondaryShadowMap = getShadowMapTexture(LightList[l].getShadowMapResolution(), true);
-
-				driver->setRenderTarget(currentSecondaryShadowMap, true, true, SColor(0xffffffff));
-				ScreenQuad.getMaterial().setTexture(0, currentShadowMapTexture);
-				ScreenQuad.getMaterial().MaterialType = (E_MATERIAL_TYPE)VSMBlurH;
+					driver->setRenderTarget(currentSecondaryShadowMap, true, true, SColor(0xffffffff));
+					ScreenQuad.getMaterial().setTexture(0, currentShadowMapTexture);
+					ScreenQuad.getMaterial().MaterialType = (E_MATERIAL_TYPE)VSMBlurH;
 				
-				ScreenQuad.render(driver);
+					ScreenQuad.render(driver);
 
-				driver->setRenderTarget(currentShadowMapTexture, true, true, SColor(0xffffffff));
-				ScreenQuad.getMaterial().setTexture(0, currentSecondaryShadowMap);
-				ScreenQuad.getMaterial().MaterialType = (E_MATERIAL_TYPE)VSMBlurV;
+					driver->setRenderTarget(currentShadowMapTexture, true, true, SColor(0xffffffff));
+					ScreenQuad.getMaterial().setTexture(0, currentSecondaryShadowMap);
+					ScreenQuad.getMaterial().MaterialType = (E_MATERIAL_TYPE)VSMBlurV;
 				
-				ScreenQuad.render(driver);
+					ScreenQuad.render(driver);
+				}
+
+				LightList[l].setMustRecalculate(false);
 			}
 
 			driver->setRenderTarget(ScreenQuad.rt[1], true, true, SColor(0xffffffff));
@@ -400,9 +397,10 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 	
 	if(PostProcessingRoutinesSize) {
 		bool Alter = false;
-		ScreenQuad.getMaterial().setTexture(1, ScreenRTT);
-		ScreenQuad.getMaterial().setTexture(2, DepthRTT);
+
 		for(u32 i = 0;i < PostProcessingRoutinesSize;++i) {
+			ScreenQuad.getMaterial().setTexture(1, ScreenRTT);
+
 			ScreenQuad.getMaterial().MaterialType = (E_MATERIAL_TYPE)PostProcessingRoutines[i].materialType;
 
 			Alter = !Alter;
@@ -414,6 +412,7 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 			ScreenQuad.render(driver);
 			if(PostProcessingRoutines[i].renderCallback) PostProcessingRoutines[i].renderCallback->OnPostRender(this);
 		}
+
 	}
 }
 

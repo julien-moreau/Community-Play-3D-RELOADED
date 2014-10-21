@@ -21,6 +21,7 @@ public:
 	void OnSetConstants(irr::video::IMaterialRendererServices* services, irr::s32 userData);
 
 	void addPass(irr::core::stringc name);
+	void setDepth(irr::core::stringc name, irr::f32 farLink);
 
 private:
 	irr::core::array<irr::video::IRenderTarget> RenderTargets;

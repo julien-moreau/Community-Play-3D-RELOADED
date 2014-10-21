@@ -97,13 +97,30 @@ namespace rendering {
 		//! \param callback: the callback derived from cp3d::rendering::IPostProcessingRenderCallback
 		virtual irr::s32 addPostProcessingEffectFromString(const irr::core::stringc &shader, IPostProcessingRenderCallback *callback = 0) = 0;
 
+		//! Sets a post processing effect constant (OnSetConstant)
+		//! \param materialType: the material to configure
+		//! \param name: the name of the constant
+		//! \param data: the constant's data
+		//! \param count: the amount of floats in *data
+		virtual void setPostProcessingEffectConstant(const irr::s32 materialType, const irr::core::stringc& name, const irr::f32* data, const irr::u32 count) = 0;
+
 		//! Adds a custom UserMapSampler texture
 		//! \param userTexture: the texture to set at UserMapSampler
 		virtual void setPostProcessingUserTexture(irr::video::ITexture* userTexture) = 0;
 
+		//! Sets a custom texture at index "index"
+		//! \param index: the index of the texture layer (0 to MATERIAL_MAX_TEXTURES)
+		//! \param texture: the texture to set
+		virtual void setPostProcessingTextureAtIndex(irr::u32 index, irr::video::ITexture *texture) = 0;
+
 		//! Returns the custom depth pass manager
 		//! Allows you to add custom depth passes using multiple render targets
 		virtual ICP3DCustomDepthPass *getDepthPassManager() = 0;
+
+		//! Generates a random texutre that can be used for SSAO post-prcess etc
+		//! \param dimensions: the texutre's dimensions
+		//! \param name: the name of the texture
+		virtual irr::video::ITexture* generateRandomVectorTexture(const irr::core::dimension2du& dimensions, const irr::core::stringc& name = "randVec") = 0;
 	};
 
 } /// End rendering namespace

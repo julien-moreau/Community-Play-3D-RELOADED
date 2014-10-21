@@ -80,6 +80,15 @@ void CCustomDepthPass::addPass(irr::core::stringc name) {
 			this, video::EMT_SOLID);
 }
 
+void CCustomDepthPass::setDepth(irr::core::stringc name, irr::f32 farLink) {
+	for (u32 i=0; i < RenderTargets.size(); i++) {
+		if (RenderTargets[i].RenderTexture->getName().getPath() == name) {
+			FarLinks[i] = farLink;
+			break;
+		}
+	}
+}
+
 void CCustomDepthPass::OnSetConstants(IMaterialRendererServices* services, s32 userData) {
 	IVideoDriver* driver = services->getVideoDriver();
 

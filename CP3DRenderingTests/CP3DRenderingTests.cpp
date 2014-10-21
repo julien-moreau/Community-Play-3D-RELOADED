@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 
+#include <iostream>
 #include <irrlicht.h>
 
 /// Irrlicht namespaces
@@ -24,6 +25,7 @@ public:
 		if (event.EventType == EET_KEY_INPUT_EVENT) {
 			if (event.KeyInput.Key == KEY_ESCAPE)
 				device->closeDevice();
+
 		}
 
 		return false;
@@ -54,25 +56,58 @@ public:
 		"	+ tex2D(ColorMapSampler, texCoord);\n"
 		"}\n"
 		"##endif\n";
-		matType = handler->addPostProcessingEffectFromString(shader, this);
-		tex = driver->getTexture("CustomDepthPassRTT");
+		MatType = handler->addPostProcessingEffectFromString(shader, this);
+		Tex = driver->getTexture("CustomDepthPassRTT");
 	}
 
 	void OnPreRender(cp3d::rendering::ICP3DHandler* handler) {
-		handler->setPostProcessingUserTexture(tex);
+		handler->setPostProcessingUserTexture(Tex);
 	}
 	void OnPostRender(cp3d::rendering::ICP3DHandler* handler) { }
 
 private:
-	s32 matType;
-	ITexture *tex;
+	s32 MatType;
+	ITexture *Tex;
+};
+
+/// Custom post process from file
+class CCustomPostProcessFile : public cp3d::rendering::IPostProcessingRenderCallback {
+public:
+	CCustomPostProcessFile(cp3d::rendering::ICP3DHandler *handler, IVideoDriver *driver) {
+		MatType = handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/SSAO.fragment.fx", this);
+		handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/BlurHP.fragment.fx");
+		handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/BlurVP.fragment.fx");
+		handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/SSAOCombine.fragment.fx");
+
+		Tex = handler->generateRandomVectorTexture(dimension2du(512, 512), "SSAORandomTexture");
+		DepthTex = driver->getTexture("CustomDepthPassRTT");
+		handler->getDepthPassManager()->setDepth("CustomDepthPassRTT", 500.f);
+
+		Driver = driver;
+	}
+
+	void OnPreRender(cp3d::rendering::ICP3DHandler* handler) {
+		mViewProj = Driver->getTransform(ETS_PROJECTION) * Driver->getTransform(ETS_VIEW);
+		handler->setPostProcessingEffectConstant(MatType, "mViewProj", mViewProj.pointer(), 16);
+
+		handler->setPostProcessingTextureAtIndex(2, DepthTex);
+		handler->setPostProcessingUserTexture(Tex);
+	}
+	void OnPostRender(cp3d::rendering::ICP3DHandler* handler) { }
+
+private:
+	s32 MatType;
+	ITexture *Tex, *DepthTex;
+	IVideoDriver *Driver;
+	matrix4 mViewProj;
+
 };
 
 /// Main function
 int main(int argc, char* argv[]) {
 
 	/// Create a device
-	IrrlichtDevice *device = createDevice(EDT_OPENGL, dimension2du(800, 600), 32, false, false, false, 0);
+	IrrlichtDevice *device = createDevice(EDT_DIRECT3D9, dimension2du(1280, 800), 32, false, false, false, 0);
 	device->setEventReceiver(new CEventReceiver(device));
 	IVideoDriver *driver = device->getVideoDriver();
 	ISceneManager *smgr = device->getSceneManager();
@@ -96,9 +131,11 @@ int main(int argc, char* argv[]) {
 
 	IMeshSceneNode *cubeNode = smgr->addCubeSceneNode(50.f, 0, -1, vector3df(0.f, 25.f, 0.f));
 	cubeNode->setMaterialFlag(EMF_LIGHTING, false);
-	handler->addShadowToNode(cubeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_BOTH);
+	handler->addShadowToNode(cubeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_CAST);
+	cubeNode->addAnimator(smgr->createFlyCircleAnimator(vector3df(0.f, 25.f, 0.f), 100.f));
 
 	cp3d::rendering::SShadowLight light1(1024, vector3df(0.f, 100.f, 100.f), vector3df(0.f), SColor(255, 255, 255, 255), 1.f, 400.f, 90.f * f32(irr::core::DEGTORAD64), false);
+	light1.setMustAutoRecalculate(false);
 	handler->addShadowLight(light1);
 
 	/// Add a custom depth pass
@@ -107,20 +144,23 @@ int main(int argc, char* argv[]) {
 	customDepthPassMgr->addPass("CustomDepthPassRTT");
 
 	/// Add a custom filter (rendering the custom depth pass result)
-	CCustomPostProcess *customPostProcess = new CCustomPostProcess(handler, driver);
+	CCustomPostProcessFile *customPostProcess = new CCustomPostProcessFile(handler, driver);
 
 	/// Finish
 	handler->setAmbientColor(SColor(255, 32, 32, 32));
 
 	/// Update the application
+	u32 lastTime = device->getTimer()->getTime();
 	while (device->run()) {
+		if (device->getTimer()->getTime() - lastTime > 1000) {
+			lastTime = device->getTimer()->getTime();
+			handler->getShadowLight(0).setMustRecalculate(true);
+		}
+
 		driver->beginScene(true, true, SColor(0x0));
-
 		handler->update();
-
 		driver->endScene();
 	}
 
 	return 0;
 }
-

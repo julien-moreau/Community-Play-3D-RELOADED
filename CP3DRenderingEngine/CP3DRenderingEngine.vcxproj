@@ -152,6 +152,12 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </FxCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CP3DR\Shaders\PostProcesses\BlurHP.fragment.fx" />
+    <None Include="..\CP3DR\Shaders\PostProcesses\BlurVP.fragment.fx" />
+    <None Include="..\CP3DR\Shaders\PostProcesses\SSAO.fragment.fx" />
+    <None Include="..\CP3DR\Shaders\PostProcesses\SSAOCombine.fragment.fx" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

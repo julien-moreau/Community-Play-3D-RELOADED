@@ -81,7 +81,12 @@ public:
 	irr::s32 addPostProcessingEffectFromString(const irr::core::stringc &shader, IPostProcessingRenderCallback *callback = 0);
 	void setPostProcessingEffectConstant(const irr::s32 materialType, const irr::core::stringc& name, const irr::f32* data, const irr::u32 count);
 	const CScreenQuad& getScreenQuad() { return ScreenQuad; }
-	void setPostProcessingUserTexture(irr::video::ITexture* userTexture) { ScreenQuad.getMaterial().setTexture(3, userTexture); }
+	void setPostProcessingUserTexture(irr::video::ITexture* userTexture) {
+		ScreenQuad.getMaterial().setTexture(3, userTexture);
+	}
+	void setPostProcessingTextureAtIndex(irr::u32 index, irr::video::ITexture *texture) {
+		ScreenQuad.getMaterial().setTexture(index, texture);
+	}
 
 	/// Utils
 	void setAmbientColor(irr::video::SColor ambientColour) { AmbientColour = ambientColour; }
@@ -161,7 +166,6 @@ private:
 	ShadowShaderCB* shadowMC;
 
 	irr::video::ITexture* ScreenRTT;
-	irr::video::ITexture* DepthRTT;
 
 	irr::core::array<SPostProcessingPair> PostProcessingRoutines;
 	irr::core::array<SShadowLight> LightList;
@@ -176,7 +180,6 @@ private:
 	bool shadowsUnsupported;
 	bool use32BitDepth;
 	bool useVSM;
-	bool DepthPass;
 };
 
 } /// End namespace rendering

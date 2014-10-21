@@ -24,6 +24,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Shaders\PostProcesses">
+      <UniqueIdentifier>{3298afc1-445c-47c4-9dd4-07db8d099830}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RenderingEngine\Handler\CP3DHandler.h">
@@ -99,5 +102,19 @@
     <FxCompile Include="..\CP3DR\Shaders\Materials\CustomDepthPass.fragment.fx">
       <Filter>Shaders\Materials</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CP3DR\Shaders\PostProcesses\BlurHP.fragment.fx">
+      <Filter>Shaders\PostProcesses</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\PostProcesses\BlurVP.fragment.fx">
+      <Filter>Shaders\PostProcesses</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\PostProcesses\SSAO.fragment.fx">
+      <Filter>Shaders\PostProcesses</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\PostProcesses\SSAOCombine.fragment.fx">
+      <Filter>Shaders\PostProcesses</Filter>
+    </None>
   </ItemGroup>
 </Project>
