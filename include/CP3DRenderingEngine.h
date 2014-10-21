@@ -7,5 +7,7 @@
 #include "ICP3DHandler.h"
 #include "ICP3DCustomPass.h"
 #include "ICP3DCustomDepthPass.h"
+#include "ICP3DLightSceneNode.h"
+#include "ICP3DMaterialCreator.h"
 
 #endif

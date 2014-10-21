@@ -28,8 +28,8 @@ private:
 	irr::core::array<irr::f32> FarLinks;
 
 	/// Shader pre-processor Vertex & Pixel
-	CShaderPreprocessor *sppV, *sppP;
-	irr::core::stringc vertexShader, pixelShader;
+	CShaderPreprocessor *SppV, *SppP;
+	irr::core::stringc VertexShader, PixelShader;
 
 };
 

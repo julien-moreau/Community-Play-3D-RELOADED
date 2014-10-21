@@ -101,6 +101,8 @@
     <ClInclude Include="..\include\ICP3DCustomDepthPass.h" />
     <ClInclude Include="..\include\ICP3DCustomPass.h" />
     <ClInclude Include="..\include\ICP3DHandler.h" />
+    <ClInclude Include="..\include\ICP3DLightSceneNode.h" />
+    <ClInclude Include="..\include\ICP3DMaterialCreator.h" />
     <ClInclude Include="..\include\ICP3DRenderingEngine.h" />
     <ClInclude Include="..\include\SShadowLight.h" />
     <ClInclude Include="CP3DEngine.h" />

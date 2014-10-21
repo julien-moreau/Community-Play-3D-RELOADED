@@ -81,7 +81,7 @@ public:
 
 		Tex = handler->generateRandomVectorTexture(dimension2du(512, 512), "SSAORandomTexture");
 		DepthTex = driver->getTexture("CustomDepthPassRTT");
-		handler->getDepthPassManager()->setDepth("CustomDepthPassRTT", 500.f);
+		handler->getDepthPassManager()->setDepth("CustomDepthPassRTT", 200.f);
 
 		Driver = driver;
 	}
@@ -126,13 +126,15 @@ int main(int argc, char* argv[]) {
 													  0, 0.f, dimension2d<f32>(0.f, 0.f), dimension2d<f32>(50.f, 50.f));
 	IAnimatedMeshSceneNode *planeNode = smgr->addAnimatedMeshSceneNode(planeMesh);
 	planeNode->setMaterialTexture(0, driver->getTexture("Textures/diffuse.tga"));
+	planeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
 	planeNode->setMaterialFlag(EMF_LIGHTING, false);
 	handler->addShadowToNode(planeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_RECEIVE);
 
-	IMeshSceneNode *cubeNode = smgr->addCubeSceneNode(50.f, 0, -1, vector3df(0.f, 25.f, 0.f));
+	IMeshSceneNode *cubeNode = smgr->addCubeSceneNode(50.f, 0, -1, vector3df(0.f, 25.f, 0.f), vector3df(0.f, 45.f, 0.f));
+	cubeNode->setMaterialTexture(0, driver->getTexture("Textures/Ciment1.png"));
+	cubeNode->setMaterialTexture(1, driver->getTexture("Textures/Ciment1NM.png"));
 	cubeNode->setMaterialFlag(EMF_LIGHTING, false);
-	handler->addShadowToNode(cubeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_CAST);
-	cubeNode->addAnimator(smgr->createFlyCircleAnimator(vector3df(0.f, 25.f, 0.f), 100.f));
+	handler->addShadowToNode(cubeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_BOTH);
 
 	cp3d::rendering::SShadowLight light1(1024, vector3df(0.f, 100.f, 100.f), vector3df(0.f), SColor(255, 255, 255, 255), 1.f, 400.f, 90.f * f32(irr::core::DEGTORAD64), false);
 	light1.setMustAutoRecalculate(false);
@@ -144,7 +146,17 @@ int main(int argc, char* argv[]) {
 	customDepthPassMgr->addPass("CustomDepthPassRTT");
 
 	/// Add a custom filter (rendering the custom depth pass result)
-	CCustomPostProcessFile *customPostProcess = new CCustomPostProcessFile(handler, driver);
+	//CCustomPostProcessFile *customPostProcessFile = new CCustomPostProcessFile(handler, driver);
+	//CCustomPostProcess *customPostProcess = new CCustomPostProcess(handler, driver);
+
+	/// Create the normal mapping material
+	cpre->createNormalMappingMaterial();
+	cubeNode->setMaterialType(cpre->NormalMappingMaterialSolid);
+	planeNode->setMaterialType(cpre->NormalMappingMaterialSolid);
+
+	ILightSceneNode *light = *cpre->createLightSceneNode();
+	light->setPosition(light1.getPosition());
+	light->getLightData().DiffuseColor = SColorf(1.f, 0.f, 0.f, 1.f);
 
 	/// Finish
 	handler->setAmbientColor(SColor(255, 32, 32, 32));
@@ -162,5 +174,5 @@ int main(int argc, char* argv[]) {
 		driver->endScene();
 	}
 
-	return 0;
+	return EXIT_SUCCESS;
 }

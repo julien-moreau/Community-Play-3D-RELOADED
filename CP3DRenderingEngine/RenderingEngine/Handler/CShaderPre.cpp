@@ -191,6 +191,10 @@ void CShaderPreprocessor::removeShaderDefine(const core::stringc name) {
 	DefineMap.remove(name);
 }
 
+void CShaderPreprocessor::clearDefines() {
+	DefineMap.clear();
+}
+
 //! PreProcesses a shader using Irrlicht's built-in shader preprocessor.
 core::stringc CShaderPreprocessor::ppShader(core::stringc shaderProgram) {
 	core::array<SDefineExp> DefineArray = grabDefineExpressions(shaderProgram);
@@ -254,7 +258,7 @@ core::stringc CShaderPreprocessor::ppShader(core::stringc shaderProgram) {
 	return shaderProgram;
 }
 
-std::string getFileContent(const std::string pFile) {
+std::string CShaderPreprocessor::getFileContent(const std::string pFile) {
 	std::ifstream File(pFile.c_str(), std::ios::in);
 	std::string Content;
 

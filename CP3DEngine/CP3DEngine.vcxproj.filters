@@ -51,6 +51,12 @@
     <ClInclude Include="..\include\ICP3DCustomDepthPass.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\ICP3DLightSceneNode.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ICP3DMaterialCreator.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DEngine.cpp">

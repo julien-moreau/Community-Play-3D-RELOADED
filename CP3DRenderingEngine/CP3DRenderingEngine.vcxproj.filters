@@ -27,6 +27,9 @@
     <Filter Include="Shaders\PostProcesses">
       <UniqueIdentifier>{3298afc1-445c-47c4-9dd4-07db8d099830}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RenderingEngine\Materials">
+      <UniqueIdentifier>{189dcb5a-cdbb-45e7-81a3-7b1863f587bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RenderingEngine\Handler\CP3DHandler.h">
@@ -59,6 +62,12 @@
     <ClInclude Include="CP3DRenderingEngine.h">
       <Filter>CP3DRE</Filter>
     </ClInclude>
+    <ClInclude Include="RenderingEngine\Materials\CNormalMappingMaterial.h">
+      <Filter>RenderingEngine\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderingEngine\Materials\CMaterialCreator.h">
+      <Filter>RenderingEngine\Materials</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DRenderingEngine.cpp">
@@ -78,6 +87,12 @@
     </ClCompile>
     <ClCompile Include="RenderingEngine\CustomPasses\CCustomDepthPass.cpp">
       <Filter>RenderingEngine\CustomPasses</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderingEngine\Materials\CNormalMappingMaterial.cpp">
+      <Filter>RenderingEngine\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderingEngine\Materials\CMaterialCreator.cpp">
+      <Filter>RenderingEngine\Materials</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -100,6 +115,12 @@
       <Filter>Shaders\Materials</Filter>
     </FxCompile>
     <FxCompile Include="..\CP3DR\Shaders\Materials\CustomDepthPass.fragment.fx">
+      <Filter>Shaders\Materials</Filter>
+    </FxCompile>
+    <FxCompile Include="..\CP3DR\Shaders\Materials\NormalMapping.fragment.fx">
+      <Filter>Shaders\Materials</Filter>
+    </FxCompile>
+    <FxCompile Include="..\CP3DR\Shaders\Materials\NormalMapping.vertex.fx">
       <Filter>Shaders\Materials</Filter>
     </FxCompile>
   </ItemGroup>

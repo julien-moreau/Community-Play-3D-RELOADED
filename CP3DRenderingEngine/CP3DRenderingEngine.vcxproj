@@ -116,6 +116,8 @@
     <ClInclude Include="RenderingEngine\Handler\CHandler.h" />
     <ClInclude Include="RenderingEngine\Handler\HandlerShaders.h" />
     <ClInclude Include="RenderingEngine\Handler\CP3DHandler.h" />
+    <ClInclude Include="RenderingEngine\Materials\CMaterialCreator.h" />
+    <ClInclude Include="RenderingEngine\Materials\CNormalMappingMaterial.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stdafx.h" />
   </ItemGroup>
@@ -125,6 +127,8 @@
     <ClCompile Include="RenderingEngine\CustomPasses\CCustomDepthPass.cpp" />
     <ClCompile Include="RenderingEngine\Handler\CShaderPre.cpp" />
     <ClCompile Include="RenderingEngine\Handler\CHandler.cpp" />
+    <ClCompile Include="RenderingEngine\Materials\CMaterialCreator.cpp" />
+    <ClCompile Include="RenderingEngine\Materials\CNormalMappingMaterial.cpp" />
     <ClCompile Include="Stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -149,6 +153,12 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vertexMain</EntryPointName>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\CP3DR\Shaders\Materials\NormalMapping.fragment.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\CP3DR\Shaders\Materials\NormalMapping.vertex.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </FxCompile>
   </ItemGroup>

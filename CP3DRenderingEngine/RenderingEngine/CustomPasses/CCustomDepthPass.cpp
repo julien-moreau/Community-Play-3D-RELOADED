@@ -15,10 +15,10 @@ CCustomDepthPass::CCustomDepthPass(IVideoDriver *driver, stringc name)
 	: cp3d::rendering::ICP3DCustomDepthPass(driver, name)
 {
 	/// Configure shaders pre-processors
-	sppV = new CShaderPreprocessor(driver);
-	vertexShader = (Driver->getDriverType() == EDT_OPENGL ? stringc("#define OPENGL_DRIVER\n") : "") + sppV->ppShaderFF("Shaders/Materials/CustomDepthPass.vertex.fx");
-	sppP = new CShaderPreprocessor(driver);
-	pixelShader = (Driver->getDriverType() == EDT_OPENGL ? stringc("#define OPENGL_DRIVER\n") : "") + sppP->ppShaderFF("Shaders/Materials/CustomDepthPass.fragment.fx");
+	SppV = new CShaderPreprocessor(driver);
+	VertexShader = (Driver->getDriverType() == EDT_OPENGL ? stringc("#define OPENGL_DRIVER\n") : "") + SppV->ppShaderFF("Shaders/Materials/CustomDepthPass.vertex.fx");
+	SppP = new CShaderPreprocessor(driver);
+	PixelShader = (Driver->getDriverType() == EDT_OPENGL ? stringc("#define OPENGL_DRIVER\n") : "") + SppP->ppShaderFF("Shaders/Materials/CustomDepthPass.fragment.fx");
 }
 
 CCustomDepthPass::~CCustomDepthPass() {
@@ -26,7 +26,7 @@ CCustomDepthPass::~CCustomDepthPass() {
 		Driver->removeTexture(RenderTargets[i].RenderTexture);
 	}
 	RenderTargets.clear();
-	delete sppV, sppP;
+	delete SppV, SppP;
 }
 
 bool CCustomDepthPass::setRenderTarget() {
@@ -51,7 +51,7 @@ void CCustomDepthPass::addPass(irr::core::stringc name) {
 		m->drop();
 
 	/// Configure shader
-	sppP->addShaderDefine("__CP3D__PASSES_COUNT__", stringc(RenderTargets.size()));
+	SppP->addShaderDefine("__CP3D__PASSES_COUNT__", stringc(RenderTargets.size()));
 	stringc shaderCode = "", shaderRT = "";
 	for (u32 i=0; i < RenderTargets.size(); i++) {
 		if (Driver->getDriverType() == EDT_DIRECT3D9)
@@ -67,16 +67,16 @@ void CCustomDepthPass::addPass(irr::core::stringc name) {
 	}
 
 	if (Driver->getDriverType() == EDT_DIRECT3D9)
-		sppP->addShaderDefine("__CP3D__RENDER_TARGETS__", shaderRT);
-	sppP->addShaderDefine("__CP3D__PIXEL_MAIN__", shaderCode);
+		SppP->addShaderDefine("__CP3D__RENDER_TARGETS__", shaderRT);
+	SppP->addShaderDefine("__CP3D__PIXEL_MAIN__", shaderCode);
 
-	stringc pp = sppP->ppShader(pixelShader);
+	stringc pp = SppP->ppShader(PixelShader);
 
 	/// Create material
 	IGPUProgrammingServices *gpu = Driver->getGPUProgrammingServices();
 	MaterialType = gpu->addHighLevelShaderMaterial(
-			sppV->ppShader(vertexShader).c_str(), "vertexMain", video::EVST_VS_2_0,
-			sppP->ppShader(pixelShader).c_str(), "pixelMain", video::EPST_PS_2_0,
+			SppV->ppShader(VertexShader).c_str(), "vertexMain", video::EVST_VS_2_0,
+			SppP->ppShader(PixelShader).c_str(), "pixelMain", video::EPST_PS_2_0,
 			this, video::EMT_SOLID);
 }
 
