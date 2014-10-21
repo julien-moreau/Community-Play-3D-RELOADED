@@ -109,6 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CP3DRenderingEngine.h" />
+    <ClInclude Include="RenderingEngine\CustomPasses\CCustomDepthPass.h" />
     <ClInclude Include="RenderingEngine\Handler\CScreenQuad.h" />
     <ClInclude Include="RenderingEngine\Handler\CShaderPre.h" />
     <ClInclude Include="RenderingEngine\Handler\CHandlerCB.h" />
@@ -121,6 +122,7 @@
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="CP3DRenderingEngine.cpp" />
+    <ClCompile Include="RenderingEngine\CustomPasses\CCustomDepthPass.cpp" />
     <ClCompile Include="RenderingEngine\Handler\CShaderPre.cpp" />
     <ClCompile Include="RenderingEngine\Handler\CHandler.cpp" />
     <ClCompile Include="Stdafx.cpp">
@@ -136,6 +138,19 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="app.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\CP3DR\Shaders\Materials\CustomDepthPass.fragment.fx">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\CP3DR\Shaders\Materials\CustomDepthPass.vertex.fx">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vertexMain</EntryPointName>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

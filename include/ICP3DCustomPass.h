@@ -25,7 +25,7 @@ namespace rendering {
 		rtargets.push_back(myRenderTarget2);
 		driver->setRenderTarget(rtargets, true, true, SColor(0x0)); /// for a multiple render targets
 		*/
-		virtual void setRenderTarget() = 0;
+		virtual bool setRenderTarget() = 0;
 
 		//! Pre-render callback
 		//! \param node: the node going to be rendered

@@ -11,6 +11,9 @@ using namespace core;
 using namespace scene;
 using namespace io;
 
+namespace cp3d {
+namespace rendering {
+
 struct SDefineExp {
 	SDefineExp() : IfPos(-1), ElsePos(-1), EndPos(-1), IfExp(""), Inverse(false) {};
 	s32 IfPos;
@@ -269,3 +272,6 @@ std::string getFileContent(const std::string pFile) {
 core::stringc CShaderPreprocessor::ppShaderFF(core::stringc shaderProgram) {
 	return ppShader(getFileContent(shaderProgram.c_str()).c_str());
 }
+
+} /// End namespace rendering
+} /// End namespace cp3d

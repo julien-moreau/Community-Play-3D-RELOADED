@@ -5,6 +5,8 @@
 #include "CShaderPre.h"
 #include "CScreenQuad.h"
 
+#include "../CustomPasses/CCustomDepthPass.h"
+
 #include <ICP3DHandler.h>
 
 namespace cp3d {
@@ -49,10 +51,7 @@ public:
 	void addShadowToNode(irr::scene::ISceneNode* node, E_FILTER_TYPE filterType = EFT_NONE, E_SHADOW_MODE shadowMode = ESM_BOTH);
 
 	/// Depth pass
-	irr::video::ITexture* getDepthMapTexture() { return DepthRTT; }
-	void addNodeToDepthPass(irr::scene::ISceneNode *node);
-	void removeNodeFromDepthPass(irr::scene::ISceneNode *node);
-	void enableDepthPass(bool enableDepthPass);
+	CCustomDepthPass *getDepthPassManager() { return CustomDepthPassMgr; }
 	
 	/// Post processes
 	void addPostProcessingEffect(irr::s32 MaterialType, IPostProcessingRenderCallback* callback = 0);
@@ -142,9 +141,11 @@ private:
 	irr::scene::ISceneManager* smgr;
 	irr::core::dimension2du mapRes;
 	
+	/// Depth Pass
+	CCustomDepthPass *CustomDepthPassMgr;
 	irr::s32 Depth;
 	irr::s32 DepthT;
-	irr::s32 DepthWiggle;
+
 	irr::s32 Shadow[EFT_COUNT];
 	irr::s32 LightModulate;
 	irr::s32 Simple;

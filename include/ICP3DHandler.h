@@ -3,6 +3,7 @@
 
 #include <irrlicht.h>
 #include <ICP3DCustomPass.h>
+#include <ICP3DCustomDepthPass.h>
 #include <SShadowLight.h>
 
 namespace cp3d {
@@ -99,6 +100,10 @@ namespace rendering {
 		//! Adds a custom UserMapSampler texture
 		//! \param userTexture: the texture to set at UserMapSampler
 		virtual void setPostProcessingUserTexture(irr::video::ITexture* userTexture) = 0;
+
+		//! Returns the custom depth pass manager
+		//! Allows you to add custom depth passes using multiple render targets
+		virtual ICP3DCustomDepthPass *getDepthPassManager() = 0;
 	};
 
 } /// End rendering namespace

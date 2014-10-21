@@ -17,7 +17,6 @@ public:
 
 	/// Getters
 	irr::IrrlichtDevice *getDevice();
-
 	irr::video::IVideoDriver *getVideoDriver();
 
 	ICP3DHandler *getHandler() { return Handler; }

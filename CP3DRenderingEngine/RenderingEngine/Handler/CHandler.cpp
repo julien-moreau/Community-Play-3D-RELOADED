@@ -45,6 +45,9 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 		depthMC = new DepthShaderCB(this);
 		shadowMC = new ShadowShaderCB(this);
 
+		CustomDepthPassMgr = new CCustomDepthPass(driver, "CustomDepthPassManager");
+		addCustomPass(CustomDepthPassMgr);
+
 		Depth = gpu->addHighLevelShaderMaterial(
 			sPP.ppShader(SHADOW_PASS_1V[shaderExt]).c_str(), "vertexMain", video::EVST_VS_2_0,
 			sPP.ppShader(SHADOW_PASS_1P[shaderExt]).c_str(), "pixelMain", video::EPST_PS_2_0,
@@ -193,14 +196,6 @@ void CCP3DHandler::setScreenRenderTargetResolution(const irr::core::dimension2du
 }
 
 
-void CCP3DHandler::enableDepthPass(bool enableDepthPass) {
-	DepthPass = enableDepthPass;
-
-	if(DepthPass && DepthRTT == 0)
-		DepthRTT = driver->addRenderTargetTexture(ScreenRTTSize, "depthRTT", use32BitDepth ? ECF_G32R32F : ECF_G16R16F);
-}
-
-
 void CCP3DHandler::addPostProcessingEffect(irr::s32 MaterialType, IPostProcessingRenderCallback* callback) {
 	SPostProcessingPair pPair(MaterialType, 0);
 	pPair.renderCallback = callback;
@@ -212,21 +207,6 @@ void CCP3DHandler::addShadowToNode(irr::scene::ISceneNode *node, E_FILTER_TYPE f
 	SShadowNode snode = {node, shadowMode, filterType};
 	ShadowNodeArray.push_back(snode);
 }
-
-
-void CCP3DHandler::addNodeToDepthPass(irr::scene::ISceneNode *node) {
-	if(DepthPassArray.binary_search(node) == -1)
-		DepthPassArray.push_back(node);
-}
-
-
-void CCP3DHandler::removeNodeFromDepthPass(irr::scene::ISceneNode *node) {
-	s32 i = DepthPassArray.binary_search(node);
-	
-	if(i != -1) 
-		DepthPassArray.erase(i);
-}
-
 
 void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 	if(shadowsUnsupported || smgr->getActiveCamera() == 0)
@@ -391,32 +371,11 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 	ScreenQuad.getMaterial().MaterialType = (E_MATERIAL_TYPE)LightModulate;
 	ScreenQuad.render(driver);
 
-	// Perform depth pass after rendering, to ensure animations stay up to date. (will be replaced by a complete pass manager)
-	/*if(DepthPass) {
-		driver->setRenderTarget(DepthRTT, true, true, SColor(0xffffffff));
-
-		depthMC->FarLink = smgr->getActiveCamera()->getFarValue();
-
-		for(u32 i = 0;i < DepthPassArray.size();++i) {
-			core::array<irr::s32> BufferMaterialList(DepthPassArray[i]->getMaterialCount());
-			BufferMaterialList.set_used(0);
-
-			for(u32 g = 0;g < DepthPassArray[i]->getMaterialCount();++g)
-				BufferMaterialList.push_back(DepthPassArray[i]->getMaterial(g).MaterialType);
-
-			DepthPassArray[i]->setMaterialType((E_MATERIAL_TYPE)Depth);
-			DepthPassArray[i]->OnAnimate(device->getTimer()->getTime());
-			DepthPassArray[i]->render();
-
-			for(u32 g = 0;g < DepthPassArray[i]->getMaterialCount();++g)
-				DepthPassArray[i]->getMaterial(g).MaterialType = (E_MATERIAL_TYPE)BufferMaterialList[g];
-		}
-
-		driver->setRenderTarget(0, false, false);
-	}*/
+	// Perform custom passes after rendering, to ensure animations stay up to date
 	for (u32 i=0; i < CustomPasses.size(); i++) {
 		if (CustomPasses[i]->isEnabled()) {
-			CustomPasses[i]->setRenderTarget();
+			if (!CustomPasses[i]->setRenderTarget())
+				continue;
 
 			for (u32 j=0; j < CustomPasses[i]->getSceneNodes().size(); j++) {
 				core::array<irr::s32> BufferMaterialList(CustomPasses[i]->getSceneNodes()[j]->getMaterialCount());

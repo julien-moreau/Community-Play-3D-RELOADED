@@ -3,8 +3,10 @@
 
 #include <irrlicht.h>
 
-class CShaderPreprocessor
-{
+namespace cp3d {
+namespace rendering {
+
+class CShaderPreprocessor {
 public:
 	CShaderPreprocessor(irr::video::IVideoDriver* driverIn);
 	irr::core::stringc ppShader(irr::core::stringc shaderProgram);
@@ -17,6 +19,10 @@ private:
 
 	irr::video::IVideoDriver* driver;
 	irr::core::map<irr::core::stringc , irr::core::stringc> DefineMap;
+
 };
+
+} /// End namespace rendering
+} /// End namespace cp3d
 
 #endif

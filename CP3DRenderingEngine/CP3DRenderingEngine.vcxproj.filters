@@ -7,32 +7,25 @@
     <Filter Include="RenderingEngine\Handler">
       <UniqueIdentifier>{eabc09a6-0dc6-4ffb-89dd-1aa86287f022}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Ressources">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Headers">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="RenderingEngine\CustomPasses">
       <UniqueIdentifier>{546dd49f-bc0d-400e-a9cb-a0035cc9028d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{a7263fb2-2ba9-4e7a-ac96-064148685b8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Materials">
+      <UniqueIdentifier>{3b6bc63a-5811-4dc5-b840-ca0105ee3ef5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CP3DRE">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="CP3DRE\Ressources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CP3DRenderingEngine.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Stdafx.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="RenderingEngine\Handler\CP3DHandler.h">
       <Filter>RenderingEngine\Handler</Filter>
     </ClInclude>
@@ -51,16 +44,28 @@
     <ClInclude Include="RenderingEngine\Handler\HandlerShaders.h">
       <Filter>RenderingEngine\Handler</Filter>
     </ClInclude>
+    <ClInclude Include="RenderingEngine\CustomPasses\CCustomDepthPass.h">
+      <Filter>RenderingEngine\CustomPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="Stdafx.h">
+      <Filter>CP3DRE</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>CP3DRE</Filter>
+    </ClInclude>
+    <ClInclude Include="CP3DRenderingEngine.h">
+      <Filter>CP3DRE</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DRenderingEngine.cpp">
-      <Filter>Sources</Filter>
+      <Filter>CP3DRE</Filter>
     </ClCompile>
     <ClCompile Include="AssemblyInfo.cpp">
-      <Filter>Sources</Filter>
+      <Filter>CP3DRE</Filter>
     </ClCompile>
     <ClCompile Include="Stdafx.cpp">
-      <Filter>Sources</Filter>
+      <Filter>CP3DRE</Filter>
     </ClCompile>
     <ClCompile Include="RenderingEngine\Handler\CShaderPre.cpp">
       <Filter>RenderingEngine\Handler</Filter>
@@ -68,18 +73,31 @@
     <ClCompile Include="RenderingEngine\Handler\CHandler.cpp">
       <Filter>RenderingEngine\Handler</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="ReadMe.txt" />
+    <ClCompile Include="RenderingEngine\CustomPasses\CCustomDepthPass.cpp">
+      <Filter>RenderingEngine\CustomPasses</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc">
-      <Filter>Ressources</Filter>
+      <Filter>CP3DRE\Ressources</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="app.ico">
-      <Filter>Ressources</Filter>
+      <Filter>CP3DRE\Ressources</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt">
+      <Filter>CP3DRE\Ressources</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\CP3DR\Shaders\Materials\CustomDepthPass.vertex.fx">
+      <Filter>Shaders\Materials</Filter>
+    </FxCompile>
+    <FxCompile Include="..\CP3DR\Shaders\Materials\CustomDepthPass.fragment.fx">
+      <Filter>Shaders\Materials</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
