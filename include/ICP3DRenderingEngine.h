@@ -23,6 +23,9 @@ public:
 	//! Returns the video driver
 	virtual irr::video::IVideoDriver *getVideoDriver() = 0;
 
+	//! Returns the gui environment
+	virtual irr::gui::IGUIEnvironment *getGUIEnvironment() = 0;
+
 	//! Returns the main handler
 	virtual ICP3DHandler *getHandler() = 0;
 

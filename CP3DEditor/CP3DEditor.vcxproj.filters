@@ -9,23 +9,28 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Headers">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="Editor">
       <UniqueIdentifier>{aae0ac58-0e1a-4c96-9e13-74d164b0e449}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\Core">
+      <UniqueIdentifier>{60a741cc-5601-4bcf-b829-1676859eb26e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\UserInterfaces">
+      <UniqueIdentifier>{28c918db-9b03-412e-acc6-f9db9f8390f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CP3DEditor.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Stdafx.h">
-      <Filter>Headers</Filter>
+      <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>Headers</Filter>
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\Core\CCP3DEditorCore.h">
+      <Filter>Editor\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\UserInterfaces\CCP3DContextMenu.h">
+      <Filter>Editor\UserInterfaces</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -37,6 +42,12 @@
     </ClCompile>
     <ClCompile Include="Stdafx.cpp">
       <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\Core\CCP3DEditorCore.cpp">
+      <Filter>Editor\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\UserInterfaces\CCP3DContextMenu.cpp">
+      <Filter>Editor\UserInterfaces</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

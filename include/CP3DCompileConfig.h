@@ -4,7 +4,9 @@
 #ifndef __H_CP3D_COMPILE_CONFIG__
 #define __H_CP3D_COMPILE_CONFIG__
 
-#include <irrlicht.h>
+namespace irr {
+	class IrrlichtDevice;
+}
 
 #define CP3DR_LIB_EXPORTS
 #ifndef _IRR_LINUX_PLATFORM_
@@ -19,20 +21,36 @@
 
 namespace cp3d {
 
+	class ICP3DEditor {
+	public:
+		//! Runs the editor. Should be called only one time to run the editor
+		//! after cp3d::createEditor()
+		virtual void runEditor() = 0;
+	};
+
 	namespace rendering {
 		class ICP3DRenderingEngine;
 	}
 
+	namespace engine {
+		class ICP3DEngine;
+	}
+
 	#if defined(CP3DR_COMPILE_RENDERING_ENGINE)
+	//! Creates a new rendering engine
+	//! \param device: the irrlicht device used by the rendering engine
 	extern "C" CP3DR_LIB_API rendering::ICP3DRenderingEngine *createRenderingEngine(irr::IrrlichtDevice *device);
 	#endif
 
 	#if defined(CP3DR_COMPILE_ENGINE)
-	extern "C" CP3DR_LIB_API void *createEngine();
+	//! Creates a new CP3D engine
+	//! \param device: the device used by the engine
+	extern "C" CP3DR_LIB_API engine::ICP3DEngine *createEngine(irr::IrrlichtDevice *device);
 	#endif
 
 	#if defined(CP3DR_COMPILE_EDITOR)
-	extern "C" CP3DR_LIB_API void *createEditor();
+	//! Creates a new editor. Can be used by external softwares
+	extern "C" CP3DR_LIB_API ICP3DEditor *createEditor();
 	#endif
 } /// End namespace cp3d
 

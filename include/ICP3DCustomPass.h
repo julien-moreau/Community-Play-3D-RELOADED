@@ -36,18 +36,18 @@ namespace rendering {
 		virtual void onPostRender(irr::scene::ISceneNode *node) { }
 
 		//! Returns the custom pass material type
-		virtual irr::s32 getMaterialType() {
+		virtual const irr::s32 getMaterialType() const {
 			return MaterialType;
 		}
 
 		//! Returns if the pass is enabled
-		virtual bool isEnabled() {
+		virtual const bool isEnabled() const {
 			return Enabled;
 		}
 
 		//! Set the pass enabled or not
 		//! \param enabled: enable or disable the pass. True if enabled
-		virtual void setEnabled(bool enabled) {
+		virtual void setEnabled(const bool enabled) {
 			Enabled = enabled;
 		}
 

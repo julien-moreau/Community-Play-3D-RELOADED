@@ -46,3 +46,6 @@
 *.suo
 *.cache
 
+# Files
+Thumbs.db
+

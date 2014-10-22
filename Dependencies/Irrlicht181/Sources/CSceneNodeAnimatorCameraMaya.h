@@ -107,11 +107,6 @@ namespace scene
 		bool Rotating;
 		bool Moving;
 		bool Translating;
-
-		bool controlDown;
-
-		f32 currentZoomWheel;
-		bool zoomingWheel;
 	};
 
 } // end namespace scene

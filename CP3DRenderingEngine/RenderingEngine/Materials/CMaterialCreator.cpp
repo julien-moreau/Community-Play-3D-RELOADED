@@ -1,10 +1,3 @@
-//
-//  CNormalMappingMaterial.cpp
-//  MacOSX
-//
-//  Created by Julien Moreau-Mathis on 21/05/2014.
-//
-//
 
 #include "stdafx.h"
 #include "CMaterialCreator.h"

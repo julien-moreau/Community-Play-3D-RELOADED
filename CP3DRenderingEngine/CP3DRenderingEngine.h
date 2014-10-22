@@ -22,7 +22,9 @@ public:
 	/// Irrlicht
 	irr::IrrlichtDevice *getDevice();
 	irr::video::IVideoDriver *getVideoDriver();
+	irr::gui::IGUIEnvironment *getGUIEnvironment();
 
+	/// Handlers
 	ICP3DHandler *getHandler() {
 		return Handler;
 	}
@@ -31,7 +33,7 @@ public:
 	ICP3DMaterialCreator *createMaterialCreator();
 
 	ICP3DLightSceneNode *createLightSceneNode();
-	irr::s32 getLightCount() {
+	irr::u32 getLightCount() {
 		return Lights.size();
 	}
 	ICP3DLightSceneNode *getLightSceneNode(irr::u32 index) {

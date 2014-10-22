@@ -111,20 +111,6 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\CP3DR\Shaders\Materials\CustomDepthPass.vertex.fx">
-      <Filter>Shaders\Materials</Filter>
-    </FxCompile>
-    <FxCompile Include="..\CP3DR\Shaders\Materials\CustomDepthPass.fragment.fx">
-      <Filter>Shaders\Materials</Filter>
-    </FxCompile>
-    <FxCompile Include="..\CP3DR\Shaders\Materials\NormalMapping.fragment.fx">
-      <Filter>Shaders\Materials</Filter>
-    </FxCompile>
-    <FxCompile Include="..\CP3DR\Shaders\Materials\NormalMapping.vertex.fx">
-      <Filter>Shaders\Materials</Filter>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\CP3DR\Shaders\PostProcesses\BlurHP.fragment.fx">
       <Filter>Shaders\PostProcesses</Filter>
     </None>
@@ -136,6 +122,21 @@
     </None>
     <None Include="..\CP3DR\Shaders\PostProcesses\SSAOCombine.fragment.fx">
       <Filter>Shaders\PostProcesses</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\PostProcesses\FXAA.fragment.fx">
+      <Filter>Shaders\PostProcesses</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\Materials\NormalMapping.vertex.fx">
+      <Filter>Shaders\Materials</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\Materials\CustomDepthPass.fragment.fx">
+      <Filter>Shaders\Materials</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\Materials\CustomDepthPass.vertex.fx">
+      <Filter>Shaders\Materials</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\Materials\NormalMapping.fragment.fx">
+      <Filter>Shaders\Materials</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -15,8 +15,8 @@ public:
 	//! \param baseMaterial: the base material of the created material
 	//! \param callback: the material's callback
 	virtual irr::s32 createMaterialFromFiles(const irr::core::stringc &vertexFilename, const irr::core::stringc &pixelFilename,
-												irr::video::E_MATERIAL_TYPE baseMaterial = irr::video::EMT_SOLID,
-												irr::video::IShaderConstantSetCallBack *callback = 0) = 0;
+											 irr::video::E_MATERIAL_TYPE baseMaterial = irr::video::EMT_SOLID,
+											 irr::video::IShaderConstantSetCallBack *callback = 0) = 0;
 
 	//! Creates a material from files (vertex & pixel)
 	//! \param vertexShader: the string containing the vertex shader code
@@ -24,8 +24,8 @@ public:
 	//! \param baseMaterial: the base material of the created material
 	//! \param callback: the material's callback
 	virtual irr::s32 createMaterialFromStrings(const irr::core::stringc &vertexShader, const irr::core::stringc &pixelShader,
-												irr::video::E_MATERIAL_TYPE baseMaterial = irr::video::EMT_SOLID,
-												irr::video::IShaderConstantSetCallBack *callback = 0) = 0;
+											   irr::video::E_MATERIAL_TYPE baseMaterial = irr::video::EMT_SOLID,
+											   irr::video::IShaderConstantSetCallBack *callback = 0) = 0;
 
 	//! Adds a define for the conditional compilation
 	//! Example:

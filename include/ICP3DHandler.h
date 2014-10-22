@@ -2,9 +2,7 @@
 #define _H_ICP3D_HANDLER_INCLUDED__
 
 #include <irrlicht.h>
-#include <ICP3DCustomPass.h>
-#include <ICP3DCustomDepthPass.h>
-#include <SShadowLight.h>
+#include "SShadowLight.h"
 
 namespace cp3d {
 namespace rendering {
@@ -29,6 +27,9 @@ namespace rendering {
 	};
 
 	class ICP3DHandler;
+	class ICP3DCustomPass;
+	class ICP3DCustomDepthPass;
+
 	//! Custom post-processing render callback
 	class IPostProcessingRenderCallback {
 	public:
@@ -121,6 +122,10 @@ namespace rendering {
 		//! \param dimensions: the texutre's dimensions
 		//! \param name: the name of the texture
 		virtual irr::video::ITexture* generateRandomVectorTexture(const irr::core::dimension2du& dimensions, const irr::core::stringc& name = "randVec") = 0;
+
+		//! Resets the render targets to the given resolution
+		//! \param resolution: the new resolution of the render targets
+		virtual void setScreenRenderTargetResolution(const irr::core::dimension2du& resolution) = 0;
 	};
 
 } /// End rendering namespace

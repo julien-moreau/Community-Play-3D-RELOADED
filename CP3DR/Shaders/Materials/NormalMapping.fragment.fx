@@ -84,21 +84,21 @@ float4 pixelMain( in PS_INPUT IN ) : COLOR
 	float4 fvObjectPosition = IN.ObjectPosition;
 
 	float3 fvTangent   = -float3(abs(IN.Normal.y) + abs(IN.Normal.z), abs(IN.Normal.x), 0); 
-	float3 fvBinormal   = cross(fvTangent,IN.Normal);
-	float3 fvNormal     = mul(IN.Normal, ModelViewMatrix); 
-	fvTangent         = mul( cross(fvBinormal, IN.Normal), ModelViewMatrix ); 
+	float3 fvBinormal  = cross(fvTangent,IN.Normal);
+	float3 fvNormal    = mul(IN.Normal, ModelViewMatrix); 
+	fvTangent          = mul( cross(fvBinormal, IN.Normal), ModelViewMatrix ); 
 	fvBinormal         = mul( fvBinormal, ModelViewMatrix ); 
 
 	float3 fvViewDirection  =  - fvObjectPosition.xyz; 
-	float3 ViewDirection = float3(0.0, 0.0, 0.0);
-	ViewDirection.x  = dot( fvTangent, fvViewDirection ); 
-	ViewDirection.y  = dot( fvBinormal, fvViewDirection ); 
-	ViewDirection.z  = dot( fvNormal, fvViewDirection ); 
+	float3 ViewDirection	= float3(0.0, 0.0, 0.0);
+	ViewDirection.x			= dot( fvTangent, fvViewDirection ); 
+	ViewDirection.y			= dot( fvBinormal, fvViewDirection ); 
+	ViewDirection.z			= dot( fvNormal, fvViewDirection ); 
 
 	/// End added vertex
 
 	float4 color = float4(0,0,0,0);
-	float3  fvNormal2         = tex2D( bumpMap, IN.Texcoord ).yxz; 
+	float3  fvNormal2 = tex2D( bumpMap, IN.Texcoord ).yxz; 
    
 	fvNormal2.xy*=2.0; 
 	fvNormal2.xy-=1.0;
@@ -127,7 +127,7 @@ float4 pixelMain( in PS_INPUT IN ) : COLOR
 
 		float fNDotL1            = max(dot(fvNormal2, fvLightDirection2),0.0)-0.1;  
 		float3  fvReflection1    = normalize( ( ( 2.0 * fvNormal2 )  ) - fvLightDirection2 );  
-		float3  fvViewDirection2  = normalize( ViewDirection ); 
+		float3  fvViewDirection2 = normalize( ViewDirection ); 
 		float fRDotV1            = max( 0.0, dot( fvReflection1, fvViewDirection2 ) ); 
 
 		fvTotalDiffuse			 += fvLightColor[i] * fNDotL1* fvBaseColor*LightDistMultiplier;  

@@ -78,10 +78,13 @@ public:
 		handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/BlurHP.fragment.fx");
 		handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/BlurVP.fragment.fx");
 		handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/SSAOCombine.fragment.fx");
+		MatType2 = handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/FXAA.fragment.fx", this);
 
 		Tex = handler->generateRandomVectorTexture(dimension2du(512, 512), "SSAORandomTexture");
 		DepthTex = driver->getTexture("CustomDepthPassRTT");
 		handler->getDepthPassManager()->setDepth("CustomDepthPassRTT", 200.f);
+
+		BufferHeight = BufferWidth = 2048;
 
 		Driver = driver;
 	}
@@ -90,17 +93,22 @@ public:
 		mViewProj = Driver->getTransform(ETS_PROJECTION) * Driver->getTransform(ETS_VIEW);
 		handler->setPostProcessingEffectConstant(MatType, "mViewProj", mViewProj.pointer(), 16);
 
+		handler->setPostProcessingEffectConstant(MatType2, "BufferWidth", &BufferWidth, 1);
+		handler->setPostProcessingEffectConstant(MatType2, "BufferHeight", &BufferHeight, 1);
+
 		handler->setPostProcessingTextureAtIndex(2, DepthTex);
 		handler->setPostProcessingUserTexture(Tex);
 	}
 	void OnPostRender(cp3d::rendering::ICP3DHandler* handler) { }
 
 private:
-	s32 MatType;
+	s32 MatType, MatType2;
+
 	ITexture *Tex, *DepthTex;
 	IVideoDriver *Driver;
-	matrix4 mViewProj;
 
+	matrix4 mViewProj;
+	f32 BufferWidth, BufferHeight;
 };
 
 /// Main function
@@ -133,6 +141,8 @@ int main(int argc, char* argv[]) {
 	IMeshSceneNode *cubeNode = smgr->addCubeSceneNode(50.f, 0, -1, vector3df(0.f, 25.f, 0.f), vector3df(0.f, 45.f, 0.f));
 	cubeNode->setMaterialTexture(0, driver->getTexture("Textures/Ciment1.png"));
 	cubeNode->setMaterialTexture(1, driver->getTexture("Textures/Ciment1NM.png"));
+	cubeNode->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
+	smgr->getMeshManipulator()->recalculateNormals(cubeNode->getMesh(), true, true);
 	cubeNode->setMaterialFlag(EMF_LIGHTING, false);
 	handler->addShadowToNode(cubeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_BOTH);
 

@@ -1,3 +1,10 @@
+#define SAMPLE_COUNT 8
+#define SSAO_REACH 1.0
+#define MAX_DEPTH_DECLINE 0.2
+#define DEPTH_ALIASING_EPISILON 0.02
+#define RAND_TEXTURE_TILES 3.0
+#define SSAO_OUTPUT_MULTIPLIER 10000.5
+
 ##ifdef OPENGL_DRIVER
 
 uniform sampler2D DepthMapSampler;
@@ -11,13 +18,6 @@ float getDepthAt(vec2 coords)
 	float extractedDepth = texDepth.r;
 	return extractedDepth;
 }
-
-#define SAMPLE_COUNT 8
-#define SSAO_REACH 1.0
-#define MAX_DEPTH_DECLINE 0.2
-#define DEPTH_ALIASING_EPISILON 0.02
-#define RAND_TEXTURE_TILES 3.0
-#define SSAO_OUTPUT_MULTIPLIER 1.5
 
 vec3 offsets[SAMPLE_COUNT];
 
@@ -84,13 +84,6 @@ float getDepthAt(float2 coords)
 	float extractedDepth = texDepth.r;
 	return extractedDepth;
 }
-
-#define SAMPLE_COUNT 8
-#define SSAO_REACH 1.0
-#define MAX_DEPTH_DECLINE 0.2
-#define DEPTH_ALIASING_EPISILON 0.02
-#define RAND_TEXTURE_TILES 3.0
-#define SSAO_OUTPUT_MULTIPLIER 1.5
 
 float4 pixelMain
 (

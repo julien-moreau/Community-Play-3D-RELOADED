@@ -9,6 +9,7 @@
 
 using namespace irr;
 using namespace video;
+using namespace gui;
 
 /// Create rendering engine
 namespace cp3d {
@@ -30,12 +31,17 @@ CCP3DRenderingEngine::~CCP3DRenderingEngine() {
 	delete Handler;
 }
 
+/// Irrlicht
 IrrlichtDevice *CCP3DRenderingEngine::getDevice() {
 	return ((CCP3DHandler*)Handler)->getIrrlichtDevice();
 }
 
 IVideoDriver *CCP3DRenderingEngine::getVideoDriver() {
 	return ((CCP3DHandler*)Handler)->getIrrlichtDevice()->getVideoDriver();
+}
+
+IGUIEnvironment *CCP3DRenderingEngine::getGUIEnvironment() {
+	return ((CCP3DHandler*)Handler)->getIrrlichtDevice()->getGUIEnvironment();
 }
 
 /// Creators

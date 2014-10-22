@@ -106,7 +106,8 @@ const char* SHADOW_PASS_1V[ESE_COUNT] = {"uniform mat4 mWorldViewProj;\n"
 "	return(OUT);\n"
 "}"};
 
-const char* SHADOW_PASS_2P[ESE_COUNT] = {"uniform sampler2D ShadowMapSampler;\n"
+const char* SHADOW_PASS_2P[ESE_COUNT] = {
+"uniform sampler2D ShadowMapSampler;\n"
 "uniform vec4 LightColour;\n"
 "varying float lightVal;\n"
 ""
@@ -270,7 +271,6 @@ const char* SHADOW_PASS_2P[ESE_COUNT] = {"uniform sampler2D ShadowMapSampler;\n"
 "		finalCol = LightColour * lightFactor * MVar[1];\n"
 "##endif\n"
 "	}"
-"	"
 "	return finalCol;\n"
 "}"};
 
