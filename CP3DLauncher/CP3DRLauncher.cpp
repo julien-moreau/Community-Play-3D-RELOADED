@@ -3,6 +3,7 @@
 
 #define CP3DR_COMPILE_EDITOR
 #include <CP3DCompileConfig.h>
+#include <ICP3DEditor.h>
 
 int main(int argc, char* argv[])
 {

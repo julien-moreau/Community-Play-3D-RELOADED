@@ -24,8 +24,6 @@ CCP3DEditionTool::CCP3DEditionTool(CCP3DEditorCore *editorCore) : EditorCore(edi
 	Driver = Gui->getVideoDriver();
 	CursorControl = editorCore->getDevice()->getCursorControl();
 
-	ScreenSize = Driver->getScreenSize();
-
 	/// Create elements
 	Window = Gui->addWindow(rect<s32>(0, 25, WindowWidth, 0), false, L"Edition Tool", 0, -1);
 	Window->getCloseButton()->setVisible(false);
@@ -37,9 +35,9 @@ CCP3DEditionTool::CCP3DEditionTool(CCP3DEditorCore *editorCore) : EditorCore(edi
 	SControlDescriptor descriptor(EICC_RIGHT);
 	descriptor.MinWidth = 200;
 	descriptor.MaxWidth = std::numeric_limits<s32>::max();
-	editorCore->getInterfaceController()->addElement(Window, descriptor);
+	editorCore->getInterfaceController()->addElement(this, descriptor);
 
-	resize();
+	OnResize();
 }
 
 CCP3DEditionTool::~CCP3DEditionTool() {
@@ -48,11 +46,7 @@ CCP3DEditionTool::~CCP3DEditionTool() {
 }
 
 void CCP3DEditionTool::OnPreUpdate() {
-	if (Driver->getScreenSize() != ScreenSize || Window->getRelativePosition().getWidth() != WindowWidth) {
-		resize();
-		ScreenSize = Driver->getScreenSize();
-		WindowWidth = Window->getRelativePosition().getWidth();
-	}
+
 }
 
 irr::gui::IGUITab *CCP3DEditionTool::addTab(const irr::core::stringc name) {
@@ -75,7 +69,7 @@ void CCP3DEditionTool::clearTabs() {
 	TabCtrl->clear();
 }
 
-void CCP3DEditionTool::resize() {
+void CCP3DEditionTool::OnResize() {
 	/// Select the new y position of the window
 	s32 positionY = 0;
 	core::list<IGUIElement *>::ConstIterator it = Gui->getRootGUIElement()->getChildren().begin();

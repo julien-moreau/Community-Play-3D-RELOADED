@@ -21,12 +21,7 @@ namespace irr {
 
 namespace cp3d {
 
-	class ICP3DEditor {
-	public:
-		//! Runs the editor. Should be called only one time to run the editor
-		//! after cp3d::createEditor()
-		virtual void runEditor() = 0;
-	};
+	class ICP3DEditor;
 
 	namespace rendering {
 		class ICP3DRenderingEngine;

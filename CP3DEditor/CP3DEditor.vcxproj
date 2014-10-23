@@ -101,6 +101,7 @@
     <ClInclude Include="Editor\GUIElements\GUIPanel\CGUIPanel.h" />
     <ClInclude Include="Editor\UserInterfaces\CCP3DContextMenu.h" />
     <ClInclude Include="Editor\UserInterfaces\CCP3DEditionTool.h" />
+    <ClInclude Include="Editor\UserInterfaces\CCP3DSceneGraph.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stdafx.h" />
   </ItemGroup>
@@ -112,6 +113,7 @@
     <ClCompile Include="Editor\GUIElements\GUIPanel\CGUIPanel.cpp" />
     <ClCompile Include="Editor\UserInterfaces\CCP3DContextMenu.cpp" />
     <ClCompile Include="Editor\UserInterfaces\CCP3DEditionTool.cpp" />
+    <ClCompile Include="Editor\UserInterfaces\CCP3DSceneGraph.cpp" />
     <ClCompile Include="Stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

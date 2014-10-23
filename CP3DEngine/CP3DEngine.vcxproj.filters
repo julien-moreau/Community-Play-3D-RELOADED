@@ -77,6 +77,12 @@
     <ClInclude Include="Engine\Core\CCP3DCustomUpdater.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\ICP3DEditor.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ICP3DInterface.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DEngine.cpp">

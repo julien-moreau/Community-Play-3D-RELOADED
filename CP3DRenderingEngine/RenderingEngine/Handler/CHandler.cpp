@@ -200,6 +200,11 @@ void CCP3DHandler::addShadowToNode(irr::scene::ISceneNode *node, E_FILTER_TYPE f
 	ShadowNodeArray.push_back(snode);
 }
 
+u32 CCP3DHandler::addShadowLight(SShadowLight &shadowLight) {
+	 LightList.push_back(shadowLight);
+	 return LightList.size() - 1;
+}
+
 void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 	if(shadowsUnsupported || smgr->getActiveCamera() == 0)
 		return;
@@ -217,6 +222,17 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 
 		/// Render all dept maps used by shadow mapping materials
 		for(u32 l = 0;l < LightListSize;++l) {
+
+			if (LightList[l].LightScenenode->getParent() != smgr->getRootSceneNode()) {
+				LightList[l].LightScenenode->updateAbsolutePosition();
+				if (LightList[l].Pos != LightList[l].LightScenenode->getAbsolutePosition())
+					LightList[l].setPosition(LightList[l].LightScenenode->getAbsolutePosition());
+			}
+			else {
+				if (LightList[l].Pos != LightList[l].LightScenenode->getPosition())
+					LightList[l].setPosition(LightList[l].LightScenenode->getPosition());
+			}
+
 			depthMC->FarLink = LightList[l].getFarValue();
 
 			driver->setTransform(ETS_VIEW, LightList[l].getViewMatrix());

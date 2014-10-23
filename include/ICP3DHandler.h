@@ -50,14 +50,6 @@ namespace rendering {
 		//! \param output: The output texture. 0 if backbuffer
 		virtual void update(irr::video::ITexture *output = 0) = 0;
 
-		//! Adds a shadow light to compute.
-		//! \param shadowLight: the SShadowLight to add
-		virtual void addShadowLight(const SShadowLight& shadowLight) = 0;
-
-		//! Returns the shadow light at index "index"
-		//! \param index: the index of the shadow light
-		virtual SShadowLight& getShadowLight(irr::u32 index) = 0;
-
 		//! Returns the shadow lights count
 		virtual const irr::u32 getShadowLightCount() const = 0;
 

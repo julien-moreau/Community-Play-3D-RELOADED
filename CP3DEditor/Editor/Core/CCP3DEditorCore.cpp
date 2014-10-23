@@ -9,6 +9,7 @@
 #include "CCP3DInterfaceController.h"
 #include "../UserInterfaces/CCP3DContextMenu.h"
 #include "../UserInterfaces/CCP3DEditionTool.h"
+#include "../UserInterfaces/CCP3DSceneGraph.h"
 
 using namespace irr;
 using namespace scene;
@@ -47,15 +48,6 @@ CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), 
 	skin->setColor(EGDC_INACTIVE_CAPTION, SColor(255,0,0,0));
 	skin->setColor(EGDC_3D_LIGHT, SColor(255, 32, 32, 32));
 
-	/// Create User Interface
-	InterfaceController = new CCP3DInterfaceController(this);
-	ContextMenu = new CCP3DContextMenu(this);
-	EditionTool = new CCP3DEditionTool(this);
-
-	/// Finish
-	WorkingDirectory = ProjectDirectory = device->getFileSystem()->getWorkingDirectory();
-	setProjectName(ProjectName);
-
 	/// Tests
 	/// Configure scene
 	createComponents();
@@ -63,6 +55,19 @@ CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), 
 	Engine->getEventReceiver()->addEventReceiver(this);
 	createTestScene();
 	#endif
+
+	/// Create User Interface
+	InterfaceController = new CCP3DInterfaceController(this);
+	ContextMenu = new CCP3DContextMenu(this);
+	EditionTool = new CCP3DEditionTool(this);
+	SceneGraph = new CCP3DSceneGraph(this);
+
+	/// Finish
+	WorkingDirectory = ProjectDirectory = device->getFileSystem()->getWorkingDirectory();
+	setProjectName(ProjectName);
+
+	EditionTool->addTab("General");
+	SceneGraph->fillGraph();
 }
 
 CCP3DEditorCore::~CCP3DEditorCore() {
@@ -74,6 +79,7 @@ CCP3DEditorCore::~CCP3DEditorCore() {
 void CCP3DEditorCore::createComponents() {
 	ISceneManager *smgr = Device->getSceneManager();
 	ICameraSceneNode *camera = smgr->addCameraSceneNodeMaya();
+	camera->setName("Editor camera");
 	camera->setPosition(vector3df(100.f, 100.f, 100.f));
 }
 
@@ -110,12 +116,14 @@ void CCP3DEditorCore::createTestScene() {
 	IAnimatedMesh *planeMesh = smgr->addHillPlaneMesh("plane_mesh", dimension2d<f32>(100.f, 100.f), dimension2d<u32>(50, 50),
 													  0, 0.f, dimension2d<f32>(0.f, 0.f), dimension2d<f32>(50.f, 50.f));
 	IAnimatedMeshSceneNode *planeNode = smgr->addAnimatedMeshSceneNode(planeMesh);
+	planeNode->setName("Plane");
 	planeNode->setMaterialTexture(0, driver->getTexture("Textures/diffuse.tga"));
 	planeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
 	planeNode->setMaterialFlag(EMF_LIGHTING, false);
 	Handler->addShadowToNode(planeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_RECEIVE);
 
 	IMeshSceneNode *cubeNode = smgr->addCubeSceneNode(50.f, 0, -1, vector3df(0.f, 25.f, 0.f), vector3df(0.f, 45.f, 0.f));
+	cubeNode->setName("Cube");
 	cubeNode->setMaterialTexture(0, driver->getTexture("Textures/Ciment1.png"));
 	cubeNode->setMaterialTexture(1, driver->getTexture("Textures/Ciment1NM.png"));
 	cubeNode->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
@@ -123,14 +131,25 @@ void CCP3DEditorCore::createTestScene() {
 	cubeNode->setMaterialFlag(EMF_LIGHTING, false);
 	Handler->addShadowToNode(cubeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_BOTH);
 
-	cp3d::rendering::SShadowLight light1(1024, vector3df(0.f, 100.f, 100.f), vector3df(0.f), SColor(255, 255, 255, 255), 1.f, 400.f, 90.f * f32(irr::core::DEGTORAD64), false);
-	light1.setMustAutoRecalculate(false);
-	Handler->addShadowLight(light1);
+	cp3d::rendering::ICP3DLightSceneNode *light = Rengine->createLightSceneNode(false, true);
+	light->setName("Light");
+	light->setPosition(vector3df(0.f, 100.f, 100.f));
+	light->getLightData().DiffuseColor = SColorf(1.f, 0.f, 0.f, 1.f);
+	light->getShadowLight()->setMustAutoRecalculate(true);
+	light->setLightStrength(10.f);
+
+	ISceneNode *emptySceneNode = smgr->addBillboardTextSceneNode(Gui->getSkin()->getFont(), L"Light :)", 0, dimension2df(30.f, 30.f), vector3df(0.f), -1, SColor(255, 255, 0, 0));
+	emptySceneNode->setName("Text Node");
+	emptySceneNode->setMaterialFlag(EMF_LIGHTING, false);
+	light->setParent(emptySceneNode);
+	emptySceneNode->addAnimator(smgr->createFlyCircleAnimator(vector3df(0.f, 100.f, 0.f), 100.f, 0.001f));
+	emptySceneNode->setDebugDataVisible(EDS_BBOX);
+
+	Rengine->createNormalMappingMaterial();
+	planeNode->setMaterialType(Rengine->NormalMappingMaterialSolid);
+	cubeNode->setMaterialType(Rengine->NormalMappingMaterialSolid);
 
 	Handler->setAmbientColor(SColor(255, 32, 32, 32));
-
-	EditionTool->addTab("General");
-	EditionTool->addTab("Materials");
 }
 
 #endif

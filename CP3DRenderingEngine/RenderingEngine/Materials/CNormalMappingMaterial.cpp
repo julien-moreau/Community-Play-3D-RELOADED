@@ -10,6 +10,7 @@
 using namespace irr;
 using namespace core;
 using namespace video;
+using namespace scene;
 
 namespace cp3d {
 namespace rendering {
@@ -34,16 +35,25 @@ CNormalMappingMaterial::~CNormalMappingMaterial() {
 }
 
 void CNormalMappingMaterial::computeArrays() {
+	LightColorArray.clear();
+	LightPositionArray.clear();
+	LightStrengthArray.clear();
 
 	for (u32 i=0;  i < RenderingEngine->getLightCount(); i++) {
 		ICP3DLightSceneNode *l = RenderingEngine->getLightSceneNode(i);
 		if (l->isComputingNormalMapping()) {
 			LightStrengthArray.push_back(l->getLightStrength());
 
-			irr::scene::ILightSceneNode *ln = *l;
-			LightPositionArray.push_back(ln->getPosition().X);
-			LightPositionArray.push_back(ln->getPosition().Y);
-			LightPositionArray.push_back(ln->getPosition().Z);
+			ILightSceneNode *ln = *l;
+			vector3df position = ln->getPosition();
+			if (ln->getParent() != ln->getSceneManager()->getRootSceneNode()) {
+				ln->updateAbsolutePosition();
+				position = ln->getAbsolutePosition();
+			}
+			
+			LightPositionArray.push_back(position.X);
+			LightPositionArray.push_back(position.Y);
+			LightPositionArray.push_back(position.Z);
 
 			LightColorArray.push_back(ln->getLightData().DiffuseColor.getRed());
 			LightColorArray.push_back(ln->getLightData().DiffuseColor.getGreen());

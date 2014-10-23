@@ -9,6 +9,7 @@
 
 using namespace irr;
 using namespace video;
+using namespace scene;
 using namespace gui;
 
 /// Create rendering engine
@@ -40,6 +41,10 @@ IVideoDriver *CCP3DRenderingEngine::getVideoDriver() {
 	return ((CCP3DHandler*)Handler)->getIrrlichtDevice()->getVideoDriver();
 }
 
+ISceneManager *CCP3DRenderingEngine::getSceneManager() {
+	return ((CCP3DHandler*)Handler)->getIrrlichtDevice()->getSceneManager();
+}
+
 IGUIEnvironment *CCP3DRenderingEngine::getGUIEnvironment() {
 	return ((CCP3DHandler*)Handler)->getIrrlichtDevice()->getGUIEnvironment();
 }
@@ -49,10 +54,23 @@ ICP3DMaterialCreator *CCP3DRenderingEngine::createMaterialCreator() {
 	return new CMaterialCreator(((CCP3DHandler*)Handler)->getIrrlichtDevice()->getVideoDriver());
 }
 
-ICP3DLightSceneNode *CCP3DRenderingEngine::createLightSceneNode() {
-	ICP3DLightSceneNode *l = new ICP3DLightSceneNode(((CCP3DHandler*)Handler)->getIrrlichtDevice()->getSceneManager()->addLightSceneNode());
-	Lights.push_back(l);
-	return l;
+ICP3DLightSceneNode *CCP3DRenderingEngine::createLightSceneNode(const bool computeNormalMapping, const bool computeShadows) {
+	CCP3DHandler *Chandler = (CCP3DHandler *)Handler;
+
+	SShadowLight shadowLight;
+	s32 shadowLightIndex = -1;
+
+	if (computeShadows)
+		shadowLightIndex = Chandler->addShadowLight(shadowLight);
+
+	ILightSceneNode *lightSceneNode = getDevice()->getSceneManager()->addLightSceneNode();
+	ICP3DLightSceneNode *light = new ICP3DLightSceneNode(lightSceneNode, computeNormalMapping, shadowLightIndex);
+
+	light->ShadowLight = (shadowLightIndex == -1) ? 0 : Chandler->getShadowLightPtr(shadowLightIndex);
+	light->ShadowLight->LightScenenode = lightSceneNode;
+
+	Lights.push_back(light);
+	return light;
 }
 
 void CCP3DRenderingEngine::createNormalMappingMaterial() {

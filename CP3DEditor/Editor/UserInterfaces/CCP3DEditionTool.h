@@ -3,6 +3,7 @@
 
 #include <irrlicht.h>
 #include <ICP3DCustomUpdate.h>
+#include <ICP3DInterface.h>
 
 namespace cp3d {
 
@@ -17,7 +18,7 @@ This class must let users (and us =D) able to create easily gui elements
 called fields (text, float, color, etc.).
 It contains an array of fields
 */
-class CCP3DEditionTool : public irr::IEventReceiver, public engine::ICP3DUpdate {
+class CCP3DEditionTool : public irr::IEventReceiver, public engine::ICP3DUpdate, public ICP3DInterface {
 public:
 
 	/// Constructor & Destructor
@@ -27,6 +28,8 @@ public:
 	/// Inheritance
 	bool OnEvent(const irr::SEvent &event);
 	void OnPreUpdate();
+	void OnResize();
+	irr::gui::IGUIElement *getElementToResize() { return Window; }
 
 	/// Utils
 	irr::gui::IGUITab *addTab(const irr::core::stringc name);
@@ -42,7 +45,6 @@ private:
 	CCP3DEditorCore *EditorCore;
 
 	/// Datas
-	irr::core::dimension2du ScreenSize;
 	irr::s32 WindowWidth;
 
 	/// GUI
@@ -50,9 +52,6 @@ private:
 	irr::gui::IGUITabControl *TabCtrl;
 
 	irr::core::array<ui::CGUIPanel *> Panels;
-
-	/// Methods
-	void resize();
 
 };
 

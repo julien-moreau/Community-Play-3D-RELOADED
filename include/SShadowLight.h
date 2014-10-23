@@ -6,8 +6,14 @@
 namespace cp3d {
 namespace rendering {
 
-struct SShadowLight
-{
+class CCP3DRenderingEngine;
+class CCP3DHandler;
+
+struct SShadowLight {
+	friend class CCP3DRenderingEngine;
+	friend class CCP3DHandler;
+public:
+
 	//! Constructor
 	//! \param shadowMapResolution: the shadow map resolution
 	//! \param position: the light's position
@@ -17,12 +23,12 @@ struct SShadowLight
 	//! \param farValue: the light's far value
 	//! \param fov: the light's front of view value
 	//! \param directional: if the light is directional of not
-	SShadowLight(const irr::u32 shadowMapResolution,
-				 const irr::core::vector3df& position, 
-				 const irr::core::vector3df& target,
+	SShadowLight(irr::u32 shadowMapResolution = 1024,
+				 irr::core::vector3df position = irr::core::vector3df(0.f),
+				 irr::core::vector3df& target = irr::core::vector3df(0.f),
 				 irr::video::SColorf lightColor = irr::video::SColor(0xffffffff), 
-				 irr::f32 nearValue = 10.0, irr::f32 farValue = 100.0,
-				 irr::f32 fov = 90.0 * irr::core::DEGTORAD64, bool directional = false)
+				 irr::f32 nearValue = 10.0f, irr::f32 farValue = 400.0f,
+				 irr::f32 fov = 90.0f * irr::core::DEGTORAD64, bool directional = false)
 				 :	Pos(position), Tar(target), FarPlane(directional ? 1.0f : farValue), DiffuseColor(lightColor), 
 					MapRes(shadowMapResolution), AutoRecalculate(true), MustRecalculate(true)
 	{
@@ -140,6 +146,7 @@ private:
 			irr::core::vector3df(0.0f, 0.0f, 1.0f) : irr::core::vector3df(0.0f, 1.0f, 0.0f)); 
 	}
 
+	irr::scene::ILightSceneNode *LightScenenode;
 	irr::video::SColorf DiffuseColor;
 	irr::core::vector3df Pos, Tar;
 	irr::f32 FarPlane;

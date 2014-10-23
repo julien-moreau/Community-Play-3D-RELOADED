@@ -1,6 +1,8 @@
 
 #include "stdafx.h"
 
+#include <ICP3DInterface.h>
+
 #include "CCP3DEditorCore.h"
 #include "CCP3DInterfaceController.h"
 
@@ -19,13 +21,15 @@ CCP3DInterfaceController::CCP3DInterfaceController(CCP3DEditorCore *editorCore) 
 
 	Gui = editorCore->getDevice()->getGUIEnvironment();
 	CursorControl = editorCore->getDevice()->getCursorControl();
+
+	ScreenSize = Gui->getVideoDriver()->getScreenSize();
 }
 
 CCP3DInterfaceController::~CCP3DInterfaceController() {
 
 }
 
-bool CCP3DInterfaceController::addElement(irr::gui::IGUIElement *element, const SControlDescriptor &descriptor) {
+bool CCP3DInterfaceController::addElement(ICP3DInterface *element, const SControlDescriptor &descriptor) {
 	if (Parameters.find(element))
 		return false;
 
@@ -33,11 +37,11 @@ bool CCP3DInterfaceController::addElement(irr::gui::IGUIElement *element, const 
 	return true;
 }
 
-bool CCP3DInterfaceController::addElement(irr::gui::IGUIElement *element, irr::s32 flags) {
+bool CCP3DInterfaceController::addElement(ICP3DInterface *element, irr::s32 flags) {
 	return addElement(element, SControlDescriptor(flags, 200, 400));
 }
 
-bool CCP3DInterfaceController::removeElement(irr::gui::IGUIElement *element) {
+bool CCP3DInterfaceController::removeElement(ICP3DInterface *element) {
 	if (!Parameters.find(element))
 		return false;
 
@@ -46,13 +50,22 @@ bool CCP3DInterfaceController::removeElement(irr::gui::IGUIElement *element) {
 }
 
 void CCP3DInterfaceController::OnPreUpdate() {
+	bool resize = false;
+	if (Gui->getVideoDriver()->getScreenSize() != ScreenSize) {
+		resize = true;
+		ScreenSize = Gui->getVideoDriver()->getScreenSize();
+	}
+
 	vector2di cpos = CursorControl->getPosition();
 	CursorControl->setActiveIcon(ECI_NORMAL);
 
 	/// Check for icon
-	core::map<IGUIElement *, SControlDescriptor>::ConstIterator it = Parameters.getIterator();
+	core::map<ICP3DInterface *, SControlDescriptor>::ConstIterator it = Parameters.getIterator();
 	for (; !it.atEnd(); it++) {
-		IGUIElement *element = it.getNode()->getKey();
+		if (resize)
+			it.getNode()->getKey()->OnResize();
+
+		IGUIElement *element = it.getNode()->getKey()->getElementToResize();
 		const s32 flags = it.getNode()->getValue().Flags;
 
 		/// Check right side
@@ -79,8 +92,8 @@ void CCP3DInterfaceController::OnPreUpdate() {
 
 	/// Resize window
 	if (MouseHeld) {
-		rect<s32> position = SelectedNode->getKey()->getRelativePosition();
-		IGUIElement *element = SelectedNode->getKey();
+		rect<s32> position = SelectedNode->getKey()->getElementToResize()->getRelativePosition();
+		IGUIElement *element = SelectedNode->getKey()->getElementToResize();
 		const SControlDescriptor descriptor = SelectedNode->getValue();
 
 		if (SelectedCheck == EICC_RIGHT) {
@@ -110,7 +123,9 @@ void CCP3DInterfaceController::OnPreUpdate() {
 		else if (descriptor.MinHeight > position.getHeight() && SelectedCheck == EICC_BOTTOM)
 			position.LowerRightCorner.Y = position.UpperLeftCorner.Y + descriptor.MinHeight + 30;
 		
-		SelectedNode->getKey()->setRelativePosition(position);
+		SelectedNode->getKey()->getElementToResize()->setRelativePosition(position);
+
+		SelectedNode->getKey()->OnResize();
 	}
 
 }
@@ -120,9 +135,9 @@ bool CCP3DInterfaceController::OnEvent(const SEvent &event) {
 	if (event.EventType == EET_MOUSE_INPUT_EVENT) {
 
 		if (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN) {
-			core::map<IGUIElement *, SControlDescriptor>::ConstIterator it = Parameters.getIterator();
+			core::map<ICP3DInterface *, SControlDescriptor>::ConstIterator it = Parameters.getIterator();
 			for (; !it.atEnd(); it++) {
-				IGUIElement *element = it.getNode()->getKey();
+				IGUIElement *element = it.getNode()->getKey()->getElementToResize();
 				IGUIElement *focus = Gui->getFocus();
 				ECURSOR_ICON icon = CursorControl->getActiveIcon();
 
@@ -172,12 +187,12 @@ bool CCP3DInterfaceController::checkForChild(IGUIElement *element, IGUIElement *
 	if (element == child)
 		return true;
 
-	core::list<IGUIElement *>::ConstIterator it = element->getChildren().begin();
-	for (; it != element->getChildren().end(); ++it) {
-		if (*it == child)
+	IGUIElement *parent = child->getParent();
+	while (parent) {
+		if (parent == element)
 			return true;
 		else
-			return checkForChild(*it, child);
+			parent = parent->getParent();
 	}
 
 	return false;

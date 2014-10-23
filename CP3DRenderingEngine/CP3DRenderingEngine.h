@@ -22,6 +22,7 @@ public:
 	/// Irrlicht
 	irr::IrrlichtDevice *getDevice();
 	irr::video::IVideoDriver *getVideoDriver();
+	irr::scene::ISceneManager *getSceneManager();
 	irr::gui::IGUIEnvironment *getGUIEnvironment();
 
 	/// Handlers
@@ -32,12 +33,15 @@ public:
 	/// Creators
 	ICP3DMaterialCreator *createMaterialCreator();
 
-	ICP3DLightSceneNode *createLightSceneNode();
+	ICP3DLightSceneNode *createLightSceneNode(const bool computeNormalMapping = false, const bool computeShadows = false);
 	irr::u32 getLightCount() {
 		return Lights.size();
 	}
-	ICP3DLightSceneNode *getLightSceneNode(irr::u32 index) {
+	ICP3DLightSceneNode *getLightSceneNode(const irr::u32 index) {
 		return Lights[index];
+	}
+	const irr::u32 getLightSceneNodeCount() const {
+		return Lights.size();
 	}
 
 	void createNormalMappingMaterial();

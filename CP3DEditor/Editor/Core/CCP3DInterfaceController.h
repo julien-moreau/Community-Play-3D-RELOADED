@@ -7,6 +7,7 @@
 
 namespace cp3d {
 
+/// Resize types to check
 enum E_INTERFACE_CONTROLLER_CHECK
 {
 	EICC_RIGHT = 0x1,
@@ -16,6 +17,7 @@ enum E_INTERFACE_CONTROLLER_CHECK
 	EMBF_FORCE_32BIT = 0x7fffffff //! This value is not used. It only forces this enumeration to compile in 32 bit.
 };
 
+/// Control descriptor
 struct SControlDescriptor {
 public:
 	SControlDescriptor(irr::s32 flags, irr::s32 minSize = 0, irr::s32 maxSize = 0)
@@ -34,6 +36,7 @@ public:
 };
 
 class CCP3DEditorCore;
+class ICP3DInterface;
 
 class CCP3DInterfaceController : public irr::IEventReceiver, public engine::ICP3DUpdate {
 public:
@@ -45,9 +48,9 @@ public:
 	bool OnEvent(const irr::SEvent &event);
 	void OnPreUpdate();
 
-	bool addElement(irr::gui::IGUIElement *element, const irr::s32 flags);
-	bool addElement(irr::gui::IGUIElement *element, const SControlDescriptor &descriptor);
-	bool removeElement(irr::gui::IGUIElement *element);
+	bool addElement(ICP3DInterface *element, const irr::s32 flags);
+	bool addElement(ICP3DInterface *element, const SControlDescriptor &descriptor);
+	bool removeElement(ICP3DInterface *element);
 
 private:
 	/// Irrlicht
@@ -56,9 +59,11 @@ private:
 
 	/// Datas
 	bool MouseHeld;
-	irr::core::map<irr::gui::IGUIElement *, SControlDescriptor> Parameters;
-	irr::core::map<irr::gui::IGUIElement *, SControlDescriptor>::ConstIterator SelectedNode;
+	irr::core::map<ICP3DInterface *, SControlDescriptor> Parameters;
+	irr::core::map<ICP3DInterface *, SControlDescriptor>::ConstIterator SelectedNode;
 	E_INTERFACE_CONTROLLER_CHECK SelectedCheck;
+
+	irr::core::dimension2du ScreenSize;
 
 	/// Methods
 	bool checkForChild(irr::gui::IGUIElement *element, irr::gui::IGUIElement *child);

@@ -2,6 +2,7 @@
 #define __H_C_CP3D_EDITOR_CORE_INCLUDED__
 
 #include <irrlicht.h>
+#include <ICP3DEditor.h>
 #include <CP3DRenderingEngine.h>
 #include <CP3DEngine.h>
 
@@ -9,6 +10,7 @@ namespace cp3d {
 
 class CCP3DContextMenu;
 class CCP3DEditionTool;
+class CCP3DSceneGraph;
 class CCP3DInterfaceController;
 
 class CCP3DEditorCore : public ICP3DEditor
@@ -59,8 +61,11 @@ private:
 
 	/// Datas
 	CCP3DInterfaceController *InterfaceController;
+
 	CCP3DContextMenu *ContextMenu;
 	CCP3DEditionTool *EditionTool;
+	CCP3DSceneGraph *SceneGraph;
+
 	irr::core::stringc ProjectName, ProjectDirectory;
 	irr::core::stringc WorkingDirectory;
 

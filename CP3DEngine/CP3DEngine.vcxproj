@@ -99,9 +99,11 @@
     <ClInclude Include="..\include\CP3DCompileConfig.h" />
     <ClInclude Include="..\include\CP3DEngine.h" />
     <ClInclude Include="..\include\CP3DRenderingEngine.h" />
+    <ClInclude Include="..\include\ICP3DInterface.h" />
     <ClInclude Include="..\include\ICP3DCustomDepthPass.h" />
     <ClInclude Include="..\include\ICP3DCustomPass.h" />
     <ClInclude Include="..\include\ICP3DCustomUpdate.h" />
+    <ClInclude Include="..\include\ICP3DEditor.h" />
     <ClInclude Include="..\include\ICP3DEngine.h" />
     <ClInclude Include="..\include\ICP3DEventReceiver.h" />
     <ClInclude Include="..\include\ICP3DHandler.h" />

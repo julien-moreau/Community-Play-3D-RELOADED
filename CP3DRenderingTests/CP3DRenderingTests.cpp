@@ -146,9 +146,9 @@ int main(int argc, char* argv[]) {
 	cubeNode->setMaterialFlag(EMF_LIGHTING, false);
 	handler->addShadowToNode(cubeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_BOTH);
 
-	cp3d::rendering::SShadowLight light1(1024, vector3df(0.f, 100.f, 100.f), vector3df(0.f), SColor(255, 255, 255, 255), 1.f, 400.f, 90.f * f32(irr::core::DEGTORAD64), false);
-	light1.setMustAutoRecalculate(false);
-	handler->addShadowLight(light1);
+	//cp3d::rendering::SShadowLight light1(1024, vector3df(0.f, 100.f, 100.f), vector3df(0.f), SColor(255, 255, 255, 255), 1.f, 400.f, 90.f * f32(irr::core::DEGTORAD64), false);
+	//light1.setMustAutoRecalculate(false);
+	//handler->addShadowLight(light1);
 
 	/// Add a custom depth pass
 	cp3d::rendering::ICP3DCustomDepthPass *customDepthPassMgr = handler->getDepthPassManager();
@@ -164,21 +164,15 @@ int main(int argc, char* argv[]) {
 	cubeNode->setMaterialType(cpre->NormalMappingMaterialSolid);
 	planeNode->setMaterialType(cpre->NormalMappingMaterialSolid);
 
-	ILightSceneNode *light = *cpre->createLightSceneNode();
-	light->setPosition(light1.getPosition());
+	cp3d::rendering::ICP3DLightSceneNode *light = cpre->createLightSceneNode(false, true);
+	light->setPosition(vector3df(0.f, 100.f, 100.f));
 	light->getLightData().DiffuseColor = SColorf(1.f, 0.f, 0.f, 1.f);
 
 	/// Finish
 	handler->setAmbientColor(SColor(255, 32, 32, 32));
 
 	/// Update the application
-	u32 lastTime = device->getTimer()->getTime();
 	while (device->run()) {
-		if (device->getTimer()->getTime() - lastTime > 1000) {
-			lastTime = device->getTimer()->getTime();
-			handler->getShadowLight(0).setMustRecalculate(true);
-		}
-
 		driver->beginScene(true, true, SColor(0x0));
 		handler->update();
 		driver->endScene();

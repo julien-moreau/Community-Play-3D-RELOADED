@@ -30,8 +30,9 @@ public:
 	void update(irr::video::ITexture* outputTarget = 0);
 
 	/// Shadows
-	void addShadowLight(const SShadowLight& shadowLight) { LightList.push_back(shadowLight); }
-	SShadowLight& getShadowLight(irr::u32 index) { return LightList[index]; }
+	irr::u32 addShadowLight(SShadowLight& shadowLight);
+	SShadowLight &getShadowLight(const irr::u32 index) { return LightList[index]; }
+	SShadowLight *getShadowLightPtr(const irr::u32 index) { return &LightList[index]; }
 	const irr::u32 getShadowLightCount() const {
 		return LightList.size();
 	}
