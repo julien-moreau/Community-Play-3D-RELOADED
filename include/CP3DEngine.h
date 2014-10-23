@@ -4,5 +4,6 @@
 #include "ICP3DEngine.h"
 #include "ICP3DEventReceiver.h"
 #include "ICP3DCustomUpdate.h"
+#include "ICP3DSceneNodeCreator.h"
 
 #endif

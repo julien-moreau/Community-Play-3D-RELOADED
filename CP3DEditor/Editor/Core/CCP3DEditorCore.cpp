@@ -8,6 +8,8 @@
 #include "CCP3DEditorCore.h"
 #include "CCP3DInterfaceController.h"
 #include "../UserInterfaces/CCP3DContextMenu.h"
+#include "../UserInterfaces/CCP3DMainToolbar.h"
+#include "../UserInterfaces/CCP3DToolsToolbar.h"
 #include "../UserInterfaces/CCP3DEditionTool.h"
 #include "../UserInterfaces/CCP3DSceneGraph.h"
 
@@ -59,6 +61,8 @@ CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), 
 	/// Create User Interface
 	InterfaceController = new CCP3DInterfaceController(this);
 	ContextMenu = new CCP3DContextMenu(this);
+	MainToolbar = new CCP3DMainToolbar(this);
+	ToolsToolbar = new CCP3DToolsToolbar(this);
 	EditionTool = new CCP3DEditionTool(this);
 	SceneGraph = new CCP3DSceneGraph(this);
 
@@ -66,7 +70,6 @@ CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), 
 	WorkingDirectory = ProjectDirectory = device->getFileSystem()->getWorkingDirectory();
 	setProjectName(ProjectName);
 
-	EditionTool->addTab("General");
 	SceneGraph->fillGraph();
 }
 
@@ -133,21 +136,41 @@ void CCP3DEditorCore::createTestScene() {
 
 	cp3d::rendering::ICP3DLightSceneNode *light = Rengine->createLightSceneNode(false, true);
 	light->setName("Light");
-	light->setPosition(vector3df(0.f, 100.f, 100.f));
+	light->setPosition(vector3df(0.f, 0.f, 0.f));
 	light->getLightData().DiffuseColor = SColorf(1.f, 0.f, 0.f, 1.f);
 	light->getShadowLight()->setMustAutoRecalculate(true);
-	light->setLightStrength(10.f);
+	light->setLightStrength(1.f);
 
 	ISceneNode *emptySceneNode = smgr->addBillboardTextSceneNode(Gui->getSkin()->getFont(), L"Light :)", 0, dimension2df(30.f, 30.f), vector3df(0.f), -1, SColor(255, 255, 0, 0));
 	emptySceneNode->setName("Text Node");
 	emptySceneNode->setMaterialFlag(EMF_LIGHTING, false);
+	emptySceneNode->setPosition(vector3df(0.f, 100.f, 100.f));
+	Handler->addShadowToNode(emptySceneNode, rendering::EFT_NONE, rendering::ESM_EXCLUDE);
 	light->setParent(emptySceneNode);
-	emptySceneNode->addAnimator(smgr->createFlyCircleAnimator(vector3df(0.f, 100.f, 0.f), 100.f, 0.001f));
 	emptySceneNode->setDebugDataVisible(EDS_BBOX);
 
 	Rengine->createNormalMappingMaterial();
 	planeNode->setMaterialType(Rengine->NormalMappingMaterialSolid);
 	cubeNode->setMaterialType(Rengine->NormalMappingMaterialSolid);
+
+	ISceneNode* skyboxNode = smgr->addSkyBoxSceneNode(
+		driver->getTexture("Textures/Skybox/glacier_up.png"),
+		driver->getTexture("Textures/Skybox/glacier_dn.png"),
+		driver->getTexture("Textures/Skybox/glacier_lf.png"),
+		driver->getTexture("Textures/Skybox/glacier_rt.png"),
+		driver->getTexture("Textures/Skybox/glacier_ft.png"),
+		driver->getTexture("Textures/Skybox/glacier_bk.png"));
+	skyboxNode->setName("Skybox");
+
+	u32 count = 0;
+	auto callback = [&](ISceneNode *node) {
+		count++;
+		node->setName(stringc(stringc("Cloud Node ") + stringc(count)).c_str());
+	};
+
+	Engine->getSceneNodeCreator()->createCloudNode(vector2df(0.008f, 0.0f), driver->getTexture("Textures/Clouds/cloud01.png"), 1.f, 0.5f, 0.1f, -0.05f, callback);
+	Engine->getSceneNodeCreator()->createCloudNode(vector2df(0.006f, 0.003f), driver->getTexture("Textures/Clouds/cloud02.png"), 0.4f, 0.05f, -0.1f, 0.5f, callback);
+	Engine->getSceneNodeCreator()->createCloudNode(vector2df(0.006f, 0.003f), driver->getTexture("Textures/Clouds/cloud03.png"), 0.035f, 0.f, -0.15f, 0.4f, callback);
 
 	Handler->setAmbientColor(SColor(255, 32, 32, 32));
 }

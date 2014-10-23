@@ -71,13 +71,16 @@ void CCP3DEditionTool::clearTabs() {
 
 void CCP3DEditionTool::OnResize() {
 	/// Select the new y position of the window
-	s32 positionY = 0;
+	s32 positionY = 0, count = 0;
 	core::list<IGUIElement *>::ConstIterator it = Gui->getRootGUIElement()->getChildren().begin();
 	for (; it != Gui->getRootGUIElement()->getChildren().end(); ++it) {
 		EGUI_ELEMENT_TYPE type = (*it)->getType();
-		if (type == EGUIET_MENU || type == EGUIET_TOOL_BAR)
+		if (type == EGUIET_MENU || type == EGUIET_TOOL_BAR) {
 			positionY += (*it)->getRelativePosition().getHeight();
+			count++;
+		}
 	}
+	positionY -= 2 * count;
 
 	/// Resize elements
 	Window->setRelativePosition(rect<s32>(0, positionY, Window->getRelativePosition().LowerRightCorner.X,

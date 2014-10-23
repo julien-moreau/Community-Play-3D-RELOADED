@@ -9,6 +9,8 @@
 namespace cp3d {
 
 class CCP3DContextMenu;
+class CCP3DMainToolbar;
+class CCP3DToolsToolbar;
 class CCP3DEditionTool;
 class CCP3DSceneGraph;
 class CCP3DInterfaceController;
@@ -63,6 +65,8 @@ private:
 	CCP3DInterfaceController *InterfaceController;
 
 	CCP3DContextMenu *ContextMenu;
+	CCP3DMainToolbar *MainToolbar;
+	CCP3DToolsToolbar *ToolsToolbar;
 	CCP3DEditionTool *EditionTool;
 	CCP3DSceneGraph *SceneGraph;
 

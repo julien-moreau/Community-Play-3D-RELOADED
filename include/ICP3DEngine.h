@@ -13,6 +13,7 @@ namespace engine {
 
 class ICP3DEventReceiver;
 class ICP3DCustomUpdater;
+class ICP3DSceneNodeCreator;
 
 class ICP3DEngine {
 public:
@@ -26,6 +27,11 @@ public:
 	//! Then you can add / remove custom updates using
 	//! addCustomUpdate(update) or removeCustomUpdate(update)
 	virtual ICP3DCustomUpdater *getCustomUpdater() = 0;
+
+	//! Returns the scene node creator
+	//! Let you able to create scene nodes using
+	//! Engine->getSceneNodeCreator()->create[...]();
+	virtual ICP3DSceneNodeCreator *getSceneNodeCreator() = 0;
 
 	//! Runs the engine.
 	//! Should be called each frame in your programs

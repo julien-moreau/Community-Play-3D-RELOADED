@@ -110,11 +110,14 @@
     <ClInclude Include="..\include\ICP3DLightSceneNode.h" />
     <ClInclude Include="..\include\ICP3DMaterialCreator.h" />
     <ClInclude Include="..\include\ICP3DRenderingEngine.h" />
+    <ClInclude Include="..\include\ICP3DSceneNodeCreator.h" />
     <ClInclude Include="..\include\SShadowLight.h" />
     <ClInclude Include="CP3DEngine.h" />
     <ClInclude Include="Engine\Core\CCP3DCustomUpdater.h" />
     <ClInclude Include="Engine\Core\CCP3DEngineCore.h" />
     <ClInclude Include="Engine\Core\CCP3DEventReceiver.h" />
+    <ClInclude Include="Engine\Scene\CCP3DSceneNodeCreator.h" />
+    <ClInclude Include="Engine\Scene\Clouds\CCloudSceneNode.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stdafx.h" />
   </ItemGroup>
@@ -124,6 +127,8 @@
     <ClCompile Include="Engine\Core\CCP3DCustomUpdater.cpp" />
     <ClCompile Include="Engine\Core\CCP3DEngineCore.cpp" />
     <ClCompile Include="Engine\Core\CCP3DEventReceiver.cpp" />
+    <ClCompile Include="Engine\Scene\CCP3DSceneNodeCreator.cpp" />
+    <ClCompile Include="Engine\Scene\Clouds\CCloudSceneNode.cpp" />
     <ClCompile Include="Stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

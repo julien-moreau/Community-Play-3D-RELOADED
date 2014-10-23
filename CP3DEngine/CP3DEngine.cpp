@@ -22,15 +22,18 @@ namespace engine {
 
 CCP3DEngine::CCP3DEngine(irr::IrrlichtDevice *device) : Device(device)
 {
-	/// Configure core
+	/// Configure rendering
+	Rengine = createRenderingEngine(device);
+	Handler = Rengine->getHandler();
+
+	/// Configure Events & Update
 	EventReceiver = new CCP3DEventReceiver();
 	Device->setEventReceiver(EventReceiver);
 
 	Updater = new CCP3DCustomUpdater();
 
-	/// Configure rendering
-	Rengine = createRenderingEngine(device);
-	Handler = Rengine->getHandler();
+	/// Scene
+	SceneNodeCreator = new CCP3DSceneNodeCreator(Rengine);
 
 	/// Finish
 	Gui = device->getGUIEnvironment();
@@ -75,6 +78,10 @@ CCP3DEventReceiver *CCP3DEngine::getEventReceiver() {
 
 CCP3DCustomUpdater *CCP3DEngine::getCustomUpdater() {
 	return Updater;
+}
+
+CCP3DSceneNodeCreator *CCP3DEngine::getSceneNodeCreator() {
+	return SceneNodeCreator;
 }
 
 rendering::ICP3DRenderingEngine *CCP3DEngine::getRenderingEngine() {

@@ -18,6 +18,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Engine\Scene">
+      <UniqueIdentifier>{7ed508a5-1600-4cf3-b26e-1d1c44e30cd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Scene\Clouds">
+      <UniqueIdentifier>{0ea7a1b2-a81d-484f-ae88-a782b34fa8ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\CP3DCompileConfig.h">
@@ -83,6 +89,15 @@
     <ClInclude Include="..\include\ICP3DInterface.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Scene\CCP3DSceneNodeCreator.h">
+      <Filter>Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ICP3DSceneNodeCreator.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\Clouds\CCloudSceneNode.h">
+      <Filter>Engine\Scene\Clouds</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DEngine.cpp">
@@ -102,6 +117,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Core\CCP3DCustomUpdater.cpp">
       <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scene\CCP3DSceneNodeCreator.cpp">
+      <Filter>Engine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scene\Clouds\CCloudSceneNode.cpp">
+      <Filter>Engine\Scene\Clouds</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

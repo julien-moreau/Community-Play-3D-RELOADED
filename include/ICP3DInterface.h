@@ -5,6 +5,17 @@
 
 namespace cp3d {
 
+enum E_INTERFACE_EVENT {
+	EIE_NODE_ADDED = 0,
+	EIE_NODE_REMOVED,
+
+	EIE_NODE_SELECTED,
+	EIE_NODE_CHANGED,
+
+	EIE_TEXTURE_SELECTED,
+	EIE_MATERIAL_SELECTED
+};
+
 /// Interface controller interface
 class ICP3DInterface {
 public:

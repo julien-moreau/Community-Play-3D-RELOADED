@@ -18,7 +18,6 @@ namespace ui {
 		/// Inheritance
 		bool OnEvent(const irr::SEvent& event);
 		void OnPreUpdate();
-
 		//! Draws the element and its children
 		void draw();
 

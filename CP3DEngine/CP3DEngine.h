@@ -8,6 +8,7 @@
 
 #include "Engine/Core/CCP3DEventReceiver.h"
 #include "Engine/Core/CCP3DCustomUpdater.h"
+#include "Engine/Scene/CCP3DSceneNodeCreator.h"
 
 namespace cp3d {
 namespace engine {
@@ -20,10 +21,14 @@ public:
 
 	void runEngine();
 
-	/// Getters
+	/// Events & Updates
 	CCP3DEventReceiver *getEventReceiver();
 	CCP3DCustomUpdater *getCustomUpdater();
 
+	/// Scene
+	CCP3DSceneNodeCreator *getSceneNodeCreator();
+
+	/// Rendering
 	rendering::ICP3DRenderingEngine *getRenderingEngine();
 
 	/// GUI
@@ -35,13 +40,16 @@ private:
 	irr::IrrlichtDevice *Device;
 	irr::gui::IGUIEnvironment *Gui;
 
+	/// Events & Update
+	CCP3DEventReceiver *EventReceiver;
+	CCP3DCustomUpdater *Updater;
+
+	/// Scene
+	CCP3DSceneNodeCreator *SceneNodeCreator;
+
 	/// Rendering
 	rendering::ICP3DRenderingEngine *Rengine;
 	rendering::ICP3DHandler *Handler;
-
-	/// Datas
-	CCP3DEventReceiver *EventReceiver;
-	CCP3DCustomUpdater *Updater;
 
 	bool DrawGUI;
 

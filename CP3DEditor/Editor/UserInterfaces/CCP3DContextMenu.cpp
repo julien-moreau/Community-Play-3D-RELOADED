@@ -105,6 +105,7 @@ CCP3DContextMenu::CCP3DContextMenu(CCP3DEditorCore *editorCore) : EditorCore(edi
 	SceneContextMenuLight->addItem(L"Shadow light... (TO DO)", -1);
 	SceneContextMenuLight->addItem(L"Standard light... (TO DO)", -1);
 	/// --------------------------------------------------
+
 }
 
 CCP3DContextMenu::~CCP3DContextMenu() {

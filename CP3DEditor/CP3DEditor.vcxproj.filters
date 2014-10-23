@@ -50,6 +50,12 @@
     <ClInclude Include="Editor\UserInterfaces\CCP3DSceneGraph.h">
       <Filter>Editor\UserInterfaces</Filter>
     </ClInclude>
+    <ClInclude Include="Editor\UserInterfaces\CCP3DMainToolbar.h">
+      <Filter>Editor\UserInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\UserInterfaces\CCP3DToolsToolbar.h">
+      <Filter>Editor\UserInterfaces</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DEditor.cpp">
@@ -77,6 +83,12 @@
       <Filter>Editor\Core</Filter>
     </ClCompile>
     <ClCompile Include="Editor\UserInterfaces\CCP3DSceneGraph.cpp">
+      <Filter>Editor\UserInterfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\UserInterfaces\CCP3DMainToolbar.cpp">
+      <Filter>Editor\UserInterfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\UserInterfaces\CCP3DToolsToolbar.cpp">
       <Filter>Editor\UserInterfaces</Filter>
     </ClCompile>
   </ItemGroup>
