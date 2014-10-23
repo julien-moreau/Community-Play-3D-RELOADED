@@ -8,6 +8,8 @@
 namespace cp3d {
 
 class CCP3DContextMenu;
+class CCP3DEditionTool;
+class CCP3DInterfaceController;
 
 class CCP3DEditorCore : public ICP3DEditor
 						#if defined (_DEBUG)
@@ -27,12 +29,17 @@ public:
 	rendering::ICP3DRenderingEngine *getRenderingEngine() { return Rengine; }
 	engine::ICP3DEngine *getEngine() { return Engine; }
 
+	irr::IrrlichtDevice *getDevice() { return Device; }
+
 	irr::core::stringc getProjectName() { return ProjectName; }
 	void setProjectName(irr::core::stringc name);
 	irr::core::stringc getProjectDirectory() { return ProjectDirectory; }
 	void setProjectDirectory(irr::core::stringc directory) { ProjectDirectory = directory; }
 
 	irr::core::stringc getWorkingDirectory() { return WorkingDirectory; }
+
+	/// Interfaces
+	CCP3DInterfaceController *getInterfaceController() { return InterfaceController; }
 
 	#if defined(_DEBUG)
 	bool OnEvent(const irr::SEvent &event);
@@ -51,7 +58,9 @@ private:
 	engine::ICP3DEngine *Engine;
 
 	/// Datas
+	CCP3DInterfaceController *InterfaceController;
 	CCP3DContextMenu *ContextMenu;
+	CCP3DEditionTool *EditionTool;
 	irr::core::stringc ProjectName, ProjectDirectory;
 	irr::core::stringc WorkingDirectory;
 

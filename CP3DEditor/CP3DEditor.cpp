@@ -1,6 +1,5 @@
-// Il s'agit du fichier DLL principal.
 
-#include "stdafx.h"
+#include "Stdafx.h"
 
 #include <CP3DCompileConfig.h>
 #include "Editor/Core/CCP3DEditorCore.h"

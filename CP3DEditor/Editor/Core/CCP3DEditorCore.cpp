@@ -6,7 +6,9 @@
 #include <CP3DCompileConfig.h>
 
 #include "CCP3DEditorCore.h"
+#include "CCP3DInterfaceController.h"
 #include "../UserInterfaces/CCP3DContextMenu.h"
+#include "../UserInterfaces/CCP3DEditionTool.h"
 
 using namespace irr;
 using namespace scene;
@@ -31,13 +33,6 @@ CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), 
 	Handler = Rengine->getHandler();
 	Handler->setScreenRenderTargetResolution(device->getVideoModeList()->getDesktopResolution());
 
-	/// Configure scene
-	createComponents();
-	#if defined(_DEBUG)
-	Engine->getEventReceiver()->addEventReceiver(this);
-	createTestScene();
-	#endif
-
 	/// Configure GUI
 	Gui = Rengine->getGUIEnvironment();
 	IGUISkin *skin = Gui->createSkin(EGST_WINDOWS_CLASSIC);
@@ -53,11 +48,21 @@ CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), 
 	skin->setColor(EGDC_3D_LIGHT, SColor(255, 32, 32, 32));
 
 	/// Create User Interface
+	InterfaceController = new CCP3DInterfaceController(this);
 	ContextMenu = new CCP3DContextMenu(this);
+	EditionTool = new CCP3DEditionTool(this);
 
 	/// Finish
 	WorkingDirectory = ProjectDirectory = device->getFileSystem()->getWorkingDirectory();
 	setProjectName(ProjectName);
+
+	/// Tests
+	/// Configure scene
+	createComponents();
+	#if defined(_DEBUG)
+	Engine->getEventReceiver()->addEventReceiver(this);
+	createTestScene();
+	#endif
 }
 
 CCP3DEditorCore::~CCP3DEditorCore() {
@@ -123,6 +128,9 @@ void CCP3DEditorCore::createTestScene() {
 	Handler->addShadowLight(light1);
 
 	Handler->setAmbientColor(SColor(255, 32, 32, 32));
+
+	EditionTool->addTab("General");
+	EditionTool->addTab("Materials");
 }
 
 #endif

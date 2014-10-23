@@ -18,6 +18,12 @@
     <Filter Include="Editor\UserInterfaces">
       <UniqueIdentifier>{28c918db-9b03-412e-acc6-f9db9f8390f6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\GUIElements">
+      <UniqueIdentifier>{1df27428-1ba8-4aa0-b70a-bf7d0430053f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\GUIElements\GUIPanel">
+      <UniqueIdentifier>{345dd9b2-81ae-4907-8c2d-812cce5bd546}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Stdafx.h">
@@ -31,6 +37,15 @@
     </ClInclude>
     <ClInclude Include="Editor\UserInterfaces\CCP3DContextMenu.h">
       <Filter>Editor\UserInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\GUIElements\GUIPanel\CGUIPanel.h">
+      <Filter>Editor\GUIElements\GUIPanel</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\UserInterfaces\CCP3DEditionTool.h">
+      <Filter>Editor\UserInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\Core\CCP3DInterfaceController.h">
+      <Filter>Editor\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -48,6 +63,15 @@
     </ClCompile>
     <ClCompile Include="Editor\UserInterfaces\CCP3DContextMenu.cpp">
       <Filter>Editor\UserInterfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\GUIElements\GUIPanel\CGUIPanel.cpp">
+      <Filter>Editor\GUIElements\GUIPanel</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\UserInterfaces\CCP3DEditionTool.cpp">
+      <Filter>Editor\UserInterfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\Core\CCP3DInterfaceController.cpp">
+      <Filter>Editor\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

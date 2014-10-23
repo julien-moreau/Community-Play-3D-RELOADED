@@ -48,7 +48,7 @@ void CCP3DEngine::runEngine() {
 
 		Device->getVideoDriver()->beginScene(true, true, SColor(0x0));
 
-		Updater->OnPostUpdate();
+		Updater->OnPreUpdate();
 
 		Handler->update();
 		if (DrawGUI)
