@@ -75,6 +75,31 @@ void CCP3DSceneGraph::OnResize() {
 
 bool CCP3DSceneGraph::OnEvent(const SEvent &event) {
 
+	if (event.EventType == EET_GUI_EVENT) {
+
+		if (event.GUIEvent.EventType == EGET_TREEVIEW_NODE_SELECT) {
+			if (event.GUIEvent.Caller == Graph) {
+				IGUITreeViewNode *node = Graph->getSelected();
+				if (!node)
+					return true;
+
+				ISceneNode *sceneNode = (ISceneNode*)node->getData();
+				void *data = sceneNode;
+				if (sceneNode->getType() == ESNT_LIGHT)
+					data = Rengine->getLightSceneNode(getLightSceneNodeIndex((ILightSceneNode*)sceneNode));
+
+				SEvent ev;
+				ev.EventType = EET_USER_EVENT;
+				ev.UserEvent.UserData1 = EIE_NODE_SELECTED;
+				ev.UserEvent.UserData2 = (s32)data;
+				EditorCore->getEngine()->getEventReceiver()->OnEvent(ev);
+				
+				return true;
+			}
+		}
+
+	}
+
 	return false;
 }
 
@@ -96,11 +121,7 @@ void CCP3DSceneGraph::fillGraphRecursively(ISceneNode *start, irr::gui::IGUITree
 		s32 imageIndex = getIconFromType(type);
 		stringw icon = ((*it)->isVisible()) ? "" : "Hidden";
 
-		void *data = 0;
-		if (type == ESNT_LIGHT)
-			data = Rengine->getLightSceneNode(getLightSceneNodeIndex((ILightSceneNode*)*it));
-		else
-			data = *it;
+		void *data = *it;
 
 		IGUITreeViewNode *node = treeNode->addChildBack(stringw((*it)->getName()).c_str(), icon.c_str(), imageIndex, -1, data);
 		fillGraphRecursively(*it, node);

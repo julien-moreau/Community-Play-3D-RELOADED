@@ -35,6 +35,10 @@ public:
 	irr::gui::IGUITab *addTab(const irr::core::stringc name);
 	void clearTabs();
 
+	/// GUI Elements
+	void setNewZone(irr::gui::IGUITab *tab, irr::core::stringw name);
+	SCP3DInterfaceData addField(irr::gui::IGUITab *tab, irr::gui::EGUI_ELEMENT_TYPE type, ICP3DEditionToolCallback callback = ICP3D_EDITION_TOOL_DEFAULT_CB);
+
 private:
 	/// Irrlicht
 	irr::gui::IGUIEnvironment *Gui;
@@ -46,12 +50,21 @@ private:
 
 	/// Datas
 	irr::s32 WindowWidth;
+	bool NewZone;
 
 	/// GUI
 	irr::gui::IGUIWindow *Window;
 	irr::gui::IGUITabControl *TabCtrl;
 
 	irr::core::array<ui::CGUIPanel *> Panels;
+
+	/// Methods
+	irr::s32 getElementPositionOffset(irr::gui::IGUITab *tab, ui::CGUIPanel *panel);
+
+	/// Creators
+	SCP3DInterfaceData createTextBoxField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel);
+	SCP3DInterfaceData createListBoxField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel);
+	SCP3DInterfaceData createComboBoxField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel);
 
 };
 

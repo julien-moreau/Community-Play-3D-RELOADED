@@ -50,14 +50,6 @@ CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), 
 	skin->setColor(EGDC_INACTIVE_CAPTION, SColor(255,0,0,0));
 	skin->setColor(EGDC_3D_LIGHT, SColor(255, 32, 32, 32));
 
-	/// Tests
-	/// Configure scene
-	createComponents();
-	#if defined(_DEBUG)
-	Engine->getEventReceiver()->addEventReceiver(this);
-	createTestScene();
-	#endif
-
 	/// Create User Interface
 	InterfaceController = new CCP3DInterfaceController(this);
 	ContextMenu = new CCP3DContextMenu(this);
@@ -70,6 +62,13 @@ CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), 
 	WorkingDirectory = ProjectDirectory = device->getFileSystem()->getWorkingDirectory();
 	setProjectName(ProjectName);
 
+	/// Tests
+	/// Configure scene
+	createComponents();
+	#if defined(_DEBUG)
+	Engine->getEventReceiver()->addEventReceiver(this);
+	createTestScene();
+	#endif
 	SceneGraph->fillGraph();
 }
 
@@ -173,6 +172,39 @@ void CCP3DEditorCore::createTestScene() {
 	Engine->getSceneNodeCreator()->createCloudNode(vector2df(0.006f, 0.003f), driver->getTexture("Textures/Clouds/cloud03.png"), 0.035f, 0.f, -0.15f, 0.4f, callback);
 
 	Handler->setAmbientColor(SColor(255, 32, 32, 32));
+
+	std::function<ICP3DEditionToolCallback(stringw text)> guiCallback = [&](stringw text) -> ICP3DEditionToolCallback {
+
+		ICP3DEditionToolCallback c = [=](SCP3DInterfaceData data) {
+			data.TextElement->setText(text.c_str());
+
+			if (data.Type == EGUIET_EDIT_BOX)
+				data.TextBox->setText(L"No Name");
+			else if (data.Type == EGUIET_COMBO_BOX) {
+				data.ComboBox->addItem(L"Item 1");
+				data.ComboBox->addItem(L"Item 2");
+			} else if (data.Type == EGUIET_LIST_BOX) {
+				data.ListData.List->addItem(L"Item 1");
+				data.ListData.List->addItem(L"Item 2");
+			}
+
+		};
+
+		return c;
+	};
+
+	IGUITab *tab = EditionTool->addTab("General");
+	EditionTool->setNewZone(tab, "Zone 1");
+	EditionTool->addField(tab, EGUIET_EDIT_BOX, guiCallback("Name :"));
+	EditionTool->addField(tab, EGUIET_EDIT_BOX, guiCallback("Name 2 Test"));
+	EditionTool->setNewZone(tab, "Zone 2");
+	EditionTool->addField(tab, EGUIET_LIST_BOX, guiCallback("List"));
+	EditionTool->addField(tab, EGUIET_COMBO_BOX, guiCallback("ComboBox 1 :"));
+	EditionTool->setNewZone(tab, "Zone 3");
+	EditionTool->addField(tab, EGUIET_COMBO_BOX, guiCallback("ComboBox 2 :"));
+
+	IGUITab *tab2 = EditionTool->addTab("Advanced");
+	EditionTool->addField(tab2, EGUIET_LIST_BOX, guiCallback("List advanced"));
 }
 
 #endif

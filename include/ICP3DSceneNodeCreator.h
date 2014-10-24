@@ -8,7 +8,7 @@ namespace cp3d {
 namespace engine {
 
 typedef std::function<void(irr::scene::ISceneNode *node)> ICP3DSceneNodeCreatorCallback;
-#define DEFAULT_CALLBACK [&](irr::scene::ISceneNode *node) { }
+#define ICP3D_SN_CREATOR_DEFAULT_CB [&](irr::scene::ISceneNode *node) { }
 
 class ICP3DSceneNodeCreator {
 public:
@@ -19,7 +19,7 @@ public:
 	//! \param scale: the cloud scale
 	virtual irr::scene::ISceneNode *createCloudNode(const irr::core::vector2df &translation, irr::video::ITexture *texture,
 													const irr::f32 textureScale, const irr::f32 centerHeight, const irr::f32 innerHeight,
-													const irr::f32 outerHeight, ICP3DSceneNodeCreatorCallback callback = DEFAULT_CALLBACK) = 0;
+													const irr::f32 outerHeight, ICP3DSceneNodeCreatorCallback callback = ICP3D_SN_CREATOR_DEFAULT_CB) = 0;
 
 };
 

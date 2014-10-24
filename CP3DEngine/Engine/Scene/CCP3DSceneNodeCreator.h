@@ -28,7 +28,7 @@ public:
 
 	irr::scene::ISceneNode *createCloudNode(const irr::core::vector2df &translation, irr::video::ITexture *texture,
 											const irr::f32 textureScale, const irr::f32 centerHeight, const irr::f32 innerHeight,
-											const irr::f32 outerHeight, ICP3DSceneNodeCreatorCallback callback = DEFAULT_CALLBACK);
+											const irr::f32 outerHeight, ICP3DSceneNodeCreatorCallback callback = ICP3D_SN_CREATOR_DEFAULT_CB);
 
 private:
 	/// Irrlicht
