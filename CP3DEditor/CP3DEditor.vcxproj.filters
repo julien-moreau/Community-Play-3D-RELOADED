@@ -24,6 +24,9 @@
     <Filter Include="Editor\GUIElements\GUIPanel">
       <UniqueIdentifier>{345dd9b2-81ae-4907-8c2d-812cce5bd546}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\UserInterfaces\EditionTools">
+      <UniqueIdentifier>{0d94334e-9341-4104-b4ee-a1ad7837593e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Stdafx.h">
@@ -55,6 +58,9 @@
     </ClInclude>
     <ClInclude Include="Editor\UserInterfaces\CCP3DToolsToolbar.h">
       <Filter>Editor\UserInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolSceneNode.h">
+      <Filter>Editor\UserInterfaces\EditionTools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -90,6 +96,9 @@
     </ClCompile>
     <ClCompile Include="Editor\UserInterfaces\CCP3DToolsToolbar.cpp">
       <Filter>Editor\UserInterfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolSceneNode.cpp">
+      <Filter>Editor\UserInterfaces\EditionTools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

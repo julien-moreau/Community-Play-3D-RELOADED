@@ -98,6 +98,9 @@
     <ClInclude Include="Engine\Scene\Clouds\CCloudSceneNode.h">
       <Filter>Engine\Scene\Clouds</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\ICP3DEditionTool.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DEngine.cpp">

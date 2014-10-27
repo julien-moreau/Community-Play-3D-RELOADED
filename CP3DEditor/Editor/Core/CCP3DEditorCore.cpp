@@ -55,7 +55,7 @@ CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), 
 	ContextMenu = new CCP3DContextMenu(this);
 	MainToolbar = new CCP3DMainToolbar(this);
 	ToolsToolbar = new CCP3DToolsToolbar(this);
-	EditionTool = new CCP3DEditionTool(this);
+	(EditionTool = new CCP3DEditionTool(this))->createDefaultControllers();
 	SceneGraph = new CCP3DSceneGraph(this);
 
 	/// Finish
@@ -173,38 +173,6 @@ void CCP3DEditorCore::createTestScene() {
 
 	Handler->setAmbientColor(SColor(255, 32, 32, 32));
 
-	std::function<ICP3DEditionToolCallback(stringw text)> guiCallback = [&](stringw text) -> ICP3DEditionToolCallback {
-
-		ICP3DEditionToolCallback c = [=](SCP3DInterfaceData data) {
-			data.TextElement->setText(text.c_str());
-
-			if (data.Type == EGUIET_EDIT_BOX)
-				data.TextBox->setText(L"No Name");
-			else if (data.Type == EGUIET_COMBO_BOX) {
-				data.ComboBox->addItem(L"Item 1");
-				data.ComboBox->addItem(L"Item 2");
-			} else if (data.Type == EGUIET_LIST_BOX) {
-				data.ListData.List->addItem(L"Item 1");
-				data.ListData.List->addItem(L"Item 2");
-			}
-
-		};
-
-		return c;
-	};
-
-	IGUITab *tab = EditionTool->addTab("General");
-	EditionTool->setNewZone(tab, "Zone 1");
-	EditionTool->addField(tab, EGUIET_EDIT_BOX, guiCallback("Name :"));
-	EditionTool->addField(tab, EGUIET_EDIT_BOX, guiCallback("Name 2 Test"));
-	EditionTool->setNewZone(tab, "Zone 2");
-	EditionTool->addField(tab, EGUIET_LIST_BOX, guiCallback("List"));
-	EditionTool->addField(tab, EGUIET_COMBO_BOX, guiCallback("ComboBox 1 :"));
-	EditionTool->setNewZone(tab, "Zone 3");
-	EditionTool->addField(tab, EGUIET_COMBO_BOX, guiCallback("ComboBox 2 :"));
-
-	IGUITab *tab2 = EditionTool->addTab("Advanced");
-	EditionTool->addField(tab2, EGUIET_LIST_BOX, guiCallback("List advanced"));
 }
 
 #endif

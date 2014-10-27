@@ -11,6 +11,9 @@ namespace rendering {
 
 class CCP3DRenderingEngine;
 
+/*
+Structure that handle all lights datas
+*/
 struct ICP3DLightSceneNode {
 	friend class CCP3DRenderingEngine;
 public:
@@ -26,69 +29,74 @@ public:
 	}
 
 	//! Returns if the light computes normal mapping
-	const bool isComputingNormalMapping() const {
+	inline const bool isComputingNormalMapping() const {
 		return ComputeNormalMapping;
 	}
 
 	//! Sets if the light computes normal mapping
 	//! \param compute: true if used by normal mapping material
-	void setComputeNormalMapping(const bool compute) {
+	inline void setComputeNormalMapping(const bool compute) {
 		ComputeNormalMapping = compute;
 	}
 
 	//! Returns the light's strength
-	const irr::f32 getLightStrength() const {
+	inline const irr::f32 getLightStrength() const {
 		return LightStrength;
 	}
 
 	//! Sets the light's strength
 	//! \param strength: the new strength of the light
-	void setLightStrength(const irr::f32 strength) {
+	inline void setLightStrength(const irr::f32 strength) {
 		LightStrength = strength;
 	}
 
 	//! Returns the shadow light
-	SShadowLight *getShadowLight() {
+	inline SShadowLight *getShadowLight() {
 		return ShadowLight;
 	}
 
 	//! Returns the shadow light index in the ICP3DHandler
-	const irr::s32 getShadowLightIndex() const {
+	inline const irr::s32 getShadowLightIndex() const {
 		return ShadowLightIndex;
 	}
 
 	//! Returns if the light computes shadows
 	//! If true, then getShadowLightIndex should return an index
 	//! != -1
-	const bool isComputingShadows() const {
+	inline const bool isComputingShadows() const {
 		return ShadowLightIndex != -1;
 	}
 
 	//! Returns the light data
-	irr::video::SLight &getLightData() {
+	inline irr::video::SLight &getLightData() {
 		return Node->getLightData();
 	}
 
 	//! Sets the light's position
-	void setPosition(const irr::core::vector3df& position) {
+	inline void setPosition(const irr::core::vector3df& position) {
 		Node->setPosition(position);
 		if (ShadowLight)
 			ShadowLight->setPosition(position);
 	}
 
 	//! Sets the new parent of the light
-	void setParent(irr::scene::ISceneNode *parent) {
+	inline void setParent(irr::scene::ISceneNode *parent) {
 		parent->addChild(Node);
 	}
 
 	//! Sets the light's name
-	void setName(const irr::core::stringc &name) {
+	inline void setName(const irr::core::stringc &name) {
 		Node->setName(name.c_str());
 	}
 
 	//! Returns the light's name
-	irr::core::stringc getName() {
+	inline irr::core::stringc getName() {
 		return Node->getName();
+	}
+
+	//! Returns the scene node type of the light (ESNT_LIGHT)
+	inline const irr::scene::ESCENE_NODE_TYPE getType() const {
+		return irr::scene::ESNT_LIGHT;
 	}
 
 private:
@@ -109,8 +117,12 @@ private:
 	//! \param computeShadows: true if the light computes shadows
 	ICP3DLightSceneNode(irr::scene::ILightSceneNode *node, const bool computeNormalMapping, const irr::s32 shadowLightIndex)
 		: Node(node), ComputeNormalMapping(computeNormalMapping), LightStrength(DEFAULT_LIGHT_STRENGTH), ShadowLightIndex(shadowLightIndex)
-	{
+	{ }
 
+	//! Private destructor
+	~ICP3DLightSceneNode() {
+		Node->remove();
+		delete ShadowLight;
 	}
 };
 

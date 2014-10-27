@@ -104,6 +104,7 @@
     <ClInclude Include="Editor\UserInterfaces\CCP3DMainToolbar.h" />
     <ClInclude Include="Editor\UserInterfaces\CCP3DSceneGraph.h" />
     <ClInclude Include="Editor\UserInterfaces\CCP3DToolsToolbar.h" />
+    <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolSceneNode.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stdafx.h" />
   </ItemGroup>
@@ -118,6 +119,7 @@
     <ClCompile Include="Editor\UserInterfaces\CCP3DMainToolbar.cpp" />
     <ClCompile Include="Editor\UserInterfaces\CCP3DSceneGraph.cpp" />
     <ClCompile Include="Editor\UserInterfaces\CCP3DToolsToolbar.cpp" />
+    <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolSceneNode.cpp" />
     <ClCompile Include="Stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

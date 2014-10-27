@@ -45,6 +45,8 @@ public:
 	/// Interfaces
 	CCP3DInterfaceController *getInterfaceController() { return InterfaceController; }
 
+	CCP3DEditionTool *getEditionTool() { return EditionTool; }
+
 	#if defined(_DEBUG)
 	bool OnEvent(const irr::SEvent &event);
 	#endif

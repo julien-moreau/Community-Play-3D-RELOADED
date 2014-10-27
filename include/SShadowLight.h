@@ -57,12 +57,12 @@ public:
 	}
 
 	//! Gets the light's position
-	const irr::core::vector3df& getPosition() const {
+	inline const irr::core::vector3df& getPosition() const {
 		return Pos;
 	}
 
 	//! Gets the light's Target.
-	const irr::core::vector3df& getTarget()  const {
+	inline const irr::core::vector3df& getTarget()  const {
 		return Tar;
 	}
 
@@ -80,22 +80,22 @@ public:
 	}
 
 	//! Gets the light's view matrix.
-	irr::core::matrix4& getViewMatrix() {
+	inline irr::core::matrix4& getViewMatrix() {
 		return ViewMat;
 	}
 
 	//! Gets the light's projection matrix.
-	irr::core::matrix4& getProjectionMatrix() {
+	inline irr::core::matrix4& getProjectionMatrix() {
 		return ProjMat;
 	}
 
 	//! Gets the light's far value.
-	irr::f32 getFarValue() const {
+	inline irr::f32 getFarValue() const {
 		return FarPlane;
 	}
 
 	//! Gets the light's color.
-	const irr::video::SColorf& getLightColor() const {
+	inline const irr::video::SColorf& getLightColor() const {
 		return DiffuseColor;
 	}
 
@@ -112,12 +112,12 @@ public:
 	}
 
 	//! Gets the shadow map resolution for this light
-	const irr::u32 getShadowMapResolution() const {
+	inline const irr::u32 getShadowMapResolution() const {
 		return MapRes;
 	}
 
 	//! Gets if the light must recalculate
-	const bool mustRecalculate() const {
+	inline const bool mustRecalculate() const {
 		return MustRecalculate;
 	}
 
@@ -128,7 +128,7 @@ public:
 	}
 
 	//! Gets if the light auto recalculate
-	const bool mustAutoRecalculate() const {
+	inline const bool mustAutoRecalculate() const {
 		return AutoRecalculate;
 	}
 

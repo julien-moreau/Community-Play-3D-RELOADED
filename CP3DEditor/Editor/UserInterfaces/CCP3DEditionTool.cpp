@@ -4,6 +4,8 @@
 #include "../Core/CCP3DInterfaceController.h"
 #include "../GUIElements/GUIPanel/CGUIPanel.h"
 
+#include "EditionTools/CCP3DEditionToolSceneNode.h"
+
 #include "CCP3DEditionTool.h"
 
 using namespace irr;
@@ -14,7 +16,8 @@ using namespace gui;
 
 namespace cp3d {
 
-CCP3DEditionTool::CCP3DEditionTool(CCP3DEditorCore *editorCore) : EditorCore(editorCore), WindowWidth(400), NewZone(true)
+CCP3DEditionTool::CCP3DEditionTool(CCP3DEditorCore *editorCore) : EditorCore(editorCore), WindowWidth(400), NewZone(true),
+	LastSceneNodeType(ESNT_UNKNOWN)
 {
 	/// Configure
 	editorCore->getEngine()->getEventReceiver()->addEventReceiver(this);
@@ -31,12 +34,13 @@ CCP3DEditionTool::CCP3DEditionTool(CCP3DEditorCore *editorCore) : EditorCore(edi
 
 	TabCtrl = Gui->addTabControl(rect<s32>(0, 0, 0, 0), Window, true, true, -1);
 
-	/// Finish
+	/// Configure UI
 	SControlDescriptor descriptor(EICC_RIGHT);
 	descriptor.MinWidth = 200;
 	descriptor.MaxWidth = std::numeric_limits<s32>::max();
 	editorCore->getInterfaceController()->addElement(this, descriptor);
 
+	/// Finish
 	OnResize();
 }
 
@@ -61,12 +65,15 @@ irr::gui::IGUITab *CCP3DEditionTool::addTab(const irr::core::stringc name) {
 
 void CCP3DEditionTool::clearTabs() {
 	/// Panels
-	for (u32 i=0; i < Panels.size(); i++)
-		Panels[i]->remove();
 	Panels.clear();
 
 	/// Tabs
-	TabCtrl->clear();
+	TabCtrl->remove();
+	TabCtrl = Gui->addTabControl(rect<s32>(0, 0, 0, 0), Window, true, true, -1);
+	OnResize();
+
+	/// Finish
+	NewZone = true;
 }
 
 void CCP3DEditionTool::OnResize() {
@@ -92,6 +99,52 @@ void CCP3DEditionTool::OnResize() {
 		Panels[i]->setRelativePosition(rect<s32>(3, 2, parent->getRelativePosition().getWidth() - 2,
 												 parent->getRelativePosition().getHeight() - 2));
 	}
+
+
+}
+
+void CCP3DEditionTool::createDefaultControllers() {
+	CCP3DEditionToolSceneNode *EditionToolSceneNode = new CCP3DEditionToolSceneNode(EditorCore);
+
+	addController(ESNT_MESH, EditionToolSceneNode);
+	addController(ESNT_ANIMATED_MESH, EditionToolSceneNode);
+	addController(ESNT_LIGHT, EditionToolSceneNode);
+	addController(ESNT_BILLBOARD, EditionToolSceneNode);
+	addController(ESNT_CUBE, EditionToolSceneNode);
+	addController(ESNT_EMPTY, EditionToolSceneNode);
+	addController(ESNT_OCTREE, EditionToolSceneNode);
+	addController(ESNT_SKY_BOX, EditionToolSceneNode);
+	addController(ESNT_SKY_DOME, EditionToolSceneNode);
+	addController(ESNT_SPHERE, EditionToolSceneNode);
+	addController(ESNT_TERRAIN, EditionToolSceneNode);
+	addController(ESNT_TEXT, EditionToolSceneNode);
+	addController(ESNT_VOLUME_LIGHT, EditionToolSceneNode);
+	addController(ESNT_WATER_SURFACE, EditionToolSceneNode);
+}
+
+bool CCP3DEditionTool::addController(ESCENE_NODE_TYPE type, ICP3DEditionToolController *controller) {
+	if (!EditionTools.find(type))
+		EditionTools.insert(type, 0);
+
+	core::map<ESCENE_NODE_TYPE, core::array<ICP3DEditionToolController *>>::Node *it = EditionTools.find(type);
+	for (u32 i=0; i < it->getValue().size(); i++) {
+		if (it->getValue()[i] == controller)
+			return false;
+	}
+
+	it->getValue().push_back(controller);
+
+	return true;
+}
+
+void CCP3DEditionTool::addSeparator(irr::gui::IGUITab *tab) {
+	ui::CGUIPanel *panel = Panels[tab->getNumber()];
+
+	s32 width = panel->getRelativePosition().getWidth();
+	s32 offset = getElementPositionOffset(tab, panel);
+
+	IGUIStaticText *e = Gui->addStaticText(L"", rect<s32>(5, offset, width - 10, offset + 20), false, false, panel, -1, false);
+	e->setVisible(false);
 }
 
 void CCP3DEditionTool::setNewZone(IGUITab *tab, stringw name) {
@@ -127,6 +180,41 @@ SCP3DInterfaceData CCP3DEditionTool::addField(IGUITab *tab, EGUI_ELEMENT_TYPE ty
 }
 
 bool CCP3DEditionTool::OnEvent(const SEvent &event) {
+
+	if (event.EventType == EET_USER_EVENT) {
+
+		/// update all edition tools with slected scene node
+		if (event.UserEvent.UserData1 == EIE_NODE_SELECTED) {
+			
+			ISceneNode *node = (ISceneNode *)event.UserEvent.UserData2;
+			node = dynamic_cast<ISceneNode *>(node);
+
+			if (!node)
+				clearTabs();
+			else {
+				ESCENE_NODE_TYPE type = node->getType();
+				core::map<ESCENE_NODE_TYPE, array<ICP3DEditionToolController *>>::Node *it = EditionTools.find(type);
+
+				if (type != LastSceneNodeType)
+					clearTabs();
+
+				if (!it)
+					return false;
+
+				for (u32 i=0; i < it->getValue().size(); i++) {
+					it->getValue()[i]->setSceneNode(node);
+					if (type != LastSceneNodeType)
+						it->getValue()[i]->createInterface();
+					it->getValue()[i]->configure();
+				}
+
+				LastSceneNodeType = type;
+
+				return false;
+			}
+		}
+
+	}
 
 	return false;
 }

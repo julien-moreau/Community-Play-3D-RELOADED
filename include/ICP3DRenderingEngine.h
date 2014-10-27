@@ -10,6 +10,16 @@ class ICP3DHandler;
 class ICP3DMaterialCreator;
 struct ICP3DLightSceneNode;
 
+/*
+Rendering engine interface
+This interface let you get all the components of
+the rendering engine. Including main rendering handler, video driver,
+gui environment, material creators etc.
+
+simply include :
+#include <CP3DRenderingEngine.h>
+
+*/
 class ICP3DRenderingEngine {
 public:
 

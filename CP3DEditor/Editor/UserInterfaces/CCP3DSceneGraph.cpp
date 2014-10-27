@@ -3,6 +3,8 @@
 #include "../Core/CCP3DInterfaceController.h"
 #include "../Core/CCP3DEditorCore.h"
 
+#include <ICP3DEditionTool.h>
+
 #include "CCP3DSceneGraph.h"
 
 using namespace irr;
@@ -83,11 +85,11 @@ bool CCP3DSceneGraph::OnEvent(const SEvent &event) {
 				if (!node)
 					return true;
 
+				/// Get node's data (ISceneNode *)
 				ISceneNode *sceneNode = (ISceneNode*)node->getData();
 				void *data = sceneNode;
-				if (sceneNode->getType() == ESNT_LIGHT)
-					data = Rengine->getLightSceneNode(getLightSceneNodeIndex((ILightSceneNode*)sceneNode));
 
+				/// Send selected event to all event receivers
 				SEvent ev;
 				ev.EventType = EET_USER_EVENT;
 				ev.UserEvent.UserData1 = EIE_NODE_SELECTED;

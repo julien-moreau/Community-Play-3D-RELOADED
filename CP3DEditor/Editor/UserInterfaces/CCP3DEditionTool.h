@@ -4,6 +4,7 @@
 #include <irrlicht.h>
 #include <ICP3DCustomUpdate.h>
 #include <ICP3DInterface.h>
+#include <ICP3DEditionTool.h>
 
 namespace cp3d {
 
@@ -18,26 +19,37 @@ This class must let users (and us =D) able to create easily gui elements
 called fields (text, float, color, etc.).
 It contains an array of fields
 */
-class CCP3DEditionTool : public irr::IEventReceiver, public engine::ICP3DUpdate, public ICP3DInterface {
+class CCP3DEditionTool : public irr::IEventReceiver, public engine::ICP3DUpdate,
+						 public ICP3DInterface, public ICP3DEditionTool
+{
 public:
 
 	/// Constructor & Destructor
 	CCP3DEditionTool(CCP3DEditorCore *editorCore);
 	~CCP3DEditionTool();
 
-	/// Inheritance
+	/// IEventReceiver
 	bool OnEvent(const irr::SEvent &event);
+	/// ICP3DUpdate
 	void OnPreUpdate();
+	/// ICP3DInterface
 	void OnResize();
 	irr::gui::IGUIElement *getElementToResize() { return Window; }
 
-	/// Utils
+	/// ICP3DEditionTool
 	irr::gui::IGUITab *addTab(const irr::core::stringc name);
+	
 	void clearTabs();
 
-	/// GUI Elements
+	void addSeparator(irr::gui::IGUITab *tab);
+
 	void setNewZone(irr::gui::IGUITab *tab, irr::core::stringw name);
+	
 	SCP3DInterfaceData addField(irr::gui::IGUITab *tab, irr::gui::EGUI_ELEMENT_TYPE type, ICP3DEditionToolCallback callback = ICP3D_EDITION_TOOL_DEFAULT_CB);
+
+	/// Utils
+	void createDefaultControllers();
+	bool addController(irr::scene::ESCENE_NODE_TYPE type, ICP3DEditionToolController *controller);
 
 private:
 	/// Irrlicht
@@ -57,6 +69,9 @@ private:
 	irr::gui::IGUITabControl *TabCtrl;
 
 	irr::core::array<ui::CGUIPanel *> Panels;
+
+	irr::core::map<irr::scene::ESCENE_NODE_TYPE, irr::core::array<ICP3DEditionToolController *>> EditionTools;
+	irr::scene::ESCENE_NODE_TYPE LastSceneNodeType;
 
 	/// Methods
 	irr::s32 getElementPositionOffset(irr::gui::IGUITab *tab, ui::CGUIPanel *panel);
