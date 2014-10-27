@@ -216,6 +216,41 @@ bool CCP3DEditionTool::OnEvent(const SEvent &event) {
 
 	}
 
+	else if (event.EventType == EET_GUI_EVENT) {
+
+		/// Update the current edition tool with the active tab
+		if (event.GUIEvent.Caller) {
+			IGUIElement *parent = event.GUIEvent.Caller;
+			bool isChildOfTabCtrl = false;
+
+			while (parent) {
+				if (parent->getParent() == TabCtrl) {
+					isChildOfTabCtrl = true;
+					break;
+				}
+				parent = parent->getParent();
+			}
+
+			core::map<ESCENE_NODE_TYPE, core::array<ICP3DEditionToolController *>>::Node *it = EditionTools.find(LastSceneNodeType);
+
+			if (isChildOfTabCtrl && it && it->getValue().size() > 0) {
+				/// Update edition tools of LastSceneNodeType
+				if (it) {
+					for (u32 i=0; i < it->getValue().size(); i++) {
+						it->getValue()[i]->apply();
+					}
+
+					SEvent ev;
+					ev.EventType = EET_USER_EVENT;
+					ev.UserEvent.UserData1 = EIE_NODE_CHANGED;
+					ev.UserEvent.UserData2 = (s32)it->getValue()[0]->getSceneNode();
+					EditorCore->getEngine()->getEventReceiver()->OnEvent(ev);
+				}
+			}
+		}
+
+	}
+
 	return false;
 }
 

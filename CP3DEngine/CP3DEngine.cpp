@@ -10,6 +10,7 @@
 
 using namespace irr;
 using namespace video;
+using namespace core;
 
 namespace cp3d {
 	CP3DR_LIB_API engine::ICP3DEngine *createEngine(IrrlichtDevice *device) {
@@ -25,6 +26,9 @@ CCP3DEngine::CCP3DEngine(irr::IrrlichtDevice *device) : Device(device)
 	/// Configure rendering
 	Rengine = createRenderingEngine(device);
 	Handler = Rengine->getHandler();
+	
+	Driver = Rengine->getVideoDriver();
+	ViewPort = Driver->getViewPort();
 
 	/// Configure Events & Update
 	EventReceiver = new CCP3DEventReceiver();
@@ -49,11 +53,18 @@ void CCP3DEngine::runEngine() {
 		if (!Device->isWindowActive())
 			continue;
 
+		Driver->setViewPort(rect<s32>(0, 0, Driver->getScreenSize().Width, Driver->getScreenSize().Height));
 		Device->getVideoDriver()->beginScene(true, true, SColor(0x0));
 
 		Updater->OnPreUpdate();
 
+		if (ViewPort != Driver->getViewPort())
+			Rengine->getVideoDriver()->setViewPort(ViewPort);
+
 		Handler->update();
+
+		Rengine->getVideoDriver()->setViewPort(rect<s32>(0, 0, Driver->getScreenSize().Width, Driver->getScreenSize().Height));
+
 		if (DrawGUI)
 			Gui->drawAll();
 
@@ -86,6 +97,10 @@ CCP3DSceneNodeCreator *CCP3DEngine::getSceneNodeCreator() {
 
 rendering::ICP3DRenderingEngine *CCP3DEngine::getRenderingEngine() {
 	return Rengine;
+}
+
+void CCP3DEngine::setSceneRenderingViewPort(rect<s32> viewPort) {
+	ViewPort = viewPort;
 }
 
 } /// End namespace engine

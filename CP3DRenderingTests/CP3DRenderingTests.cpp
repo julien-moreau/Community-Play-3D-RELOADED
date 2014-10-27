@@ -135,12 +135,14 @@ int main(int argc, char* argv[]) {
 	IAnimatedMeshSceneNode *planeNode = smgr->addAnimatedMeshSceneNode(planeMesh);
 	planeNode->setMaterialTexture(0, driver->getTexture("Textures/diffuse.tga"));
 	planeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
+	planeNode->setMaterialTexture(2, driver->getTexture("Textures/specular.tga"));
 	planeNode->setMaterialFlag(EMF_LIGHTING, false);
+	smgr->getMeshManipulator()->recalculateNormals(planeMesh, true, true);
 	handler->addShadowToNode(planeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_RECEIVE);
 
 	IMeshSceneNode *cubeNode = smgr->addCubeSceneNode(50.f, 0, -1, vector3df(0.f, 25.f, 0.f), vector3df(0.f, 45.f, 0.f));
-	cubeNode->setMaterialTexture(0, driver->getTexture("Textures/Ciment1.png"));
-	cubeNode->setMaterialTexture(1, driver->getTexture("Textures/Ciment1NM.png"));
+	cubeNode->setMaterialTexture(0, driver->getTexture("Textures/specular.tga"));
+	cubeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
 	cubeNode->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
 	smgr->getMeshManipulator()->recalculateNormals(cubeNode->getMesh(), true, true);
 	cubeNode->setMaterialFlag(EMF_LIGHTING, false);
@@ -164,7 +166,7 @@ int main(int argc, char* argv[]) {
 	cubeNode->setMaterialType(cpre->NormalMappingMaterialSolid);
 	planeNode->setMaterialType(cpre->NormalMappingMaterialSolid);
 
-	cp3d::rendering::ICP3DLightSceneNode *light = cpre->createLightSceneNode(false, true);
+	cp3d::rendering::ICP3DLightSceneNode *light = cpre->createLightSceneNode(true, true);
 	light->setPosition(vector3df(0.f, 100.f, 100.f));
 	light->getLightData().DiffuseColor = SColorf(1.f, 0.f, 0.f, 1.f);
 

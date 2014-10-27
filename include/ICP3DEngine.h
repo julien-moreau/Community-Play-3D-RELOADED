@@ -42,6 +42,10 @@ public:
 	//! Returns the rendering engine
 	virtual rendering::ICP3DRenderingEngine *getRenderingEngine() = 0;
 
+	//! Sets the viewport where the driver should
+	//! render the scene using ICP3DHandler::update();
+	virtual void setSceneRenderingViewPort(irr::core::rect<irr::s32> viewPort) = 0;
+
 };
 
 } /// End engine namespace

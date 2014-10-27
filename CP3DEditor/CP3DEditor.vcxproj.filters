@@ -5,10 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Ressources">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Editor">
       <UniqueIdentifier>{aae0ac58-0e1a-4c96-9e13-74d164b0e449}</UniqueIdentifier>
     </Filter>
@@ -26,6 +22,10 @@
     </Filter>
     <Filter Include="Editor\UserInterfaces\EditionTools">
       <UniqueIdentifier>{0d94334e-9341-4104-b4ee-a1ad7837593e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Ressources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -106,12 +106,12 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc">
-      <Filter>Ressources</Filter>
+      <Filter>Sources\Ressources</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="app.ico">
-      <Filter>Ressources</Filter>
+      <Filter>Sources\Ressources</Filter>
     </Image>
   </ItemGroup>
 </Project>

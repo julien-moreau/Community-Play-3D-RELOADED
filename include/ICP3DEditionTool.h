@@ -122,6 +122,11 @@ public:
 		SceneNode = node;
 	}
 
+	//! Returns the scene node of the edition tool
+	virtual irr::scene::ISceneNode *getSceneNode() {
+		return SceneNode;
+	}
+
 protected:
 
 	irr::scene::ISceneNode *SceneNode;

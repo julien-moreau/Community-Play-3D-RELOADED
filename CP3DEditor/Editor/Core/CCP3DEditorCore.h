@@ -15,7 +15,7 @@ class CCP3DEditionTool;
 class CCP3DSceneGraph;
 class CCP3DInterfaceController;
 
-class CCP3DEditorCore : public ICP3DEditor
+class CCP3DEditorCore : public ICP3DEditor, public engine::ICP3DUpdate
 						#if defined (_DEBUG)
 						, public irr::IEventReceiver
 						#endif
@@ -26,8 +26,11 @@ public:
 	CCP3DEditorCore(irr::IrrlichtDevice *device);
 	~CCP3DEditorCore();
 
-	/// Methods
+	/// ICP3DEditor
 	void runEditor();
+
+	/// ICP3DUpdate
+	void OnPreUpdate();
 
 	/// Getters
 	rendering::ICP3DRenderingEngine *getRenderingEngine() { return Rengine; }
@@ -54,6 +57,7 @@ public:
 private:
 	/// Device
 	irr::IrrlichtDevice *Device;
+	irr::video::IVideoDriver *Driver;
 	irr::gui::IGUIEnvironment *Gui;
 
 	/// Rendering

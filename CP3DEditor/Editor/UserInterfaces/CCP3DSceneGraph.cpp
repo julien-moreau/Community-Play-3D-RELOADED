@@ -15,7 +15,7 @@ using namespace gui;
 
 namespace cp3d {
 
-CCP3DSceneGraph::CCP3DSceneGraph(CCP3DEditorCore *editorCore) : EditorCore(editorCore), WindowWidth(400)
+CCP3DSceneGraph::CCP3DSceneGraph(CCP3DEditorCore *editorCore) : EditorCore(editorCore), WindowWidth(400), SelectedSceneNode(0)
 {
 	/// Configure
 	editorCore->getEngine()->getEventReceiver()->addEventReceiver(this);
@@ -85,8 +85,18 @@ bool CCP3DSceneGraph::OnEvent(const SEvent &event) {
 				if (!node)
 					return true;
 
+				if (SelectedSceneNode)
+					SelectedSceneNode->setDebugDataVisible(EDS_OFF);
+
 				/// Get node's data (ISceneNode *)
 				ISceneNode *sceneNode = (ISceneNode*)node->getData();
+				sceneNode = dynamic_cast<ISceneNode *>(sceneNode);
+				if (!sceneNode) {
+					SelectedSceneNode = 0;
+					return true;
+				}
+
+				SelectedSceneNode = sceneNode;
 				void *data = sceneNode;
 
 				/// Send selected event to all event receivers
@@ -95,9 +105,36 @@ bool CCP3DSceneGraph::OnEvent(const SEvent &event) {
 				ev.UserEvent.UserData1 = EIE_NODE_SELECTED;
 				ev.UserEvent.UserData2 = (s32)data;
 				EditorCore->getEngine()->getEventReceiver()->OnEvent(ev);
+
+				SelectedSceneNode->setDebugDataVisible(EDS_MESH_WIRE_OVERLAY);
 				
 				return true;
 			}
+		}
+
+	}
+
+	else if (event.EventType == EET_USER_EVENT) {
+
+		if (event.UserEvent.UserData1 == EIE_NODE_CHANGED) {
+			ISceneNode *node = (ISceneNode *)event.UserEvent.UserData2;
+			node = dynamic_cast<ISceneNode *>(node);
+
+			if (!node)
+				return false;
+
+			IGUITreeViewNode *n = Graph->getSelected();
+			if (!n)
+				return false;
+
+			ISceneNode *node2 = (ISceneNode *)n->getData();
+			if (node != node2)
+				return false;
+
+			n->setData(node);
+			n->setText(stringw(node->getName()).c_str());
+
+			return false;
 		}
 
 	}
@@ -113,7 +150,7 @@ void CCP3DSceneGraph::fillGraph(irr::scene::ISceneNode *start) {
 	SceneNode->setExpanded(true);
 }
 
-void CCP3DSceneGraph::fillGraphRecursively(ISceneNode *start, irr::gui::IGUITreeViewNode *treeNode) {
+void CCP3DSceneGraph::fillGraphRecursively(ISceneNode *start, IGUITreeViewNode *treeNode) {
 
 	ISceneNodeList::ConstIterator it = start->getChildren().begin();
 
@@ -132,7 +169,7 @@ void CCP3DSceneGraph::fillGraphRecursively(ISceneNode *start, irr::gui::IGUITree
 
 }
 
-irr::s32 CCP3DSceneGraph::getIconFromType(irr::scene::ESCENE_NODE_TYPE type) {
+irr::s32 CCP3DSceneGraph::getIconFromType(ESCENE_NODE_TYPE type) {
 	s32 index = 0;
 	switch (type) {
 	case ESNT_ANIMATED_MESH: index = 25 * 12 + 18; break;

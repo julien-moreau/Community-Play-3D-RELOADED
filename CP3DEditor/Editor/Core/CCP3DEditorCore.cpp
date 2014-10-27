@@ -27,6 +27,7 @@ CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), 
 	device->setResizable(true);
 	device->maximizeWindow();
 	device->getVideoDriver()->OnResize(device->getVideoDriver()->getScreenSize());
+	Driver = device->getVideoDriver();
 
 	/// Configure engine
 	Engine = cp3d::createEngine(device);
@@ -69,6 +70,7 @@ CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), 
 	Engine->getEventReceiver()->addEventReceiver(this);
 	createTestScene();
 	#endif
+	Engine->getCustomUpdater()->addCustomUpdate(this);
 	SceneGraph->fillGraph();
 }
 
@@ -89,6 +91,28 @@ void CCP3DEditorCore::setProjectName(irr::core::stringc name) {
 	ProjectName = name;
 	Device->setWindowCaption(stringw(stringc(CP3DR_PROJECT_NAME) + stringc(" - ") + stringc(ProjectName)).c_str());
 	ContextMenu->setProjectName(name);
+}
+
+void CCP3DEditorCore::OnPreUpdate() {
+	rect<s32> viewPort;
+
+	s32 positionY = 0, count = 0;
+	core::list<IGUIElement *>::ConstIterator it = Gui->getRootGUIElement()->getChildren().begin();
+	for (; it != Gui->getRootGUIElement()->getChildren().end(); ++it) {
+		EGUI_ELEMENT_TYPE type = (*it)->getType();
+		if (type == EGUIET_MENU || type == EGUIET_TOOL_BAR) {
+			positionY += (*it)->getRelativePosition().getHeight();
+			count++;
+		}
+	}
+	positionY -= 2 * count;
+
+	viewPort.UpperLeftCorner.X = EditionTool->getElementToResize()->getRelativePosition().getWidth();
+	viewPort.UpperLeftCorner.Y = positionY;
+	viewPort.LowerRightCorner.X = Driver->getScreenSize().Width - SceneGraph->getElementToResize()->getRelativePosition().getWidth();
+	viewPort.LowerRightCorner.Y = Driver->getScreenSize().Height;
+
+	Engine->setSceneRenderingViewPort(viewPort);
 }
 
 /// Runs the editor
@@ -126,8 +150,8 @@ void CCP3DEditorCore::createTestScene() {
 
 	IMeshSceneNode *cubeNode = smgr->addCubeSceneNode(50.f, 0, -1, vector3df(0.f, 25.f, 0.f), vector3df(0.f, 45.f, 0.f));
 	cubeNode->setName("Cube");
-	cubeNode->setMaterialTexture(0, driver->getTexture("Textures/Ciment1.png"));
-	cubeNode->setMaterialTexture(1, driver->getTexture("Textures/Ciment1NM.png"));
+	cubeNode->setMaterialTexture(0, driver->getTexture("Textures/specular.tga"));
+	cubeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
 	cubeNode->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
 	smgr->getMeshManipulator()->recalculateNormals(cubeNode->getMesh(), true, true);
 	cubeNode->setMaterialFlag(EMF_LIGHTING, false);

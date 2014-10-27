@@ -19,6 +19,7 @@ public:
 	CCP3DEngine(irr::IrrlichtDevice *device);
 	~CCP3DEngine();
 
+	/// ICP3DEngine
 	void runEngine();
 
 	/// Events & Updates
@@ -30,6 +31,7 @@ public:
 
 	/// Rendering
 	rendering::ICP3DRenderingEngine *getRenderingEngine();
+	void setSceneRenderingViewPort(irr::core::rect<irr::s32> viewPort);
 
 	/// GUI
 	const bool isDrawingGUI() const;
@@ -38,6 +40,7 @@ public:
 private:
 	/// Irrlicht
 	irr::IrrlichtDevice *Device;
+	irr::video::IVideoDriver *Driver;
 	irr::gui::IGUIEnvironment *Gui;
 
 	/// Events & Update
@@ -50,6 +53,7 @@ private:
 	/// Rendering
 	rendering::ICP3DRenderingEngine *Rengine;
 	rendering::ICP3DHandler *Handler;
+	irr::core::rect<irr::s32> ViewPort;
 
 	bool DrawGUI;
 

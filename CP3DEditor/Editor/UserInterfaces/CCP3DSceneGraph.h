@@ -52,6 +52,7 @@ private:
 	/// Datas
 	irr::gui::IGUITreeViewNode *RootNode;
 	irr::gui::IGUITreeViewNode *SceneNode;
+	irr::scene::ISceneNode *SelectedSceneNode;
 
 	irr::s32 WindowWidth;
 

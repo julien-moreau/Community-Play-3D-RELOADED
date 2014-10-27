@@ -71,13 +71,14 @@ struct VS_INPUT
 
 VS_OUTPUT vertexMain( in VS_INPUT IN ) 
 {    
-   VS_OUTPUT OUT = (VS_OUTPUT)0;
-   OUT.Position = mul(float4(IN.Position,1.0), ModelViewProjectionMatrix);
-   OUT.Texcoord = IN.Texcoord;
-   OUT.Normal   = IN.Normal;
-   OUT.ObjectPosition = OUT.Position;
+	VS_OUTPUT OUT = (VS_OUTPUT)0;
 
-   return OUT;
+	OUT.Position = mul(float4(IN.Position, 1.0), ModelViewProjectionMatrix);
+	OUT.Texcoord = IN.Texcoord;
+	OUT.Normal   = IN.Normal;
+	OUT.ObjectPosition = OUT.Position;
+
+	return OUT;
 }
 
 
