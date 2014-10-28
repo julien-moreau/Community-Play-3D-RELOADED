@@ -76,6 +76,7 @@ private:
 
 	/// Methods
 	irr::s32 getElementPositionOffset(irr::gui::IGUITab *tab, ui::CGUIPanel *panel);
+	irr::s32 getPanelWidth(irr::gui::IGUIElement *panel);
 
 	/// Creators
 	SCP3DInterfaceData createTextBoxField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel);

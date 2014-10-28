@@ -167,7 +167,7 @@ void CCP3DEditorCore::createTestScene() {
 	cubeNode->setMaterialTexture(0, driver->getTexture("Textures/specular.tga"));
 	cubeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
 	cubeNode->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
-	smgr->getMeshManipulator()->recalculateNormals(cubeNode->getMesh(), true, true);
+	smgr->getMeshManipulator()->recalculateNormals(cubeNode->getMesh(), true, false);
 	cubeNode->setMaterialFlag(EMF_LIGHTING, false);
 	Handler->addShadowToNode(cubeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_BOTH);
 

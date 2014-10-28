@@ -129,6 +129,14 @@ void CCP3DEditionTool::OnResize() {
 		IGUIElement *parent = Panels[i]->getParent();
 		Panels[i]->setRelativePosition(rect<s32>(3, 2, parent->getRelativePosition().getWidth() - 2,
 												 parent->getRelativePosition().getHeight() - 2));
+
+		/// Resize children elements to original position
+		Panels[i]->getScrollBar()->setPos(0);
+		SEvent ev;
+		ev.EventType = EET_GUI_EVENT;
+		ev.GUIEvent.Caller = Panels[i]->getScrollBar();
+		ev.GUIEvent.EventType = EGET_SCROLL_BAR_CHANGED;
+		Panels[i]->OnEvent(ev);
 	}
 
 	core::list<SCP3DInterfaceData>::ConstIterator itd = InterfaceDatas.begin();
@@ -146,15 +154,15 @@ void CCP3DEditionTool::OnResize() {
 			elements.push_back((*itd).TextureData.RemoveButton);
 			elements.push_back((*itd).TextureData.Zone);
 		}
-		else if ((*itd).Type == EGUIET_LIST_BOX) {
+		else if ((*itd).Type == EGUIET_LIST_BOX)
 			elements.push_back((*itd).ListData.List);
-		}
 		else if ((*itd).Type == EGUIET_CHECK_BOX)
 			elements.push_back((*itd).CheckBox);
 
 		for (u32 i=0; i < elements.size(); i++) {
 			rect<s32> position = elements[i]->getRelativePosition();
-			position.LowerRightCorner.X = elements[i]->getParent()->getRelativePosition().getWidth() - 5;
+			position.LowerRightCorner.X = getPanelWidth(elements[i]->getParent()) - 5;
+			//elements[i]->getParent()->getRelativePosition().getWidth() - 5;
 			elements[i]->setRelativePosition(rect<s32>(position));
 		}
 	}
@@ -197,7 +205,7 @@ bool CCP3DEditionTool::addController(ESCENE_NODE_TYPE type, ICP3DEditionToolCont
 void CCP3DEditionTool::addSeparator(irr::gui::IGUITab *tab) {
 	ui::CGUIPanel *panel = Panels[tab->getNumber()];
 
-	s32 width = panel->getRelativePosition().getWidth();
+	s32 width = getPanelWidth(panel);
 	s32 offset = getElementPositionOffset(tab, panel);
 
 	IGUIStaticText *e = Gui->addStaticText(L"", rect<s32>(5, offset, width - 10, offset + 20), false, false, panel, -1, false);
@@ -209,7 +217,7 @@ void CCP3DEditionTool::setNewZone(IGUITab *tab, stringw name) {
 
 	ui::CGUIPanel *panel = Panels[tab->getNumber()];
 
-	s32 width = panel->getRelativePosition().getWidth();
+	s32 width = getPanelWidth(panel);
 	s32 offset = getElementPositionOffset(tab, panel);
 
 	IGUIStaticText *e = Gui->addStaticText(name.c_str(), rect<s32>(2, offset, width - 2, offset + 25), false, false, panel, -1, false);
@@ -239,6 +247,8 @@ SCP3DInterfaceData CCP3DEditionTool::addField(IGUITab *tab, EGUI_ELEMENT_TYPE ty
 
 	callback(e);
 	InterfaceDatas.push_back(e);
+
+	panel->recalculateScrollBar();
 
 	return e;
 }
@@ -285,7 +295,10 @@ bool CCP3DEditionTool::OnEvent(const SEvent &event) {
 	else if (event.EventType == EET_GUI_EVENT) {
 
 		/// Update the current edition tool with the active tab
-		if (event.GUIEvent.Caller) {
+		if (event.GUIEvent.Caller && event.GUIEvent.EventType != EGET_ELEMENT_FOCUSED &&
+			event.GUIEvent.EventType != EGET_ELEMENT_FOCUS_LOST && event.GUIEvent.EventType != EGET_ELEMENT_HOVERED &&
+			event.GUIEvent.EventType != EGET_ELEMENT_LEFT)
+		{
 			IGUIElement *parent = event.GUIEvent.Caller;
 			bool isChildOfTabCtrl = false;
 
@@ -317,13 +330,35 @@ bool CCP3DEditionTool::OnEvent(const SEvent &event) {
 
 	}
 
+	else if (event.EventType == EET_MOUSE_INPUT_EVENT) {
+		if (event.MouseInput.Event == EMIE_MOUSE_WHEEL) {
+
+			const s32 tabIndex = TabCtrl->getActiveTab();
+			ui::CGUIPanel *panel = Panels[tabIndex];
+			IGUIElement *focus = Gui->getFocus();
+
+			if (focus == panel || focus == TabCtrl || focus == TabCtrl->getTab(tabIndex) ||
+				(focus && focus->getParent() == panel))
+			{
+				panel->getScrollBar()->setPos(panel->getScrollBar()->getPos() - s32(event.MouseInput.Wheel * 2.0));
+
+				SEvent ev;
+				ev.EventType = EET_GUI_EVENT;
+				ev.GUIEvent.Caller = panel->getScrollBar();
+				ev.GUIEvent.EventType = EGET_SCROLL_BAR_CHANGED;
+				panel->OnEvent(ev);
+			}
+
+		}
+	}
+
 	return false;
 }
 
 SCP3DInterfaceData CCP3DEditionTool::createTextBoxField(IGUITab *tab, ui::CGUIPanel *panel) {
 	SCP3DInterfaceData e(EGUIET_EDIT_BOX);
 
-	s32 width = panel->getRelativePosition().getWidth();
+	s32 width = getPanelWidth(panel);
 	s32 offset = getElementPositionOffset(tab, panel);
 
 	e.TextElement = Gui->addStaticText(L"Text", rect<s32>(5, offset, width / 3, offset + 20), true, false, panel, -1, true);
@@ -337,7 +372,7 @@ SCP3DInterfaceData CCP3DEditionTool::createTextBoxField(IGUITab *tab, ui::CGUIPa
 SCP3DInterfaceData CCP3DEditionTool::createListBoxField(IGUITab *tab, ui::CGUIPanel *panel) {
 	SCP3DInterfaceData e(EGUIET_LIST_BOX);
 
-	s32 width = panel->getRelativePosition().getWidth();
+	s32 width = getPanelWidth(panel);
 	s32 offset = getElementPositionOffset(tab, panel);
 
 	e.TextElement = Gui->addStaticText(L"Text", rect<s32>(5, offset, width - 150, offset + 20), true, false, panel, -1, true);
@@ -354,13 +389,14 @@ SCP3DInterfaceData CCP3DEditionTool::createListBoxField(IGUITab *tab, ui::CGUIPa
 SCP3DInterfaceData CCP3DEditionTool::createComboBoxField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel) {
 	SCP3DInterfaceData e(EGUIET_COMBO_BOX);
 
-	s32 width = panel->getRelativePosition().getWidth();
+	s32 width = getPanelWidth(panel);
 	s32 offset = getElementPositionOffset(tab, panel);
 
 	e.TextElement = Gui->addStaticText(L"Text", rect<s32>(5, offset, width - 150, offset + 20), true, false, panel, -1, true);
 	((IGUIStaticText*)e.TextElement)->setTextAlignment(EGUIA_UPPERLEFT, EGUIA_CENTER);
 
 	e.ComboBox = Gui->addComboBox(rect<s32>(width / 3, offset, width - 10, offset + 20), panel, -1);
+	e.ComboBox->setMaxSelectionRows(20);
 
 	return e;
 }
@@ -368,7 +404,7 @@ SCP3DInterfaceData CCP3DEditionTool::createComboBoxField(irr::gui::IGUITab *tab,
 SCP3DInterfaceData CCP3DEditionTool::createTextureField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel) {
 	SCP3DInterfaceData e(EGUIET_IMAGE);
 
-	s32 width = panel->getRelativePosition().getWidth();
+	s32 width = getPanelWidth(panel);
 	s32 offset = getElementPositionOffset(tab, panel);
 
 	e.TextureData.Zone = Gui->addStaticText(L"", rect<s32>(2, offset - 2, width - 2, offset + 92), false, false, panel, -1, true);
@@ -396,6 +432,12 @@ SCP3DInterfaceData CCP3DEditionTool::createCheckBoxField(irr::gui::IGUITab *tab,
 	return e;
 }
 
+s32 CCP3DEditionTool::getPanelWidth(IGUIElement *panel) {
+	const s32 size = Gui->getSkin()->getSize(EGDS_SCROLLBAR_SIZE);
+
+	return panel->getRelativePosition().getWidth() - size;
+}
+
 s32 CCP3DEditionTool::getElementPositionOffset(IGUITab *tab, ui::CGUIPanel *panel) {
 
 	core::list<IGUIElement *> glist = panel->getChildren();
@@ -405,6 +447,9 @@ s32 CCP3DEditionTool::getElementPositionOffset(IGUITab *tab, ui::CGUIPanel *pane
 	s32 maxOffset = offset;
 	
 	for (; it != glist.end(); ++it) {
+		if ((*it) == panel->getScrollBar())
+			continue;
+
 		s32 height = (*it)->getRelativePosition().LowerRightCorner.Y;
 		if (height >= maxOffset)
 			maxOffset = offset + height;

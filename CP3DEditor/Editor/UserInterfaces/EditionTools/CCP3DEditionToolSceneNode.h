@@ -55,8 +55,11 @@ private:
 	SCP3DInterfaceData SceneNodeSetShadowed, SceneNodeShadowType, SceneNodeFilterType;
 
 	/// Materials
+	SCP3DInterfaceData MaterialName;
 	SCP3DInterfaceData MaterialSelector;
 	SCP3DInterfaceData MaterialTextures[irr::video::MATERIAL_MAX_TEXTURES];
+	SCP3DInterfaceData MaterialMatType;
+	SCP3DInterfaceData MaterialShininess;
 
 	/// Animators
 	SCP3DInterfaceData SceneNodeAnimators;

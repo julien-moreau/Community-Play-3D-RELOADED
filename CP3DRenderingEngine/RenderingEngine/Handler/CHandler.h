@@ -59,7 +59,7 @@ public:
 	void setShadowModeForNode(irr::scene::ISceneNode *node, E_SHADOW_MODE shadowMode);
 	void setFilterTypeForNode(irr::scene::ISceneNode *node, E_FILTER_TYPE filterType);
 
-	void setUseVSM(bool useVSM) { useVSM = useVSM; }
+	void setUseVSM(bool use) { useVSM = use; }
 
 	/// Depth pass
 	CCustomDepthPass *getDepthPassManager() { return CustomDepthPassMgr; }

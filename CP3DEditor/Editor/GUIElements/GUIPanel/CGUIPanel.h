@@ -21,6 +21,20 @@ namespace ui {
 		//! Draws the element and its children
 		void draw();
 
+		/// Resizes the element (including scrollbar)
+		void setRelativePosition(const irr::core::rect<irr::s32> &r);
+
+		irr::gui::IGUIScrollBar *getScrollBar() {
+			return ScrollBar;
+		}
+
+		void recalculateScrollBar();
+
+	private:
+		irr::gui::IGUIScrollBar *ScrollBar;
+
+		irr::s32 LastScrollBarPosition;
+
 	};
 
 
