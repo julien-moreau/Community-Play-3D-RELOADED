@@ -30,6 +30,9 @@
     <Filter Include="include\engine">
       <UniqueIdentifier>{7522dc35-df3c-425b-9d28-46a700813386}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\editor">
+      <UniqueIdentifier>{ce285ca4-fb69-4c38-abd1-f830896864e5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\CP3DCompileConfig.h">
@@ -59,17 +62,11 @@
     <ClInclude Include="Engine\Core\CCP3DCustomUpdater.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\ICP3DEditor.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Scene\CCP3DSceneNodeCreator.h">
       <Filter>Engine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Scene\Clouds\CCloudSceneNode.h">
       <Filter>Engine\Scene\Clouds</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ICP3DEditionTool.h">
-      <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\SShadowLight.h">
       <Filter>include\rendering</Filter>
@@ -106,6 +103,15 @@
     </ClInclude>
     <ClInclude Include="..\include\ICP3DSceneNodeCreator.h">
       <Filter>include\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ICP3DEditor.h">
+      <Filter>include\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ICP3DEditionTool.h">
+      <Filter>include\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ICP3DFileSelector.h">
+      <Filter>include\editor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

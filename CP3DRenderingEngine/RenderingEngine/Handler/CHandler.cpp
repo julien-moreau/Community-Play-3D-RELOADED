@@ -148,6 +148,8 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 		device->getLogger()->log("CP3DHandler: Shader effects not supported on this system.");
 		shadowsUnsupported = true;
 	}
+
+	ViewPort = driver->getViewPort();
 }
 
 
@@ -382,6 +384,8 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 	ScreenQuad.getMaterial().setTexture(1, ScreenQuad.rt[0]);
 
 	ScreenQuad.getMaterial().MaterialType = (E_MATERIAL_TYPE)LightModulate;
+	if (!PostProcessingRoutinesSize)
+		driver->setViewPort(ViewPort);
 	ScreenQuad.render(driver);
 
 	// Perform custom passes after rendering, to ensure animations stay up to date
@@ -421,8 +425,13 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 
 			Alter = !Alter;
 			ScreenQuad.getMaterial().setTexture(0, i == 0 ? ScreenRTT : ScreenQuad.rt[int(!Alter)]);
-			driver->setRenderTarget(i >= PostProcessingRoutinesSize - 1 ?
-				outputTarget : ScreenQuad.rt[int(Alter)], true, true, ClearColour);
+
+			if (i >= PostProcessingRoutinesSize - 1) {
+				driver->setViewPort(ViewPort);
+				driver->setRenderTarget(outputTarget, true, true, ClearColour);
+			}
+			else
+				driver->setRenderTarget(ScreenQuad.rt[int(Alter)], true, true, ClearColour);
 
 			if(PostProcessingRoutines[i].renderCallback) PostProcessingRoutines[i].renderCallback->OnPreRender(this);
 			ScreenQuad.render(driver);

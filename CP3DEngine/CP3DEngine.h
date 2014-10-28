@@ -31,7 +31,6 @@ public:
 
 	/// Rendering
 	rendering::ICP3DRenderingEngine *getRenderingEngine();
-	void setSceneRenderingViewPort(irr::core::rect<irr::s32> viewPort);
 
 	/// GUI
 	const bool isDrawingGUI() const;
@@ -53,7 +52,6 @@ private:
 	/// Rendering
 	rendering::ICP3DRenderingEngine *Rengine;
 	rendering::ICP3DHandler *Handler;
-	irr::core::rect<irr::s32> ViewPort;
 
 	bool DrawGUI;
 

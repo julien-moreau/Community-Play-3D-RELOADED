@@ -51,8 +51,17 @@ struct SCP3DInterfaceData {
 		irr::gui::IGUIListBox *List;
 	};
 
+	struct STextureData {
+		irr::gui::IGUIImage *Image;
+		irr::gui::IGUIEditBox *EditBoxPath;
+		irr::gui::IGUIButton *BrowseButton;
+		irr::gui::IGUIButton *RemoveButton;
+		irr::gui::IGUIFileOpenDialog *BrowseDialog;
+	};
+
 	union {
 		SListData ListData;
+		STextureData TextureData;
 		irr::gui::IGUIEditBox *TextBox;
 		irr::gui::IGUIComboBox *ComboBox;
 	};

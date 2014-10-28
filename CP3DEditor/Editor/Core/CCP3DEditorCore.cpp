@@ -12,6 +12,7 @@
 #include "../UserInterfaces/CCP3DToolsToolbar.h"
 #include "../UserInterfaces/CCP3DEditionTool.h"
 #include "../UserInterfaces/CCP3DSceneGraph.h"
+#include "../GUIElements/GUIFileSelector/CGUIFileSelector.h"
 
 using namespace irr;
 using namespace scene;
@@ -60,7 +61,7 @@ CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), 
 	SceneGraph = new CCP3DSceneGraph(this);
 
 	/// Finish
-	WorkingDirectory = ProjectDirectory = device->getFileSystem()->getWorkingDirectory();
+	WorkingDirectory = ProjectDirectory = device->getFileSystem()->getWorkingDirectory() + "/";
 	setProjectName(ProjectName);
 
 	/// Tests
@@ -112,12 +113,25 @@ void CCP3DEditorCore::OnPreUpdate() {
 	viewPort.LowerRightCorner.X = Driver->getScreenSize().Width - SceneGraph->getElementToResize()->getRelativePosition().getWidth();
 	viewPort.LowerRightCorner.Y = Driver->getScreenSize().Height;
 
-	Engine->setSceneRenderingViewPort(viewPort);
+	Rengine->getHandler()->setViewPort(viewPort);
 }
 
 /// Runs the editor
 void CCP3DEditorCore::runEditor() {
 	Engine->runEngine();
+}
+
+ui::ICP3DFileSelector *CCP3DEditorCore::createFileOpenDialog(irr::core::stringw name, irr::gui::IGUIElement *parent, ui::ICP3DFileSelector::E_FILESELECTOR_TYPE type) {
+	ui::CGUIFileSelector *selector = new ui::CGUIFileSelector(name.c_str(), Gui, parent == 0 ? Gui->getRootGUIElement() : parent, -1, type);
+
+	selector->setCustomDirectoryIcon(Driver->getTexture(WorkingDirectory + "GUI/open.png"));
+	selector->setCustomFileIcon(Driver->getTexture(WorkingDirectory + "GUI/parameters.png"));
+	
+	selector->addPlacePaths(L"CP3D Directory", WorkingDirectory.c_str(), Driver->getTexture(WorkingDirectory + "GUI/parameters.png"));
+	selector->addPlacePaths(L"Project Directory", ProjectDirectory.c_str(), Driver->getTexture(WorkingDirectory + "GUI/play_game.png"));
+	selector->addPlacePaths(L"Opened Place", Device->getFileSystem()->getWorkingDirectory(), Driver->getTexture(WorkingDirectory + "Gui/open.png"));
+
+	return selector;
 }
 
 } /// End namespace cp3d

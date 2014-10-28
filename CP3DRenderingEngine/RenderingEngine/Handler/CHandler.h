@@ -99,6 +99,7 @@ public:
 	irr::scene::ISceneManager* getActiveSceneManager() { return smgr; }
 	irr::f32 getTime() { return device->getTimer()->getTime() / 100.0f; }
 	void setClearColour(irr::video::SColor ClearCol) { ClearColour = ClearCol; }
+	void setViewPort(irr::core::rect<irr::s32> viewPort) { ViewPort = viewPort; }
 
 	/// Custom Passes
 	void addCustomPass(ICP3DCustomPass *pass) {
@@ -177,6 +178,8 @@ private:
 	irr::video::SColor ClearColour;
 	irr::video::SColor AmbientColour;
 	CScreenQuad ScreenQuad;
+
+	irr::core::rect<irr::s32> ViewPort;
 
 	bool shadowsUnsupported;
 	bool use32BitDepth;

@@ -780,6 +780,32 @@ void CGUITreeView::mouseAction( s32 xpos, s32 ypos, bool onlyHover /*= false*/ )
 	}
 }
 
+//! Sets the new relative position
+void CGUITreeView::setRelativePosition(const core::rect<s32> &r) {
+	const u32 size = Environment->getSkin()->getSize(EGDS_SCROLLBAR_SIZE);
+	if (ScrollBarV)
+	{
+		core::rect<s32> position;
+		position.UpperLeftCorner.X = r.getWidth() - size;
+		position.UpperLeftCorner.Y = 0;
+		position.LowerRightCorner.X = r.getWidth();
+		position.LowerRightCorner.Y = r.getHeight() - size;
+
+		ScrollBarV->setRelativePosition(position);
+	}
+	if (ScrollBarH)
+	{
+		core::rect<s32> position;
+		position.UpperLeftCorner.X = 0;
+		position.UpperLeftCorner.Y = r.getHeight() - size;
+		position.LowerRightCorner.X = r.getWidth() - size;
+		position.LowerRightCorner.Y = r.getHeight();
+
+		ScrollBarH->setRelativePosition(position);
+	}
+
+	IGUITreeView::setRelativePosition(r);
+}
 
 //! draws the element and its children
 void CGUITreeView::draw()

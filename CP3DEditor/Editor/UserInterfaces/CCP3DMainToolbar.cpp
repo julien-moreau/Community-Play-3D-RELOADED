@@ -40,11 +40,11 @@ CCP3DMainToolbar::CCP3DMainToolbar(CCP3DEditorCore *editorCore) : EditorCore(edi
 
 	Toolbar->addButton(-1, L"", L"", Driver->getTexture("GUI/separator.png"), false, true)->setVisible(false);
 
-	Toolbar->addButton(-1, L"", L"Manage animators...", Driver->getTexture("GUI/animators.png"), 0, true, true);
-	Toolbar->addButton(-1, L"", L"Manage materials...", Driver->getTexture("GUI/materials.png"), 0, true, true);
-	Toolbar->addButton(-1, L"", L"Manage post-processes", Driver->getTexture("GUI/postprocesses.png"), 0, true, true);
-	Toolbar->addButton(-1, L"", L"Manage scenarios...", Driver->getTexture("GUI/scenarios.png"), 0, true, true);
-	Toolbar->addButton(-1, L"", L"Manage particle systems...", Driver->getTexture("GUI/particles.png"), 0, true, true);
+	Toolbar->addButton(-1, L"", L"Manage animators...", Driver->getTexture("GUI/animators.png"), 0, false, true);
+	Toolbar->addButton(-1, L"", L"Manage materials...", Driver->getTexture("GUI/materials.png"), 0, false, true);
+	Toolbar->addButton(-1, L"", L"Manage post-processes", Driver->getTexture("GUI/postprocesses.png"), 0, false, true);
+	Toolbar->addButton(-1, L"", L"Manage scenarios...", Driver->getTexture("GUI/scenarios.png"), 0, false, true);
+	Toolbar->addButton(-1, L"", L"Manage particle systems...", Driver->getTexture("GUI/particles.png"), 0, false, true);
 
 }
 

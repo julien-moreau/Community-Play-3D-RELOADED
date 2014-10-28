@@ -30,6 +30,7 @@ public:
 
 private:
 	/// Irrlicht
+	irr::video::IVideoDriver *Driver;
 	irr::gui::IGUIEnvironment *Gui;
 
 	/// CP3D
@@ -40,11 +41,16 @@ private:
 	irr::gui::IGUITab *GeneralTab;
 	irr::gui::IGUITab *MaterialTab;
 
-
+	/// General
 	SCP3DInterfaceData SceneNodeName;
 	SCP3DInterfaceData SceneNodePositionX, SceneNodePositionY, SceneNodePositionZ;
 	SCP3DInterfaceData SceneNodeRotationX, SceneNodeRotationY, SceneNodeRotationZ;
 	SCP3DInterfaceData SceneNodeScaleX, SceneNodeScaleY, SceneNodeScaleZ;
+
+	SCP3DInterfaceData SceneNodeAnimators;
+
+	/// Materials
+	SCP3DInterfaceData MaterialTextures[irr::video::MATERIAL_MAX_TEXTURES];
 
 };
 

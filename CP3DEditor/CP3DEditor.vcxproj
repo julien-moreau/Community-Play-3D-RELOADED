@@ -98,6 +98,7 @@
   <ItemGroup>
     <ClInclude Include="Editor\Core\CCP3DEditorCore.h" />
     <ClInclude Include="Editor\Core\CCP3DInterfaceController.h" />
+    <ClInclude Include="Editor\GUIElements\GUIFileSelector\CGUIFileSelector.h" />
     <ClInclude Include="Editor\GUIElements\GUIPanel\CGUIPanel.h" />
     <ClInclude Include="Editor\UserInterfaces\CCP3DContextMenu.h" />
     <ClInclude Include="Editor\UserInterfaces\CCP3DEditionTool.h" />
@@ -113,6 +114,7 @@
     <ClCompile Include="CP3DEditor.cpp" />
     <ClCompile Include="Editor\Core\CCP3DEditorCore.cpp" />
     <ClCompile Include="Editor\Core\CCP3DInterfaceController.cpp" />
+    <ClCompile Include="Editor\GUIElements\GUIFileSelector\CGUIFileSelector.cpp" />
     <ClCompile Include="Editor\GUIElements\GUIPanel\CGUIPanel.cpp" />
     <ClCompile Include="Editor\UserInterfaces\CCP3DContextMenu.cpp" />
     <ClCompile Include="Editor\UserInterfaces\CCP3DEditionTool.cpp" />

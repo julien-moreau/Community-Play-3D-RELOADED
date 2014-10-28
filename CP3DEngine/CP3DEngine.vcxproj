@@ -100,6 +100,7 @@
     <ClInclude Include="..\include\CP3DEngine.h" />
     <ClInclude Include="..\include\CP3DRenderingEngine.h" />
     <ClInclude Include="..\include\ICP3DEditionTool.h" />
+    <ClInclude Include="..\include\ICP3DFileSelector.h" />
     <ClInclude Include="..\include\ICP3DInterface.h" />
     <ClInclude Include="..\include\ICP3DCustomDepthPass.h" />
     <ClInclude Include="..\include\ICP3DCustomPass.h" />

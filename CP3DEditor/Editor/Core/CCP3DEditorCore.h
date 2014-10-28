@@ -3,6 +3,7 @@
 
 #include <irrlicht.h>
 #include <ICP3DEditor.h>
+#include <ICP3DFileSelector.h>
 #include <CP3DRenderingEngine.h>
 #include <CP3DEngine.h>
 
@@ -28,6 +29,8 @@ public:
 
 	/// ICP3DEditor
 	void runEditor();
+
+	ui::ICP3DFileSelector *createFileOpenDialog(irr::core::stringw name, irr::gui::IGUIElement *parent, ui::ICP3DFileSelector::E_FILESELECTOR_TYPE type);
 
 	/// ICP3DUpdate
 	void OnPreUpdate();

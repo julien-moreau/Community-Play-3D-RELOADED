@@ -118,6 +118,10 @@ namespace rendering {
 		//! Resets the render targets to the given resolution
 		//! \param resolution: the new resolution of the render targets
 		virtual void setScreenRenderTargetResolution(const irr::core::dimension2du& resolution) = 0;
+
+		//! Sets the view port where to render the scene
+		//! \param viewPort: the new view port
+		virtual void setViewPort(irr::core::rect<irr::s32> viewPort) = 0;
 	};
 
 } /// End rendering namespace

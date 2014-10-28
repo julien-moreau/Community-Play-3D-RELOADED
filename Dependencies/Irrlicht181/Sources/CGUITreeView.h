@@ -271,6 +271,9 @@ namespace gui
 		//! draws the element and its children
 		virtual void draw();
 
+		//! Sets the new relative position
+		void setRelativePosition(const core::rect<s32> &r);
+
 		//! Sets the font which should be used as icon font. This font is set to the Irrlicht engine
 		//! built-in-font by default. Icons can be displayed in front of every list item.
 		//! An icon is a string, displayed with the icon font. When using the build-in-font of the

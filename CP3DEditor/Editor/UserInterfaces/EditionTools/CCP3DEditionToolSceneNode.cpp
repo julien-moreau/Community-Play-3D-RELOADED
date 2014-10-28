@@ -17,6 +17,10 @@ CCP3DEditionToolSceneNode::CCP3DEditionToolSceneNode(CCP3DEditorCore *editorCore
 {
 	/// Configure
 	EditionTool = editorCore->getEditionTool();
+	Driver = editorCore->getRenderingEngine()->getVideoDriver();
+	Gui = editorCore->getRenderingEngine()->getGUIEnvironment();
+
+	editorCore->getEngine()->getEventReceiver()->addEventReceiver(this);
 }
 
 CCP3DEditionToolSceneNode::~CCP3DEditionToolSceneNode() {
@@ -24,13 +28,15 @@ CCP3DEditionToolSceneNode::~CCP3DEditionToolSceneNode() {
 }
 
 void CCP3DEditionToolSceneNode::createInterface() {
-	/// General
+	/// Tabs
 	GeneralTab = EditionTool->addTab("General");
+	if (SceneNode->getType() != ESNT_LIGHT)
+		MaterialTab = EditionTool->addTab("Materials");
 
+	/// General
 	SceneNodeName = EditionTool->addField(GeneralTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Name :"));
 
 	EditionTool->setNewZone(GeneralTab, "Transforms");
-
 	SceneNodePositionX = EditionTool->addField(GeneralTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Position X :"));
 	SceneNodePositionY = EditionTool->addField(GeneralTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Position Y :"));
 	SceneNodePositionZ = EditionTool->addField(GeneralTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Position Z :"));
@@ -42,6 +48,18 @@ void CCP3DEditionToolSceneNode::createInterface() {
 	SceneNodeScaleX = EditionTool->addField(GeneralTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Scaling X :"));
 	SceneNodeScaleY = EditionTool->addField(GeneralTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Scaling Y :"));
 	SceneNodeScaleZ = EditionTool->addField(GeneralTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Scaling Z :"));
+
+	EditionTool->setNewZone(GeneralTab, "Animators");
+	SceneNodeAnimators = EditionTool->addField(GeneralTab, EGUIET_LIST_BOX, DefaultEditionToolCallback("Animators :"));
+
+	if (SceneNode->getType() != ESNT_LIGHT) {
+		/// Materials
+		for (u32 i=0; i < irr::video::MATERIAL_MAX_TEXTURES; i++) {
+			stringw txt = stringw("Texture layer ") + stringw(i) + stringw(" :");
+			MaterialTextures[i] = EditionTool->addField(MaterialTab, EGUIET_IMAGE, DefaultEditionToolCallback(txt));
+			EditionTool->addSeparator(MaterialTab);
+		}
+	}
 }
 
 void CCP3DEditionToolSceneNode::configure() {
@@ -59,6 +77,15 @@ void CCP3DEditionToolSceneNode::configure() {
 	SceneNodeScaleX.TextBox->setText(stringw(SceneNode->getScale().X).c_str());
 	SceneNodeScaleY.TextBox->setText(stringw(SceneNode->getScale().Y).c_str());
 	SceneNodeScaleZ.TextBox->setText(stringw(SceneNode->getScale().Z).c_str());
+
+	if (SceneNode->getType() != ESNT_LIGHT) {
+		/// Materials
+		for (u32 i=0; i < irr::video::MATERIAL_MAX_TEXTURES; i++) {
+			MaterialTextures[i].TextureData.Image->setImage(SceneNode->getMaterial(0).TextureLayer[i].Texture);
+			if (MaterialTextures[i].TextureData.Image->getImage())
+				MaterialTextures[i].TextureData.EditBoxPath->setText(stringw(MaterialTextures[i].TextureData.Image->getImage()->getName().getPath()).c_str());
+		}
+	}
 }
 
 void CCP3DEditionToolSceneNode::apply() {
@@ -82,6 +109,41 @@ void CCP3DEditionToolSceneNode::apply() {
 }
 
 bool CCP3DEditionToolSceneNode::OnEvent(const SEvent &event) {
+	
+	/// Textures (Materials)
+	if (event.EventType == EET_GUI_EVENT) {
+
+		if (event.GUIEvent.EventType == EGET_BUTTON_CLICKED) {
+
+			/// Textures (Materials)
+			for (u32 i=0; i < video::MATERIAL_MAX_TEXTURES; i++) {
+				/// Browse
+				if (event.GUIEvent.Caller == MaterialTextures[i].TextureData.BrowseButton) {
+					MaterialTextures[i].TextureData.BrowseDialog = EditorCore->createFileOpenDialog("Select Texture...", 0, ui::ICP3DFileSelector::EFST_OPEN_DIALOG);
+					return true;
+				}
+			}
+
+		}
+
+		else if (event.GUIEvent.EventType == EGET_FILE_SELECTED) {
+
+			/// Textures(Materials)
+			for (u32 i=0; i < video::MATERIAL_MAX_TEXTURES; i++) {
+				/// Browse
+				if (event.GUIEvent.Caller == MaterialTextures[i].TextureData.BrowseDialog) {
+					ITexture *tex = Driver->getTexture(MaterialTextures[i].TextureData.BrowseDialog->getFileName());
+					if (!tex)
+						return true;
+
+					MaterialTextures[i].TextureData.Image->setImage(tex);
+					SceneNode->getMaterial(0).TextureLayer[i].Texture = tex;
+					return true;
+				}
+			}
+		}
+
+	}
 
 	return false;
 }

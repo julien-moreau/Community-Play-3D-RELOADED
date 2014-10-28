@@ -31,7 +31,7 @@ public:
 	/// IEventReceiver
 	bool OnEvent(const irr::SEvent &event);
 	/// ICP3DUpdate
-	void OnPreUpdate();
+	void OnPostUpdate();
 	/// ICP3DInterface
 	void OnResize();
 	irr::gui::IGUIElement *getElementToResize() { return Window; }
@@ -80,6 +80,9 @@ private:
 	SCP3DInterfaceData createTextBoxField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel);
 	SCP3DInterfaceData createListBoxField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel);
 	SCP3DInterfaceData createComboBoxField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel);
+	SCP3DInterfaceData createTextureField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel);
+
+	irr::core::list<SCP3DInterfaceData> InterfaceDatas;
 
 };
 

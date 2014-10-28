@@ -78,7 +78,7 @@ public:
 
 	//! Sets the relative rectangle of this element.
 	/** \param r The absolute position to set */
-	void setRelativePosition(const core::rect<s32>& r)
+	virtual void setRelativePosition(const core::rect<s32>& r)
 	{
 		if (Parent)
 		{

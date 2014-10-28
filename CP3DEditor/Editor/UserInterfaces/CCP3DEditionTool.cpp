@@ -49,8 +49,35 @@ CCP3DEditionTool::~CCP3DEditionTool() {
 	TabCtrl->remove();
 }
 
-void CCP3DEditionTool::OnPreUpdate() {
+void CCP3DEditionTool::OnPostUpdate() {
+	const u32 index = TabCtrl->getActiveTab();
+	if (index == -1)
+		return;
 
+	IGUITab *tab = TabCtrl->getTab(index);
+	ui::CGUIPanel *panel = Panels[index];
+
+	core::list<SCP3DInterfaceData>::ConstIterator it = InterfaceDatas.begin();
+	for (; it != InterfaceDatas.end(); ++it) {
+
+		/// If image then zoom on the image
+		if ((*it).Type == EGUIET_IMAGE) {
+			IGUIImage *img = (*it).TextureData.Image;
+
+			if (img->getParent() == panel) {
+				vector2di cpos = CursorControl->getPosition();
+				img->updateAbsolutePosition();
+				if (img->getImage() && img->getAbsolutePosition().isPointInside(cpos)) {
+
+					rect<s32> destRect(cpos.X, cpos.Y, cpos.X + 250, cpos.Y + 250);
+					rect<s32> sourceRect(0, 0, img->getImage()->getOriginalSize().Width, img->getImage()->getOriginalSize().Height);
+					Driver->draw2DImage(img->getImage(), destRect, sourceRect);
+
+				}
+			}
+		}
+
+	}
 }
 
 irr::gui::IGUITab *CCP3DEditionTool::addTab(const irr::core::stringc name) {
@@ -71,6 +98,9 @@ void CCP3DEditionTool::clearTabs() {
 	TabCtrl->remove();
 	TabCtrl = Gui->addTabControl(rect<s32>(0, 0, 0, 0), Window, true, true, -1);
 	OnResize();
+
+	/// Interface Datas
+	InterfaceDatas.clear();
 
 	/// Finish
 	NewZone = true;
@@ -100,7 +130,30 @@ void CCP3DEditionTool::OnResize() {
 												 parent->getRelativePosition().getHeight() - 2));
 	}
 
+	core::list<SCP3DInterfaceData>::ConstIterator itd = InterfaceDatas.begin();
+	for (; itd != InterfaceDatas.end(); ++itd) {
+		core::array<IGUIElement *> elements;
+		if ((*itd).Type == EGUIET_EDIT_BOX)
+			elements.push_back((*itd).TextBox);
+		else if ((*itd).Type == EGUIET_COMBO_BOX)
+			elements.push_back((*itd).ComboBox);
+		else if ((*itd).Type == EGUIET_STATIC_TEXT)
+			elements.push_back((*itd).TextElement);
+		else if ((*itd).Type == EGUIET_IMAGE) {
+			elements.push_back((*itd).TextureData.BrowseButton);
+			elements.push_back((*itd).TextureData.EditBoxPath);
+			elements.push_back((*itd).TextureData.RemoveButton);
+		}
+		else if ((*itd).Type == EGUIET_LIST_BOX) {
+			elements.push_back((*itd).ListData.List);
+		}
 
+		for (u32 i=0; i < elements.size(); i++) {
+			rect<s32> position = elements[i]->getRelativePosition();
+			position.LowerRightCorner.X = elements[i]->getParent()->getRelativePosition().getWidth() - 5;
+			elements[i]->setRelativePosition(rect<s32>(position));
+		}
+	}
 }
 
 void CCP3DEditionTool::createDefaultControllers() {
@@ -155,9 +208,13 @@ void CCP3DEditionTool::setNewZone(IGUITab *tab, stringw name) {
 	s32 width = panel->getRelativePosition().getWidth();
 	s32 offset = getElementPositionOffset(tab, panel);
 
-	IGUIStaticText *e2 = Gui->addStaticText(name.c_str(), rect<s32>(5, offset, width - 10, offset + 20), false, false, panel, -1, false);
-	e2->setTextAlignment(EGUIA_CENTER, EGUIA_CENTER);
-	e2->setBackgroundColor(SColor(255, 128, 128, 128));
+	IGUIStaticText *e = Gui->addStaticText(name.c_str(), rect<s32>(5, offset, width - 10, offset + 20), false, false, panel, -1, false);
+	e->setTextAlignment(EGUIA_CENTER, EGUIA_CENTER);
+	e->setBackgroundColor(SColor(255, 128, 128, 128));
+
+	SCP3DInterfaceData ed(EGUIET_STATIC_TEXT);
+	ed.TextElement = e;
+	InterfaceDatas.push_back(ed);
 
 	NewZone = true;
 }
@@ -170,11 +227,13 @@ SCP3DInterfaceData CCP3DEditionTool::addField(IGUITab *tab, EGUI_ELEMENT_TYPE ty
 	case EGUIET_EDIT_BOX: e = createTextBoxField(tab, panel); break;
 	case EGUIET_LIST_BOX: e = createListBoxField(tab, panel); break;
 	case EGUIET_COMBO_BOX: e = createComboBoxField(tab, panel); break;
+	case EGUIET_IMAGE: e = createTextureField(tab, panel); break;
 
 	default: break;
 	}
 
 	callback(e);
+	InterfaceDatas.push_back(e);
 
 	return e;
 }
@@ -295,6 +354,24 @@ SCP3DInterfaceData CCP3DEditionTool::createComboBoxField(irr::gui::IGUITab *tab,
 	((IGUIStaticText*)e.TextElement)->setTextAlignment(EGUIA_UPPERLEFT, EGUIA_CENTER);
 
 	e.ComboBox = Gui->addComboBox(rect<s32>(width / 3, offset, width - 10, offset + 20), panel, -1);
+
+	return e;
+}
+
+SCP3DInterfaceData CCP3DEditionTool::createTextureField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel) {
+	SCP3DInterfaceData e(EGUIET_IMAGE);
+
+	s32 width = panel->getRelativePosition().getWidth();
+	s32 offset = getElementPositionOffset(tab, panel);
+
+	e.TextElement = Gui->addStaticText(L"", rect<s32>(5, offset, width - 5, offset + 20), false, true, panel, -1, false);
+	e.TextureData.Image = Gui->addImage(rect<s32>(5, offset + 20, 75, offset + 20 + 70), panel, -1, L"Texture", false);
+	e.TextureData.Image->setScaleImage(true);
+	e.TextureData.EditBoxPath = Gui->addEditBox(L"", rect<s32>(75, offset + 20, width - 5, offset + 40), true, panel, -1);
+	e.TextureData.EditBoxPath->setEnabled(false);
+	e.TextureData.BrowseButton = Gui->addButton(rect<s32>(75, offset + 40, width - 5, offset + 60), panel, -1, L"Browse...", L"Browse texture...");
+	e.TextureData.RemoveButton = Gui->addButton(rect<s32>(75, offset + 60, width - 5, offset + 80), panel, -1, L"Unset", L"Unsets the texture");
+	e.TextureData.BrowseDialog = 0;
 
 	return e;
 }
