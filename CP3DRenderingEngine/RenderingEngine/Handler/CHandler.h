@@ -39,17 +39,27 @@ public:
 
 	irr::video::ITexture* getShadowMapTexture(const irr::u32 resolution, const bool secondary = false);
 	void removeShadowFromNode(irr::scene::ISceneNode* node) {
-		SShadowNode tmpShadowNode = {node, ESM_RECEIVE, EFT_NONE};
-		irr::s32 i = ShadowNodeArray.binary_search(tmpShadowNode);
-
-		if(i != -1)
-			ShadowNodeArray.erase(i);
+		for (irr::u32 i=0; i < ShadowNodeArray.size(); i++) {
+			if (ShadowNodeArray[i].node == node) {
+				ShadowNodeArray.erase(i);
+				break;
+			}
+		}
 	}
 	void excludeNodeFromLightingCalculations(irr::scene::ISceneNode* node) {
 		SShadowNode tmpShadowNode = {node, ESM_EXCLUDE, EFT_NONE};
 		ShadowNodeArray.push_back(tmpShadowNode);
 	}
 	void addShadowToNode(irr::scene::ISceneNode* node, E_FILTER_TYPE filterType = EFT_NONE, E_SHADOW_MODE shadowMode = ESM_BOTH);
+	bool isNodeShadowed(irr::scene::ISceneNode *node);
+
+	E_SHADOW_MODE getShadowModeForNode(irr::scene::ISceneNode *node);
+	E_FILTER_TYPE getFilterTypeForNode(irr::scene::ISceneNode *node);
+
+	void setShadowModeForNode(irr::scene::ISceneNode *node, E_SHADOW_MODE shadowMode);
+	void setFilterTypeForNode(irr::scene::ISceneNode *node, E_FILTER_TYPE filterType);
+
+	void setUseVSM(bool useVSM) { useVSM = useVSM; }
 
 	/// Depth pass
 	CCustomDepthPass *getDepthPassManager() { return CustomDepthPassMgr; }
@@ -164,8 +174,8 @@ private:
 	irr::s32 VSMBlurV;
 	irr::core::array<ICP3DCustomPass *> CustomPasses;
 	
-	DepthShaderCB* depthMC;
-	ShadowShaderCB* shadowMC;
+	DepthShaderCB* DepthMC;
+	ShadowShaderCB* ShadowMC;
 
 	irr::video::ITexture* ScreenRTT;
 

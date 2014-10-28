@@ -9,21 +9,36 @@ namespace rendering {
 
 	//! Shadow mode. If the nodes should receive, cast or exclude
 	enum E_SHADOW_MODE {
-		ESM_RECEIVE,
+		ESM_RECEIVE = 0,
 		ESM_CAST,
 		ESM_BOTH,
 		ESM_EXCLUDE,
 		ESM_COUNT
 	};
+	const irr::c8* const ShadowModeNames[] = {
+		"Receive",
+		"Cast",
+		"Both (Cast & Receive)",
+		"Exclude",
+		0
+	};
 
 	//! Shadow map filter type
 	enum E_FILTER_TYPE {
-		EFT_NONE,
+		EFT_NONE = 0,
 		EFT_4PCF,
 		EFT_8PCF,
 		EFT_12PCF,
 		EFT_16PCF,
 		EFT_COUNT
+	};
+	const irr::c8* const FilterTypeNames[] = {
+		"None",
+		"4 PCF",
+		"8 PCF",
+		"12 PCF",
+		"16 PCF",
+		0
 	};
 
 	class ICP3DHandler;
@@ -67,6 +82,10 @@ namespace rendering {
 		//! \param filterType: the shadow map filter type
 		//! \param shadowMode: the shadow mode for this node. Cast, Receive, Both or Exclude
 		virtual void addShadowToNode(irr::scene::ISceneNode* node, E_FILTER_TYPE filterType = EFT_NONE, E_SHADOW_MODE shadowMode = ESM_BOTH) = 0;
+
+		//! Returns if the node is shadowed or not
+		//! \param node: the node to test
+		virtual bool isNodeShadowed(irr::scene::ISceneNode *node) = 0;
 
 		//! Sets the ambiant color of the scene
 		//! \param ambiantColour: the ambiant color of the scene
@@ -122,6 +141,24 @@ namespace rendering {
 		//! Sets the view port where to render the scene
 		//! \param viewPort: the new view port
 		virtual void setViewPort(irr::core::rect<irr::s32> viewPort) = 0;
+
+		//! Returns the shadow mode for the given node
+		//! \param node: the node to test
+		virtual E_SHADOW_MODE getShadowModeForNode(irr::scene::ISceneNode *node) = 0;
+
+		//! Sets the new shadow mode for the node
+		//! \param node: the node to modify
+		//! \param shadowMode: the shadow mode
+		virtual void setShadowModeForNode(irr::scene::ISceneNode *node, E_SHADOW_MODE shadowMode) = 0;
+
+		//! Returns the filter type for the given node
+		//! \param node: the node to test
+		virtual E_FILTER_TYPE getFilterTypeForNode(irr::scene::ISceneNode *node) = 0;
+
+		//! Sets the new filter type for the scene node
+		//! \param: the node to modify
+		//! \param filterType: the filter type to set
+		virtual void setFilterTypeForNode(irr::scene::ISceneNode *node, E_FILTER_TYPE filterType) = 0;
 	};
 
 } /// End rendering namespace

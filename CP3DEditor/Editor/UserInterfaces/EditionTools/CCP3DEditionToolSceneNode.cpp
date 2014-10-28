@@ -13,12 +13,14 @@ using namespace gui;
 
 namespace cp3d {
 
-CCP3DEditionToolSceneNode::CCP3DEditionToolSceneNode(CCP3DEditorCore *editorCore) : EditorCore(editorCore)
+CCP3DEditionToolSceneNode::CCP3DEditionToolSceneNode(CCP3DEditorCore *editorCore) : EditorCore(editorCore), CurrentMaterialID(0)
 {
 	/// Configure
 	EditionTool = editorCore->getEditionTool();
 	Driver = editorCore->getRenderingEngine()->getVideoDriver();
 	Gui = editorCore->getRenderingEngine()->getGUIEnvironment();
+
+	Handler = editorCore->getRenderingEngine()->getHandler();
 
 	editorCore->getEngine()->getEventReceiver()->addEventReceiver(this);
 }
@@ -32,9 +34,12 @@ void CCP3DEditionToolSceneNode::createInterface() {
 	GeneralTab = EditionTool->addTab("General");
 	if (SceneNode->getType() != ESNT_LIGHT)
 		MaterialTab = EditionTool->addTab("Materials");
+	AnimatorsTab = EditionTool->addTab("Animators");
 
 	/// General
+	EditionTool->setNewZone(GeneralTab, "General");
 	SceneNodeName = EditionTool->addField(GeneralTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Name :"));
+	SceneNodeID = EditionTool->addField(GeneralTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("ID :"));
 
 	EditionTool->setNewZone(GeneralTab, "Transforms");
 	SceneNodePositionX = EditionTool->addField(GeneralTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Position X :"));
@@ -49,22 +54,39 @@ void CCP3DEditionToolSceneNode::createInterface() {
 	SceneNodeScaleY = EditionTool->addField(GeneralTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Scaling Y :"));
 	SceneNodeScaleZ = EditionTool->addField(GeneralTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Scaling Z :"));
 
-	EditionTool->setNewZone(GeneralTab, "Animators");
-	SceneNodeAnimators = EditionTool->addField(GeneralTab, EGUIET_LIST_BOX, DefaultEditionToolCallback("Animators :"));
+	EditionTool->setNewZone(GeneralTab, "Rendering");
+	SceneNodeSetShadowed = EditionTool->addField(GeneralTab, EGUIET_CHECK_BOX, DefaultEditionToolCallback("Shadowed"));
+	SceneNodeShadowType = EditionTool->addField(GeneralTab, EGUIET_COMBO_BOX, DefaultEditionToolCallback("Shadowing :"));
+	SceneNodeFilterType = EditionTool->addField(GeneralTab, EGUIET_COMBO_BOX, DefaultEditionToolCallback("Filter type :"));
+	{
+		for (u32 i=0; i < rendering::ESM_COUNT; i++)
+			SceneNodeShadowType.ComboBox->addItem(stringw(rendering::ShadowModeNames[i]).c_str());
+		for (u32 i=0; i < rendering::EFT_COUNT; i++)
+			SceneNodeFilterType.ComboBox->addItem(stringw(rendering::FilterTypeNames[i]).c_str());
+	}
 
+	/// Materials
 	if (SceneNode->getType() != ESNT_LIGHT) {
-		/// Materials
+		MaterialSelector = EditionTool->addField(MaterialTab, EGUIET_COMBO_BOX, DefaultEditionToolCallback("Material :"));
+
+		EditionTool->setNewZone(MaterialTab, "Textures");
+
 		for (u32 i=0; i < irr::video::MATERIAL_MAX_TEXTURES; i++) {
 			stringw txt = stringw("Texture layer ") + stringw(i) + stringw(" :");
 			MaterialTextures[i] = EditionTool->addField(MaterialTab, EGUIET_IMAGE, DefaultEditionToolCallback(txt));
 			EditionTool->addSeparator(MaterialTab);
 		}
 	}
+
+	/// Animators
+	EditionTool->setNewZone(AnimatorsTab, "Animators");
+	SceneNodeAnimators = EditionTool->addField(AnimatorsTab, EGUIET_LIST_BOX, DefaultEditionToolCallback("Animators :"));
 }
 
 void CCP3DEditionToolSceneNode::configure() {
 	/// General
 	SceneNodeName.TextBox->setText(stringw(SceneNode->getName()).c_str());
+	SceneNodeID.TextBox->setText(stringw(SceneNode->getID()).c_str());
 
 	SceneNodePositionX.TextBox->setText(stringw(SceneNode->getPosition().X).c_str());
 	SceneNodePositionY.TextBox->setText(stringw(SceneNode->getPosition().Y).c_str());
@@ -78,13 +100,32 @@ void CCP3DEditionToolSceneNode::configure() {
 	SceneNodeScaleY.TextBox->setText(stringw(SceneNode->getScale().Y).c_str());
 	SceneNodeScaleZ.TextBox->setText(stringw(SceneNode->getScale().Z).c_str());
 
+	SceneNodeSetShadowed.CheckBox->setChecked(Handler->isNodeShadowed(SceneNode));
+	{
+		SceneNodeShadowType.ComboBox->setSelected(Handler->getShadowModeForNode(SceneNode));
+		SceneNodeShadowType.ComboBox->setEnabled(SceneNodeSetShadowed.CheckBox->isChecked());
+		SceneNodeFilterType.ComboBox->setSelected(Handler->getFilterTypeForNode(SceneNode));
+		SceneNodeFilterType.ComboBox->setEnabled(SceneNodeSetShadowed.CheckBox->isChecked());
+	}
+
+	/// Materials
 	if (SceneNode->getType() != ESNT_LIGHT) {
-		/// Materials
+		for (u32 i=0; i < SceneNode->getMaterialCount(); i++) {
+			MaterialSelector.ComboBox->addItem(stringw(SceneNode->getMaterial(i).Name).c_str());
+		}
+
 		for (u32 i=0; i < irr::video::MATERIAL_MAX_TEXTURES; i++) {
-			MaterialTextures[i].TextureData.Image->setImage(SceneNode->getMaterial(0).TextureLayer[i].Texture);
+			MaterialTextures[i].TextureData.Image->setImage(SceneNode->getMaterial(CurrentMaterialID).TextureLayer[i].Texture);
 			if (MaterialTextures[i].TextureData.Image->getImage())
 				MaterialTextures[i].TextureData.EditBoxPath->setText(stringw(MaterialTextures[i].TextureData.Image->getImage()->getName().getPath()).c_str());
 		}
+	}
+
+	/// Animators
+	core::list<ISceneNodeAnimator *>::ConstIterator animator = SceneNode->getAnimators().begin();
+	for (; animator != SceneNode->getAnimators().end(); ++animator) {
+		ISceneNodeAnimator *anim = (*animator);
+		SceneNodeAnimators.ListData.List->addItem(stringw(anim->getName()).c_str());
 	}
 }
 
@@ -106,6 +147,12 @@ void CCP3DEditionToolSceneNode::apply() {
 					core::fast_atof(stringc(SceneNodeScaleY.TextBox->getText()).c_str()),
 					core::fast_atof(stringc(SceneNodeScaleZ.TextBox->getText()).c_str()));
 	SceneNode->setScale(scale);
+
+	rendering::E_FILTER_TYPE filterType = (rendering::E_FILTER_TYPE)SceneNodeFilterType.ComboBox->getSelected();
+	rendering::E_SHADOW_MODE shadowMode = (rendering::E_SHADOW_MODE)SceneNodeShadowType.ComboBox->getSelected();
+	Handler->removeShadowFromNode(SceneNode);
+	if (SceneNodeSetShadowed.CheckBox->isChecked())
+		Handler->addShadowToNode(SceneNode, filterType, shadowMode);
 }
 
 bool CCP3DEditionToolSceneNode::OnEvent(const SEvent &event) {
@@ -120,6 +167,11 @@ bool CCP3DEditionToolSceneNode::OnEvent(const SEvent &event) {
 				/// Browse
 				if (event.GUIEvent.Caller == MaterialTextures[i].TextureData.BrowseButton) {
 					MaterialTextures[i].TextureData.BrowseDialog = EditorCore->createFileOpenDialog("Select Texture...", 0, ui::ICP3DFileSelector::EFST_OPEN_DIALOG);
+					return true;
+				}
+				else if (event.GUIEvent.Caller == MaterialTextures[i].TextureData.RemoveButton) {
+					MaterialTextures[i].TextureData.Image->setImage(0);
+					SceneNode->getMaterial(CurrentMaterialID).TextureLayer[i].Texture = 0;
 					return true;
 				}
 			}
@@ -137,9 +189,18 @@ bool CCP3DEditionToolSceneNode::OnEvent(const SEvent &event) {
 						return true;
 
 					MaterialTextures[i].TextureData.Image->setImage(tex);
-					SceneNode->getMaterial(0).TextureLayer[i].Texture = tex;
+					SceneNode->getMaterial(CurrentMaterialID).TextureLayer[i].Texture = tex;
 					return true;
 				}
+			}
+		}
+
+		else if (event.GUIEvent.EventType == EGET_COMBO_BOX_CHANGED) {
+			if (event.GUIEvent.Caller == MaterialSelector.ComboBox) {
+				CurrentMaterialID = MaterialSelector.ComboBox->getSelected();
+				if (CurrentMaterialID < 0)
+					CurrentMaterialID = 0;
+				configure();
 			}
 		}
 

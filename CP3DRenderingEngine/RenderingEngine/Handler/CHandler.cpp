@@ -20,7 +20,7 @@ CCP3DHandler::CCP3DHandler(IrrlichtDevice* dev, const irr::core::dimension2du& s
 	const bool useVSMShadows, const bool useRoundSpotLights, const bool use32BitDepthBuffers)
 : device(dev), smgr(dev->getSceneManager()), driver(dev->getVideoDriver()),
 ScreenRTTSize(screenRTTSize.getArea() == 0 ? dev->getVideoDriver()->getScreenSize() : screenRTTSize),
-ClearColour(0x0), shadowsUnsupported(false), depthMC(0), shadowMC(0),
+ClearColour(0x0), shadowsUnsupported(false), DepthMC(0), ShadowMC(0),
 AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 {
 	bool tempTexFlagMipMaps = driver->getTextureCreationFlag(ETCF_CREATE_MIP_MAPS);
@@ -42,8 +42,8 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 	if(gpu && ((driver->getDriverType() == EDT_OPENGL && driver->queryFeature(EVDF_ARB_GLSL)) ||
 			   (driver->getDriverType() == EDT_DIRECT3D9 && driver->queryFeature(EVDF_PIXEL_SHADER_2_0))))
 	{
-		depthMC = new DepthShaderCB(this);
-		shadowMC = new ShadowShaderCB(this);
+		DepthMC = new DepthShaderCB(this);
+		ShadowMC = new ShadowShaderCB(this);
 
 		CustomDepthPassMgr = new CCustomDepthPass(driver, "CustomDepthPassManager");
 		addCustomPass(CustomDepthPassMgr);
@@ -51,32 +51,32 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 		Depth = gpu->addHighLevelShaderMaterial(
 			sPP.ppShader(SHADOW_PASS_1V[shaderExt]).c_str(), "vertexMain", video::EVST_VS_2_0,
 			sPP.ppShader(SHADOW_PASS_1P[shaderExt]).c_str(), "pixelMain", video::EPST_PS_2_0,
-			depthMC, video::EMT_SOLID);
+			DepthMC, video::EMT_SOLID);
 
 		DepthT = gpu->addHighLevelShaderMaterial(
 			sPP.ppShader(SHADOW_PASS_1V[shaderExt]).c_str(), "vertexMain", video::EVST_VS_2_0,
 			sPP.ppShader(SHADOW_PASS_1PT[shaderExt]).c_str(), "pixelMain", video::EPST_PS_2_0,
-			depthMC, video::EMT_TRANSPARENT_ALPHA_CHANNEL_REF);
+			DepthMC, video::EMT_TRANSPARENT_ALPHA_CHANNEL_REF);
 
 		WhiteWash = gpu->addHighLevelShaderMaterial(
 			sPP.ppShader(SHADOW_PASS_1V[shaderExt]).c_str(), "vertexMain", video::EVST_VS_2_0,
 			sPP.ppShader(WHITE_WASH_P[shaderExt]).c_str(), "pixelMain", video::EPST_PS_2_0,
-			depthMC, video::EMT_SOLID);
+			DepthMC, video::EMT_SOLID);
 
 		WhiteWashTRef = gpu->addHighLevelShaderMaterial(
 			sPP.ppShader(SHADOW_PASS_1V[shaderExt]).c_str(), "vertexMain", video::EVST_VS_2_0,
 			sPP.ppShader(WHITE_WASH_P[shaderExt]).c_str(), "pixelMain", video::EPST_PS_2_0,
-			depthMC, video::EMT_TRANSPARENT_ALPHA_CHANNEL_REF);
+			DepthMC, video::EMT_TRANSPARENT_ALPHA_CHANNEL_REF);
 
 		WhiteWashTAdd = gpu->addHighLevelShaderMaterial(
 			sPP.ppShader(SHADOW_PASS_1V[shaderExt]).c_str(), "vertexMain", video::EVST_VS_2_0,
 			sPP.ppShader(WHITE_WASH_P_ADD[shaderExt]).c_str(), "pixelMain", video::EPST_PS_2_0,
-			depthMC, video::EMT_TRANSPARENT_ALPHA_CHANNEL);
+			DepthMC, video::EMT_TRANSPARENT_ALPHA_CHANNEL);
 
 		WhiteWashTAlpha = gpu->addHighLevelShaderMaterial(
 			sPP.ppShader(SHADOW_PASS_1V[shaderExt]).c_str(), "vertexMain", video::EVST_VS_2_0,
 			sPP.ppShader(WHITE_WASH_P[shaderExt]).c_str(), "pixelMain", video::EPST_PS_2_0,
-			depthMC, video::EMT_TRANSPARENT_ALPHA_CHANNEL);
+			DepthMC, video::EMT_TRANSPARENT_ALPHA_CHANNEL);
 
 		if(useRoundSpotLights)
 			sPP.addShaderDefine("ROUND_SPOTLIGHTS");
@@ -98,7 +98,7 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 			Shadow[i] = gpu->addHighLevelShaderMaterial(
 				sPP.ppShader(SHADOW_PASS_2V[shaderExt]).c_str(), "vertexMain", vertexProfile,
 				sPP.ppShader(SHADOW_PASS_2P[shaderExt]).c_str(), "pixelMain", pixelProfile,
-				shadowMC, video::EMT_SOLID);
+				ShadowMC, video::EMT_SOLID);
 		}
 
 		// Set resolution preprocessor defines.
@@ -202,6 +202,50 @@ void CCP3DHandler::addShadowToNode(irr::scene::ISceneNode *node, E_FILTER_TYPE f
 	ShadowNodeArray.push_back(snode);
 }
 
+E_SHADOW_MODE CCP3DHandler::getShadowModeForNode(irr::scene::ISceneNode *node) {
+	for (u32 i=0; i < ShadowNodeArray.size(); i++) {
+		if (ShadowNodeArray[i].node == node)
+			return ShadowNodeArray[i].shadowMode;
+	}
+
+	return ESM_EXCLUDE;
+}
+void CCP3DHandler::setShadowModeForNode(irr::scene::ISceneNode *node, E_SHADOW_MODE shadowMode) {
+	for (u32 i=0; i < ShadowNodeArray.size(); i++) {
+		if (ShadowNodeArray[i].node == node) {
+			ShadowNodeArray[i].shadowMode = shadowMode;
+			break;
+		}
+	}
+}
+
+E_FILTER_TYPE CCP3DHandler::getFilterTypeForNode(irr::scene::ISceneNode *node) {
+	for (u32 i=0; i < ShadowNodeArray.size(); i++) {
+		if (ShadowNodeArray[i].node == node)
+			return ShadowNodeArray[i].filterType;
+	}
+
+	return EFT_NONE;
+}
+
+void CCP3DHandler::setFilterTypeForNode(irr::scene::ISceneNode *node, E_FILTER_TYPE filterType) {
+	for (u32 i=0; i < ShadowNodeArray.size(); i++) {
+		if (ShadowNodeArray[i].node == node) {
+			ShadowNodeArray[i].filterType = filterType;
+			break;
+		}
+	}
+}
+
+bool CCP3DHandler::isNodeShadowed(irr::scene::ISceneNode *node) {
+	for (u32 i=0; i < ShadowNodeArray.size(); i++) {
+		if (ShadowNodeArray[i].node == node)
+			return true;
+	}
+
+	return false;
+}
+
 u32 CCP3DHandler::addShadowLight(SShadowLight &shadowLight) {
 	 LightList.push_back(shadowLight);
 	 return LightList.size() - 1;
@@ -235,7 +279,7 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 					LightList[l].setPosition(LightList[l].LightScenenode->getPosition());
 			}
 
-			depthMC->FarLink = LightList[l].getFarValue();
+			DepthMC->FarLink = LightList[l].getFarValue();
 
 			driver->setTransform(ETS_VIEW, LightList[l].getViewMatrix());
 			driver->setTransform(ETS_PROJECTION, LightList[l].getProjectionMatrix());
@@ -292,12 +336,12 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 			driver->setTransform(ETS_VIEW, activeCam->getViewMatrix());
 			driver->setTransform(ETS_PROJECTION, activeCam->getProjectionMatrix());
 
-			shadowMC->LightColour = LightList[l].getLightColor();
-			shadowMC->LightLink = LightList[l].getPosition();
-			shadowMC->FarLink = LightList[l].getFarValue();
-			shadowMC->ViewLink = LightList[l].getViewMatrix();
-			shadowMC->ProjLink = LightList[l].getProjectionMatrix();
-			shadowMC->MapRes = (f32)LightList[l].getShadowMapResolution();
+			ShadowMC->LightColour = LightList[l].getLightColor();
+			ShadowMC->LightLink = LightList[l].getPosition();
+			ShadowMC->FarLink = LightList[l].getFarValue();
+			ShadowMC->ViewLink = LightList[l].getViewMatrix();
+			ShadowMC->ProjLink = LightList[l].getProjectionMatrix();
+			ShadowMC->MapRes = (f32)LightList[l].getShadowMapResolution();
 
 			/// Render all receive nodes
 			for(u32 i = 0;i < ShadowNodeArraySize;++i) {

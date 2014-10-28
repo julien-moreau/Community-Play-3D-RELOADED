@@ -198,6 +198,12 @@ void CCP3DEditorCore::createTestScene() {
 		driver->getTexture("Textures/Skybox/glacier_ft.png"),
 		driver->getTexture("Textures/Skybox/glacier_bk.png"));
 	skyboxNode->setName("Skybox");
+	skyboxNode->getMaterial(0).Name = "Up";
+	skyboxNode->getMaterial(1).Name = "Down";
+	skyboxNode->getMaterial(2).Name = "Left";
+	skyboxNode->getMaterial(3).Name = "Right";
+	skyboxNode->getMaterial(4).Name = "Front";
+	skyboxNode->getMaterial(5).Name = "Back";
 
 	u32 count = 0;
 	auto callback = [&](ISceneNode *node) {

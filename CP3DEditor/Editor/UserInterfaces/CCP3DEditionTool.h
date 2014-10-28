@@ -72,6 +72,7 @@ private:
 
 	irr::core::map<irr::scene::ESCENE_NODE_TYPE, irr::core::array<ICP3DEditionToolController *>> EditionTools;
 	irr::scene::ESCENE_NODE_TYPE LastSceneNodeType;
+	irr::s32 LastSelectedTab;
 
 	/// Methods
 	irr::s32 getElementPositionOffset(irr::gui::IGUITab *tab, ui::CGUIPanel *panel);
@@ -81,6 +82,7 @@ private:
 	SCP3DInterfaceData createListBoxField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel);
 	SCP3DInterfaceData createComboBoxField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel);
 	SCP3DInterfaceData createTextureField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel);
+	SCP3DInterfaceData createCheckBoxField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel);
 
 	irr::core::list<SCP3DInterfaceData> InterfaceDatas;
 

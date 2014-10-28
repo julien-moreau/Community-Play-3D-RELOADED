@@ -17,7 +17,7 @@ using namespace gui;
 namespace cp3d {
 
 CCP3DEditionTool::CCP3DEditionTool(CCP3DEditorCore *editorCore) : EditorCore(editorCore), WindowWidth(400), NewZone(true),
-	LastSceneNodeType(ESNT_UNKNOWN)
+	LastSceneNodeType(ESNT_UNKNOWN), LastSelectedTab(-1)
 {
 	/// Configure
 	editorCore->getEngine()->getEventReceiver()->addEventReceiver(this);
@@ -95,6 +95,7 @@ void CCP3DEditionTool::clearTabs() {
 	Panels.clear();
 
 	/// Tabs
+	LastSelectedTab = TabCtrl->getActiveTab();
 	TabCtrl->remove();
 	TabCtrl = Gui->addTabControl(rect<s32>(0, 0, 0, 0), Window, true, true, -1);
 	OnResize();
@@ -143,10 +144,13 @@ void CCP3DEditionTool::OnResize() {
 			elements.push_back((*itd).TextureData.BrowseButton);
 			elements.push_back((*itd).TextureData.EditBoxPath);
 			elements.push_back((*itd).TextureData.RemoveButton);
+			elements.push_back((*itd).TextureData.Zone);
 		}
 		else if ((*itd).Type == EGUIET_LIST_BOX) {
 			elements.push_back((*itd).ListData.List);
 		}
+		else if ((*itd).Type == EGUIET_CHECK_BOX)
+			elements.push_back((*itd).CheckBox);
 
 		for (u32 i=0; i < elements.size(); i++) {
 			rect<s32> position = elements[i]->getRelativePosition();
@@ -208,9 +212,9 @@ void CCP3DEditionTool::setNewZone(IGUITab *tab, stringw name) {
 	s32 width = panel->getRelativePosition().getWidth();
 	s32 offset = getElementPositionOffset(tab, panel);
 
-	IGUIStaticText *e = Gui->addStaticText(name.c_str(), rect<s32>(5, offset, width - 10, offset + 20), false, false, panel, -1, false);
+	IGUIStaticText *e = Gui->addStaticText(name.c_str(), rect<s32>(2, offset, width - 2, offset + 25), false, false, panel, -1, false);
 	e->setTextAlignment(EGUIA_CENTER, EGUIA_CENTER);
-	e->setBackgroundColor(SColor(255, 128, 128, 128));
+	e->setBackgroundColor(SColor(255, 0, 0, 0));
 
 	SCP3DInterfaceData ed(EGUIET_STATIC_TEXT);
 	ed.TextElement = e;
@@ -228,6 +232,7 @@ SCP3DInterfaceData CCP3DEditionTool::addField(IGUITab *tab, EGUI_ELEMENT_TYPE ty
 	case EGUIET_LIST_BOX: e = createListBoxField(tab, panel); break;
 	case EGUIET_COMBO_BOX: e = createComboBoxField(tab, panel); break;
 	case EGUIET_IMAGE: e = createTextureField(tab, panel); break;
+	case EGUIET_CHECK_BOX: e = createCheckBoxField(tab, panel); break;
 
 	default: break;
 	}
@@ -268,6 +273,8 @@ bool CCP3DEditionTool::OnEvent(const SEvent &event) {
 				}
 
 				LastSceneNodeType = type;
+				if (TabCtrl->getTabCount() >= LastSelectedTab)
+					TabCtrl->setActiveTab(LastSelectedTab);
 
 				return false;
 			}
@@ -364,6 +371,8 @@ SCP3DInterfaceData CCP3DEditionTool::createTextureField(irr::gui::IGUITab *tab, 
 	s32 width = panel->getRelativePosition().getWidth();
 	s32 offset = getElementPositionOffset(tab, panel);
 
+	e.TextureData.Zone = Gui->addStaticText(L"", rect<s32>(2, offset - 2, width - 2, offset + 92), false, false, panel, -1, true);
+	((IGUIStaticText*)e.TextureData.Zone)->setBackgroundColor(SColor(255, 48, 48, 48));
 	e.TextElement = Gui->addStaticText(L"", rect<s32>(5, offset, width - 5, offset + 20), false, true, panel, -1, false);
 	e.TextureData.Image = Gui->addImage(rect<s32>(5, offset + 20, 75, offset + 20 + 70), panel, -1, L"Texture", false);
 	e.TextureData.Image->setScaleImage(true);
@@ -372,6 +381,17 @@ SCP3DInterfaceData CCP3DEditionTool::createTextureField(irr::gui::IGUITab *tab, 
 	e.TextureData.BrowseButton = Gui->addButton(rect<s32>(75, offset + 40, width - 5, offset + 60), panel, -1, L"Browse...", L"Browse texture...");
 	e.TextureData.RemoveButton = Gui->addButton(rect<s32>(75, offset + 60, width - 5, offset + 80), panel, -1, L"Unset", L"Unsets the texture");
 	e.TextureData.BrowseDialog = 0;
+
+	return e;
+}
+
+SCP3DInterfaceData CCP3DEditionTool::createCheckBoxField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel) {
+	SCP3DInterfaceData e(EGUIET_CHECK_BOX);
+
+	s32 width = panel->getRelativePosition().getWidth();
+	s32 offset = getElementPositionOffset(tab, panel);
+
+	e.CheckBox = Gui->addCheckBox(false, rect<s32>(5, offset, width - 5, offset + 20), panel, -1, L"");
 
 	return e;
 }

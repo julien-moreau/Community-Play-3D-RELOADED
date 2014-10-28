@@ -25,7 +25,8 @@ namespace rendering {
 
 CCP3DRenderingEngine::CCP3DRenderingEngine(IrrlichtDevice *device) : NormalMapMaterialType(0)
 {
-	Handler = new CCP3DHandler(device, device->getVideoDriver()->getScreenSize(), false, true, true);
+	Handler = new CCP3DHandler(device, device->getVideoDriver()->getScreenSize(), true, true, true);
+	((CCP3DHandler*)Handler)->setUseVSM(false);
 }
 
 CCP3DRenderingEngine::~CCP3DRenderingEngine() {

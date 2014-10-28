@@ -3,6 +3,7 @@
 
 #include <irrlicht.h>
 #include <ICP3DEditionTool.h>
+#include <ICP3DHandler.h>
 
 namespace cp3d {
 
@@ -37,20 +38,31 @@ private:
 	CCP3DEditorCore *EditorCore;
 	CCP3DEditionTool *EditionTool;
 
+	/// Rendering
+	rendering::ICP3DHandler *Handler;
+
 	/// GUI
 	irr::gui::IGUITab *GeneralTab;
 	irr::gui::IGUITab *MaterialTab;
+	irr::gui::IGUITab *AnimatorsTab;
 
 	/// General
 	SCP3DInterfaceData SceneNodeName;
+	SCP3DInterfaceData SceneNodeID;
 	SCP3DInterfaceData SceneNodePositionX, SceneNodePositionY, SceneNodePositionZ;
 	SCP3DInterfaceData SceneNodeRotationX, SceneNodeRotationY, SceneNodeRotationZ;
 	SCP3DInterfaceData SceneNodeScaleX, SceneNodeScaleY, SceneNodeScaleZ;
-
-	SCP3DInterfaceData SceneNodeAnimators;
+	SCP3DInterfaceData SceneNodeSetShadowed, SceneNodeShadowType, SceneNodeFilterType;
 
 	/// Materials
+	SCP3DInterfaceData MaterialSelector;
 	SCP3DInterfaceData MaterialTextures[irr::video::MATERIAL_MAX_TEXTURES];
+
+	/// Animators
+	SCP3DInterfaceData SceneNodeAnimators;
+
+	/// Datas
+	irr::s32 CurrentMaterialID;
 
 };
 

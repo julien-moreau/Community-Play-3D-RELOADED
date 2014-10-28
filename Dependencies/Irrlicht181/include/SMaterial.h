@@ -236,7 +236,7 @@ namespace video
 			PolygonOffsetFactor(0), PolygonOffsetDirection(EPO_FRONT),
 			Wireframe(false), PointCloud(false), GouraudShading(true),
 			Lighting(true), ZWriteEnable(true), BackfaceCulling(true), FrontfaceCulling(false),
-			FogEnable(false), NormalizeNormals(false), UseMipMaps(true)
+			FogEnable(false), NormalizeNormals(false), UseMipMaps(true), Name("New Material")
 		{ }
 
 		//! Copy constructor
@@ -289,7 +289,7 @@ namespace video
 			PolygonOffsetFactor = other.PolygonOffsetFactor;
 			PolygonOffsetDirection = other.PolygonOffsetDirection;
 			UseMipMaps = other.UseMipMaps;
-
+			Name = other.Name;
 			return *this;
 		}
 
@@ -437,6 +437,9 @@ namespace video
 		//! Shall mipmaps be used if available
 		/** Sometimes, disabling mipmap usage can be useful. Default: true */
 		bool UseMipMaps:1;
+
+		//! Handles the material's name
+		core::stringc Name;
 
 		//! Gets the texture transformation matrix for level i
 		/** \param i The desired level. Must not be larger than MATERIAL_MAX_TEXTURES.
@@ -653,7 +656,8 @@ namespace video
 				BlendOperation != b.BlendOperation ||
 				PolygonOffsetFactor != b.PolygonOffsetFactor ||
 				PolygonOffsetDirection != b.PolygonOffsetDirection ||
-				UseMipMaps != b.UseMipMaps;
+				UseMipMaps != b.UseMipMaps ||
+				Name != b.Name;
 			for (u32 i=0; (i<MATERIAL_MAX_TEXTURES) && !different; ++i)
 			{
 				different |= (TextureLayer[i] != b.TextureLayer[i]);

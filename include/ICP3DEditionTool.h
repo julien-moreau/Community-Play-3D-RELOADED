@@ -34,7 +34,7 @@ enum E_CP3DGUI_ELEMENT_TYPE {
 struct SCP3DInterfaceData {
 
 	//!Constructor
-	SCP3DInterfaceData(irr::gui::EGUI_ELEMENT_TYPE type = irr::gui::EGUIET_ELEMENT) : Type(type)
+	SCP3DInterfaceData(irr::gui::EGUI_ELEMENT_TYPE type = irr::gui::EGUIET_ELEMENT) : Type(type), TextElement(0), TextBox(0)
 	{ }
 
 	//! Text element
@@ -57,6 +57,7 @@ struct SCP3DInterfaceData {
 		irr::gui::IGUIButton *BrowseButton;
 		irr::gui::IGUIButton *RemoveButton;
 		irr::gui::IGUIFileOpenDialog *BrowseDialog;
+		irr::gui::IGUIElement *Zone;
 	};
 
 	union {
@@ -64,6 +65,7 @@ struct SCP3DInterfaceData {
 		STextureData TextureData;
 		irr::gui::IGUIEditBox *TextBox;
 		irr::gui::IGUIComboBox *ComboBox;
+		irr::gui::IGUICheckBox *CheckBox;
 	};
 
 };
@@ -76,7 +78,10 @@ typedef std::function<void(const SCP3DInterfaceData &data)> ICP3DEditionToolCall
 //! \param text: the text to displayed by the element
 static auto DefaultEditionToolCallback = [](irr::core::stringw text) -> ICP3DEditionToolCallback {
 	ICP3DEditionToolCallback c = [=](SCP3DInterfaceData data) {
-		data.TextElement->setText(text.c_str());
+		if (data.Type == irr::gui::EGUIET_CHECK_BOX)
+			data.CheckBox->setText(text.c_str());
+		else
+			data.TextElement->setText(text.c_str());
 	};
 
 	return c;
