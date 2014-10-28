@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Flip Programming Guide: Using the Undo/Redo system</title>
+<link rel="stylesheet" href="docpage.css" type="text/css" />
+</head>
+
+<script type="text/javascript">
+function searchfield_focus(obj)
+{
+obj.style.color="#000"
+if (obj.value=="Search Library")
+	{obj.value=""}
+}
+</script>
+
+
+<body>
+
+<div id="header">
+<div style="width: 1006px;">
+<!--<form method="get" class="search" style="padding-top: 5px;"  action="http://www.google.com/search">
+<input onfocus="searchfield_focus(this)" type="search" class="search" name="q" value="Search Library">
+<input type="hidden" name="sitesearch" value="">
+</form>-->
+</div>
+<p><a href="index.html">Ohm Force Developer Library</a><a href="ohm.flip.guide.about.html">Flip Programming Guide</a></p>
+</div>
+
+<div id="toc">
+<p>Flip Programming Guide</p>
+<ul>
+<li><a href="ohm.flip.guide.about.html">About Flip Programming Guide</a></li>
+<li><a href="ohm.flip.guide.design.html">Designing your Flip Application</a></li>
+<li><a href="ohm.flip.guide.class.html">Writing a Flip Class Part 1</a></li>
+<li><a href="ohm.flip.guide.class2.html">Writing a Flip Class Part 2</a></li>
+<li><a href="ohm.flip.guide.containers.html">Using Containers</a></li>
+<li><a href="ohm.flip.guide.enums.html">Using Enums</a></li>
+<li><a href="ohm.flip.guide.blob.html">Using Blobs</a></li>
+<li><a href="ohm.flip.guide.objectref.html">Using ObjectRefs</a></li>
+<li><a href="ohm.flip.guide.cue.html">Using Cues</a></li>
+<li><a href="ohm.flip.guide.navigation.html">Navigating the Model</a></li>
+<li><a href="ohm.flip.guide.observer.html">Writing a DocumentObserver</a></li>
+<li><a href="ohm.flip.guide.validator.html">Writing a DocumentValidator</a></li>
+<li><a href="ohm.flip.guide.undo.html"><strong>Using the Undo/Redo system</strong></a>
+	<ul>
+	<li><a href="ohm.flip.guide.undo.html#overview">Overview</a></li>
+	<li><a href="ohm.flip.guide.undo.html#setup">Setting Up</a></li>
+	<li><a href="ohm.flip.guide.undo.html#adding">Adding Metadata to a Transaction</a></li>
+	<li><a href="ohm.flip.guide.undo.html#invoking">Invoking the Undo/Redo System</a></li>
+	</ul>
+</li>
+<li><a href="ohm.flip.guide.const.html">Managing Pseudo Const Members</a></li>
+<li><a href="ohm.flip.guide.mold.html">Using an ObjectMold</a></li>
+<li><a href="ohm.flip.guide.conversion.html">Writing a Converter</a></li>
+<li><a href="ohm.flip.guide.tweaker.html">Writing a DocumentTweaker</a></li>
+</ul>
+
+<div class="bottomspacer">&nbsp;</div>
+</div>
+
+<div id="content">
+
+<div class="nav" align="right"><a href="ohm.flip.guide.validator.html">previous</a><span>&nbsp;</span><a href="ohm.flip.guide.const.html">next</a></div>
+
+<h1>Using the Undo/Redo system</h1>
+
+<p>This chapter will describe how to set up and use an automatic undo/redo system
+with the Flip framework.</p>
+<h2><a name="overview">Overview</a></h2>
+<p>The Flip framework offers a complete automatic undo/redo system. Instead
+of maintaining one action class per user action, adding a name (or more
+generally metadatas) to a transaction is sufficient for the undo/redo
+system to work.</p>
+<p>Each time the client manipulate the model, a transaction is made and
+record all the change to the models in some kind of simple assembler.
+This transaction which is also a program is then sent to the server.
+Because the transaction might need to be rollbacked, the program and its
+associated assembler were made to be reversible.</p>
+<p>The undo/redo system use exactly this system. Because the programs can
+be read in whatever direction, undoing is just about reading the program
+backward.</p>
+<p>More subtleties were added to the undo/redo system. In particular, it
+tries to autocorrect the program when it is being executed to try to
+avoid structural problems that would make the transaction being refused
+by the server.</p>
+<h2><a name="setup">Setting Up</a></h2>
+<p>The Flip framework offers a class,
+<span class="code">RootBase</span> 
+which automatically
+had the undo system to the root flip class. Instead of inheriting from
+<span class="code">flip::Object</span> 
+, the root class will inherit from
+<span class="code">flip::RootBase</span> 
+.</p>
+<p>Doing so limits just offer a single name for the stored transactions, which
+is very likely to be exactly what you want. If you want more metadatas to
+be stored along a single transaction, you may study the
+<span class="code">flip::RootBase</span> 
+and visit the
+<a href="ohm.flip.reference.scribe.html">flip::Scribe</a>
+reference
+for more informations.</p>
+<p>The following listing illustrate how your root class
+<span class="code">Root</span> 
+should be declared.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>class Root</pre></td></tr>
+<tr><td><pre>:  public ohm::flip::RootBase // instead of ohm::flip::Object</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>};</pre></td></tr>
+</table>
+</div>
+<p>At this point, the root Flip class will have a fully functionning undo/redo
+system.</p>
+<h2><a name="adding">Adding Metadata to a Transaction</a></h2>
+<p>The following listing illustrate the use of the undo/redo system in a
+<span class="code">tx_</span> 
+prefixed model function.</p>
+<div class="codeblock">
+<table>
+<tr><td><small><pre>void  MyClass::tx_set_value (float val)</pre></small></td></tr>
+<tr><td><small><pre>{</pre></small></td></tr>
+<tr><td><small><pre>   Root & root = get_ancestor &lt;Root&gt; ();</pre></small></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><strong><pre>   _tx_session_guard.prepare_record (root.use_scribe ());   // 1.</pre></strong></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><small><pre>   if (!_tx_session_guard.start ()) return;</pre></small></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><small><pre>   ext_set_value (val);</pre></small></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><strong><pre>   root.set_scribe_metadata ("Change Value");               // 2.</pre></strong></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><small><pre>   _tx_session_guard.commit ();</pre></small></td></tr>
+<tr><td><small><pre>}</pre></small></td></tr>
+</table>
+</div>
+<ol>
+<li>Prepare the
+<span class="code">Scribe</span> 
+to record : it will check-in automatically to the document
+</li>
+<li>Set the metadata for the transaction. Here this is a string that will be displayed to the user
+</li>
+</ol>
+<p>For the undo/redo system
+<strong>not</strong> to record a transaction, the line
+<span class="code">1.</span> 
+and
+<span class="code">2.</span> 
+above just need to be removed.</p>
+<h2><a name="invoking">Invoking the Undo/Redo System</a></h2>
+<p>Invoking the undo/redo system is done through the
+<span class="code">RootBase</span> 
+class.
+The
+<span class="code">Scribe</span> 
+maintains a pile of undo and redo transaction. Those piles
+are handled automatically and as the user wants it.</p>
+<ul>
+<li><span class="code">has_undo</span> 
+method tells if some undo transaction are available
+</li>
+<li><span class="code">get_undo_annotation</span> 
+method tells the name of the top transaction if available
+</li>
+<li><span class="code">undo</span> 
+method actually apply the transaction at the top of the pile and place
+it in the
+<span class="code">redo</span> 
+pile
+</li>
+</ul>
+<p>The same similar function are available for
+<span class="code">redo</span> 
+.</p>
+
+
+<div class="nav" align="right"><a href="ohm.flip.guide.validator.html">previous</a><span>&nbsp;</span><a href="ohm.flip.guide.const.html">next</a></div>
+
+<div class="bottomspacer">&nbsp;</div>
+
+</div>
+
+<footer>
+<a href="index.html">Ohm Force Developer Library</a> > <a href="ohm.flip.guide.about.html">Flip Programming Guide</a> > <a href="ohm.flip.guide.undo.html">Using the Undo/Redo system</a>
+</footer>
+
+
+</body>
+
+</html>

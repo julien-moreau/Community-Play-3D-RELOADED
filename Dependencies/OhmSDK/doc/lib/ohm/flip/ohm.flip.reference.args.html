@@ -1,0 +1,404 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Flip Reference: Args Class Reference</title>
+<link rel="stylesheet" href="docpage.css" type="text/css" />
+</head>
+
+<script type="text/javascript">
+function searchfield_focus(obj)
+{
+obj.style.color="#000"
+if (obj.value=="Search Library")
+	{obj.value=""}
+}
+</script>
+
+
+<body>
+
+<div id="header">
+<div style="width: 1006px;">
+<!--<form method="get" class="search" style="padding-top: 5px;"  action="http://www.google.com/search">
+<input onfocus="searchfield_focus(this)" type="search" class="search" name="q" value="Search Library">
+<input type="hidden" name="sitesearch" value="">
+</form>-->
+</div>
+<p><a href="index.html">Ohm Force Developer Library</a><a href="ohm.flip.reference.overview.html">Flip Reference</a></p>
+</div>
+
+<div id="toc">
+<p>Flip Reference</p>
+<ul>
+<li><a href="ohm.flip.reference.overview.html">Overview</a></li>
+<li><a href="ohm.flip.reference.args.html"><strong>Args Class Reference</strong></a>
+	<ul>
+	<li><a href="ohm.flip.reference.args.html#overview">Overview</a></li>
+	<li><a href="ohm.flip.reference.args.html#diagram">Partial Class Diagram</a></li>
+	<li><a href="ohm.flip.reference.args.html#header">Methods Overview</a></li>
+	<li><a href="ohm.flip.reference.args.html#method">Methods</a></li>
+	</ul>
+</li>
+<li><a href="ohm.flip.reference.array.html">Array Template Class Reference</a></li>
+<li><a href="ohm.flip.reference.bool.html">Bool Class Reference</a></li>
+<li><a href="ohm.flip.reference.blob.html">Blob Class Reference</a></li>
+<li><a href="ohm.flip.reference.classdescmgr.html">ClassDescManager Class Reference</a></li>
+<li><a href="ohm.flip.reference.classdesc.html">ClassDescription Template Class Reference</a></li>
+<li><a href="ohm.flip.reference.collection.html">Collection Template Class Reference</a></li>
+<li><a href="ohm.flip.reference.cue.html">Cue Class Reference</a></li>
+<li><a href="ohm.flip.reference.docbase.html">DocumentBase Class Reference</a></li>
+<li><a href="ohm.flip.reference.docclient.html">DocumentClient Class Reference</a></li>
+<li><a href="ohm.flip.reference.doclocal.html">DocumentLocal Class Reference</a></li>
+<li><a href="ohm.flip.reference.docserver.html">DocumentServer Class Reference</a></li>
+<li><a href="ohm.flip.reference.docsignal.html">DocumentSignal Class Reference</a></li>
+<li><a href="ohm.flip.reference.doctweaker.html">DocumentTweaker Template Class Reference</a></li>
+<li><a href="ohm.flip.reference.docvalid.html">DocumentValidator Template Class Reference</a></li>
+<li><a href="ohm.flip.reference.enum.html">Enum Template Class Reference</a></li>
+<li><a href="ohm.flip.reference.enumdescmgr.html">EnumDescManager Class Reference</a></li>
+<li><a href="ohm.flip.reference.enumdesc.html">EnumDescription Template Class Reference</a></li>
+<li><a href="ohm.flip.reference.findmask.html">FindMask Enum Reference</a></li>
+<li><a href="ohm.flip.reference.float64.html">Float64 Class Reference</a></li>
+<li><a href="ohm.flip.reference.int64.html">Int64 Class Reference</a></li>
+<li><a href="ohm.flip.reference.object.html">Object Class Reference</a></li>
+<li><a href="ohm.flip.reference.objectmold.html">ObjectMold Class Reference</a></li>
+<li><a href="ohm.flip.reference.objectmolddata.html">ObjectMoldData Class Reference</a></li>
+<li><a href="ohm.flip.reference.objectref.html">ObjectRef Template Class Reference</a></li>
+<li><a href="ohm.flip.reference.pasteboard.html">PasteBoard Class Reference</a></li>
+<li><a href="ohm.flip.reference.ref.html">Ref Type Reference</a></li>
+<li><a href="ohm.flip.reference.scribe.html">Scribe Class Reference</a></li>
+<li><a href="ohm.flip.reference.txguard.html">TxSessionGuard Class Reference</a></li>
+<li><a href="ohm.flip.reference.validwriter.html">ValidationReportWriter Class Reference</a></li>
+</ul>
+
+<div class="bottomspacer">&nbsp;</div>
+</div>
+
+<div id="content">
+
+<div class="nav" align="right"><a href="ohm.flip.reference.overview.html">previous</a><span>&nbsp;</span><a href="ohm.flip.reference.array.html">next</a></div>
+
+<h1>Args Class Reference</h1>
+
+<table>
+<tr><td><p>Namespace
+</p></td><td><p><span class="code">ohm::flip</span> 
+</p></td></tr>
+<tr><td><p>Declared in
+</p></td><td><p><span class="code">ohm/flip/Args.h</span> 
+</p></td></tr>
+<tr><td><p>Companion Guide
+</p></td><td><p><a href="ohm.flip.guide.const.html">Flip Programming Guide: Managing Pseudo Const Members</a>
+</p></td></tr>
+<tr><td><p>Used by
+</p></td><td><p><a href="ohm.flip.reference.array.html"><span class="code">ohm::flip::Array</span> </a>
+</p></td></tr>
+<tr><td><p></p></td><td><p><a href="ohm.flip.reference.collection.html"><span class="code">ohm::flip::Collection</span> </a>
+</p></td></tr>
+</table>
+<h2><a name="overview">Overview</a></h2>
+<p>The
+<span class="code">Args</span> 
+class implements the cascaded constructor arguments used
+when inserting objects in a container with default post constructor arguments.</p>
+<p>All
+<span class="code">push</span> 
+functions returns a reference to
+<span class="code">this</span> 
+, so that it
+can be chained as in this typical example :</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>ohm::flip::Args ().push (true).push (2.0).push ("Some text")</pre></td></tr>
+</table>
+</div>
+<p>The class itself works like a FIFO queue. Every value pushed will also
+push the associated type, so that all subsequent pop can be type checked.</p>
+<div class="important"><p><strong>Important:</strong>This class should be used only to pass parameters on construction to
+fill Flip class members that somehow needs to be constant during the
+lifetime of the object, typically members which do have getters but
+no setters. When using this class it is very usual to introduce bugs
+in the code, so if the object is not supposed to have a const member,
+first create the object and then modify it in a single transaction.</p></div>
+<h2><a name="diagram">Partial Class Diagram</a></h2>
+<center><img src="ohm.flip.reference.args.diagram.png" /></center>
+<h2><a name="header">Methods Overview</a></h2>
+<h3><a name="header.assign">Pushing</a></h3>
+<ul>
+<li><a href="#method.push.bool"><span class="code">push (bool)</span> </a>
+</li>
+<li><a href="#method.push.i64"><span class="code">push (ohm::archi::Int64)</span> </a>
+</li>
+<li><a href="#method.push.f64"><span class="code">push (ohm::archi::Float64)</span> </a>
+</li>
+<li><a href="#method.push.str"><span class="code">push (const std::string &)</span> </a>
+</li>
+<li><a href="#method.push.data"><span class="code">push (const std::vector &lt;ohm::archi::UByte&gt; &)</span> </a>
+</li>
+<li><a href="#method.push.data2"><span class="code">push (const ohm::archi::UByte *, size_t)</span> </a>
+</li>
+<li><a href="#method.push.obj"><span class="code">push (ohm::flip::Object &)</span> </a>
+</li>
+</ul>
+<h3><a name="header.casting">Popping</a></h3>
+<ul>
+<li><a href="#method.pop.bool"><span class="code">pop (bool &)</span> </a>
+</li>
+<li><a href="#method.pop.fbool"><span class="code">pop (ohm::flip::Bool &)</span> </a>
+</li>
+<li><a href="#method.pop.i64"><span class="code">pop (ohm::archi::Int64 &)</span> </a>
+</li>
+<li><a href="#method.pop.fi64"><span class="code">pop (ohm::flip::Int64 &)</span> </a>
+</li>
+<li><a href="#method.pop.fenum"><span class="code">pop (ohm::flip::EnumMaster &)</span> </a>
+</li>
+<li><a href="#method.pop.f64"><span class="code">pop (ohm::archi::Float64 &)</span> </a>
+</li>
+<li><a href="#method.pop.ff64"><span class="code">pop (ohm::flip::Float64 &)</span> </a>
+</li>
+<li><a href="#method.pop.data"><span class="code">pop (const ohm::archi::UByte * &, size_t &)</span> </a>
+</li>
+<li><a href="#method.pop.str"><span class="code">pop (std::string &)</span> </a>
+</li>
+<li><a href="#method.pop.blob"><span class="code">pop (ohm::flip::Blob &)</span> </a>
+</li>
+<li><a href="#method.pop.objref"><span class="code">pop (ohm::flip::ObjectRefMaster &)</span> </a>
+</li>
+</ul>
+<h2><a name="method">Methods</a></h2>
+<div class="sectioncode">
+<h3><a name="method.push.bool">push (bool)</a></h3>
+<p>Push a
+<span class="code">bool</span> 
+value in this.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>Args &         push (bool val);</pre></td></tr>
+</table>
+</div>
+</div>
+<div class="sectioncode">
+<h3><a name="method.push.i64">push (ohm::archi::Int64)</a></h3>
+<p>Push a
+<span class="code">ohm::archi::Int64</span> 
+value in this.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>Args &         push (ohm::archi::Int64 val);</pre></td></tr>
+</table>
+</div>
+</div>
+<div class="sectioncode">
+<h3><a name="method.push.i64">push (archi::Float64 val)</a></h3>
+<p>Push a
+<span class="code">ohm::archi::Float64</span> 
+value in this.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>Args &         push (ohm::archi::Float64 val);</pre></td></tr>
+</table>
+</div>
+</div>
+<div class="sectioncode">
+<h3><a name="method.push.str">push (const std::string &)</a></h3>
+<p>Push a
+<span class="code">const std::string &</span> 
+as an opaque data in this.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>Args &         push (const std::string & str);</pre></td></tr>
+</table>
+</div>
+</div>
+<div class="sectioncode">
+<h3><a name="method.push.data">push (const std::vector <ohm::archi::UByte> &)</a></h3>
+<p>Push a
+<span class="code">const std::vector &lt;ohm::archi::UByte&gt; &</span> 
+as an opaque data in this.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>Args &         push (const std::string & str);</pre></td></tr>
+</table>
+</div>
+</div>
+<div class="sectioncode">
+<h3><a name="method.push.data2">push (const ohm::archi::UByte *, size_t)</a></h3>
+<p>Push a the data from
+<span class="code">val_ptr</span> 
+to
+<span class="code">val_ptr + val_size</span> 
+as an opaque data in this.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>Args &         push (const ohm::archi::UByte * val_ptr, size_t val_size);</pre></td></tr>
+</table>
+</div>
+</div>
+<div class="sectioncode">
+<h3><a name="method.push.obj">push (ohm::flip::Object &)</a></h3>
+<p>Push the
+<span class="code">object</span> 
+reference as a 64 bits integer in this.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>Args &         push (ohm::flip::Object & object);</pre></td></tr>
+</table>
+</div>
+</div>
+<div class="sectioncode">
+<h3><a name="method.pop.bool">pop (bool &)</a></h3>
+<p>Pop a
+<span class="code">bool</span> 
+from this and fill it into
+<span class="code">val</span> 
+.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>void           pop (bool & val);</pre></td></tr>
+</table>
+</div>
+</div>
+<div class="sectioncode">
+<h3><a name="method.pop.fbool">pop (ohm::flip::Bool &)</a></h3>
+<p>Pop a
+<span class="code">bool</span> 
+from this and fill it into the Flip object
+<span class="code">val</span> 
+.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>void           pop (ohm::flip::Bool & val);</pre></td></tr>
+</table>
+</div>
+</div>
+<div class="sectioncode">
+<h3><a name="method.pop.i64">pop (ohm::archi::Int64 &)</a></h3>
+<p>Pop a 64 bits integer from this and fill it into
+<span class="code">val</span> 
+.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>void           pop (ohm::archi::Int64 & val);</pre></td></tr>
+</table>
+</div>
+</div>
+<div class="sectioncode">
+<h3><a name="method.pop.fi64">pop (ohm::flip::Int64 &)</a></h3>
+<p>Pop a 64 bits integer from this and fill it into the Flip object
+<span class="code">val</span> 
+.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>void           pop (ohm::flip::Int64 & val);</pre></td></tr>
+</table>
+</div>
+</div>
+<div class="sectioncode">
+<h3><a name="method.pop.fenum">pop (ohm::flip::EnumMaster &)</a></h3>
+<p>Pop a 64 bits integer from this and fill it into the Flip object
+<span class="code">val</span> 
+by static casting it to the
+<span class="code">enum</span> 
+represented by
+<span class="code">ohm::flip::EnumMaster</span> 
+.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>void           pop (ohm::flip::EnumMaster & val);</pre></td></tr>
+</table>
+</div>
+</div>
+<div class="sectioncode">
+<h3><a name="method.pop.f64">pop (ohm::archi::Float64 &)</a></h3>
+<p>Pop a 64 bits floating point value from this and fill it into
+<span class="code">val</span> 
+.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>void           pop (ohm::archi::Float64 & val);</pre></td></tr>
+</table>
+</div>
+</div>
+<div class="sectioncode">
+<h3><a name="method.pop.ff64">pop (ohm::flip::Float64 &)</a></h3>
+<p>Pop a 64 bits floating point value from this and fill it into the Flip object
+<span class="code">val</span> 
+.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>void           pop (ohm::flip::Float64 & val);</pre></td></tr>
+</table>
+</div>
+</div>
+<div class="sectioncode">
+<h3><a name="method.pop.data">pop (const ohm::archi::UByte * &, size_t &)</a></h3>
+<p>Pop an opaque data from this and make
+<span class="code">data_ptr</span> 
+points to the beginning
+of the opaque data and fill
+<span class="code">data_size</span> 
+with the opaque data size.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>void           pop (const archi::UByte * & data_ptr, size_t & data_size);</pre></td></tr>
+</table>
+</div>
+<div class="important"><p><strong>Important:</strong><span class="code">data_ptr</span> 
+must not be released.</p></div>
+</div>
+<div class="sectioncode">
+<h3><a name="method.pop.str">pop (std::string &)</a></h3>
+<p>Pop an opaque data from this and fill it into
+<span class="code">str</span> 
+.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>void           pop (std::string & str);</pre></td></tr>
+</table>
+</div>
+</div>
+<div class="sectioncode">
+<h3><a name="method.pop.blob">pop (ohm::flip::Blob &)</a></h3>
+<p>Pop an opaque data from this and fill it into the Flip object
+<span class="code">val</span> 
+.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>void           pop (ohm::flip::Blob & val);</pre></td></tr>
+</table>
+</div>
+</div>
+<div class="sectioncode">
+<h3><a name="method.pop.objref">pop (ohm::flip::ObjectRefMaster &)</a></h3>
+<p>Pop a 64 bits integer from this reinterpret it as a Flip object reference
+and assign it to the Flip object
+<span class="code">val</span> 
+. The reference can be dandling
+(ie. not pointing to a valid Flip object or an object matching the type
+of the
+<span class="code">ohm::flip::ObjectRef</span> 
+)</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>void           pop (ObjectRefMaster & val);</pre></td></tr>
+</table>
+</div>
+</div>
+
+
+<div class="nav" align="right"><a href="ohm.flip.reference.overview.html">previous</a><span>&nbsp;</span><a href="ohm.flip.reference.array.html">next</a></div>
+
+<div class="bottomspacer">&nbsp;</div>
+
+</div>
+
+<footer>
+<a href="index.html">Ohm Force Developer Library</a> > <a href="ohm.flip.reference.overview.html">Flip Reference</a> > <a href="ohm.flip.reference.args.html">Args Class Reference</a>
+</footer>
+
+
+</body>
+
+</html>

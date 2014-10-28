@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Flip Overview: Threading System</title>
+<link rel="stylesheet" href="docpage.css" type="text/css" />
+</head>
+
+<script type="text/javascript">
+function searchfield_focus(obj)
+{
+obj.style.color="#000"
+if (obj.value=="Search Library")
+	{obj.value=""}
+}
+</script>
+
+
+<body>
+
+<div id="header">
+<div style="width: 1006px;">
+<!--<form method="get" class="search" style="padding-top: 5px;"  action="http://www.google.com/search">
+<input onfocus="searchfield_focus(this)" type="search" class="search" name="q" value="Search Library">
+<input type="hidden" name="sitesearch" value="">
+</form>-->
+</div>
+<p><a href="index.html">Ohm Force Developer Library</a><a href="ohm.flip.overview.about.html">Flip Overview</a></p>
+</div>
+
+<div id="toc">
+<p>Flip Overview</p>
+<ul>
+<li><a href="ohm.flip.overview.about.html">About Flip</a></li>
+<li><a href="ohm.flip.overview.how.html">How it Works</a></li>
+<li><a href="ohm.flip.overview.model.html">Interfacing with the Model</a></li>
+<li><a href="ohm.flip.overview.undo.html">Undo/Redo System</a></li>
+<li><a href="ohm.flip.overview.threading.html"><strong>Threading System</strong></a>
+</li>
+<li><a href="ohm.flip.overview.document.html">Document Format, Conversion</a></li>
+</ul>
+
+<div class="bottomspacer">&nbsp;</div>
+</div>
+
+<div id="content">
+
+<div class="nav" align="right"><a href="ohm.flip.overview.undo.html">previous</a><span>&nbsp;</span><a href="ohm.flip.overview.document.html">next</a></div>
+
+<h1>Threading System</h1>
+
+<p>When programming with Flip, only one transaction can be started at one specific
+time. This does not allow for concurrent change on the model. However, Flip
+comes with a threading system that allow for concurrent change.</p>
+<center><img src="ohm.flip.overview.thread.png" /></center>
+<p>Threading in Flip allows to have multiple copies of the document (one per
+each Flip thread) and therefore concurrent change on those copies.
+Concurrent conflictual changes are resolved in the exact same way as for
+the server, so the client do not have to take care of it.</p>
+<p>However threads in Flip are distinct from Operating System threads. Two
+flip threads can live in the same Operating System thread, in two different
+Operating System threads, and even in two Operating System processes.</p>
+
+
+<div class="nav" align="right"><a href="ohm.flip.overview.undo.html">previous</a><span>&nbsp;</span><a href="ohm.flip.overview.document.html">next</a></div>
+
+<div class="bottomspacer">&nbsp;</div>
+
+</div>
+
+<footer>
+<a href="index.html">Ohm Force Developer Library</a> > <a href="ohm.flip.overview.about.html">Flip Overview</a> > <a href="ohm.flip.overview.threading.html">Threading System</a>
+</footer>
+
+
+</body>
+
+</html>

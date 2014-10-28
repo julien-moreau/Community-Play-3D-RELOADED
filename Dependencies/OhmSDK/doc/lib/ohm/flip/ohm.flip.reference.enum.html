@@ -1,0 +1,295 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Flip Reference: Enum Template Class Reference</title>
+<link rel="stylesheet" href="docpage.css" type="text/css" />
+</head>
+
+<script type="text/javascript">
+function searchfield_focus(obj)
+{
+obj.style.color="#000"
+if (obj.value=="Search Library")
+	{obj.value=""}
+}
+</script>
+
+
+<body>
+
+<div id="header">
+<div style="width: 1006px;">
+<!--<form method="get" class="search" style="padding-top: 5px;"  action="http://www.google.com/search">
+<input onfocus="searchfield_focus(this)" type="search" class="search" name="q" value="Search Library">
+<input type="hidden" name="sitesearch" value="">
+</form>-->
+</div>
+<p><a href="index.html">Ohm Force Developer Library</a><a href="ohm.flip.reference.overview.html">Flip Reference</a></p>
+</div>
+
+<div id="toc">
+<p>Flip Reference</p>
+<ul>
+<li><a href="ohm.flip.reference.overview.html">Overview</a></li>
+<li><a href="ohm.flip.reference.args.html">Args Class Reference</a></li>
+<li><a href="ohm.flip.reference.array.html">Array Template Class Reference</a></li>
+<li><a href="ohm.flip.reference.bool.html">Bool Class Reference</a></li>
+<li><a href="ohm.flip.reference.blob.html">Blob Class Reference</a></li>
+<li><a href="ohm.flip.reference.classdescmgr.html">ClassDescManager Class Reference</a></li>
+<li><a href="ohm.flip.reference.classdesc.html">ClassDescription Template Class Reference</a></li>
+<li><a href="ohm.flip.reference.collection.html">Collection Template Class Reference</a></li>
+<li><a href="ohm.flip.reference.cue.html">Cue Class Reference</a></li>
+<li><a href="ohm.flip.reference.docbase.html">DocumentBase Class Reference</a></li>
+<li><a href="ohm.flip.reference.docclient.html">DocumentClient Class Reference</a></li>
+<li><a href="ohm.flip.reference.doclocal.html">DocumentLocal Class Reference</a></li>
+<li><a href="ohm.flip.reference.docserver.html">DocumentServer Class Reference</a></li>
+<li><a href="ohm.flip.reference.docsignal.html">DocumentSignal Class Reference</a></li>
+<li><a href="ohm.flip.reference.doctweaker.html">DocumentTweaker Template Class Reference</a></li>
+<li><a href="ohm.flip.reference.docvalid.html">DocumentValidator Template Class Reference</a></li>
+<li><a href="ohm.flip.reference.enum.html"><strong>Enum Template Class Reference</strong></a>
+	<ul>
+	<li><a href="ohm.flip.reference.enum.html#overview">Overview</a></li>
+	<li><a href="ohm.flip.reference.enum.html#headertpl">Template Parameters Overview</a></li>
+	<li><a href="ohm.flip.reference.enum.html#diagram">Partial Class Diagram</a></li>
+	<li><a href="ohm.flip.reference.enum.html#header">Methods Overview</a></li>
+	<li><a href="ohm.flip.reference.enum.html#tpl">Template Parameters</a></li>
+	<li><a href="ohm.flip.reference.enum.html#method">Methods</a></li>
+	</ul>
+</li>
+<li><a href="ohm.flip.reference.enumdescmgr.html">EnumDescManager Class Reference</a></li>
+<li><a href="ohm.flip.reference.enumdesc.html">EnumDescription Template Class Reference</a></li>
+<li><a href="ohm.flip.reference.findmask.html">FindMask Enum Reference</a></li>
+<li><a href="ohm.flip.reference.float64.html">Float64 Class Reference</a></li>
+<li><a href="ohm.flip.reference.int64.html">Int64 Class Reference</a></li>
+<li><a href="ohm.flip.reference.object.html">Object Class Reference</a></li>
+<li><a href="ohm.flip.reference.objectmold.html">ObjectMold Class Reference</a></li>
+<li><a href="ohm.flip.reference.objectmolddata.html">ObjectMoldData Class Reference</a></li>
+<li><a href="ohm.flip.reference.objectref.html">ObjectRef Template Class Reference</a></li>
+<li><a href="ohm.flip.reference.pasteboard.html">PasteBoard Class Reference</a></li>
+<li><a href="ohm.flip.reference.ref.html">Ref Type Reference</a></li>
+<li><a href="ohm.flip.reference.scribe.html">Scribe Class Reference</a></li>
+<li><a href="ohm.flip.reference.txguard.html">TxSessionGuard Class Reference</a></li>
+<li><a href="ohm.flip.reference.validwriter.html">ValidationReportWriter Class Reference</a></li>
+</ul>
+
+<div class="bottomspacer">&nbsp;</div>
+</div>
+
+<div id="content">
+
+<div class="nav" align="right"><a href="ohm.flip.reference.docvalid.html">previous</a><span>&nbsp;</span><a href="ohm.flip.reference.enumdescmgr.html">next</a></div>
+
+<h1>Enum Template Class Reference</h1>
+
+<table>
+<tr><td><p>Namespace
+</p></td><td><p><span class="code">ohm::flip</span> 
+</p></td></tr>
+<tr><td><p>Inherits from
+</p></td><td><p><a href="ohm.flip.reference.object.html"><span class="code">ohm::flip::Object</span> </a>
+</p></td></tr>
+<tr><td><p>Declared in
+</p></td><td><p><span class="code">ohm/flip/Enum.h</span> 
+</p></td></tr>
+<tr><td><p>Companion Guide
+</p></td><td><p><a href="ohm.flip.guide.class.html">Flip Programming Guide: Writing a Flip Class Part 1</a>
+</p></td></tr>
+<tr><td><p></p></td><td><p><a href="ohm.flip.guide.enums.html">Flip Programming Guide: Using Enums</a>
+</p></td></tr>
+<tr><td><p>See Also
+</p></td><td><p><a href="ohm.flip.reference.enumdescmgr.html"><span class="code">ohm::flip::EnumDescManager</span> </a>
+</p></td></tr>
+<tr><td><p></p></td><td><p><a href="ohm.flip.reference.enumdesc.html"><span class="code">ohm::flip::EnumDescription</span> </a>
+</p></td></tr>
+</table>
+<h2><a name="overview">Overview</a></h2>
+<p>The
+<span class="code">Enum</span> 
+template class implements a Flip value type holding an
+<span class="code">enum</span> 
+value.
+The following sections will only document the public API.</p>
+<h2><a name="headertpl">Template Parameters Overview</a></h2>
+<ul>
+<li><a href="#tpl.EnumType"><span class="code">EnumType</span> </a>
+</li>
+<li><a href="#tpl.MIN"><span class="code">MIN</span> </a>
+</li>
+<li><a href="#tpl.NBR"><span class="code">NBR</span> </a>
+</li>
+</ul>
+<h2><a name="diagram">Partial Class Diagram</a></h2>
+<center><img src="ohm.flip.reference.enum.diagram.png" /></center>
+<h2><a name="header">Methods Overview</a></h2>
+<h3><a name="header.assign">Assigning</a></h3>
+<ul>
+<li><a href="#method.ctor"><span class="code">ctor</span> </a>
+</li>
+<li><a href="#method.operator.assign"><span class="code">operator =</span> </a>
+</li>
+</ul>
+<h3><a name="header.casting">Casting</a></h3>
+<ul>
+<li><a href="#method.operator.bool"><span class="code">operator bool</span> </a>
+</li>
+<li><a href="#method.get_old_value"><span class="code">get_old_value</span> </a>
+</li>
+</ul>
+<h3><a name="header.comparing">Comparing</a></h3>
+<ul>
+<li><a href="#method.operator.equal"><span class="code">operator ==</span> </a>
+</li>
+<li><a href="#method.operator.unequal"><span class="code">operator !=</span> </a>
+</li>
+</ul>
+<h3><a name="header.differencing">Differencing</a></h3>
+<ul>
+<li><a href="#method.did_value_change"><span class="code">did_value_change</span> </a>
+</li>
+</ul>
+<h2><a name="tpl">Template Parameters</a></h2>
+<div class="sectioncode">
+<h3><a name="tpl.EnumType">EnumType</a></h3>
+<p>The
+<span class="code">enum</span> 
+itself.</p>
+</div>
+<div class="sectioncode">
+<h3><a name="tpl.MIN">MIN</a></h3>
+<p>Minimum value of the
+<span class="code">enum</span> 
+.
+A valid enum value must be in the range
+<span class="code">[MIN; MIN + NBR)</span> 
+.
+Failure
+to achieve this will be report as a structural validation failure from the
+server.</p>
+</div>
+<div class="sectioncode">
+<h3><a name="tpl.NBR">NBR</a></h3>
+<p>The number of values in the
+<span class="code">enum</span> 
+.
+A valid enum value must be in the range
+<span class="code">[MIN; MIN + NBR)</span> 
+.
+Failure
+to achieve this will be report as a structural validation failure from the
+server.</p>
+</div>
+<h2><a name="method">Methods</a></h2>
+<div class="sectioncode">
+<h3><a name="method.ctor">ctor</a></h3>
+<p>Sets the value at post construction stage.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>virtual void   ctor (ohm::flip::Args & args);</pre></td></tr>
+<tr><td><pre>void           ctor (EnumType val);</pre></td></tr>
+</table>
+</div>
+<p>The first version sets the value from a cascaded arguments object
+<a href="ohm.flip.reference.args.html"><span class="code">ohm::flip::Args</span> </a></p>
+</div>
+<div class="sectioncode">
+<h3><a name="method.operator.assign">operator =</a></h3>
+<p>Sets the value.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>Enum &         operator = (EnumType val);</pre></td></tr>
+</table>
+</div>
+<p><strong>Returns</strong> a reference to
+<span class="code">this</span> 
+.</p>
+</div>
+<div class="sectioncode">
+<h3><a name="method.operator.bool">operator bool</a></h3>
+<p>Returns the value of
+<span class="code">this</span> 
+.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>               operator EnumType () const;</pre></td></tr>
+</table>
+</div>
+<div class="warning"><p><strong>WARNING:</strong>it is invalid to call this function when the object is being
+restored</p></div>
+</div>
+<div class="sectioncode">
+<h3><a name="method.get_old_value">get_old_value</a></h3>
+<p>Returns the old value of
+<span class="code">this</span> 
+.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>EnumType       get_old_value () const;</pre></td></tr>
+</table>
+</div>
+<div class="warning"><p><strong>WARNING:</strong>it is invalid to call this function when the object is being
+inited</p></div>
+</div>
+<div class="sectioncode">
+<h3><a name="method.operator.equal">operator ==</a></h3>
+<p>Returns
+<span class="code">true</span> 
+if the right handed value is equal to
+<span class="code">this</span> 
+,
+<span class="code">false</span> 
+otherwise.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>               operator == (EnumType val) const;</pre></td></tr>
+</table>
+</div>
+</div>
+<div class="sectioncode">
+<h3><a name="method.operator.unequal">operator !=</a></h3>
+<p>Returns
+<span class="code">true</span> 
+if the right handed value is not equal to
+<span class="code">this</span> 
+,
+<span class="code">false</span> 
+otherwise.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>               operator != (EnumType val) const;</pre></td></tr>
+</table>
+</div>
+</div>
+<div class="sectioncode">
+<h3><a name="method.did_value_change">did_value_change</a></h3>
+<p>Returns
+<span class="code">true</span> 
+if the old value is different from the current value.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>bool           did_value_change () const;</pre></td></tr>
+</table>
+</div>
+<div class="note"><p><strong>Note:</strong>Outside of an observer
+<span class="code">document_changed</span> 
+call, this will always return
+<span class="code">false</span> </p></div>
+</div>
+
+
+<div class="nav" align="right"><a href="ohm.flip.reference.docvalid.html">previous</a><span>&nbsp;</span><a href="ohm.flip.reference.enumdescmgr.html">next</a></div>
+
+<div class="bottomspacer">&nbsp;</div>
+
+</div>
+
+<footer>
+<a href="index.html">Ohm Force Developer Library</a> > <a href="ohm.flip.reference.overview.html">Flip Reference</a> > <a href="ohm.flip.reference.enum.html">Enum Template Class Reference</a>
+</footer>
+
+
+</body>
+
+</html>

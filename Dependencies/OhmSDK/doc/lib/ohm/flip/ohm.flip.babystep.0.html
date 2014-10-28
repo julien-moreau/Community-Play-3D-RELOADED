@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Flip BabyStep Tutorial: BabyStep 0: Starting Point</title>
+<link rel="stylesheet" href="docpage.css" type="text/css" />
+</head>
+
+<script type="text/javascript">
+function searchfield_focus(obj)
+{
+obj.style.color="#000"
+if (obj.value=="Search Library")
+	{obj.value=""}
+}
+</script>
+
+
+<body>
+
+<div id="header">
+<div style="width: 1006px;">
+<!--<form method="get" class="search" style="padding-top: 5px;"  action="http://www.google.com/search">
+<input onfocus="searchfield_focus(this)" type="search" class="search" name="q" value="Search Library">
+<input type="hidden" name="sitesearch" value="">
+</form>-->
+</div>
+<p><a href="index.html">Ohm Force Developer Library</a><a href="ohm.flip.babystep.about.html">Flip BabyStep Tutorial</a></p>
+</div>
+
+<div id="toc">
+<p>Flip BabyStep Tutorial</p>
+<ul>
+<li><a href="ohm.flip.babystep.about.html">About Flip BabyStep Tutorial</a></li>
+<li><a href="ohm.flip.babystep.0.html"><strong>BabyStep 0: Starting Point</strong></a>
+	<ul>
+	<li><a href="ohm.flip.babystep.0.html#overview">Overview</a></li>
+	<li><a href="ohm.flip.babystep.0.html#main">The main.cpp File</a></li>
+	</ul>
+</li>
+<li><a href="ohm.flip.babystep.1.html">BabyStep 1: Binding Flip</a></li>
+<li><a href="ohm.flip.babystep.2.html">BabyStep 2: Adding the Root Object</a></li>
+<li><a href="ohm.flip.babystep.3.html">BabyStep 3: Interacting with the Model</a></li>
+</ul>
+
+<div class="bottomspacer">&nbsp;</div>
+</div>
+
+<div id="content">
+
+<div class="nav" align="right"><a href="ohm.flip.babystep.about.html">previous</a><span>&nbsp;</span><a href="ohm.flip.babystep.1.html">next</a></div>
+
+<h1>BabyStep 0: Starting Point</h1>
+
+<p>This chapter makes an introduction about the very starting point of the baby steps tutorials.
+It relies on the
+<span class="code">babystep0</span> 
+...
+<span class="code">babystep3</span> 
+contained into
+<span class="code">src/samples/flip/</span> 
+folder.</p>
+<ul>
+<li>If you are using Visual C++ Studio 2005 or later, you will want to use the
+<span class="code">babystep.sln</span> 
+solution,
+</li>
+<li>If you are using XCode 3.1 or later, you will want to use the
+<span class="code">babystep.xcodeproj</span> 
+project.
+</li>
+</ul>
+<div class="important"><p><strong>Important:</strong>Please read the
+<span class="code">readme.html</span> 
+file contained in those folders for build instructions.</p></div>
+<h2><a name="overview">Overview</a></h2>
+<p>Multiple files are present in the folder. The following describes each file and what
+it is used for.</p>
+<p>The
+<span class="code">babystep.xcodeproj</span> 
+and
+<span class="code">babystep.sln</span> 
+are the project or solution used for your
+IDE. They contains the other files from this folder, as well as all the files needed to
+compile a fully working babystep application.</p>
+<p>The
+<span class="code">Info.plist</span> 
+is MacOS XCode specific file.</p>
+<p>The
+<span class="code">main.cpp</span> 
+file contains the
+<span class="code">main</span> 
+code for our project.</p>
+<p>The
+<span class="code">BabystepGui.cpp</span> 
+and
+<span class="code">BabystepGui.h</span> 
+defines the
+<span class="code">BabystepGui</span> 
+class
+that makes a very basic GUI
+for our application, with a main window and a menu bar.
+This is also where almost every flip view code is located.</p>
+<p>The
+<span class="code">ModelRoot.cpp</span> 
+and
+<span class="code">ModelRoot.h</span> 
+defines the
+<span class="code">ModelRoot</span> 
+class
+which is a very basic data model. This is where almost every flip controller code is
+located.</p>
+<p>The
+<span class="code">BundleRoot.cpp/.h</span> 
+,
+<span class="code">FrameRoot.cpp/.h</span> 
+and
+<span class="code">PrimRoot.cpp/.h</span> 
+give
+a basic GUI to manipulate the model and see how it is manipulated.
+Those classes use the opal/opak framework which is beyond the scope of this tutorial.
+However the classes are very simple and easy to understand.</p>
+<h2><a name="main">The main.cpp File</a></h2>
+<p>The
+<span class="code">main.cpp</span> 
+file is for now filled with a very simple
+<span class="code">main</span> 
+code for
+the application. it has support for Windows and MacOS. The Windows code essentially
+deduces the boot parameters
+<span class="code">argc</span> 
+and
+<span class="code">argv</span> 
+.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>opa::ApplicationWindowSimple window (argc, argv);</pre></td></tr>
+<tr><td><pre>BabystepGui gui (window);</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>window.run ();</pre></td></tr>
+</table>
+</div>
+<p>The above code is the essential of the
+<span class="code">main</span> 
+function. It is enclosed in a
+<span class="code">try/catch</span> 
+block.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>opa::ApplicationWindowSimple window (argc, argv);</pre></td></tr>
+</table>
+</div>
+<p>This line will construct a very simple application when one main windows is assumed.
+This window will have a menu bar on Windows, where as the MacOS version will have
+its standard menu bar.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>BabystepGui gui (window);</pre></td></tr>
+</table>
+</div>
+<p>This line will construct our application GUI and attach it to
+<span class="code">window</span> 
+.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>window.run ();</pre></td></tr>
+</table>
+</div>
+<p>Finally this line starts the application event loop, the loop to which used inputs events
+are directed.</p>
+<p>The
+<span class="code">BabystepGui</span> 
+class, while being used in the code, is inactive. It does not contain
+any useful code for now. The
+<span class="code">ModelRoot</span> 
+class is also almost empty, and does not
+contain useful code for now. The other classes are not empty, but have commented code
+that we will uncomment as needed.</p>
+<p>At this stage, you should be able to build the project without issues. If you then run the
+project, you should see a window appearing with probably graphic garbage in it.
+It is now time to move to the next chapter and add actual flip code to our application.</p>
+
+
+<div class="nav" align="right"><a href="ohm.flip.babystep.about.html">previous</a><span>&nbsp;</span><a href="ohm.flip.babystep.1.html">next</a></div>
+
+<div class="bottomspacer">&nbsp;</div>
+
+</div>
+
+<footer>
+<a href="index.html">Ohm Force Developer Library</a> > <a href="ohm.flip.babystep.about.html">Flip BabyStep Tutorial</a> > <a href="ohm.flip.babystep.0.html">BabyStep 0: Starting Point</a>
+</footer>
+
+
+</body>
+
+</html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Flip Programming Guide: Writing a Flip Class Part 1</title>
+<link rel="stylesheet" href="docpage.css" type="text/css" />
+</head>
+
+<script type="text/javascript">
+function searchfield_focus(obj)
+{
+obj.style.color="#000"
+if (obj.value=="Search Library")
+	{obj.value=""}
+}
+</script>
+
+
+<body>
+
+<div id="header">
+<div style="width: 1006px;">
+<!--<form method="get" class="search" style="padding-top: 5px;"  action="http://www.google.com/search">
+<input onfocus="searchfield_focus(this)" type="search" class="search" name="q" value="Search Library">
+<input type="hidden" name="sitesearch" value="">
+</form>-->
+</div>
+<p><a href="index.html">Ohm Force Developer Library</a><a href="ohm.flip.guide.about.html">Flip Programming Guide</a></p>
+</div>
+
+<div id="toc">
+<p>Flip Programming Guide</p>
+<ul>
+<li><a href="ohm.flip.guide.about.html">About Flip Programming Guide</a></li>
+<li><a href="ohm.flip.guide.design.html">Designing your Flip Application</a></li>
+<li><a href="ohm.flip.guide.class.html"><strong>Writing a Flip Class Part 1</strong></a>
+	<ul>
+	<li><a href="ohm.flip.guide.class.html#header">Declaring the Class</a></li>
+	<li><a href="ohm.flip.guide.class.html#inheritance">Inheritance</a></li>
+	<li><a href="ohm.flip.guide.class.html#members">Adding Flip Members</a></li>
+	</ul>
+</li>
+<li><a href="ohm.flip.guide.class2.html">Writing a Flip Class Part 2</a></li>
+<li><a href="ohm.flip.guide.containers.html">Using Containers</a></li>
+<li><a href="ohm.flip.guide.enums.html">Using Enums</a></li>
+<li><a href="ohm.flip.guide.blob.html">Using Blobs</a></li>
+<li><a href="ohm.flip.guide.objectref.html">Using ObjectRefs</a></li>
+<li><a href="ohm.flip.guide.cue.html">Using Cues</a></li>
+<li><a href="ohm.flip.guide.navigation.html">Navigating the Model</a></li>
+<li><a href="ohm.flip.guide.observer.html">Writing a DocumentObserver</a></li>
+<li><a href="ohm.flip.guide.validator.html">Writing a DocumentValidator</a></li>
+<li><a href="ohm.flip.guide.undo.html">Using the Undo/Redo system</a></li>
+<li><a href="ohm.flip.guide.const.html">Managing Pseudo Const Members</a></li>
+<li><a href="ohm.flip.guide.mold.html">Using an ObjectMold</a></li>
+<li><a href="ohm.flip.guide.conversion.html">Writing a Converter</a></li>
+<li><a href="ohm.flip.guide.tweaker.html">Writing a DocumentTweaker</a></li>
+</ul>
+
+<div class="bottomspacer">&nbsp;</div>
+</div>
+
+<div id="content">
+
+<div class="nav" align="right"><a href="ohm.flip.guide.design.html">previous</a><span>&nbsp;</span><a href="ohm.flip.guide.class2.html">next</a></div>
+
+<h1>Writing a Flip Class Part 1</h1>
+
+<p>This chapter and the next chapter will describe how to write a Flip Class as well as writing
+convention which should be followed to make it future proof.</p>
+<p>In the following, we will show the step by step construction of an hypothetic
+<span class="code">MyClass</span> 
+class.</p>
+<p>This chapter will assume that your company is called ACME making the application “Product”.</p>
+<h2><a name="header">Declaring the Class</a></h2>
+<p>Every class managed by flip will need to inherit from
+<span class="code">ohm::flip::Object</span> 
+,
+so the first thing is to inherit from it. Since the base class needs a document
+to operate on, we will pass it to the constructor. It is important that every
+flip class constructor follows the same exact prototype.</p>
+<p>We will also need to declare the class
+before we can use it, so that we will add a
+<span class="code">declare</span> 
+member.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>#include "ohm/flip/Object.h"</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>class MyClass</pre></td></tr>
+<tr><td><pre>:  public ohm::flip::Object</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>public:</pre></td></tr>
+<tr><td><pre>   static void    declare ();</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>                  MyClass (ohm::flip::DocumentBase & document);</pre></td></tr>
+<tr><td><pre>   virtual        ~MyClass () {}</pre></td></tr>
+<tr><td><small><pre>   [...]</pre></small></td></tr>
+<tr><td><pre>};</pre></td></tr>
+</table>
+</div>
+<p>The function
+<span class="code">declare</span> 
+will declare this class to the Flip framework.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>void  MyClass::declare ()</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   using namespace ohm::flip;</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   ClassDescription &lt;MyClass&gt;::use ().set_name ("acme.product.MyClass");   // 1.</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   ClassDescManager::declare (ClassDescription &lt;MyClass&gt;::use ());         // 2.</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<ol>
+<li>This line will link your class with a name given as the string. This string
+	will be used when writing the document
+</li>
+<li>This line will add this class to the set of Flip managed classes
+</li>
+</ol>
+<p>The constructor will pass the document to its base class.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>MyClass::MyClass (ohm::flip::DocumentBase & document)</pre></td></tr>
+<tr><td><pre>:  ohm::flip::Object (document)</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<p>Then we will add the class in the global
+<span class="code">declare</span> 
+function in
+<span class="code">fnc.cpp</span> </p>
+<div class="codeblock">
+<table>
+<tr><td><pre>void  declare ()</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   flip::ClassDescManager::use_instance ().declare_basic_types ();</pre></td></tr>
+<tr><td><pre>   </pre></td></tr>
+<tr><td><pre>   MyClass::declare ();</pre></td></tr>
+<tr><td><pre>   </pre></td></tr>
+<tr><td><pre>   flip::EnumDescManager::use_instance ().post_check ();</pre></td></tr>
+<tr><td><pre>   flip::ClassDescManager::use_instance ().post_check ();</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<div class="note"><p><strong>Note:</strong>If you forget to declare a class, an
+<span class="code">assert</span> 
+will trigger on runtime,
+with a comment next to it to remind you to declare the class</p></div>
+<h2><a name="inheritance">Inheritance</a></h2>
+<p>The Flip framework has a limited while being sufficient support for inheritance :
+It does not support multiple inheritance.</p>
+<p>To make
+<span class="code">MySubClass</span> 
+inherit from
+<span class="code">MyClass</span> 
+we will make
+it inherit in the C++ code and declare the inheritience in the
+<span class="code">declare</span> 
+function.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>class MySubClass</pre></td></tr>
+<tr><td><pre>:  public MyClass</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>public:</pre></td></tr>
+<tr><td><pre>   static void    declare ();</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><small><pre>   [...]</pre></small></td></tr>
+<tr><td><pre>};</pre></td></tr>
+</table>
+</div>
+<p>The function
+<span class="code">declare</span> 
+will declare this class to the Flip framework.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>void  MySubClass::declare ()</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   using namespace ohm::flip;</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   ClassDescription &lt;MySubClass&gt;::use ().set_name ("acme.product.MySubClass");</pre></td></tr>
+<tr><td><strong><pre>   ClassDescription &lt;MySubClass&gt;::use ().inherit &lt;MyClass&gt; ();</pre></strong></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   ClassDescManager::declare (ClassDescription &lt;MySubClass&gt;::use ());</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<p>Then we will add the class in the global
+<span class="code">declare</span> 
+function in
+<span class="code">fnc.cpp</span> 
+and make sure that the base class is declared
+<strong>before</strong> our class.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>void  declare ()</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   flip::ClassDescManager::use_instance ().declare_basic_types ();</pre></td></tr>
+<tr><td><pre>   </pre></td></tr>
+<tr><td><pre>   MyClass::declare ();</pre></td></tr>
+<tr><td><strong><pre>   MySubClass::declare ();</pre></strong></td></tr>
+<tr><td><pre>   </pre></td></tr>
+<tr><td><pre>   flip::EnumDescManager::use_instance ().post_check ();</pre></td></tr>
+<tr><td><pre>   flip::ClassDescManager::use_instance ().post_check ();</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<h2><a name="members">Adding Flip Members</a></h2>
+<p>Every class managed by flip may contain an illimited number of either
+Flip basic types or your own custom Flip classes.</p>
+<p>Flip offers, three categories of basic types :</p>
+<ul>
+<li>Value types that hold a value
+</li>
+<li>Enumerate types based on an
+<span class="code">enum</span> 
+</li>
+<li>Containers
+</li>
+<li>Signaling type
+</li>
+</ul>
+<center><img src="ohm.flip.guide.class.types.png" /></center>
+<h3><a name="members.value">Value Types</a></h3>
+<p>Value types are limited to 3 types :</p>
+<ul>
+<li><span class="code">ohm::flip::Bool</span> 
+</li>
+<li><span class="code">ohm::flip::Int64</span> 
+</li>
+<li><span class="code">ohm::flip::Float64</span> 
+</li>
+</ul>
+<p><span class="code">ohm::flip::Bool</span> 
+will hold a boolean value,
+<span class="code">ohm::flip::Int64</span> 
+will
+hold a 64 bits integer value and
+<span class="code">ohm::flip::Float64</span> 
+will hold a 64 bits
+floating point value.</p>
+<p>They are defined respectively in
+<span class="code">ohm/flip/Bool.h</span> 
+,
+<span class="code">ohm/flip/Int64.h</span> 
+and
+<span class="code">ohm/flip/Float64.h</span> </p>
+<h3><a name="members.enum">Enumeration Types</a></h3>
+<p>The
+<span class="code">ohm::flip::Enum</span> 
+type will hold an enumeration based on a C++ enum.</p>
+<p>It is defined in
+<span class="code">ohm/flip/Enum.h</span> </p>
+<h3><a name="members.blob">Opaque Data Type</a></h3>
+<p>The
+<span class="code">ohm::flip::Blob</span> 
+type will hold an opaque dynamic-sized blob of data.</p>
+<p>It is defined in
+<span class="code">ohm/flip/Blob.h</span> </p>
+<h3><a name="members.containers">Containers</a></h3>
+<p>Container types are limited to 2 types :</p>
+<ul>
+<li><span class="code">ohm::flip::Array</span> 
+</li>
+<li><span class="code">ohm::flip::Collection</span> 
+</li>
+</ul>
+<p><span class="code">ohm::flip::Array</span> 
+will hold an explicit ordered list of object.
+<span class="code">ohm::flip::Colletion</span> 
+will hold an implicit orderer list or an unordered list
+of object.</p>
+<p>They are defined respectively in
+<span class="code">ohm/flip/Array.h</span> 
+and
+<span class="code">ohm/flip/Colletion.h</span> </p>
+<h3><a name="members.objectref">Reference Type</a></h3>
+<p>Flip offers a Reference type, named
+<span class="code">ohm::flip::ObjectRef</span> 
+that allows
+to reference another Flip object in the model tree.</p>
+<h3><a name="members.signal">Signaling Type</a></h3>
+<p>The Flip framework contains one signaling type, named
+<span class="code">ohm::flip::Cue</span> 
+that
+allows to signal other users with data that is not persistent (that is not written
+in the document)</p>
+<p>It is defined in
+<span class="code">ohm/flip/Cue.h</span> </p>
+<h3><a name="members.using">Using Types</a></h3>
+<p>Adding a Flip member consists of adding it to the Flip class and declaring it to
+the Flip framework.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>#include "ohm/flip/Object.h"</pre></td></tr>
+<tr><td><pre>#include "ohm/flip/Bool.h"</pre></td></tr>
+<tr><td><pre>#include "ohm/flip/Int64.h"</pre></td></tr>
+<tr><td><pre>#include "ohm/flip/Float64.h"</pre></td></tr>
+<tr><td><pre>#include "ohm/flip/Enum.h"</pre></td></tr>
+<tr><td><pre>#include "ohm/flip/Array.h"</pre></td></tr>
+<tr><td><pre>#include "ohm/flip/Collection.h"</pre></td></tr>
+<tr><td><pre>#include "ohm/flip/Cue.h"</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>class MyClass</pre></td></tr>
+<tr><td><pre>:  public ohm::flip::Object</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>public:</pre></td></tr>
+<tr><td><pre>   enum MyEnum</pre></td></tr>
+<tr><td><pre>   {</pre></td></tr>
+<tr><td><pre>                        MyEnum_FOO = 0,</pre></td></tr>
+<tr><td><pre>                        MyEnum_BAR,</pre></td></tr>
+<tr><td><pre>      </pre></td></tr>
+<tr><td><pre>                        MyEnum_NBR_ELT</pre></td></tr>
+<tr><td><pre>   }</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   static void          declare ();</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>                        MyClass (ohm::flip::DocumentBase & document);</pre></td></tr>
+<tr><td><pre>   virtual              ~MyClass () {}</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>private:</pre></td></tr>
+<tr><td><pre>   ohm::flip::Bool      _my_bool;</pre></td></tr>
+<tr><td><pre>   ohm::flip::Int64     _my_int;</pre></td></tr>
+<tr><td><pre>   ohm::flip::Float64   _my_float;</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   ohm::flip::Enum &lt;MyEnum, MyEnum_FOO, MyEnum_NBR_ELT&gt;</pre></td></tr>
+<tr><td><pre>                        _my_enum;</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   ohm::flip::Blob      _my_blob;</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   ohm::flip::Array &lt;MyElementClass&gt;</pre></td></tr>
+<tr><td><pre>                        _my_array;</pre></td></tr>
+<tr><td><pre>   ohm::flip::Collection &lt;MyElementClass&gt;</pre></td></tr>
+<tr><td><pre>                        _my_collection;</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   ohm::flip::Cue       _my_cue;</pre></td></tr>
+<tr><td><pre>};</pre></td></tr>
+</table>
+</div>
+<p>The function
+<span class="code">declare</span> 
+will declare those members to the Flip framework.</p>
+<div class="codeblock">
+<table>
+<tr><td><small><pre>void  MyClass::declare ()</pre></small></td></tr>
+<tr><td><small><pre>{</pre></small></td></tr>
+<tr><td><small><pre>   using namespace ohm::flip;</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><strong><pre>   EnumDescription &lt;MyEnum&gt;::use ().set_name ("acme.product.MyClass.MyEnum");</pre></strong></td></tr>
+<tr><td><strong><pre>   EnumDescription &lt;MyEnum&gt;::use ().push_enum_desc (MyEnum_FOO, "MyEnum_FOO");</pre></strong></td></tr>
+<tr><td><strong><pre>   EnumDescription &lt;MyEnum&gt;::use ().push_enum_desc (MyEnum_BAR, "MyEnum_BAR");</pre></strong></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><strong><pre>   EnumDescManager::declare (EnumDescription &lt;MyEnum&gt;::use ());</pre></strong></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>   ClassDescription &lt;MyClass&gt;::use ().set_name ("acme.product.MyClass");</pre></small></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><strong><pre>   ClassDescription &lt;MyClass&gt;::use ().push_var_desc (&MyClass::_my_bool, "_my_bool");</pre></strong></td></tr>
+<tr><td><strong><pre>   ClassDescription &lt;MyClass&gt;::use ().push_var_desc (&MyClass::_my_int, "_my_int");</pre></strong></td></tr>
+<tr><td><strong><pre>   ClassDescription &lt;MyClass&gt;::use ().push_var_desc (&MyClass::_my_float, "_my_float");</pre></strong></td></tr>
+<tr><td><strong><pre></pre></strong></td></tr>
+<tr><td><strong><pre>   ClassDescription &lt;MyClass&gt;::use ().push_var_desc (&MyClass::_my_enum, "_my_enum");</pre></strong></td></tr>
+<tr><td><strong><pre></pre></strong></td></tr>
+<tr><td><strong><pre>   ClassDescription &lt;MyClass&gt;::use ().push_var_desc (&MyClass::_my_blob, "_my_blob");</pre></strong></td></tr>
+<tr><td><strong><pre></pre></strong></td></tr>
+<tr><td><strong><pre>   ClassDescription &lt;MyClass&gt;::use ().push_var_desc (&MyClass::_my_array, "_my_array");</pre></strong></td></tr>
+<tr><td><strong><pre>   ClassDescription &lt;MyClass&gt;::use ().push_var_desc (&MyClass::_my_collection, "_my_collection");</pre></strong></td></tr>
+<tr><td><strong><pre></pre></strong></td></tr>
+<tr><td><strong><pre>   ClassDescription &lt;MyClass&gt;::use ().push_var_desc (&MyClass::_my_cue, "_my_cue");</pre></strong></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>   ClassDescManager::declare (ClassDescription &lt;MyClass&gt;::use ());</pre></small></td></tr>
+<tr><td><small><pre>}</pre></small></td></tr>
+</table>
+</div>
+<p>In the above code, the enum is declared first before the member using the enum
+is declared. The code will assign a name to the enums and members and will be
+used when saving the document.</p>
+<p>The constructor will pass the document to its members.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>MyClass::MyClass (ohm::flip::DocumentBase & document)</pre></td></tr>
+<tr><td><pre>:  ohm::flip::Object (document)</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>,  _my_bool (document)</pre></td></tr>
+<tr><td><pre>,  _my_int (document)</pre></td></tr>
+<tr><td><pre>,  _my_float (document)</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>,  _my_enum (document)</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>,  _my_blob (document)</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>,  _my_array (document)</pre></td></tr>
+<tr><td><pre>,  _my_collection (document)</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>,  _my_cue (document)</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<p>Now that we have declared the model, the next step will be to manipulate it, which we
+will show in the next chapter. However all the above code is essentially what is used by
+the server.</p>
+
+
+<div class="nav" align="right"><a href="ohm.flip.guide.design.html">previous</a><span>&nbsp;</span><a href="ohm.flip.guide.class2.html">next</a></div>
+
+<div class="bottomspacer">&nbsp;</div>
+
+</div>
+
+<footer>
+<a href="index.html">Ohm Force Developer Library</a> > <a href="ohm.flip.guide.about.html">Flip Programming Guide</a> > <a href="ohm.flip.guide.class.html">Writing a Flip Class Part 1</a>
+</footer>
+
+
+</body>
+
+</html>

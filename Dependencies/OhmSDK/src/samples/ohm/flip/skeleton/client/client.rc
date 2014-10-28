@@ -1,0 +1,30 @@
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// RCDATA
+//
+
+
+// cursor
+skeleton.cursor.arrow.move.copy.png                   10 ".\\art\\skeleton.cursor.arrow.move.copy.png"
+skeleton.cursor.resize.right.png                      10 ".\\art\\skeleton.cursor.resize.right.png"
+skeleton.cursor.arrow.move.png                        10 ".\\art\\skeleton.cursor.arrow.move.png"
+skeleton.cursor.arrow.png                             10 ".\\art\\skeleton.cursor.arrow.png"
+skeleton.cursor.eraser.png                            10 ".\\art\\skeleton.cursor.eraser.png"
+skeleton.cursor.hand.closed.png                       10 ".\\art\\skeleton.cursor.hand.closed.png"
+skeleton.cursor.hand.opened.png                       10 ".\\art\\skeleton.cursor.hand.opened.png"
+skeleton.cursor.pen.png                               10 ".\\art\\skeleton.cursor.pen.png"
+
+
+// 
+skeleton.noise.png                                    10 ".\\art\\skeleton.noise.png"
+skeleton.taxi.shadow.png                              10 ".\\art\\skeleton.taxi.shadow.png"
+skeleton.pedestrian.png                               10 ".\\art\\skeleton.pedestrian.png"
+skeleton.pedestrian.selection.png                     10 ".\\art\\skeleton.pedestrian.selection.png"
+skeleton.taxi.back.png                                10 ".\\art\\skeleton.taxi.back.png"
+skeleton.taxi.color.png                               10 ".\\art\\skeleton.taxi.color.png"
+skeleton.taxi.front.png                               10 ".\\art\\skeleton.taxi.front.png"
+skeleton.taxi.reflect.png                             10 ".\\art\\skeleton.taxi.reflect.png"
+skeleton.taxi.selection.png                           10 ".\\art\\skeleton.taxi.selection.png"
+
+

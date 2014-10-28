@@ -1,0 +1,362 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Flip BabyStep Tutorial: BabyStep 2: Adding the Root Object</title>
+<link rel="stylesheet" href="docpage.css" type="text/css" />
+</head>
+
+<script type="text/javascript">
+function searchfield_focus(obj)
+{
+obj.style.color="#000"
+if (obj.value=="Search Library")
+	{obj.value=""}
+}
+</script>
+
+
+<body>
+
+<div id="header">
+<div style="width: 1006px;">
+<!--<form method="get" class="search" style="padding-top: 5px;"  action="http://www.google.com/search">
+<input onfocus="searchfield_focus(this)" type="search" class="search" name="q" value="Search Library">
+<input type="hidden" name="sitesearch" value="">
+</form>-->
+</div>
+<p><a href="index.html">Ohm Force Developer Library</a><a href="ohm.flip.babystep.about.html">Flip BabyStep Tutorial</a></p>
+</div>
+
+<div id="toc">
+<p>Flip BabyStep Tutorial</p>
+<ul>
+<li><a href="ohm.flip.babystep.about.html">About Flip BabyStep Tutorial</a></li>
+<li><a href="ohm.flip.babystep.0.html">BabyStep 0: Starting Point</a></li>
+<li><a href="ohm.flip.babystep.1.html">BabyStep 1: Binding Flip</a></li>
+<li><a href="ohm.flip.babystep.2.html"><strong>BabyStep 2: Adding the Root Object</strong></a>
+	<ul>
+	<li><a href="ohm.flip.babystep.2.html#making">Making a Flip Class</a></li>
+	<li><a href="ohm.flip.babystep.2.html#adding">Adding Objects to a Flip Class</a></li>
+	</ul>
+</li>
+<li><a href="ohm.flip.babystep.3.html">BabyStep 3: Interacting with the Model</a></li>
+</ul>
+
+<div class="bottomspacer">&nbsp;</div>
+</div>
+
+<div id="content">
+
+<div class="nav" align="right"><a href="ohm.flip.babystep.1.html">previous</a><span>&nbsp;</span><a href="ohm.flip.babystep.3.html">next</a></div>
+
+<h1>BabyStep 2: Adding the Root Object</h1>
+
+<p>This chapter will be our second modification of the code exposed in
+<a href="ohm.flip.babystep.0.html">BabyStep 0: Starting Point</a>
+. Now that a flip document is bound
+to our application, we will now add the root model object to it.</p>
+<h2><a name="making">Making a Flip Class</a></h2>
+<h3><a name="making.modelroot.h">ModelRoot.h</a></h3>
+<p>A flip document has one and one only object which defines the model root.
+The following will describe how to code this object.</p>
+<div class="codeblock">
+<p><strong>Listing</strong>Modifying
+<span class="code">ModelRoot.h</span> 
+</p>
+<table>
+<tr><td><small><pre>/*\\\ INCLUDE FILES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><strong><pre>#include "ohm/flip/RootBase.h"         // 1.</pre></strong></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>class ModelRoot</pre></small></td></tr>
+<tr><td><strong><pre>:  public ohm::flip::RootBase          // 2.</pre></strong></td></tr>
+<tr><td><small><pre>{</pre></small></td></tr>
+<tr><td><small><pre>/*\\\ PUBLIC \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/</pre></small></td></tr>
+<tr><td><small><pre>public:</pre></small></td></tr>
+<tr><td><strong><pre>   static void    declare ();          // 3.</pre></strong></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><strong><pre>                  ModelRoot (ohm::flip::DocumentBase & document);</pre></strong></td></tr>
+<tr><td><small><pre>   virtual        ~ModelRoot ();</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>}; // class ModelRoot</pre></small></td></tr>
+</table>
+</div>
+<ol>
+<li>include the class...
+</li>
+<li>... that will automatically make a flip root object
+</li>
+<li>flip is a declarative framework, flip classes need to be declared before they can be used
+</li>
+</ol>
+<h3><a name="making.modelroot.cpp">ModelRoot.cpp</a></h3>
+<p>Then we are going to change the definition file to reflect the changes we made in the header.</p>
+<div class="codeblock">
+<p><strong>Listing</strong>Modifying
+<span class="code">ModelRoot.cpp</span> 
+</p>
+<table>
+<tr><td><small><pre>/*\\\ INCLUDE FILES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>#include "ModelRoot.h"</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><strong><pre>#include "ohm/flip/ClassDescription.h"</pre></strong></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>/*\\\ PUBLIC \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><strong><pre>void  ModelRoot::declare ()</pre></strong></td></tr>
+<tr><td><strong><pre>{</pre></strong></td></tr>
+<tr><td><strong><pre>   using namespace ohm::flip;</pre></strong></td></tr>
+<tr><td><strong><pre></pre></strong></td></tr>
+<tr><td><strong><pre>   ClassDescManager::use_instance ().declare_basic_types ();            // 1.</pre></strong></td></tr>
+<tr><td><strong><pre></pre></strong></td></tr>
+<tr><td><strong><pre>   ClassDescription &lt;ModelRoot&gt;::use ().set_name ("ModelRoot");         // 2.</pre></strong></td></tr>
+<tr><td><strong><pre>   ClassDescription &lt;ModelRoot&gt;::use ().enable_root ("v1.0");           // 3.</pre></strong></td></tr>
+<tr><td><strong><pre>   ClassDescManager::declare (ClassDescription &lt;ModelRoot&gt;::use ());    // 4.</pre></strong></td></tr>
+<tr><td><strong><pre></pre></strong></td></tr>
+<tr><td><strong><pre>   ClassDescManager::use_instance ().post_check ();                     // 5.</pre></strong></td></tr>
+<tr><td><strong><pre>}</pre></strong></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><strong><pre>ModelRoot::ModelRoot (ohm::flip::DocumentBase & document)</pre></strong></td></tr>
+<tr><td><strong><pre>:  ohm::flip::RootBase (document)</pre></strong></td></tr>
+<tr><td><strong><pre>{</pre></strong></td></tr>
+<tr><td><strong><pre>}</pre></strong></td></tr>
+</table>
+</div>
+<ol>
+<li>before declaring our own classes, we need to make flip declare all its internal
+types such as
+<span class="code">flip::Int64</span> 
+,
+<span class="code">flip::Float64</span> 
+, etc.
+</li>
+<li>set a name for this class
+</li>
+<li>set the current version of the document format
+</li>
+<li>tell the class manager to finally declare the class to flip
+</li>
+<li>after all classes have been declared, let flip make an internal consistency check
+</li>
+</ol>
+<p>Now that a root object has been added to the document, we are going to add some attributes
+to the root object to make it more useful.</p>
+<h2><a name="adding">Adding Objects to a Flip Class</a></h2>
+<h3><a name="adding.modelroot.h">ModelRoot.h</a></h3>
+<div class="codeblock">
+<p><strong>Listing</strong>Modifying
+<span class="code">ModelRoot.h</span> 
+</p>
+<table>
+<tr><td><small><pre>/*\\\ INCLUDE FILES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>#include "ohm/flip/RootBase.h"</pre></small></td></tr>
+<tr><td><strong><pre>#include "ohm/flip/Float64.h"</pre></strong></td></tr>
+<tr><td><strong><pre>#include "ohm/flip/TxSessionGuard.h"</pre></strong></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>class ModelRoot</pre></small></td></tr>
+<tr><td><small><pre>:  public ohm::flip::RootBase</pre></small></td></tr>
+<tr><td><small><pre>{</pre></small></td></tr>
+<tr><td><small><pre>/*\\\ PUBLIC \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/</pre></small></td></tr>
+<tr><td><small><pre>public:</pre></small></td></tr>
+<tr><td><small><pre>   static void    declare ();</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>                  ModelRoot (ohm::flip::DocumentBase & document);</pre></small></td></tr>
+<tr><td><small><pre>   virtual        ~ModelRoot ();</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><strong><pre>   void           set_point (float x, float y);    // 1.</pre></strong></td></tr>
+<tr><td><strong><pre>   bool           point_changed () const;          // 2.</pre></strong></td></tr>
+<tr><td><strong><pre>   float          get_point_x () const;            // 3.</pre></strong></td></tr>
+<tr><td><strong><pre>   float          get_point_y () const;</pre></strong></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>/*\\\ PRIVATE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/</pre></small></td></tr>
+<tr><td><small><pre>private:</pre></small></td></tr>
+<tr><td><strong><pre>   ohm::flip::Float64                              // 4.</pre></strong></td></tr>
+<tr><td><strong><pre>                  _point_x;</pre></strong></td></tr>
+<tr><td><strong><pre>   ohm::flip::Float64</pre></strong></td></tr>
+<tr><td><strong><pre>                  _point_y;</pre></strong></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><strong><pre>   ohm::flip::TxSessionGuard</pre></strong></td></tr>
+<tr><td><strong><pre>                  _tx_session_guard;               // 5.</pre></strong></td></tr>
+<tr><td><small><pre>}; // class ModelRoot</pre></small></td></tr>
+</table>
+</div>
+<ol>
+<li>add a setter for the point. this will make a flip transaction that will change the two members.
+</li>
+<li>this function will be used when observing the document, to know if the members changed
+</li>
+<li>add a getter for the point
+</li>
+<li>the two flip attributes for this class, in a floating point format
+</li>
+<li>a guard for the class that ensures that we are not trying to make two concurrent flip transactions
+and also gives a convenient way to bind with the undo system
+</li>
+</ol>
+<p>flip comes with a bunch of different basic types, namely :</p>
+<ul>
+<li><span class="code">flip::Bool</span> 
+that represents a boolean object
+</li>
+<li><span class="code">flip::Int64</span> 
+that represents an 64 bits integer object
+</li>
+<li><span class="code">flip::Float64</span> 
+that represents an 64 bits floating point object
+</li>
+<li><span class="code">flip::Enum</span> 
+that represents a named
+<span class="code">type</span> 
+</li>
+<li><span class="code">flip::Blob</span> 
+that represents an opaque blob of data
+</li>
+<li><span class="code">flip::Cue</span> 
+that represents a way to signal non persistent data between clients
+</li>
+<li><span class="code">flip::ObjectRef</span> 
+that represents a pointer to another flip object
+</li>
+<li><span class="code">flip::Array</span> 
+that represented an ordered container
+</li>
+<li><span class="code">flip::Collection</span> 
+that represented an unordered container
+</li>
+</ul>
+<h3><a name="adding.modelroot.cpp">ModelRoot.cpp</a></h3>
+<div class="codeblock">
+<p><strong>Listing</strong>Modifying
+<span class="code">ModelRoot.cpp</span> 
+/
+<span class="code">ModelRoot::declare</span> 
+and constructor
+</p>
+<table>
+<tr><td><small><pre>/*\\\ INCLUDE FILES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>#include "ModelRoot.h"</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>#include "ohm/flip/ClassDescription.h"</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>/*\\\ PUBLIC \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>void  ModelRoot::declare ()</pre></small></td></tr>
+<tr><td><small><pre>{</pre></small></td></tr>
+<tr><td><small><pre>   using namespace ohm::flip;</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>   ClassDescManager::use_instance ().declare_basic_types ();</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>   ClassDescription &lt;ModelRoot&gt;::use ().set_name ("ModelRoot");</pre></small></td></tr>
+<tr><td><strong><pre>   ClassDescription &lt;ModelRoot&gt;::use ().push_var_desc (&ModelRoot::_point_x, "_point_x");    // 1.</pre></strong></td></tr>
+<tr><td><strong><pre>   ClassDescription &lt;ModelRoot&gt;::use ().push_var_desc (&ModelRoot::_point_y, "_point_y");</pre></strong></td></tr>
+<tr><td><small><pre>   ClassDescription &lt;ModelRoot&gt;::use ().enable_root ("v1.0");</pre></small></td></tr>
+<tr><td><small><pre>   ClassDescManager::declare (ClassDescription &lt;ModelRoot&gt;::use ());</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>   ClassDescManager::use_instance ().post_check ();</pre></small></td></tr>
+<tr><td><small><pre>}</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>ModelRoot::ModelRoot (ohm::flip::DocumentBase & document)</pre></small></td></tr>
+<tr><td><small><pre>:  flip::RootBase (document)</pre></small></td></tr>
+<tr><td><strong><pre>,  _point_x (document)                                                                       // 2.</pre></strong></td></tr>
+<tr><td><strong><pre>,  _point_y (document)</pre></strong></td></tr>
+<tr><td><strong><pre></pre></strong></td></tr>
+<tr><td><strong><pre>,  _tx_session_guard (document)</pre></strong></td></tr>
+<tr><td><small><pre>{</pre></small></td></tr>
+<tr><td><small><pre>}</pre></small></td></tr>
+</table>
+</div>
+<ol>
+<li>add the two members to our root class
+</li>
+<li>bind everything to the flip document
+</li>
+</ol>
+<div class="codeblock">
+<p><strong>Listing</strong>Modifying
+<span class="code">ModelRoot.cpp</span> 
+/
+<span class="code">ModelRoot::set_point</span> 
+</p>
+<table>
+<tr><td><pre>void  ModelRoot::set_point (float x, float y)</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   _tx_session_guard.prepare_record (use_scribe ());  // 1.</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   if (!_tx_session_guard.start ()) return;           // 2.</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   _point_x = x;                                      // 3.</pre></td></tr>
+<tr><td><pre>   _point_y = y;</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   set_scribe_metadata ("Change Point");              // 4.</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   _tx_session_guard.commit ();                       // 5.</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<ol>
+<li>prepare the undo system
+</li>
+<li>start a flip transaction. if a transaction is always started, abort the operation
+</li>
+<li>set the values
+</li>
+<li>set a name for this transaction for the undo system
+</li>
+<li>commit the transaction
+</li>
+</ol>
+<p><span class="code">point_changed</span> 
+and getters implementation are straight forward and listed below.</p>
+<div class="codeblock">
+<p><strong>Listing</strong>Modifying
+<span class="code">ModelRoot.cpp</span> 
+/
+<span class="code">ModelRoot::point_changed</span> 
+and getters
+</p>
+<table>
+<tr><td><pre>bool  ModelRoot::point_changed () const</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   return _point_x.did_value_change () || _point_y.did_value_change ();</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>float ModelRoot::get_point_x () const</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   return _point_x;</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>float ModelRoot::get_point_y () const</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   return _point_y;</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<p>At this point, we have a fully functionnal model. We can call
+<span class="code">set_point</span> 
+and this will
+actually change the document to reflect the change. Now we need to be able to know and
+display document changes, which is done in the observer, here in the
+<span class="code">BabystepGui</span> 
+class</p>
+
+
+<div class="nav" align="right"><a href="ohm.flip.babystep.1.html">previous</a><span>&nbsp;</span><a href="ohm.flip.babystep.3.html">next</a></div>
+
+<div class="bottomspacer">&nbsp;</div>
+
+</div>
+
+<footer>
+<a href="index.html">Ohm Force Developer Library</a> > <a href="ohm.flip.babystep.about.html">Flip BabyStep Tutorial</a> > <a href="ohm.flip.babystep.2.html">BabyStep 2: Adding the Root Object</a>
+</footer>
+
+
+</body>
+
+</html>

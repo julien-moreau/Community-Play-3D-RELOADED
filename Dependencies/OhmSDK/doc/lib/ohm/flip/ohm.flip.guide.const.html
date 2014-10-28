@@ -1,0 +1,303 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Flip Programming Guide: Managing Pseudo Const Members</title>
+<link rel="stylesheet" href="docpage.css" type="text/css" />
+</head>
+
+<script type="text/javascript">
+function searchfield_focus(obj)
+{
+obj.style.color="#000"
+if (obj.value=="Search Library")
+	{obj.value=""}
+}
+</script>
+
+
+<body>
+
+<div id="header">
+<div style="width: 1006px;">
+<!--<form method="get" class="search" style="padding-top: 5px;"  action="http://www.google.com/search">
+<input onfocus="searchfield_focus(this)" type="search" class="search" name="q" value="Search Library">
+<input type="hidden" name="sitesearch" value="">
+</form>-->
+</div>
+<p><a href="index.html">Ohm Force Developer Library</a><a href="ohm.flip.guide.about.html">Flip Programming Guide</a></p>
+</div>
+
+<div id="toc">
+<p>Flip Programming Guide</p>
+<ul>
+<li><a href="ohm.flip.guide.about.html">About Flip Programming Guide</a></li>
+<li><a href="ohm.flip.guide.design.html">Designing your Flip Application</a></li>
+<li><a href="ohm.flip.guide.class.html">Writing a Flip Class Part 1</a></li>
+<li><a href="ohm.flip.guide.class2.html">Writing a Flip Class Part 2</a></li>
+<li><a href="ohm.flip.guide.containers.html">Using Containers</a></li>
+<li><a href="ohm.flip.guide.enums.html">Using Enums</a></li>
+<li><a href="ohm.flip.guide.blob.html">Using Blobs</a></li>
+<li><a href="ohm.flip.guide.objectref.html">Using ObjectRefs</a></li>
+<li><a href="ohm.flip.guide.cue.html">Using Cues</a></li>
+<li><a href="ohm.flip.guide.navigation.html">Navigating the Model</a></li>
+<li><a href="ohm.flip.guide.observer.html">Writing a DocumentObserver</a></li>
+<li><a href="ohm.flip.guide.validator.html">Writing a DocumentValidator</a></li>
+<li><a href="ohm.flip.guide.undo.html">Using the Undo/Redo system</a></li>
+<li><a href="ohm.flip.guide.const.html"><strong>Managing Pseudo Const Members</strong></a>
+	<ul>
+	<li><a href="ohm.flip.guide.const.html#concepts">Concepts</a></li>
+	<li><a href="ohm.flip.guide.const.html#transforming">Transforming the Code</a></li>
+	</ul>
+</li>
+<li><a href="ohm.flip.guide.mold.html">Using an ObjectMold</a></li>
+<li><a href="ohm.flip.guide.conversion.html">Writing a Converter</a></li>
+<li><a href="ohm.flip.guide.tweaker.html">Writing a DocumentTweaker</a></li>
+</ul>
+
+<div class="bottomspacer">&nbsp;</div>
+</div>
+
+<div id="content">
+
+<div class="nav" align="right"><a href="ohm.flip.guide.undo.html">previous</a><span>&nbsp;</span><a href="ohm.flip.guide.mold.html">next</a></div>
+
+<h1>Managing Pseudo Const Members</h1>
+
+<p>This chapter will describe how to make a member (pseudo)
+<span class="code">const</span> 
+.</p>
+<p>In the following, we will show the step by step construction of an hypothetic
+<span class="code">MyClass</span> 
+class.</p>
+<h2><a name="concepts">Concepts</a></h2>
+<p>The Flip framework does not support
+<span class="code">const</span> 
+members inherently, that is
+declaring, for example, a
+<span class="code">ohm::flip::Int64</span> 
+member as
+<span class="code">const</span> 
+won’t let you chance to assign a value. The member would always be
+<span class="code">0</span> 
+.</p>
+<p>To circumvant this limitation, it was introduced the concept of
+<strong>post
+contruction stage</strong> . The post construction stage is called just after a Flip
+object is created, and before the object can be manipulated by the client.
+This stage allows to manage pseudo const members in Flip.</p>
+<p>Typically pseudo const members have the same access API as normal members,
+except that they have no setter. To set the actual value of the member,
+the post construction stage is used, and will be called once by Flip when
+the object is created.</p>
+<div class="warning"><p><strong>WARNING:</strong>The following technics should
+<strong>only</strong> be used for pseudo const
+members as the use of
+<span class="code">flip::Args</span> 
+is a common source of bugs, in
+particular when refactoring code, as no static syntaxic check can be
+done on the type and number of parameters at compilation time.</p></div>
+<h2><a name="transforming">Transforming the Code</a></h2>
+<p>This section will show how to transform the code for a regular member
+with its setter/getter/changed members to a pseudo const member.</p>
+<h3><a name="transforming.declaration">Declarative Code</a></h3>
+<p>The following listing shows the original declarative code, before it is modified
+to make the member
+<span class="code">_my_float</span> 
+a pseudo const member.</p>
+<div class="codeblock">
+<p><strong>Listing</strong>Original declarative source code showing a normal member
+</p>
+<table>
+<tr><td><small><pre>#include "ohm/flip/Object.h"</pre></small></td></tr>
+<tr><td><small><pre>#include "ohm/flip/Float64.h"</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>class MyClass</pre></small></td></tr>
+<tr><td><small><pre>:  public ohm::flip::Object</pre></small></td></tr>
+<tr><td><small><pre>{</pre></small></td></tr>
+<tr><td><small><pre>public:</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>   static void          declare ();</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>                        MyClass (ohm::flip::DocumentBase & document);</pre></small></td></tr>
+<tr><td><small><pre>   virtual              ~MyClass () {}</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><strong><pre>   void                 ext_set_my_float (float val);</pre></strong></td></tr>
+<tr><td><strong><pre>   float                get_my_float () const;</pre></strong></td></tr>
+<tr><td><strong><pre>   bool                 my_float_changed () const;</pre></strong></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><small><pre>private:</pre></small></td></tr>
+<tr><td><small><pre>   ohm::flip::Float64   _my_float;</pre></small></td></tr>
+<tr><td><small><pre>};</pre></small></td></tr>
+</table>
+</div>
+<p>The following listing shows the modified declarative code, after it is modified
+to make the member
+<span class="code">_my_float</span> 
+a pseudo const member :
+<span class="code">ext_set_my_float</span> 
+was replaced by the
+<span class="code">virtual</span> 
+method
+<span class="code">ctor</span> 
+.</p>
+<div class="codeblock">
+<p><strong>Listing</strong>Modified declarative source code showing a pseudo const member
+</p>
+<table>
+<tr><td><small><pre>#include "ohm/flip/Object.h"</pre></small></td></tr>
+<tr><td><small><pre>#include "ohm/flip/Float64.h"</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>class MyClass</pre></small></td></tr>
+<tr><td><small><pre>:  public ohm::flip::Object</pre></small></td></tr>
+<tr><td><small><pre>{</pre></small></td></tr>
+<tr><td><small><pre>public:</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>   static void          declare ();</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>                        MyClass (ohm::flip::DocumentBase & document);</pre></small></td></tr>
+<tr><td><small><pre>   virtual              ~MyClass () {}</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><strong><pre>   virtual void         ctor (flip::Args & args);</pre></strong></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><strong><pre>   float                get_my_float () const;</pre></strong></td></tr>
+<tr><td><strong><pre>   bool                 my_float_changed () const;</pre></strong></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><small><pre>private:</pre></small></td></tr>
+<tr><td><small><pre>   ohm::flip::Float64   _my_float;</pre></small></td></tr>
+<tr><td><small><pre>};</pre></small></td></tr>
+</table>
+</div>
+<h3><a name="transforming.implementation">Implementation Code</a></h3>
+<p>The following listing shows the original implementation code, before it is modified
+to make the member
+<span class="code">_my_float</span> 
+a pseudo const member.</p>
+<div class="codeblock">
+<p><strong>Listing</strong>Original implementation source code showing a normal member
+</p>
+<table>
+<tr><td><strong><pre>void  MyClass::ext_set_my_float (float val)</pre></strong></td></tr>
+<tr><td><strong><pre>{</pre></strong></td></tr>
+<tr><td><strong><pre>   _my_float = val;</pre></strong></td></tr>
+<tr><td><strong><pre>}</pre></strong></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><small><pre>float MyClass::get_my_float () const</pre></small></td></tr>
+<tr><td><small><pre>{</pre></small></td></tr>
+<tr><td><small><pre>   return _my_float;</pre></small></td></tr>
+<tr><td><small><pre>}</pre></small></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><small><pre>bool  MyClass::my_float_changed () const</pre></small></td></tr>
+<tr><td><small><pre>{</pre></small></td></tr>
+<tr><td><small><pre>   return _my_float.did_value_change ();</pre></small></td></tr>
+<tr><td><small><pre>}</pre></small></td></tr>
+</table>
+</div>
+<p>The following listing shows the modified implementation code, after it is modified
+to make the member
+<span class="code">_my_float</span> 
+a pseudo const member :
+<span class="code">ext_set_my_float</span> 
+was replaced by the
+<span class="code">virtual</span> 
+method
+<span class="code">ctor</span> 
+.</p>
+<div class="codeblock">
+<p><strong>Listing</strong>Modified implementation source code showing a pseudo const member
+</p>
+<table>
+<tr><td><strong><pre>void  MyClass::ctor (flip::Args & args)</pre></strong></td></tr>
+<tr><td><strong><pre>{</pre></strong></td></tr>
+<tr><td><strong><pre>   _my_float.ctor (args);</pre></strong></td></tr>
+<tr><td><strong><pre>}</pre></strong></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><small><pre>float MyClass::get_my_float () const</pre></small></td></tr>
+<tr><td><small><pre>{</pre></small></td></tr>
+<tr><td><small><pre>   return _my_float;</pre></small></td></tr>
+<tr><td><small><pre>}</pre></small></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><small><pre>bool  MyClass::my_float_changed () const</pre></small></td></tr>
+<tr><td><small><pre>{</pre></small></td></tr>
+<tr><td><small><pre>   return _my_float.did_value_change ();</pre></small></td></tr>
+<tr><td><small><pre>}</pre></small></td></tr>
+</table>
+</div>
+<h3><a name="transforming.calling">Calling Code</a></h3>
+<p>The following listing shows the original calling code, before it is modified
+to make the member
+<span class="code">_my_float</span> 
+a pseudo const member. The class is
+always created by the mean of
+<span class="code">insert</span> 
+into a container.</p>
+<div class="codeblock">
+<p><strong>Listing</strong>Original calling source code
+</p>
+<table>
+<tr><td><pre>MyClassColl::iterator   MySuperClass::ext_add_element (float val)</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   MyClassColl::iterator it = _class_coll.insert ();</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   MyClassColl & my_class = *it;</pre></td></tr>
+<tr><td><pre>   my_class.ext_set_my_float (val);</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   return it;</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<p>The following listing shows the modified calling code, after it is modified
+to make the member
+<span class="code">_my_float</span> 
+a pseudo const member :
+<span class="code">ext_set_my_float</span> 
+was replaced by the use of a
+<span class="code">flip::Args</span> 
+object.</p>
+<div class="codeblock">
+<p><strong>Listing</strong>Modified calling source code
+</p>
+<table>
+<tr><td><pre>MyClassColl::iterator   MySuperClass::ext_add_element (float val)</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   MyClassColl::iterator it = _class_coll.insert (</pre></td></tr>
+<tr><td><pre>      flip::Args ().push (val)</pre></td></tr>
+<tr><td><pre>   );</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   return it;</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<p>The class
+<span class="code">flip::Args</span> 
+will behave like a parameter list holder, and acts
+like a FIFO queue. The exact same number of pushed values must be popped.</p>
+<div class="note"><p><strong>Note:</strong><span class="code">flip::Args</span> 
+will
+<span class="code">assert</span> 
+if the number of popped values from
+<span class="code">ctor</span> 
+does not exactly match the number and type of the original pushed values.</p></div>
+<p>If the Flip class has one or more base class, the Flip framework code will automatically
+call the base classes with the same rule as for the constructor of C++ classes.</p>
+<div class="warning"><p><strong>WARNING:</strong>You cannot modify a container in a
+<span class="code">ctor</span> 
+call.</p></div>
+
+
+<div class="nav" align="right"><a href="ohm.flip.guide.undo.html">previous</a><span>&nbsp;</span><a href="ohm.flip.guide.mold.html">next</a></div>
+
+<div class="bottomspacer">&nbsp;</div>
+
+</div>
+
+<footer>
+<a href="index.html">Ohm Force Developer Library</a> > <a href="ohm.flip.guide.about.html">Flip Programming Guide</a> > <a href="ohm.flip.guide.const.html">Managing Pseudo Const Members</a>
+</footer>
+
+
+</body>
+
+</html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Flip Programming Guide: Using Containers</title>
+<link rel="stylesheet" href="docpage.css" type="text/css" />
+</head>
+
+<script type="text/javascript">
+function searchfield_focus(obj)
+{
+obj.style.color="#000"
+if (obj.value=="Search Library")
+	{obj.value=""}
+}
+</script>
+
+
+<body>
+
+<div id="header">
+<div style="width: 1006px;">
+<!--<form method="get" class="search" style="padding-top: 5px;"  action="http://www.google.com/search">
+<input onfocus="searchfield_focus(this)" type="search" class="search" name="q" value="Search Library">
+<input type="hidden" name="sitesearch" value="">
+</form>-->
+</div>
+<p><a href="index.html">Ohm Force Developer Library</a><a href="ohm.flip.guide.about.html">Flip Programming Guide</a></p>
+</div>
+
+<div id="toc">
+<p>Flip Programming Guide</p>
+<ul>
+<li><a href="ohm.flip.guide.about.html">About Flip Programming Guide</a></li>
+<li><a href="ohm.flip.guide.design.html">Designing your Flip Application</a></li>
+<li><a href="ohm.flip.guide.class.html">Writing a Flip Class Part 1</a></li>
+<li><a href="ohm.flip.guide.class2.html">Writing a Flip Class Part 2</a></li>
+<li><a href="ohm.flip.guide.containers.html"><strong>Using Containers</strong></a>
+	<ul>
+	<li><a href="ohm.flip.guide.containers.html#which">Which Container to Use ?</a></li>
+	<li><a href="ohm.flip.guide.containers.html#arrays">Using Arrays</a></li>
+	<li><a href="ohm.flip.guide.containers.html#collections">Using Collections</a></li>
+	<li><a href="ohm.flip.guide.containers.html#operatorless">Writing Collection Element Comparison Operator</a></li>
+	<li><a href="ohm.flip.guide.containers.html#inheritance">Inheritance</a></li>
+	</ul>
+</li>
+<li><a href="ohm.flip.guide.enums.html">Using Enums</a></li>
+<li><a href="ohm.flip.guide.blob.html">Using Blobs</a></li>
+<li><a href="ohm.flip.guide.objectref.html">Using ObjectRefs</a></li>
+<li><a href="ohm.flip.guide.cue.html">Using Cues</a></li>
+<li><a href="ohm.flip.guide.navigation.html">Navigating the Model</a></li>
+<li><a href="ohm.flip.guide.observer.html">Writing a DocumentObserver</a></li>
+<li><a href="ohm.flip.guide.validator.html">Writing a DocumentValidator</a></li>
+<li><a href="ohm.flip.guide.undo.html">Using the Undo/Redo system</a></li>
+<li><a href="ohm.flip.guide.const.html">Managing Pseudo Const Members</a></li>
+<li><a href="ohm.flip.guide.mold.html">Using an ObjectMold</a></li>
+<li><a href="ohm.flip.guide.conversion.html">Writing a Converter</a></li>
+<li><a href="ohm.flip.guide.tweaker.html">Writing a DocumentTweaker</a></li>
+</ul>
+
+<div class="bottomspacer">&nbsp;</div>
+</div>
+
+<div id="content">
+
+<div class="nav" align="right"><a href="ohm.flip.guide.class2.html">previous</a><span>&nbsp;</span><a href="ohm.flip.guide.enums.html">next</a></div>
+
+<h1>Using Containers</h1>
+
+<p>This chapter will describe the use of containers with the Flip framework.</p>
+<p>In the following, we will show the step by step construction of an hypothetic
+<span class="code">MyClass</span> 
+class.</p>
+<p>This chapter will assume that your company is called ACME making the application “Product”.</p>
+<h2><a name="which">Which Container to Use ?</a></h2>
+<p>The Flip framework offers two type of container. The first one,
+<span class="code">ohm::flip::Array</span> 
+is an explicitely ordered container. The second one,
+<span class="code">ohm::flip::Collection</span> 
+is
+either an implicitely ordered container or an unordered container.</p>
+<p>The containers themselves can hold any flip classes, except basic classes offered by Flip.
+They support inheritance, so that if
+<span class="code">MySubClass1</span> 
+and
+<span class="code">MySubClass2</span> 
+inherit
+from
+<span class="code">MyClass</span> 
+a container of
+<span class="code">MyClass</span> 
+will support indifferently
+<span class="code">MySubClass1</span> 
+or
+<span class="code">MySubClass2</span> 
+.</p>
+<p>An explicitely ordered container is defined as an ordered container in which the client
+of the container decides of the order of the elements in the container. Typically, this
+is similar to the
+<span class="code">std::list</span> 
+or
+<span class="code">std::vector</span> 
+template classes, in which
+the client has full control over the order of the elements in the container.</p>
+<p>An implicitely ordered container is defined as an ordered container in which the order
+of elements is implicitely defined by the elements themselves, that is there exists
+a
+<strong>total</strong> order (as opposed to
+<strong>partial</strong> order) for the elements. Typically,
+this is similar to the
+<span class="code">std::set</span> 
+template class for which the compound element
+must support
+<span class="code">operator &lt;</span> 
+. Flip classes in the implicitely ordered container must
+support the
+<span class="code">operator &lt;</span> 
+as well. Total order condition can always be met, and this
+will be exposed in the code below.</p>
+<p>Container choice algorithm is summarized in the diagram below :</p>
+<center><img src="ohm.flip.guide.containers.choice.png" /></center>
+<p>Containers actually owns their elements. In particular, if a container is
+destroyed, its elements will be automatically destroyed.</p>
+<p>The following code with only show the
+<span class="code">ext_</span> 
+prefixed version of the
+functions as this is the only one that will directly manipulate the containers.
+The other functions are anyway exactly the same since they never directly
+manipulate the model itself, but only manages transaction life cycles.</p>
+<h2><a name="arrays">Using Arrays</a></h2>
+<p>The following listing shows a
+<span class="code">MyClass</span> 
+class containing elements of the
+<span class="code">MyElementClass</span> 
+class. The code was trimmed down to show only the
+interesting parts.</p>
+<p>As a convention, all arrays of a particular class are turned into a
+<span class="code">typedef</span> 
+to clean up the code. As you will make massive use of iterators, this keeps the
+code a lot more easier to read.</p>
+<div class="codeblock">
+<p><strong>Listing</strong><span class="code">MyElementClassArr.h</span> 
+</p>
+<table>
+<tr><td><pre>typedef ohm::flip::Array &lt;MyElementClass&gt; MyElementClassArr;</pre></td></tr>
+</table>
+</div>
+<div class="codeblock">
+<p><strong>Listing</strong><span class="code">MyClass.h</span> 
+</p>
+<table>
+<tr><td><small><pre>#include "ohm/flip/Object.h"</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>class MyClass</pre></small></td></tr>
+<tr><td><small><pre>:  public ohm::flip::Object</pre></small></td></tr>
+<tr><td><small><pre>{</pre></small></td></tr>
+<tr><td><small><pre>public:</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>   static void          declare ();</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>                        MyClass (ohm::flip::DocumentBase & document);</pre></small></td></tr>
+<tr><td><small><pre>   virtual              ~MyClass () {}</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><strong><pre>   MyElementClassArr::iterator</pre></strong></td></tr>
+<tr><td><strong><pre>                        ext_push_back_element ();</pre></strong></td></tr>
+<tr><td><strong><pre>   void                 ext_erase (MyElementClassArr::iterator it)</pre></strong></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><small><pre>private:</pre></small></td></tr>
+<tr><td><strong><pre>   MyElementClassArr    _my_element_class_arr;</pre></strong></td></tr>
+<tr><td><small><pre>};</pre></small></td></tr>
+</table>
+</div>
+<div class="codeblock">
+<p><strong>Listing</strong><span class="code">MyClass::ext_push_back_element</span> 
+</p>
+<table>
+<tr><td><pre>MyElementClassArr::iterator   MyClass::ext_push_back_element ()</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   return _my_element_class_arr.insert (_my_element_class_arr.end ());</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<p>The code above will add an element of class
+<span class="code">MyElementClass</span> 
+to the
+array
+<span class="code">_my_element_class_arr</span> 
+.</p>
+<p>Similarly, you may erase an element with the following code</p>
+<div class="codeblock">
+<p><strong>Listing</strong><span class="code">MyClass::ext_erase</span> 
+</p>
+<table>
+<tr><td><pre>void  MyClass::ext_erase (MyElementClassArr::iterator it)</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   _my_element_class_arr.erase (it);</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<h2><a name="collections">Using Collections</a></h2>
+<p>The following listing shows a
+<span class="code">MyClass</span> 
+class containing elements of the
+<span class="code">MyElementClass</span> 
+class. The code was trimmed down to show only the
+interesting parts.</p>
+<p>As a convention, all collections of a particular class are turned into a
+<span class="code">typedef</span> 
+to clean up the code. As you will make massive use of iterators, this keeps the
+code a lot more easier to read.</p>
+<div class="codeblock">
+<p><strong>Listing</strong><span class="code">MyElementClassColl.h</span> 
+</p>
+<table>
+<tr><td><pre>typedef ohm::flip::Collection &lt;MyElementClass&gt; MyElementClassColl;</pre></td></tr>
+</table>
+</div>
+<div class="codeblock">
+<p><strong>Listing</strong><span class="code">MyClass.h</span> 
+</p>
+<table>
+<tr><td><small><pre>#include "ohm/flip/Object.h"</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>class MyClass</pre></small></td></tr>
+<tr><td><small><pre>:  public ohm::flip::Object</pre></small></td></tr>
+<tr><td><small><pre>{</pre></small></td></tr>
+<tr><td><small><pre>public:</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>   static void          declare ();</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>                        MyClass (ohm::flip::DocumentBase & document);</pre></small></td></tr>
+<tr><td><small><pre>   virtual              ~MyClass () {}</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><strong><pre>   MyElementClassColl::iterator</pre></strong></td></tr>
+<tr><td><strong><pre>                        ext_insert_element ();</pre></strong></td></tr>
+<tr><td><strong><pre>   void                 ext_erase (MyElementClassColl::iterator it)</pre></strong></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><small><pre>private:</pre></small></td></tr>
+<tr><td><strong><pre>   MyElementClassColl   _my_element_class_coll;</pre></strong></td></tr>
+<tr><td><small><pre>};</pre></small></td></tr>
+</table>
+</div>
+<div class="codeblock">
+<p><strong>Listing</strong><span class="code">MyClass::ext_insert_element</span> 
+</p>
+<table>
+<tr><td><pre>MyElementClassColl::iterator  MyClass::ext_insert_element ()</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   return _my_element_class_coll.insert ();</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<p>The code above will add an element of class
+<span class="code">MyElementClass</span> 
+to the
+collection
+<span class="code">_my_element_class_coll</span> 
+.</p>
+<p>Similarly, you may erase an element with the following code</p>
+<div class="codeblock">
+<p><strong>Listing</strong><span class="code">MyClass::ext_erase</span> 
+</p>
+<table>
+<tr><td><pre>void  MyClass::ext_erase (MyElementClassColl::iterator it)</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   _my_element_class_coll.erase (it);</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<p>The code above wouldn’t work if
+<span class="code">MyElementClass</span> 
+does not support
+<span class="code">operator &lt;</span> 
+. The next section will show how to write this operator,
+and in particular to provide a total order operator.</p>
+<h2><a name="operatorless">Writing Collection Element Comparison Operator</a></h2>
+<p>Whenever a collection is used as an unordered container or an implicitely
+ordered container, the collection element needs to support
+<span class="code">operator &lt;</span> 
+which needs to provide a total order, that is if
+<span class="code">a &lt; b</span> 
+is a false
+assertion and
+<span class="code">b &lt; a</span> 
+is a false assertion, then
+<span class="code">a == b</span> 
+.</p>
+<p>We are going to see here how to write those comparators in the two cases.</p>
+<h3><a name="operatorless.unordered">Unordered Container</a></h3>
+<p>The total order condition requires that we are able to make a distinction
+between two different objects. This can be easily achieved using the
+objet reference number, which is guaranteed to be unique.</p>
+<p>Therefore, such a comparison operator would be written like this :</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>bool MyElementClass::operator &lt; (const MyElementClass & other)</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   return get_ref () &lt; other.get_ref ();</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<h3><a name="operatorless.ordered">Implicitely Ordered Container</a></h3>
+<p>The total order condition requires that we are able to make a distinction
+between two different objects.</p>
+<p>For the example, we suppose that the
+<span class="code">MyElementClass</span> 
+class has
+a
+<span class="code">ohm::flip::Float64 _position</span> 
+class member, and that we want
+the collection to be ordered by position.</p>
+<p>Such a comparison operator would be written like this :</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>#include "ohm/lang/fnc.h"</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>bool MyElementClass::operator &lt; (const MyElementClass & other)</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   int c = lang::cmp (get_position (), other.get_position ());</pre></td></tr>
+<tr><td><pre>   if (c != 0) return c &lt; 0;</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   c = lang::cmp (get_ref (), other.other.get_ref ());</pre></td></tr>
+<tr><td><pre>   return c &lt; 0;</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<p>Note that total order is achieved by using the
+objet reference number, which is guaranteed to be unique.</p>
+<h2><a name="inheritance">Inheritance</a></h2>
+<p>The containers support inheritance, so that if
+<span class="code">MySubElementClass1</span> 
+and
+<span class="code">MySubElementClass2</span> 
+inherit from
+<span class="code">MyElementClass</span> 
+a container of
+<span class="code">MyElementClass</span> 
+will support indifferently
+<span class="code">MySubElementClass1</span> 
+or
+<span class="code">MySubElementClass2</span> 
+.</p>
+<p>To
+<span class="code">insert</span> 
+a
+<span class="code">MySubElementClass1</span> 
+into a
+<span class="code">MyElementClass</span> 
+container, the code would be written like this for an array :</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>_my_element_class_arr.insert &lt;MySubElementClass1&gt; (it);</pre></td></tr>
+</table>
+</div>
+<p>And the code would be writtent like this for a collection :</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>_my_element_class_coll.insert &lt;MySubElementClass1&gt; ();</pre></td></tr>
+</table>
+</div>
+
+
+<div class="nav" align="right"><a href="ohm.flip.guide.class2.html">previous</a><span>&nbsp;</span><a href="ohm.flip.guide.enums.html">next</a></div>
+
+<div class="bottomspacer">&nbsp;</div>
+
+</div>
+
+<footer>
+<a href="index.html">Ohm Force Developer Library</a> > <a href="ohm.flip.guide.about.html">Flip Programming Guide</a> > <a href="ohm.flip.guide.containers.html">Using Containers</a>
+</footer>
+
+
+</body>
+
+</html>

@@ -1,0 +1,4268 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="lib">
+      <UniqueIdentifier>{d44fb7c1-7414-49dc-b6d7-0c91a19d8255}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm">
+      <UniqueIdentifier>{2d4a24bd-20c2-4eeb-aaad-8cf1c7d4b08e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\archi">
+      <UniqueIdentifier>{7efd7853-f6fa-4942-9b88-8b7d11e0a6f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\archi\win32">
+      <UniqueIdentifier>{8798461a-9b84-4279-a2eb-482ba84bab1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\archi\x86">
+      <UniqueIdentifier>{982204a0-0a3f-48af-8052-1aa061984f86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\conc">
+      <UniqueIdentifier>{505043fa-79bd-458a-a41a-9a05ce64479c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\flip">
+      <UniqueIdentifier>{2815c0cc-7d1e-420e-b0c1-3342047a6585}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\flip\conv">
+      <UniqueIdentifier>{1107e48f-bdb6-45c9-91ee-b9830381c09c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\flip\local">
+      <UniqueIdentifier>{36618292-74c5-4164-ae38-441023b1a9ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\flip\private">
+      <UniqueIdentifier>{2f34b346-7070-4e7e-b545-3394d3a6a818}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\lang">
+      <UniqueIdentifier>{57a1e314-248b-4b0e-99ba-084fdb67f52b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\math">
+      <UniqueIdentifier>{8a759189-a53a-48ef-aefe-875e8992a987}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\mem">
+      <UniqueIdentifier>{64d9272b-a144-44a2-83fb-168c257b5f8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\mem\mmgr">
+      <UniqueIdentifier>{751c4961-390f-496e-aa71-20f8b102b95d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\mon">
+      <UniqueIdentifier>{adbae1a6-2923-488b-9d1a-da412189b1d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\odbg">
+      <UniqueIdentifier>{b98d183a-71e4-4ccc-8e16-862e02f8759e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\opa">
+      <UniqueIdentifier>{f2e5f127-a7ff-4b54-9e58-b6661407d622}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\opa\base">
+      <UniqueIdentifier>{cd15344f-8ff6-4396-aec8-c0557a40d6a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\opa\frame">
+      <UniqueIdentifier>{49bd0d0a-b219-4ddc-a4f8-742058b5a238}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\opa\prim">
+      <UniqueIdentifier>{d78b2165-60b7-40e5-b8fb-c7e0ac037c4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\opa\private">
+      <UniqueIdentifier>{af0aef98-cdfc-4055-a586-489ad37f86c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\opak">
+      <UniqueIdentifier>{e921e72a-295c-49d3-a491-4c0c54d2a8b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\opak\base">
+      <UniqueIdentifier>{7cf0121b-ce15-466f-be7b-3bdfb8f96d67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\opak\private">
+      <UniqueIdentifier>{85a6b172-9080-46ab-b95e-115fa4ec2c25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\opal">
+      <UniqueIdentifier>{2d54addc-2a2c-41fb-b3c8-31f70c0e083a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\opal\base">
+      <UniqueIdentifier>{6ac7ee1f-b30b-4675-97d2-bf2185467a1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\opal\dsp">
+      <UniqueIdentifier>{d8d8c510-ea88-460d-886a-7e1f9ca1c534}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\opal\freetype">
+      <UniqueIdentifier>{6a513745-f805-404a-a719-1a30ccd6c1a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\opal\private">
+      <UniqueIdentifier>{2d2f7fb6-e852-474f-9af4-4343531a5a3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\opal\directx">
+      <UniqueIdentifier>{f03d4f21-5d1c-4193-8dd5-050bc127405f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\opal\win32">
+      <UniqueIdentifier>{2554cd2a-f508-4c3d-95b5-94a1316ac9ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\opal\shader">
+      <UniqueIdentifier>{cb1d9d07-c31d-4a33-8796-5a58e4c1b91d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\pibase">
+      <UniqueIdentifier>{eebef1bc-9ba1-46cc-8994-b2d36e1669e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\sys">
+      <UniqueIdentifier>{1b8c3ba8-5150-48d3-b2bd-de9db3aa8340}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\sys\win32">
+      <UniqueIdentifier>{c6343aa7-dbd2-45a0-a946-da3f2b2c8f19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\task">
+      <UniqueIdentifier>{961da8c4-db10-478e-b972-d99d0049de79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\task\private">
+      <UniqueIdentifier>{ec8b9737-2c7b-4803-8ee5-ba520aa0e37f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\task\win32">
+      <UniqueIdentifier>{df72c434-d0fb-4958-b98a-f2c437476347}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\txt">
+      <UniqueIdentifier>{2621dc33-9a24-43ae-be8a-e9a3a1ef619d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\txt\ascii">
+      <UniqueIdentifier>{caafe5f3-66fc-405b-a42f-efdfdd0cc61f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\txt\out">
+      <UniqueIdentifier>{269ed79d-b8ec-465f-b22b-91e2bdf2f47e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\txt\unicode">
+      <UniqueIdentifier>{5ae98512-ef9f-4d7c-b5a6-10a801d239e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\txt\utf16">
+      <UniqueIdentifier>{8803df1d-34ce-4591-a8d7-1feed98ae007}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\txt\utf8">
+      <UniqueIdentifier>{c5a05610-6125-4586-b202-a1104e4ad905}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\ohm\util">
+      <UniqueIdentifier>{43017b2c-f504-4af4-9139-f4a38a08be7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\freetype">
+      <UniqueIdentifier>{8f362a06-3aca-4670-91d7-e437279479b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\freetype\src">
+      <UniqueIdentifier>{c7f43cbc-06d5-484d-93ad-a6b7412aaf5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\freetype\src\base">
+      <UniqueIdentifier>{6dd4d37d-6d6a-4ed4-b6dc-61277578f523}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\libpng">
+      <UniqueIdentifier>{b7c3b1e5-9556-433c-b064-1017ea9bd015}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\zlib">
+      <UniqueIdentifier>{eb297a4a-0514-495f-b6d4-ee3d46d40a1a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\CpuId.h">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\CpuId.hpp">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\def.h">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\endian.h">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\endian.hpp">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\Float32Rev.h">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\Float32Rev.hpp">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\Float64Rev.h">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\Float64Rev.hpp">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\fnc.h">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\fnc.hpp">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\Int16Rev.h">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\Int16Rev.hpp">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\Int32Rev.h">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\Int32Rev.hpp">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\Int64Rev.h">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\Int64Rev.hpp">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\types.h">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\UInt16Rev.h">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\UInt16Rev.hpp">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\UInt32Rev.h">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\UInt32Rev.hpp">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\UInt64Rev.h">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\UInt64Rev.hpp">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\Vect128MemOpAlign.h">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\Vect128MemOpAlign.hpp">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\Vect128MemOpUnalign.h">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\Vect128MemOpUnalign.hpp">
+      <Filter>lib\ohm\archi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\archi\x86\CpuIdx86.h">
+      <Filter>lib\ohm\archi\x86</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AioAdd.h">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AioAdd.hpp">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AioAddMod.h">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AioAddMod.hpp">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AioAnd.h">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AioAnd.hpp">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AioFncBinary.h">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AioFncBinary.hpp">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AioMax.h">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AioMax.hpp">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AioMin.h">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AioMin.hpp">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AioOr.h">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AioOr.hpp">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AioSetBits.h">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AioSetBits.hpp">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AioXor.h">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AioXor.hpp">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AtomicInt.h">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AtomicInt.hpp">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AtomicIntOp.h">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AtomicIntOp.hpp">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AtomicMem.h">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AtomicMem.hpp">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AtomicPtr.h">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AtomicPtr.hpp">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AtomicPtrIntPair.h">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\AtomicPtrIntPair.hpp">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\BufferizedObj.h">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\BufferizedObj.hpp">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\CellPool.h">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\CellPool.hpp">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\Err.h">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\LockFreeBuffer.h">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\LockFreeBuffer.hpp">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\LockFreeCell.h">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\LockFreeQueue.h">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\LockFreeQueue.hpp">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\LockFreeStack.h">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\conc\LockFreeStack.hpp">
+      <Filter>lib\ohm\conc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\Annotation.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\Args.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\Array.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\Array.hpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\Blob.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\Bool.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\ClassDescManager.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\ClassDescription.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\ClassDescription.hpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\Collection.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\Collection.hpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\ComLayerClient.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\ComLayerClientBase.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\ComLayerMsgType.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\ComLayerServer.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\ComLayerServerBase.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\Constants.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\Cue.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\Data.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\DataMaster.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\DocumentClient.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\DocumentClientMaster.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\DocumentLocal.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\DocumentLocal.hpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\DocumentObserver.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\DocumentObserver.hpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\DocumentServer.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\DocumentSignal.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\DocumentTweaker.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\DocumentTweaker.hpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\DocumentValidator.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\DocumentValidator.hpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\DynamicCast.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\DynamicCast.hpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\Enum.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\Enum.hpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\EnumDescManager.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\EnumDescription.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\EnumDescription.hpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\Err.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\FindMask.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\Float64.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\Int64.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\ItemizerCdm.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\ItemizerCdm.hpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\ItemizerDyn.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\ItemizerDyn.hpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\Object.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\Object.hpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\ObjectMold.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\ObjectMold.hpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\ObjectMoldData.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\ObjectMoldData.hpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\ObjectRef.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\ObjectRef.hpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\PasteBoard.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\Ref.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\RootBase.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\Scribable.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\Scribe.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\SessionManager.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\SessionManagerInterface.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\SessionManagerMemory.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\TxSessionGuard.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\ValidationReportReader.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\ValidationReportWriter.h">
+      <Filter>lib\ohm\flip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\conv\ConvArray.h">
+      <Filter>lib\ohm\flip\conv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\conv\ConvBlob.h">
+      <Filter>lib\ohm\flip\conv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\conv\ConvBool.h">
+      <Filter>lib\ohm\flip\conv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\conv\ConvCollection.h">
+      <Filter>lib\ohm\flip\conv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\conv\ConvCue.h">
+      <Filter>lib\ohm\flip\conv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\conv\ConvDocument.h">
+      <Filter>lib\ohm\flip\conv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\conv\ConvEnum.h">
+      <Filter>lib\ohm\flip\conv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\conv\ConvFloat64.h">
+      <Filter>lib\ohm\flip\conv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\conv\ConvInt64.h">
+      <Filter>lib\ohm\flip\conv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\conv\ConvObject.h">
+      <Filter>lib\ohm\flip\conv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\conv\ConvObjectRef.h">
+      <Filter>lib\ohm\flip\conv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\conv\ConvSharedPtr.h">
+      <Filter>lib\ohm\flip\conv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\conv\ConvSharedPtr.hpp">
+      <Filter>lib\ohm\flip\conv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\local\ClientLocal.h">
+      <Filter>lib\ohm\flip\local</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\local\ComLayerClientLocal.h">
+      <Filter>lib\ohm\flip\local</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\local\ComLayerServerLocal.h">
+      <Filter>lib\ohm\flip\local</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\local\ServerLocal.h">
+      <Filter>lib\ohm\flip\local</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\ArrayIteratorBase.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\ArrayIteratorBase.hpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\ArrayMaster.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\BasicType.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\BasicTypesName.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\BinaryKey.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\ClassDescriptionMaster.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\Codec.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\CollectionIteratorBase.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\CollectionIteratorBase.hpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\CollectionMaster.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\DataStreamInput.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\DataStreamOutput.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\DocumentBase.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\DocumentBase.hpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\DocumentClientMasterSlot.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\DocumentDifferentiator.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\DocumentDifferentiator.hpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\DocumentFormatter.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\DocumentKeywords.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\DocumentParser.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\DocumentReader.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\DocumentWriter.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\EnumDescriptionMaster.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\EnumMaster.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\IdPtrMapSmall.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\IdPtrMapSmall.hpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\MachineCode.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\MsgRouting.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\ObjectManager.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\ObjectRefMaster.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\ObjectTravelAgency.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\ObjectTravelAgency.hpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\PostManClientBase.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\RandomGenerator.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\SeedGenerator.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\StdCtlMsg.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\TransactionsManager.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\TravelerObjectBackup.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\TravelerObjectCheckSynchronization.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\TravelerObjectCollector.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\TravelerObjectInit.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\TravelerObjectRestore.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\TravelerObjectSynchronize.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\TravelerObjectUnassign.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\TravelerSerialKiller.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\TravelerSlaughterWitness.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\TxDesc.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\TxIdGenerator.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\TypeTraits.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\UserManager.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\flip\private\VirtualMachine.h">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\lang\CodeTxt.h">
+      <Filter>lib\ohm\lang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\lang\def.h">
+      <Filter>lib\ohm\lang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\lang\fnc.h">
+      <Filter>lib\ohm\lang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\lang\fnc.hpp">
+      <Filter>lib\ohm\lang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\math\Approx.h">
+      <Filter>lib\ohm\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\math\Approx.hpp">
+      <Filter>lib\ohm\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\math\bit.h">
+      <Filter>lib\ohm\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\math\bit.hpp">
+      <Filter>lib\ohm\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\math\BitMask.h">
+      <Filter>lib\ohm\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\math\BitMask.hpp">
+      <Filter>lib\ohm\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\math\def.h">
+      <Filter>lib\ohm\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\math\FloatMultiPrec.h">
+      <Filter>lib\ohm\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\math\FloatMultiPrec.hpp">
+      <Filter>lib\ohm\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\math\FloatMultiPrecPrint.h">
+      <Filter>lib\ohm\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\math\FloatMultiPrecPrint.hpp">
+      <Filter>lib\ohm\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\math\FloatMultiPrecScan.h">
+      <Filter>lib\ohm\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\math\FloatMultiPrecScan.hpp">
+      <Filter>lib\ohm\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\math\fnc.h">
+      <Filter>lib\ohm\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\math\fnc.hpp">
+      <Filter>lib\ohm\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\math\IntMultiPrec.h">
+      <Filter>lib\ohm\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\math\IntMultiPrec.hpp">
+      <Filter>lib\ohm\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\math\RndGenMT19937.h">
+      <Filter>lib\ohm\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\mem\Array.h">
+      <Filter>lib\ohm\mem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\mem\Array.hpp">
+      <Filter>lib\ohm\mem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\mem\LockFreeRingFifo.h">
+      <Filter>lib\ohm\mem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\mem\LockFreeRingFifo.hpp">
+      <Filter>lib\ohm\mem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\mem\SafeList.h">
+      <Filter>lib\ohm\mem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\mem\SafeList.hpp">
+      <Filter>lib\ohm\mem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\mem\SharedPtr.h">
+      <Filter>lib\ohm\mem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\mem\SharedPtr.hpp">
+      <Filter>lib\ohm\mem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\mem\mmgr\AllocTools.h">
+      <Filter>lib\ohm\mem\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\mem\mmgr\AllocToolsBase.h">
+      <Filter>lib\ohm\mem\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\mem\mmgr\AllocToolsBase.hpp">
+      <Filter>lib\ohm\mem\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\mem\mmgr\AllocToolsGeneric.h">
+      <Filter>lib\ohm\mem\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\mem\mmgr\AllocToolsGeneric.hpp">
+      <Filter>lib\ohm\mem\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\mem\mmgr\AllocToolsPod.h">
+      <Filter>lib\ohm\mem\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\mem\mmgr\AllocToolsPod.hpp">
+      <Filter>lib\ohm\mem\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\mem\mmgr\CellPool.h">
+      <Filter>lib\ohm\mem\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\mem\mmgr\CellPool.hpp">
+      <Filter>lib\ohm\mem\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\mem\mmgr\MemMgrInterface.h">
+      <Filter>lib\ohm\mem\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\mem\mmgr\Vector.h">
+      <Filter>lib\ohm\mem\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\mem\mmgr\Vector.hpp">
+      <Filter>lib\ohm\mem\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\mon\Monitor.h">
+      <Filter>lib\ohm\mon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\mon\Msg.h">
+      <Filter>lib\ohm\mon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\mon\MsgRingBuffer.h">
+      <Filter>lib\ohm\mon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\mon\trace.h">
+      <Filter>lib\ohm\mon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\odbg\Debugger.h">
+      <Filter>lib\ohm\odbg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\odbg\LogMgr.h">
+      <Filter>lib\ohm\odbg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\AffineTransform.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\ApplicationWindowSimple.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\ApplicationWindowSimple.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\Bundle.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\Bundle.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\BundleUnscale.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\BundleView.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\BundleView.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\Constants.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\Debugger.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\EventBundleView.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\Margin.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\Path.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\Point.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\Point.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\Quad.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\Rect.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\Size.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\Size.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\TextBundle.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\ToolTipSafeLink.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetAlert.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetAlert.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetCheckBox.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetCheckBox.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetComboBox.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetComboBox.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetDialog.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetDialog.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetDiscloser.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetDiscloser.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetEmbedder.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetEmbedder.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetFader.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetFader.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetImage.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetLabel.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetLabelLink.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetLabelLink.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetList.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetMatrixBool.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetMatrixBool.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetMenuItem.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetMenuItem.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetMenuRoot.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetMenuRoot.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetMenuSeparator.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetMusicTime.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetMusicTime.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetProgressBar.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetProxy.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetProxy.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetPushButton.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetPushButton.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetPushButtonHelp.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetPushButtonHelp.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetPushButtonImage.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetPushButtonImage.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetPushButtonSmall.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetPushButtonSmall.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetPushButtonTiny.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetPushButtonTiny.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetScroll.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetScroll.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetScrollBar.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetSection.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetSection.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetSpacer.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetSpin.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetSpin.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetStack.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetText.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetTextField.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetTextField.hpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\WidgetToggle.h">
+      <Filter>lib\ohm\opa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\EventBase.h">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\LayerAspectWidget.h">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\Orientation.h">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\WidgetBase.h">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\WidgetBase.hpp">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\WidgetBox.h">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\WidgetContainerBase.h">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\WidgetContainerBase.hpp">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\WidgetCreationHelper.h">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\WidgetCreationHelper.hpp">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\WidgetEmbedderBase.h">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\WidgetKeyboardFocusBase.h">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\WidgetListBase.h">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\WidgetListBase.hpp">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\WidgetListItem.h">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\WidgetListItem.hpp">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\WidgetMatrixBoolCell.h">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\WidgetMatrixBoolCell.hpp">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\WidgetMenuBase.h">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\WidgetMenuNodeBase.h">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\WidgetMenuNodeBase.hpp">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\WidgetMetricAuto.h">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\WidgetOrientableBase.h">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\WidgetPushButtonBase.h">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\WidgetPushButtonBase.hpp">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\base\WidgetStackBase.h">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\frame\FrameComboBox.h">
+      <Filter>lib\ohm\opa\frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\frame\FrameFader.h">
+      <Filter>lib\ohm\opa\frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\frame\FrameMenuItem.h">
+      <Filter>lib\ohm\opa\frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\frame\FrameMusicTime.h">
+      <Filter>lib\ohm\opa\frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\frame\FrameScrollBar.h">
+      <Filter>lib\ohm\opa\frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\frame\FrameTextField.h">
+      <Filter>lib\ohm\opa\frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\frame\FrameTextField.hpp">
+      <Filter>lib\ohm\opa\frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\frame\TrackerMusicTimeValue.h">
+      <Filter>lib\ohm\opa\frame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\prim\LayerWidget.h">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\prim\PrimCheckBox.h">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\prim\PrimComboBox.h">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\prim\PrimDialog.h">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\prim\PrimFader.h">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\prim\PrimLabel.h">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\prim\PrimListItem.h">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\prim\PrimMatrixBoolCell.h">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\prim\PrimMenuItem.h">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\prim\PrimMenuRoot.h">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\prim\PrimMusicTime.h">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\prim\PrimProgressBar.h">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\prim\PrimPushButton.h">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\prim\PrimPushButtonSmall.h">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\prim\PrimPushButtonTiny.h">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\prim\PrimScrollBar.h">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\prim\PrimSection.h">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\prim\PrimSpin.h">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\prim\PrimText.h">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\prim\PrimTip.h">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\prim\PrimToolTip.h">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\prim\PrimWidget.h">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\AspectWidget.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetCheckBox.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetComboBox.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetDialog.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetFader.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetLabel.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetList.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetMatrixBool.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetMenu.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetMusicTime.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetProgressBar.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetPushButton.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetPushButtonSmall.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetPushButtonTiny.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetScrollBar.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetSection.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetSpin.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\FrameDialogBack.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\FrameDialogBlock.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\FrameScroll.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\FrameUnscale.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\FrameWidgetBaseDebug.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\FrameWidgetMenuClose.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\PrimFlipFlop.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\PrimSticker.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\PrimUnscale.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\PrimWidgetBaseDebug.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opa\private\WidgetLayoutManager.h">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\AutoPrimPtr.h">
+      <Filter>lib\ohm\opak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\AutoPrimPtr.hpp">
+      <Filter>lib\ohm\opak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\Bitmap.h">
+      <Filter>lib\ohm\opak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\FpsDisplay.h">
+      <Filter>lib\ohm\opak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\Image.h">
+      <Filter>lib\ohm\opak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\ImageStretched.h">
+      <Filter>lib\ohm\opak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\LabelSimple.h">
+      <Filter>lib\ohm\opak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\Layer.h">
+      <Filter>lib\ohm\opak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\LayerAspectColorAB.h">
+      <Filter>lib\ohm\opak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\LayerClip.h">
+      <Filter>lib\ohm\opak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\LayerEffect.h">
+      <Filter>lib\ohm\opak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\LayerFlip.h">
+      <Filter>lib\ohm\opak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\LayerFreeze.h">
+      <Filter>lib\ohm\opak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\LayerStaticAspect.h">
+      <Filter>lib\ohm\opak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\LayerStaticAspect.hpp">
+      <Filter>lib\ohm\opak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\LayerTransform.h">
+      <Filter>lib\ohm\opak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\LayerTransparency.h">
+      <Filter>lib\ohm\opak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\RectFilled.h">
+      <Filter>lib\ohm\opak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\SprungBitmap.h">
+      <Filter>lib\ohm\opak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\SprungImage.h">
+      <Filter>lib\ohm\opak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\TextField.h">
+      <Filter>lib\ohm\opak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\TextLabel.h">
+      <Filter>lib\ohm\opak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\View.h">
+      <Filter>lib\ohm\opak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\Animatable.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\AspectBase.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\AspectColorAB.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\AspectColorProcessorBase.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\AspectKeyedBase.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\BlendModable.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\BlendMode.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\BorderScalable.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\CachePool.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\Colorizable.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\FontProxy.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\GraphicContext.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\GraphicContext.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\HelperImage.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\HelperImage.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\HelperRect.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\HelperRect.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\HelperSnake.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\HelperSprungImage.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\HelperSprungImage.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\HelperSurface.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\Hintable.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\LabelSimpleHelper.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\Opacifiable.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\Orientable.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\Orientation.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\Primitive.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\Primitive.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\PrimitiveContainer.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\PrimitiveContainer.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\PrimitiveHelper.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\Scalable.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\Sizable.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TransitionDelay.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TransitionFunction.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeBitmap.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeBitmap.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeBlob.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeBlob.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeBool.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeBool.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeColor.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeColor.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeEnum.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeEnum.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeFloat.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeFloat.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeFont.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeFont.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeImage.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeImage.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeInt.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeInt.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeKeyframable.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeKeyframable.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeMargin.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeMargin.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeMessage.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeMessage.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeObject.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeObject.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypePoint.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypePoint.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeRect.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeRect.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeScripture.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeScripture.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeSharedPtr.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeSharedPtr.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeSignal.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeSignal.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeSize.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeSize.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeSprungImage.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeSprungImage.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeString.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeString.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeTicker.h">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\base\TypeTicker.hpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\private\Animator.h">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\private\AnimatorListener.h">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\private\AspectStack.h">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\private\AspectStack.hpp">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\private\CellGeneric.h">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\private\CellList.h">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\private\CellList.hpp">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\private\CellListIteratorBase.h">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\private\CellListIteratorBase.hpp">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\private\CellPoolWrapper.h">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\private\GraphicState.h">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\private\MarkStack.h">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\private\MarkStack.hpp">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\private\MemMgrAutoGrow.h">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\private\PrimitivePtrOrder.h">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\private\Transaction.h">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\private\TransactionDebug.h">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\private\TransactionMaster.h">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opak\private\TypeDebug.h">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Application.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Application.hpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\AreaString.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\AutoContextState.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\AutoContextState.hpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\AutoFramePtr.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\AutoFramePtr.hpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Bitmap.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\BitmapContext.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Cache.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\CaptureType.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Color.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\ColorEngine.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\ColorLab.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\ColorProcessorInterface.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\ColorXYZ.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\ConductChange.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\ConductChange.hpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Cursor.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\CursorLink.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\CursorManager.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Custom.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Custom.hpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Data.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\def.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Err.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Event.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Event.hpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\FilterMode.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Font.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\FontManager.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Frame.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Frame.hpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\FrameConduct.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\FrameConduct.hpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\FramePath.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\FrameTransform.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Gradient.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Gradient.hpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\GraphicContextInterface.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\HIDEvent.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Image.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\ImageLoader.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\ImageManager.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Key.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\KeyboardCatchFocus.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\KeyChar.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\KeyCode.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\LabelString.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\MenuBar.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\MenuBase.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\MenuContainer.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\MenuContainer.hpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\MenuEvent.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\MenuItem.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\MenuItem.hpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\MenuRoot.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\MenuRoot.hpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\MenuSeparator.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\MenuStdId.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\MenuStdIdLink.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\MenuStdIdLink.hpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Mouse.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\PixArgb.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Primitive.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\QuitListener.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Screens.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Scripture.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\SprungImage.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\SprungMode.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\StandardMouseCursor.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\TextFrame.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Timer.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\VideoThread.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\View.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\View.hpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Window.h">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\Window.hpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\ConductBase.h">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\EventDispatcher.h">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\EventDispatcherBlock.h">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\EventDispatcherStandard.h">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\EventDispatcherStandard.hpp">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\EventDispatcherStandardConduct.h">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\EventDispatcherStandardConduct.hpp">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\EventDispatcherStandardCustom.h">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\EventDispatcherStandardCustom.hpp">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\EventDispatcherStandardData.h">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\EventDispatcherStandardData.hpp">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\EventDispatcherStandardKeyboard.h">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\EventDispatcherStandardKeyboard.hpp">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\EventDispatcherStandardMouse.h">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\EventDispatcherStandardMouse.hpp">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\EventDispatcherStandardUserInput.h">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\EventDispatcherStandardUserInput.hpp">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\EventTypeCounter.h">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\EventTypeCounter.hpp">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\FrameKey.h">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\FrameKey.hpp">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\FrameSignal.h">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\FrameSignal.hpp">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\FrameTracker.h">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\FrameTracker.hpp">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\base\TrackerBase.h">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\dsp\Cropper.h">
+      <Filter>lib\ohm\opal\dsp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\dsp\Downsampler.h">
+      <Filter>lib\ohm\opal\dsp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\dsp\MarkFinder.h">
+      <Filter>lib\ohm\opal\dsp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\freetype\FontPaths.h">
+      <Filter>lib\ohm\opal\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\freetype\FontResources.h">
+      <Filter>lib\ohm\opal\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\freetype\FontTable.h">
+      <Filter>lib\ohm\opal\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\freetype\FontTableGlyphMetrics.h">
+      <Filter>lib\ohm\opal\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\freetype\FontTableGlyphSubstitution.h">
+      <Filter>lib\ohm\opal\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\freetype\FontTableKern.h">
+      <Filter>lib\ohm\opal\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\freetype\FTLibrary.h">
+      <Filter>lib\ohm\opal\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\BlendMode.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\Clock.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\ClockListener.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\ConductStack.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\ConductStack.hpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\Engine.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\FragmentProgramManager.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\FragmentProgramProc.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\Frame_iterator.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\Frame_iterator.hpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\FrameBin.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\FramePtrOrder.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\Glyph.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\GraphicContextBase.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\GraphicContextBase.hpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\GraphicState.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\GraphicStateStack.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\MarkStack.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\MarkStack.hpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\MouseFrameRoundTripManager.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\PixArgbBE.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\PixArgbBE.hpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\PixArgbLE.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\PixArgbLE.hpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\PngLoader.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\PngWriter.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\PostActionListener.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\SystemEvent.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\SystemEventMgr.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\SystemGraphicContext.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\TimeListener.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\TimerManager.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\TypescriptMeasure.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\private\Typesetter.h">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\directx\CacheImpl.h">
+      <Filter>lib\ohm\opal\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\directx\CacheManager.h">
+      <Filter>lib\ohm\opal\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\directx\Direct3d.h">
+      <Filter>lib\ohm\opal\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\directx\Direct3dCaps.h">
+      <Filter>lib\ohm\opal\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\directx\Direct3dState.h">
+      <Filter>lib\ohm\opal\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\directx\DirectXContext.h">
+      <Filter>lib\ohm\opal\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\directx\DirectXEngine.h">
+      <Filter>lib\ohm\opal\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\directx\FVFVertex.h">
+      <Filter>lib\ohm\opal\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\directx\ImageLoaderImpl.h">
+      <Filter>lib\ohm\opal\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\directx\VideoThreadImpl.h">
+      <Filter>lib\ohm\opal\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\directx\ViewImplDirectX.h">
+      <Filter>lib\ohm\opal\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\win32\ApplicationImpl.h">
+      <Filter>lib\ohm\opal\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\win32\CursorImpl.h">
+      <Filter>lib\ohm\opal\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\win32\MenuBarImpl.h">
+      <Filter>lib\ohm\opal\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\win32\RectCat.h">
+      <Filter>lib\ohm\opal\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\win32\ScreensImpl.h">
+      <Filter>lib\ohm\opal\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\win32\ViewImpl.h">
+      <Filter>lib\ohm\opal\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\win32\WindowImpl.h">
+      <Filter>lib\ohm\opal\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\shader\ShaderFloat4.h">
+      <Filter>lib\ohm\opal\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\shader\ShaderOperatable.h">
+      <Filter>lib\ohm\opal\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\shader\ShaderTexture.h">
+      <Filter>lib\ohm\opal\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\opal\shader\ShaderVar.h">
+      <Filter>lib\ohm\opal\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\pibase\Err.h">
+      <Filter>lib\ohm\pibase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\CpuTimer.h">
+      <Filter>lib\ohm\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\CritSec.h">
+      <Filter>lib\ohm\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\Err.h">
+      <Filter>lib\ohm\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\File.h">
+      <Filter>lib\ohm\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\FileRef.h">
+      <Filter>lib\ohm\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\FileRefFactory.h">
+      <Filter>lib\ohm\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\FileRefSPtr.h">
+      <Filter>lib\ohm\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\FilesystemSpec.h">
+      <Filter>lib\ohm\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\Interlocked.h">
+      <Filter>lib\ohm\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\Interlocked_common.hpp">
+      <Filter>lib\ohm\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\Mutex.h">
+      <Filter>lib\ohm\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\ReadWriteLock.h">
+      <Filter>lib\ohm\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\SysLogger.h">
+      <Filter>lib\ohm\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\ThreadBase.h">
+      <Filter>lib\ohm\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\ThreadMgr.h">
+      <Filter>lib\ohm\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\ThreadSync.h">
+      <Filter>lib\ohm\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\TimerFine.h">
+      <Filter>lib\ohm\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\TimerReliable.h">
+      <Filter>lib\ohm\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\TimeZoneType.h">
+      <Filter>lib\ohm\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\UtcTime.h">
+      <Filter>lib\ohm\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\win32\CritSectUtil.h">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\win32\ExceptionHandler.h">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\win32\FileImpl.h">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\win32\FileRefImpl.h">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\win32\FileUtilWin32.h">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\win32\fnc_win32.h">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\win32\LocalUseCom.h">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\win32\LocalUseOle.h">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\win32\MutexImpl.h">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\win32\ReadWriteLockImpl.h">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\win32\ThreadBaseImpl.h">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\win32\ThreadSyncImpl.h">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\sys\win32\TimerReliableImpl.h">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\task\Clock.h">
+      <Filter>lib\ohm\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\task\Event.h">
+      <Filter>lib\ohm\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\task\Event.hpp">
+      <Filter>lib\ohm\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\task\IpcData.h">
+      <Filter>lib\ohm\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\task\IpcPortBiDir.h">
+      <Filter>lib\ohm\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\task\IpcPortLocal.h">
+      <Filter>lib\ohm\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\task\IpcPortRemote.h">
+      <Filter>lib\ohm\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\task\Observer.h">
+      <Filter>lib\ohm\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\task\Observer.hpp">
+      <Filter>lib\ohm\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\task\ObserverLockFree.h">
+      <Filter>lib\ohm\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\task\ObserverLockFree.hpp">
+      <Filter>lib\ohm\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\task\Port.h">
+      <Filter>lib\ohm\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\task\RunLoop.h">
+      <Filter>lib\ohm\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\task\RunLoopBase.h">
+      <Filter>lib\ohm\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\task\RunLoopGui.h">
+      <Filter>lib\ohm\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\task\RunLoopManager.h">
+      <Filter>lib\ohm\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\task\RunLoopOnce.h">
+      <Filter>lib\ohm\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\task\Timer.h">
+      <Filter>lib\ohm\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\task\Timer.hpp">
+      <Filter>lib\ohm\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\task\private\EventProvider.h">
+      <Filter>lib\ohm\task\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\task\win32\AcceleratorInterface.h">
+      <Filter>lib\ohm\task\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\task\win32\IpcPortLocalImpl.h">
+      <Filter>lib\ohm\task\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\task\win32\IpcPortRemoteImpl.h">
+      <Filter>lib\ohm\task\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\task\win32\RunLoopGuiImpl.h">
+      <Filter>lib\ohm\task\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\Char16.h">
+      <Filter>lib\ohm\txt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\ConvChar.h">
+      <Filter>lib\ohm\txt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\ConvChar.hpp">
+      <Filter>lib\ohm\txt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\Err.h">
+      <Filter>lib\ohm\txt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\fnc.h">
+      <Filter>lib\ohm\txt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\fnc.hpp">
+      <Filter>lib\ohm\txt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\ascii\ascii_fnc.h">
+      <Filter>lib\ohm\txt\ascii</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\ascii\ascii_fnc.hpp">
+      <Filter>lib\ohm\txt\ascii</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\ascii\ConvDigit.h">
+      <Filter>lib\ohm\txt\ascii</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\ascii\ConvDigit.hpp">
+      <Filter>lib\ohm\txt\ascii</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\out\ArgBase.h">
+      <Filter>lib\ohm\txt\out</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\out\ArgConv.h">
+      <Filter>lib\ohm\txt\out</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\out\ArgConv.hpp">
+      <Filter>lib\ohm\txt\out</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\out\ArgFloat.h">
+      <Filter>lib\ohm\txt\out</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\out\ArgInt.h">
+      <Filter>lib\ohm\txt\out</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\out\ArgNumBase.h">
+      <Filter>lib\ohm\txt\out</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\out\ArgString.h">
+      <Filter>lib\ohm\txt\out</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\out\DevInterface.h">
+      <Filter>lib\ohm\txt\out</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\out\FmtInfo.h">
+      <Filter>lib\ohm\txt\out</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\out\Print.h">
+      <Filter>lib\ohm\txt\out</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\out\PrintInterface.h">
+      <Filter>lib\ohm\txt\out</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\out\PrintNa.h">
+      <Filter>lib\ohm\txt\out</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\out\PrintTubeEscaper.h">
+      <Filter>lib\ohm\txt\out</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\unicode\BidiClass.h">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\unicode\Categ.h">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\unicode\Categ.hpp">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\unicode\CategClass.h">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\unicode\Char.h">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\unicode\CharData.h">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\unicode\CharDataInfo.h">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\unicode\CharDataInfo.hpp">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\unicode\ConvCi.h">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\unicode\ConvCi.hpp">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\unicode\ConvNeutral.h">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\unicode\ConvNeutral.hpp">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\unicode\GraphemeBreakProp.h">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\unicode\LineBreakAction.h">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\unicode\LineBreakProp.h">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\unicode\PredEq.h">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\unicode\PredEq.hpp">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\unicode\PredLt.h">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\unicode\PredLt.hpp">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\unicode\StringU.h">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\unicode\unicode.h">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\unicode\WordBreakProp.h">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\unicode\WordBreakPropTableNext.h">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\unicode\WordBreakPropTablePrev.h">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\utf16\Codec16.h">
+      <Filter>lib\ohm\txt\utf16</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\utf16\Codec16.hpp">
+      <Filter>lib\ohm\txt\utf16</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\utf16\def.h">
+      <Filter>lib\ohm\txt\utf16</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\utf16\utf16_fnc.h">
+      <Filter>lib\ohm\txt\utf16</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\utf8\Codec8.h">
+      <Filter>lib\ohm\txt\utf8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\utf8\ConvNum.h">
+      <Filter>lib\ohm\txt\utf8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\utf8\def.h">
+      <Filter>lib\ohm\txt\utf8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\txt\utf8\utf8.h">
+      <Filter>lib\ohm\txt\utf8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\util\ArgcArgvParser.h">
+      <Filter>lib\ohm\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\util\Base64.h">
+      <Filter>lib\ohm\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\util\BinaryStreamInput.h">
+      <Filter>lib\ohm\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\util\BinaryStreamInput.hpp">
+      <Filter>lib\ohm\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\util\BinaryStreamOutput.h">
+      <Filter>lib\ohm\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\util\BinaryStreamOutputBase.h">
+      <Filter>lib\ohm\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\util\BinaryStreamOutputBase.hpp">
+      <Filter>lib\ohm\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\util\BinaryStreamOutputNa.h">
+      <Filter>lib\ohm\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\util\boot.hpp">
+      <Filter>lib\ohm\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\util\Date.h">
+      <Filter>lib\ohm\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\util\Delegate.h">
+      <Filter>lib\ohm\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\util\Delegate.hpp">
+      <Filter>lib\ohm\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\util\Err.h">
+      <Filter>lib\ohm\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\util\FileDescriptor.h">
+      <Filter>lib\ohm\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\util\FileOp.h">
+      <Filter>lib\ohm\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\util\LogLine.h">
+      <Filter>lib\ohm\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\util\LogMgr.h">
+      <Filter>lib\ohm\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\util\SingletonBase.h">
+      <Filter>lib\ohm\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\util\SingletonBase.hpp">
+      <Filter>lib\ohm\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\util\trace.h">
+      <Filter>lib\ohm\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\ohm\util\TraceTools.h">
+      <Filter>lib\ohm\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\libpng\png.h">
+      <Filter>lib\libpng</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\libpng\pngconf.h">
+      <Filter>lib\libpng</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\libpng\pngpriv.h">
+      <Filter>lib\libpng</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\zlib\crc32.h">
+      <Filter>lib\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\zlib\deflate.h">
+      <Filter>lib\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\zlib\inffast.h">
+      <Filter>lib\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\zlib\inffixed.h">
+      <Filter>lib\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\zlib\inflate.h">
+      <Filter>lib\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\zlib\inftrees.h">
+      <Filter>lib\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\zlib\trees.h">
+      <Filter>lib\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\zlib\zconf.h">
+      <Filter>lib\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\zlib\zlib.h">
+      <Filter>lib\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\lib\zlib\zutil.h">
+      <Filter>lib\zlib</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\lib\ohm\archi\CpuId_common.cpp">
+      <Filter>lib\ohm\archi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\archi\win32\CpuId.cpp">
+      <Filter>lib\ohm\archi\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\archi\x86\CpuIdx86.cpp">
+      <Filter>lib\ohm\archi\x86</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\Args.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\Blob.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\Bool.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\ClassDescManager.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\ComLayerClientBase.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\ComLayerServerBase.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\Cue.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\DataMaster.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\DocumentClient.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\DocumentClientMaster.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\DocumentLocal.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\DocumentServer.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\EnumDescManager.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\Err.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\Float64.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\Int64.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\Object.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\ObjectMold.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\ObjectMoldData.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\PasteBoard.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\RootBase.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\Scribe.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\SessionManager.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\SessionManagerMemory.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\TxSessionGuard.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\ValidationReportReader.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\ValidationReportWriter.cpp">
+      <Filter>lib\ohm\flip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\conv\ConvArray.cpp">
+      <Filter>lib\ohm\flip\conv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\conv\ConvBlob.cpp">
+      <Filter>lib\ohm\flip\conv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\conv\ConvBool.cpp">
+      <Filter>lib\ohm\flip\conv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\conv\ConvCollection.cpp">
+      <Filter>lib\ohm\flip\conv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\conv\ConvCue.cpp">
+      <Filter>lib\ohm\flip\conv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\conv\ConvDocument.cpp">
+      <Filter>lib\ohm\flip\conv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\conv\ConvEnum.cpp">
+      <Filter>lib\ohm\flip\conv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\conv\ConvFloat64.cpp">
+      <Filter>lib\ohm\flip\conv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\conv\ConvInt64.cpp">
+      <Filter>lib\ohm\flip\conv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\conv\ConvObject.cpp">
+      <Filter>lib\ohm\flip\conv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\conv\ConvObjectRef.cpp">
+      <Filter>lib\ohm\flip\conv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\local\ClientLocal.cpp">
+      <Filter>lib\ohm\flip\local</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\local\ComLayerClientLocal.cpp">
+      <Filter>lib\ohm\flip\local</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\local\ComLayerServerLocal.cpp">
+      <Filter>lib\ohm\flip\local</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\local\ServerLocal.cpp">
+      <Filter>lib\ohm\flip\local</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\ArrayMaster.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\BasicType.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\BasicTypesName.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\BinaryKey.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\Codec.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\CollectionMaster.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\DataStreamInput.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\DataStreamOutput.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\DocumentBase.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\DocumentClientMasterSlot.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\DocumentDifferentiator.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\DocumentFormatter.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\DocumentKeywords.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\DocumentParser.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\DocumentReader.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\DocumentWriter.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\EnumMaster.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\IdPtrMapSmall.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\MachineCode.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\MsgRouting.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\ObjectManager.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\ObjectRefMaster.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\ObjectTravelAgency.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\PostManClientBase.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\RandomGenerator.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\SeedGenerator.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\TransactionsManager.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\TravelerObjectBackup.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\TravelerObjectCheckSynchronization.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\TravelerObjectCollector.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\TravelerObjectInit.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\TravelerObjectRestore.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\TravelerObjectSynchronize.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\TravelerObjectUnassign.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\TravelerSerialKiller.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\TravelerSlaughterWitness.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\TxDesc.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\TxIdGenerator.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\UserManager.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\flip\private\VirtualMachine.cpp">
+      <Filter>lib\ohm\flip\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\lang\fnc.cpp">
+      <Filter>lib\ohm\lang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\math\RndGenMT19937.cpp">
+      <Filter>lib\ohm\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\mem\mmgr\MemMgrInterface.cpp">
+      <Filter>lib\ohm\mem\mmgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\mon\Monitor.cpp">
+      <Filter>lib\ohm\mon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\mon\Msg.cpp">
+      <Filter>lib\ohm\mon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\mon\MsgRingBuffer.cpp">
+      <Filter>lib\ohm\mon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\odbg\LogMgr.cpp">
+      <Filter>lib\ohm\odbg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\AffineTransform.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\ApplicationWindowSimple.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\Bundle.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\BundleUnscale.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\BundleView.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\Constants.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\Debugger.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\EventBundleView.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\Margin.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\Path.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\Point.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\Quad.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\Rect.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\Size.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\TextBundle.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\ToolTipSafeLink.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetAlert.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetCheckBox.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetComboBox.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetDialog.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetDiscloser.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetEmbedder.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetFader.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetImage.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetLabel.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetLabelLink.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetList.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetMatrixBool.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetMenuItem.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetMenuRoot.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetMenuSeparator.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetMusicTime.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetProgressBar.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetProxy.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetPushButton.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetPushButtonHelp.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetPushButtonImage.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetPushButtonSmall.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetPushButtonTiny.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetScroll.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetScrollBar.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetSection.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetSpacer.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetSpin.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetStack.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetText.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\WidgetTextField.cpp">
+      <Filter>lib\ohm\opa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\base\EventBase.cpp">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\base\LayerAspectWidget.cpp">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\base\WidgetBase.cpp">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\base\WidgetBox.cpp">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\base\WidgetContainerBase.cpp">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\base\WidgetEmbedderBase.cpp">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\base\WidgetKeyboardFocusBase.cpp">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\base\WidgetListBase.cpp">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\base\WidgetListItem.cpp">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\base\WidgetMatrixBoolCell.cpp">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\base\WidgetMenuBase.cpp">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\base\WidgetMenuNodeBase.cpp">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\base\WidgetMetricAuto.cpp">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\base\WidgetOrientableBase.cpp">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\base\WidgetPushButtonBase.cpp">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\base\WidgetStackBase.cpp">
+      <Filter>lib\ohm\opa\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\frame\FrameComboBox.cpp">
+      <Filter>lib\ohm\opa\frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\frame\FrameFader.cpp">
+      <Filter>lib\ohm\opa\frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\frame\FrameMenuItem.cpp">
+      <Filter>lib\ohm\opa\frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\frame\FrameMusicTime.cpp">
+      <Filter>lib\ohm\opa\frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\frame\FrameScrollBar.cpp">
+      <Filter>lib\ohm\opa\frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\frame\FrameTextField.cpp">
+      <Filter>lib\ohm\opa\frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\frame\TrackerMusicTimeValue.cpp">
+      <Filter>lib\ohm\opa\frame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\prim\LayerWidget.cpp">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\prim\PrimCheckBox.cpp">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\prim\PrimComboBox.cpp">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\prim\PrimDialog.cpp">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\prim\PrimFader.cpp">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\prim\PrimLabel.cpp">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\prim\PrimListItem.cpp">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\prim\PrimMatrixBoolCell.cpp">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\prim\PrimMenuItem.cpp">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\prim\PrimMenuRoot.cpp">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\prim\PrimMusicTime.cpp">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\prim\PrimProgressBar.cpp">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\prim\PrimPushButton.cpp">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\prim\PrimPushButtonSmall.cpp">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\prim\PrimPushButtonTiny.cpp">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\prim\PrimScrollBar.cpp">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\prim\PrimSection.cpp">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\prim\PrimSpin.cpp">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\prim\PrimText.cpp">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\prim\PrimTip.cpp">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\prim\PrimToolTip.cpp">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\prim\PrimWidget.cpp">
+      <Filter>lib\ohm\opa\prim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\AspectWidget.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetCheckBox.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetComboBox.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetDialog.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetFader.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetLabel.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetList.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetMatrixBool.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetMenu.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetMusicTime.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetProgressBar.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetPushButton.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetPushButtonSmall.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetPushButtonTiny.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetScrollBar.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetSection.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\AspectWidgetSpin.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\FrameDialogBack.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\FrameDialogBlock.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\FrameScroll.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\FrameUnscale.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\FrameWidgetBaseDebug.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\FrameWidgetMenuClose.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\PrimFlipFlop.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\PrimSticker.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\PrimUnscale.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\PrimWidgetBaseDebug.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opa\private\WidgetLayoutManager.cpp">
+      <Filter>lib\ohm\opa\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\Bitmap.cpp">
+      <Filter>lib\ohm\opak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\FpsDisplay.cpp">
+      <Filter>lib\ohm\opak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\Image.cpp">
+      <Filter>lib\ohm\opak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\ImageStretched.cpp">
+      <Filter>lib\ohm\opak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\LabelSimple.cpp">
+      <Filter>lib\ohm\opak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\Layer.cpp">
+      <Filter>lib\ohm\opak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\LayerAspectColorAB.cpp">
+      <Filter>lib\ohm\opak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\LayerClip.cpp">
+      <Filter>lib\ohm\opak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\LayerEffect.cpp">
+      <Filter>lib\ohm\opak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\LayerFlip.cpp">
+      <Filter>lib\ohm\opak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\LayerFreeze.cpp">
+      <Filter>lib\ohm\opak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\LayerTransform.cpp">
+      <Filter>lib\ohm\opak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\LayerTransparency.cpp">
+      <Filter>lib\ohm\opak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\RectFilled.cpp">
+      <Filter>lib\ohm\opak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\SprungBitmap.cpp">
+      <Filter>lib\ohm\opak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\SprungImage.cpp">
+      <Filter>lib\ohm\opak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\TextField.cpp">
+      <Filter>lib\ohm\opak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\TextLabel.cpp">
+      <Filter>lib\ohm\opak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\View.cpp">
+      <Filter>lib\ohm\opak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\AspectBase.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\AspectColorAB.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\AspectColorProcessorBase.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\AspectKeyedBase.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\BlendModable.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\BorderScalable.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\CachePool.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\Colorizable.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\FontProxy.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\GraphicContext.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\HelperImage.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\HelperRect.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\HelperSnake.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\HelperSprungImage.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\HelperSurface.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\Hintable.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\LabelSimpleHelper.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\Opacifiable.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\Orientable.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\Primitive.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\PrimitiveContainer.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\PrimitiveHelper.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\Scalable.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\Sizable.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\TransitionDelay.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\base\TransitionFunction.cpp">
+      <Filter>lib\ohm\opak\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\private\Animator.cpp">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\private\AspectStack.cpp">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\private\CellGeneric.cpp">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\private\CellPoolWrapper.cpp">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\private\GraphicState.cpp">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\private\MarkStack.cpp">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\private\MemMgrAutoGrow.cpp">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\private\PrimitivePtrOrder.cpp">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\private\Transaction.cpp">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opak\private\TransactionMaster.cpp">
+      <Filter>lib\ohm\opak\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\Application.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\AreaString.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\Bitmap.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\BitmapContext.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\Cache.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\Color.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\ColorEngine.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\ColorLab.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\ColorXYZ.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\ConductChange.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\Cursor.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\CursorLink.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\CursorManager.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\Custom.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\Data.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\Event.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\Font.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\FontManager.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\Frame.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\FrameTransform.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\HIDEvent.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\ImageLoader.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\ImageManager.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\Key.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\KeyboardCatchFocus.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\LabelString.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\MenuBar.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\MenuBase.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\MenuContainer.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\MenuEvent.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\MenuItem.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\MenuRoot.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\MenuSeparator.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\MenuStdIdLink.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\Mouse.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\Primitive.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\Screens.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\Scripture.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\SprungImage.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\TextFrame.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\VideoThread.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\View.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\Window.cpp">
+      <Filter>lib\ohm\opal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\base\ConductBase.cpp">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\base\EventDispatcherBlock.cpp">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\base\EventTypeCounter.cpp">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\base\FrameKey.cpp">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\base\FrameSignal.cpp">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\base\FrameTracker.cpp">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\base\TrackerBase.cpp">
+      <Filter>lib\ohm\opal\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\dsp\Cropper.cpp">
+      <Filter>lib\ohm\opal\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\dsp\Downsampler.cpp">
+      <Filter>lib\ohm\opal\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\dsp\MarkFinder.cpp">
+      <Filter>lib\ohm\opal\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\freetype\FontPaths.cpp">
+      <Filter>lib\ohm\opal\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\freetype\FontResources.cpp">
+      <Filter>lib\ohm\opal\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\freetype\FontTable.cpp">
+      <Filter>lib\ohm\opal\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\freetype\FontTableGlyphMetrics.cpp">
+      <Filter>lib\ohm\opal\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\freetype\FontTableGlyphSubstitution.cpp">
+      <Filter>lib\ohm\opal\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\freetype\FontTableKern.cpp">
+      <Filter>lib\ohm\opal\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\freetype\FTLibrary.cpp">
+      <Filter>lib\ohm\opal\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\private\Clock.cpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\private\ConductStack.cpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\private\FragmentProgramManager.cpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\private\FrameBin.cpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\private\FramePtrOrder.cpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\private\Glyph.cpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\private\GraphicContextBase.cpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\private\GraphicState.cpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\private\GraphicStateStack.cpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\private\MarkStack.cpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\private\MouseFrameRoundTripManager.cpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\private\PixArgbBE.cpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\private\PixArgbLE.cpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\private\PngLoader.cpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\private\PngWriter.cpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\private\SystemEvent.cpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\private\SystemEventMgr.cpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\private\TimerManager.cpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\private\TypescriptMeasure.cpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\private\Typesetter.cpp">
+      <Filter>lib\ohm\opal\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\directx\CacheImpl.cpp">
+      <Filter>lib\ohm\opal\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\directx\CacheManager.cpp">
+      <Filter>lib\ohm\opal\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\directx\Direct3d.cpp">
+      <Filter>lib\ohm\opal\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\directx\Direct3dCaps.cpp">
+      <Filter>lib\ohm\opal\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\directx\Direct3dState.cpp">
+      <Filter>lib\ohm\opal\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\directx\DirectXContext.cpp">
+      <Filter>lib\ohm\opal\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\directx\DirectXEngine.cpp">
+      <Filter>lib\ohm\opal\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\directx\Image.cpp">
+      <Filter>lib\ohm\opal\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\directx\ImageLoaderImpl.cpp">
+      <Filter>lib\ohm\opal\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\directx\VideoThreadImpl.cpp">
+      <Filter>lib\ohm\opal\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\directx\ViewImplDirectX.cpp">
+      <Filter>lib\ohm\opal\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\win32\ApplicationImpl.cpp">
+      <Filter>lib\ohm\opal\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\win32\CursorImpl.cpp">
+      <Filter>lib\ohm\opal\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\win32\MenuBarImpl.cpp">
+      <Filter>lib\ohm\opal\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\win32\RectCat.cpp">
+      <Filter>lib\ohm\opal\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\win32\ScreensImpl.cpp">
+      <Filter>lib\ohm\opal\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\win32\ViewImpl.cpp">
+      <Filter>lib\ohm\opal\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\win32\WindowImpl.cpp">
+      <Filter>lib\ohm\opal\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\shader\ShaderFloat4.cpp">
+      <Filter>lib\ohm\opal\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\shader\ShaderOperatable.cpp">
+      <Filter>lib\ohm\opal\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\shader\ShaderTexture.cpp">
+      <Filter>lib\ohm\opal\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\opal\shader\ShaderVar.cpp">
+      <Filter>lib\ohm\opal\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\pibase\Err.cpp">
+      <Filter>lib\ohm\pibase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\CritSec.cpp">
+      <Filter>lib\ohm\sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\File_common.cpp">
+      <Filter>lib\ohm\sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\UtcTime_common.cpp">
+      <Filter>lib\ohm\sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\ConvString.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\CpuTimer.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\CritSectUtil.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\ExceptionHandler.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\File.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\FileImpl.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\FileRef.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\FileRefFactory.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\FileRefImpl.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\FileRefOp.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\FilesystemSpec.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\FileUtilWin32.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\fnc_win32.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\Interlocked.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\LocalUseCom.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\LocalUseOle.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\Mutex.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\MutexImpl.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\OsInfo.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\ReadWriteLock.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\ReadWriteLockImpl.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\ThreadBase.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\ThreadBaseImpl.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\ThreadMgr.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\ThreadSync.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\ThreadSyncImpl.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\TimerReliable.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\sys\win32\UtcTime.cpp">
+      <Filter>lib\ohm\sys\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\task\Clock.cpp">
+      <Filter>lib\ohm\task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\task\Event.cpp">
+      <Filter>lib\ohm\task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\task\IpcData.cpp">
+      <Filter>lib\ohm\task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\task\IpcPortBiDir.cpp">
+      <Filter>lib\ohm\task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\task\IpcPortLocal.cpp">
+      <Filter>lib\ohm\task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\task\IpcPortRemote.cpp">
+      <Filter>lib\ohm\task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\task\Observer.cpp">
+      <Filter>lib\ohm\task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\task\Port.cpp">
+      <Filter>lib\ohm\task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\task\RunLoop.cpp">
+      <Filter>lib\ohm\task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\task\RunLoopBase.cpp">
+      <Filter>lib\ohm\task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\task\RunLoopGui.cpp">
+      <Filter>lib\ohm\task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\task\RunLoopManager.cpp">
+      <Filter>lib\ohm\task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\task\RunLoopOnce.cpp">
+      <Filter>lib\ohm\task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\task\Timer.cpp">
+      <Filter>lib\ohm\task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\task\private\EventProvider.cpp">
+      <Filter>lib\ohm\task\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\task\win32\IpcPortLocalImpl.cpp">
+      <Filter>lib\ohm\task\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\task\win32\IpcPortRemoteImpl.cpp">
+      <Filter>lib\ohm\task\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\task\win32\RunLoopGuiImpl.cpp">
+      <Filter>lib\ohm\task\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\txt\fnc.cpp">
+      <Filter>lib\ohm\txt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\txt\ascii\ascii_fnc.cpp">
+      <Filter>lib\ohm\txt\ascii</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\txt\out\ArgBase.cpp">
+      <Filter>lib\ohm\txt\out</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\txt\out\ArgFloat.cpp">
+      <Filter>lib\ohm\txt\out</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\txt\out\ArgInt.cpp">
+      <Filter>lib\ohm\txt\out</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\txt\out\ArgNumBase.cpp">
+      <Filter>lib\ohm\txt\out</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\txt\out\ArgString.cpp">
+      <Filter>lib\ohm\txt\out</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\txt\out\FmtInfo.cpp">
+      <Filter>lib\ohm\txt\out</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\txt\out\Print.cpp">
+      <Filter>lib\ohm\txt\out</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\txt\out\PrintInterface.cpp">
+      <Filter>lib\ohm\txt\out</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\txt\out\PrintNa.cpp">
+      <Filter>lib\ohm\txt\out</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\txt\out\PrintTubeEscaper.cpp">
+      <Filter>lib\ohm\txt\out</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\txt\unicode\CharData.cpp">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\txt\unicode\unicode.cpp">
+      <Filter>lib\ohm\txt\unicode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\txt\utf16\utf16_fnc.cpp">
+      <Filter>lib\ohm\txt\utf16</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\txt\utf8\Codec8.cpp">
+      <Filter>lib\ohm\txt\utf8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\txt\utf8\ConvNum.cpp">
+      <Filter>lib\ohm\txt\utf8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\txt\utf8\def.cpp">
+      <Filter>lib\ohm\txt\utf8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\txt\utf8\utf8.cpp">
+      <Filter>lib\ohm\txt\utf8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\util\ArgcArgvParser.cpp">
+      <Filter>lib\ohm\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\util\Base64.cpp">
+      <Filter>lib\ohm\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\util\BinaryStreamInput.cpp">
+      <Filter>lib\ohm\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\util\BinaryStreamOutput.cpp">
+      <Filter>lib\ohm\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\util\BinaryStreamOutputBase.cpp">
+      <Filter>lib\ohm\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\util\BinaryStreamOutputNa.cpp">
+      <Filter>lib\ohm\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\util\Date.cpp">
+      <Filter>lib\ohm\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\util\Delegate.cpp">
+      <Filter>lib\ohm\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\util\FileDescriptor.cpp">
+      <Filter>lib\ohm\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\util\FileOp.cpp">
+      <Filter>lib\ohm\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\util\LogLine.cpp">
+      <Filter>lib\ohm\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\util\LogMgr.cpp">
+      <Filter>lib\ohm\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\ohm\util\TraceTools.cpp">
+      <Filter>lib\ohm\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\autofit\autofit.c">
+      <Filter>lib\freetype\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\bdf\bdf.c">
+      <Filter>lib\freetype\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\cff\cff.c">
+      <Filter>lib\freetype\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\cache\ftcache.c">
+      <Filter>lib\freetype\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\gzip\ftgzip.c">
+      <Filter>lib\freetype\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\lzw\ftlzw.c">
+      <Filter>lib\freetype\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\pcf\pcf.c">
+      <Filter>lib\freetype\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\pfr\pfr.c">
+      <Filter>lib\freetype\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\psaux\psaux.c">
+      <Filter>lib\freetype\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\pshinter\pshinter.c">
+      <Filter>lib\freetype\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\psnames\psnames.c">
+      <Filter>lib\freetype\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\raster\raster.c">
+      <Filter>lib\freetype\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\sfnt\sfnt.c">
+      <Filter>lib\freetype\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\smooth\smooth.c">
+      <Filter>lib\freetype\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\truetype\truetype.c">
+      <Filter>lib\freetype\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\type1\type1.c">
+      <Filter>lib\freetype\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\cid\type1cid.c">
+      <Filter>lib\freetype\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\type42\type42.c">
+      <Filter>lib\freetype\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\winfonts\winfnt.c">
+      <Filter>lib\freetype\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\base\ftapi.c">
+      <Filter>lib\freetype\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\base\ftbase.c">
+      <Filter>lib\freetype\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\base\ftbbox.c">
+      <Filter>lib\freetype\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\base\ftbdf.c">
+      <Filter>lib\freetype\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\base\ftbitmap.c">
+      <Filter>lib\freetype\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\base\ftcid.c">
+      <Filter>lib\freetype\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\base\ftdebug.c">
+      <Filter>lib\freetype\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\base\ftgasp.c">
+      <Filter>lib\freetype\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\base\ftglyph.c">
+      <Filter>lib\freetype\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\base\ftgxval.c">
+      <Filter>lib\freetype\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\base\ftinit.c">
+      <Filter>lib\freetype\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\base\ftlcdfil.c">
+      <Filter>lib\freetype\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\base\ftmm.c">
+      <Filter>lib\freetype\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\base\ftotval.c">
+      <Filter>lib\freetype\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\base\ftpatent.c">
+      <Filter>lib\freetype\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\base\ftpfr.c">
+      <Filter>lib\freetype\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\base\ftstroke.c">
+      <Filter>lib\freetype\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\base\ftsynth.c">
+      <Filter>lib\freetype\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\base\ftsystem.c">
+      <Filter>lib\freetype\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\base\fttype1.c">
+      <Filter>lib\freetype\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\base\ftwinfnt.c">
+      <Filter>lib\freetype\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\freetype\src\base\ftxf86.c">
+      <Filter>lib\freetype\src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\libpng\png.c">
+      <Filter>lib\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\libpng\pngerror.c">
+      <Filter>lib\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\libpng\pngget.c">
+      <Filter>lib\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\libpng\pngmem.c">
+      <Filter>lib\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\libpng\pngpread.c">
+      <Filter>lib\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\libpng\pngread.c">
+      <Filter>lib\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\libpng\pngrio.c">
+      <Filter>lib\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\libpng\pngrtran.c">
+      <Filter>lib\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\libpng\pngrutil.c">
+      <Filter>lib\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\libpng\pngset.c">
+      <Filter>lib\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\libpng\pngtrans.c">
+      <Filter>lib\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\libpng\pngwio.c">
+      <Filter>lib\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\libpng\pngwrite.c">
+      <Filter>lib\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\libpng\pngwtran.c">
+      <Filter>lib\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\libpng\pngwutil.c">
+      <Filter>lib\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\zlib\adler32.c">
+      <Filter>lib\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\zlib\compress.c">
+      <Filter>lib\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\zlib\crc32.c">
+      <Filter>lib\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\zlib\deflate.c">
+      <Filter>lib\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\zlib\gzio.c">
+      <Filter>lib\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\zlib\infback.c">
+      <Filter>lib\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\zlib\inffast.c">
+      <Filter>lib\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\zlib\inflate.c">
+      <Filter>lib\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\zlib\inftrees.c">
+      <Filter>lib\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\zlib\trees.c">
+      <Filter>lib\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\zlib\uncompr.c">
+      <Filter>lib\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\lib\zlib\zutil.c">
+      <Filter>lib\zlib</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\..\..\lib\ohm\opa\ohm_opa.rc">
+      <Filter>lib\ohm\opa</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

@@ -60,13 +60,14 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>CP3DR_COMPILE_EDITOR;WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\Irrlicht181\include\;$(SolutionDir)include\;$(SolutionDir)CP3DEditor\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\Irrlicht181\include\;$(SolutionDir)include\;$(SolutionDir)CP3DEditor\;$(SolutionDir)Dependencies\OhmSDK\src\lib\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OpenMPSupport>true</OpenMPSupport>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Irrlicht_d.lib;CP3DRenderingEngine_d.lib;CP3DEngine_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\Irrlicht181\Output\;$(SolutionDir)CP3DRenderingEngine\Output\;$(SolutionDir)CP3DEngine\Output\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Irrlicht_d.lib;CP3DRenderingEngine_d.lib;CP3DEngine_d.lib;OhmSDK_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\Irrlicht181\Output\;$(SolutionDir)CP3DRenderingEngine\Output\;$(SolutionDir)CP3DEngine\Output\;$(SolutionDir)Dependencies\OhmSDK\libs\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>$(OutDir)$(TargetName).lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
@@ -78,12 +79,13 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>CP3DR_COMPILE_EDITOR;WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\Irrlicht181\include\;$(SolutionDir)include\;$(SolutionDir)CP3DEditor\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\Irrlicht181\include\;$(SolutionDir)include\;$(SolutionDir)CP3DEditor\;$(SolutionDir)Dependencies\OhmSDK\src\lib\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>Irrlicht.lib;CP3DRenderingEngine.lib;CP3DEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\Irrlicht181\Output\;$(SolutionDir)CP3DRenderingEngine\Output\;$(SolutionDir)CP3DEngine\Output\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Irrlicht.lib;CP3DRenderingEngine.lib;CP3DEngine.lib;OhmSDK.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\Irrlicht181\Output\;$(SolutionDir)CP3DRenderingEngine\Output\;$(SolutionDir)CP3DEngine\Output\;$(SolutionDir)Dependencies\OhmSDK\libs\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>$(OutDir)$(TargetName).lib</ImportLibrary>
     </Link>
     <PostBuildEvent>

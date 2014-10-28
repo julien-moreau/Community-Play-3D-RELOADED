@@ -1,0 +1,340 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Flip Programming Guide: Writing a Flip Class Part 2</title>
+<link rel="stylesheet" href="docpage.css" type="text/css" />
+</head>
+
+<script type="text/javascript">
+function searchfield_focus(obj)
+{
+obj.style.color="#000"
+if (obj.value=="Search Library")
+	{obj.value=""}
+}
+</script>
+
+
+<body>
+
+<div id="header">
+<div style="width: 1006px;">
+<!--<form method="get" class="search" style="padding-top: 5px;"  action="http://www.google.com/search">
+<input onfocus="searchfield_focus(this)" type="search" class="search" name="q" value="Search Library">
+<input type="hidden" name="sitesearch" value="">
+</form>-->
+</div>
+<p><a href="index.html">Ohm Force Developer Library</a><a href="ohm.flip.guide.about.html">Flip Programming Guide</a></p>
+</div>
+
+<div id="toc">
+<p>Flip Programming Guide</p>
+<ul>
+<li><a href="ohm.flip.guide.about.html">About Flip Programming Guide</a></li>
+<li><a href="ohm.flip.guide.design.html">Designing your Flip Application</a></li>
+<li><a href="ohm.flip.guide.class.html">Writing a Flip Class Part 1</a></li>
+<li><a href="ohm.flip.guide.class2.html"><strong>Writing a Flip Class Part 2</strong></a>
+	<ul>
+	<li><a href="ohm.flip.guide.class2.html#understanding">Understanding Transactions</a></li>
+	<li><a href="ohm.flip.guide.class2.html#conventions">Conventions</a></li>
+	<li><a href="ohm.flip.guide.class2.html#example">Example</a></li>
+	</ul>
+</li>
+<li><a href="ohm.flip.guide.containers.html">Using Containers</a></li>
+<li><a href="ohm.flip.guide.enums.html">Using Enums</a></li>
+<li><a href="ohm.flip.guide.blob.html">Using Blobs</a></li>
+<li><a href="ohm.flip.guide.objectref.html">Using ObjectRefs</a></li>
+<li><a href="ohm.flip.guide.cue.html">Using Cues</a></li>
+<li><a href="ohm.flip.guide.navigation.html">Navigating the Model</a></li>
+<li><a href="ohm.flip.guide.observer.html">Writing a DocumentObserver</a></li>
+<li><a href="ohm.flip.guide.validator.html">Writing a DocumentValidator</a></li>
+<li><a href="ohm.flip.guide.undo.html">Using the Undo/Redo system</a></li>
+<li><a href="ohm.flip.guide.const.html">Managing Pseudo Const Members</a></li>
+<li><a href="ohm.flip.guide.mold.html">Using an ObjectMold</a></li>
+<li><a href="ohm.flip.guide.conversion.html">Writing a Converter</a></li>
+<li><a href="ohm.flip.guide.tweaker.html">Writing a DocumentTweaker</a></li>
+</ul>
+
+<div class="bottomspacer">&nbsp;</div>
+</div>
+
+<div id="content">
+
+<div class="nav" align="right"><a href="ohm.flip.guide.class.html">previous</a><span>&nbsp;</span><a href="ohm.flip.guide.containers.html">next</a></div>
+
+<h1>Writing a Flip Class Part 2</h1>
+
+<p>This chapter follows the previous in which we declared a Flip class. In this chapter
+we will see how to manipulate a flip class.</p>
+<p>In the following, we will show the step by step construction of an hypothetic
+<span class="code">MyClass</span> 
+class.</p>
+<p>This chapter, like the previous, will assume that your company is
+called ACME making the application “Product”.</p>
+<h2><a name="understanding">Understanding Transactions</a></h2>
+<p>Before reading this section, you should be familiar with the
+<a href="ohm.flip.overview.how.html">Flip Overview: How it Works</a>
+chapter. The following will describe
+the transaction system in greater depth.</p>
+<p>The Flip framework works in a transactional way. When you manipulate the model,
+Flip will build a transaction that will be sent to the server and kept for
+the undo/redo system.</p>
+<p>However when manipulating the framework, you must tell it to begin a transaction.
+Multiple concurrent transactions cannot occur in Flip (unless using the Flip thread
+system) and you cannot manipulate the framework outside a transaction.</p>
+<p>Flip delivers markers for the beginning of a transaction as well as its end.
+To ensure that multiple concurrent transactions do not occur, Flip offers a
+convenient class named
+<span class="code">TxSessionGuard</span> 
+.</p>
+<p>However it is not unrare to cascade several transactions between Flip classes.
+For example if you have a class
+<span class="code">MyClass</span> 
+and another
+<span class="code">MyAggregateClass</span> 
+where the latter is an aggregate of the former, you might have a function
+in
+<span class="code">Myclass</span> 
+that start a transaction and call another function of
+<span class="code">MyAggregateClass</span> 
+. In that case, you won’t want the latter class to start
+a transaction, but rather manipulate the current opened transaction.</p>
+<p>Rather that maintaining a recursive count (like the one you can find in the
+implementation of recursive mutexes), it was decided that the client of the
+framework would separate the code that manipulate the start and end of a
+transaction from the code that actually fills the transaction.</p>
+<p>Also, if most of the model functions will start a transaction, fill the transaction
+and end the transaction in one call, the client of the Flip framework will usually
+also want to have a transaction that span accross multiple calls to the model.
+For example if the user click & drag the mouse on screen and the transaction is
+filled while the mouse is being dragged.</p>
+<p>All those cases are handled by the Flip framework. To make the code easier to read
+and to maintain, we elaborated a robust workflow accross the years, which is essentially
+a set of conventions to use.</p>
+<p>The function to manipulate the model are separated in 3 categories :</p>
+<ul>
+<li>The code that setup a transaction and fill it in one call
+</li>
+<li>The code that only fill the model
+</li>
+<li>The code that do all the above but spanned on multiple calls
+</li>
+</ul>
+<h2><a name="conventions">Conventions</a></h2>
+<p>By convention, the code that setup a transaction and fill it in one call will be
+prefixed by
+<span class="code">tx_</span> 
+. The code that will only fill the model will be
+prefixed by
+<span class="code">ext_</span> 
+. Finally the code that spanned accross multiple
+calls will contain
+<span class="code">session</span> 
+.</p>
+<p>Internally, the
+<span class="code">tx_</span> 
+prefixed and
+<span class="code">session</span> 
+code will call the
+<span class="code">ext_</span> 
+prefixed code. Therefore, if you read code where a
+<span class="code">tx_</span> 
+prefixed function calls
+a
+<span class="code">tx_</span> 
+prefixed function, you know that something is wrong. The same goes for
+a
+<span class="code">ext_</span> 
+prefixed function that would call a
+<span class="code">tx_</span> 
+prefixed function,
+and so on.</p>
+<p>Also, this means that the only function that can be called outside of the model
+(that is in the client code) are only the ones prefixed by
+<span class="code">tx_</span> 
+and the
+ones containing
+<span class="code">session</span> 
+. Calling an
+<span class="code">ext_</span> 
+prefixed function outside
+of the model can be considered as an error. Any developer not following this rule
+shall be severly punished.</p>
+<h2><a name="example">Example</a></h2>
+<p>Practically, if we take the example of the class exposed in the previous chapter,
+<span class="code">MyClass</span> 
+and wish to manipulate the
+<span class="code">_my_int</span> 
+member, the code would go like this
+if we were to use all the transaction system that Flip handles.</p>
+<div class="codeblock">
+<table>
+<tr><td><small><pre>#include "ohm/flip/Object.h"</pre></small></td></tr>
+<tr><td><small><pre>#include "ohm/flip/Float64.h"</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>class MyClass</pre></small></td></tr>
+<tr><td><small><pre>:  public ohm::flip::Object</pre></small></td></tr>
+<tr><td><small><pre>{</pre></small></td></tr>
+<tr><td><small><pre>public:</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>   static void          declare ();</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>                        MyClass (ohm::flip::DocumentBase & document);</pre></small></td></tr>
+<tr><td><small><pre>   virtual              ~MyClass () {}</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><strong><pre>   void                 tx_set_my_float (float val);</pre></strong></td></tr>
+<tr><td><strong><pre>   void                 ext_set_my_float (float val);</pre></strong></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><strong><pre>   bool                 start_session ();</pre></strong></td></tr>
+<tr><td><strong><pre>   void                 commit_session ();</pre></strong></td></tr>
+<tr><td><strong><pre>   void                 revert_session ();</pre></strong></td></tr>
+<tr><td><strong><pre>   void                 session_set_my_float (float val);</pre></strong></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><small><pre>private:</pre></small></td></tr>
+<tr><td><small><pre>   ohm::flip::Float64   _my_float;</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><strong><pre>   ohm::flip::TxSessionGuard</pre></strong></td></tr>
+<tr><td><strong><pre>                        _tx_session_guard;</pre></strong></td></tr>
+<tr><td><small><pre>};</pre></small></td></tr>
+</table>
+</div>
+<p>Note the addition of the
+<span class="code">_tx_session_guard</span> 
+member. This member does not need
+to be declared in the
+<span class="code">declare</span> 
+function, but needs to be linked to the
+document in
+<span class="code">MyClass</span> 
+constructor.</p>
+<div class="codeblock">
+<table>
+<tr><td><small><pre>MyClass::MyClass (ohm::flip::DocumentBase & document)</pre></small></td></tr>
+<tr><td><small><pre>:  ohm::flip::Object (document)</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>,  _my_float (document)</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><strong><pre>,  _tx_session_guard (document)</pre></strong></td></tr>
+<tr><td><small><pre>{</pre></small></td></tr>
+<tr><td><small><pre>}</pre></small></td></tr>
+</table>
+</div>
+<p>The following will show the implementation of the function members added in
+the listing above. The function is simple, but this shows clearly the pattern
+that will be used in
+<strong>every</strong> transaction manipulation functions.</p>
+<div class="codeblock">
+<p><strong>Listing</strong><span class="code">MyClass::tx_set_my_float</span> 
+implementation
+</p>
+<table>
+<tr><td><pre>void  MyClass::tx_set_my_float (float val)</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   if (!_tx_session_guard.start ())    // 1.</pre></td></tr>
+<tr><td><pre>   {</pre></td></tr>
+<tr><td><pre>      return;                          // 2.</pre></td></tr>
+<tr><td><pre>   }</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   ext_set_my_float (val);             // 3.</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   _tx_session_guard.commit ();        // 4.</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<ol>
+<li>Try to start a new transaction...
+</li>
+<li>...A transaction was already started (for example one that spans accross multiple calls)
+</li>
+<li>Cascade the actual transaction fill to the
+<span class="code">ext_</span> 
+prefixed function
+</li>
+<li>End the current transaction. After this call, a new transaction can be started.
+</li>
+</ol>
+<div class="codeblock">
+<p><strong>Listing</strong><span class="code">MyClass::ext_set_my_float</span> 
+implementation
+</p>
+<table>
+<tr><td><pre>void  MyClass::ext_set_my_float (float val)</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   _my_float = val;</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<p>The above listing is quite forward :
+<span class="code">_my_float</span> 
+is assigned
+<span class="code">val</span> 
+. This will
+generate a piece of the transaction.</p>
+<p>The following listing will show the implementation of the
+<span class="code">session</span> 
+based function.
+This is essentially a scattered version of the
+<span class="code">tx_</span> 
+prefixed function, with
+an additionnal guard.</p>
+<div class="codeblock">
+<p><strong>Listing</strong><span class="code">MyClass::session_*</span> 
+implementation
+</p>
+<table>
+<tr><td><pre>bool  MyClass::start_session ()</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   return _tx_session_guard.start ();</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>void  MyClass::commit_session ()</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   _tx_session_guard.commit ();</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>void  MyClass::revert_session ()</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   _tx_session_guard.revert ();</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>void  MyClass::session_set_my_float (float val)</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   flip::TxSessionGuard::AutoWield auto_wield (_tx_session_guard);   // 1.</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   ext_set_my_float (val);                                           // 2.</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<ol>
+<li>The guard will ensure that the a transaction is present and will
+<span class="code">assert</span> 
+otherwise
+</li>
+<li>We call the function that fill the transaction
+</li>
+</ol>
+<p>Note that a session can be reverted. If the user cancel the action after it was initiated
+(for example by switching to another application while dragging an object on screen), the
+transaction can be cancelled, and will be automatically rollbacked from where it was.</p>
+<p>The value types, enum types and opaque data classes are quite simple in their use. They
+just hold data. However correct design considerations should be taken when using container
+classes or the signaling type. This will be discussed in the next 2 chapters.</p>
+
+
+<div class="nav" align="right"><a href="ohm.flip.guide.class.html">previous</a><span>&nbsp;</span><a href="ohm.flip.guide.containers.html">next</a></div>
+
+<div class="bottomspacer">&nbsp;</div>
+
+</div>
+
+<footer>
+<a href="index.html">Ohm Force Developer Library</a> > <a href="ohm.flip.guide.about.html">Flip Programming Guide</a> > <a href="ohm.flip.guide.class2.html">Writing a Flip Class Part 2</a>
+</footer>
+
+
+</body>
+
+</html>

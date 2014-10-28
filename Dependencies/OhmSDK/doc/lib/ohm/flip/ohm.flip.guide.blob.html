@@ -1,0 +1,237 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Flip Programming Guide: Using Blobs</title>
+<link rel="stylesheet" href="docpage.css" type="text/css" />
+</head>
+
+<script type="text/javascript">
+function searchfield_focus(obj)
+{
+obj.style.color="#000"
+if (obj.value=="Search Library")
+	{obj.value=""}
+}
+</script>
+
+
+<body>
+
+<div id="header">
+<div style="width: 1006px;">
+<!--<form method="get" class="search" style="padding-top: 5px;"  action="http://www.google.com/search">
+<input onfocus="searchfield_focus(this)" type="search" class="search" name="q" value="Search Library">
+<input type="hidden" name="sitesearch" value="">
+</form>-->
+</div>
+<p><a href="index.html">Ohm Force Developer Library</a><a href="ohm.flip.guide.about.html">Flip Programming Guide</a></p>
+</div>
+
+<div id="toc">
+<p>Flip Programming Guide</p>
+<ul>
+<li><a href="ohm.flip.guide.about.html">About Flip Programming Guide</a></li>
+<li><a href="ohm.flip.guide.design.html">Designing your Flip Application</a></li>
+<li><a href="ohm.flip.guide.class.html">Writing a Flip Class Part 1</a></li>
+<li><a href="ohm.flip.guide.class2.html">Writing a Flip Class Part 2</a></li>
+<li><a href="ohm.flip.guide.containers.html">Using Containers</a></li>
+<li><a href="ohm.flip.guide.enums.html">Using Enums</a></li>
+<li><a href="ohm.flip.guide.blob.html"><strong>Using Blobs</strong></a>
+	<ul>
+	<li><a href="ohm.flip.guide.blob.html#why">Why Use a Blob ?</a></li>
+	<li><a href="ohm.flip.guide.blob.html#encoders">Encoders</a></li>
+	<li><a href="ohm.flip.guide.blob.html#inline">Inline Property</a></li>
+	</ul>
+</li>
+<li><a href="ohm.flip.guide.objectref.html">Using ObjectRefs</a></li>
+<li><a href="ohm.flip.guide.cue.html">Using Cues</a></li>
+<li><a href="ohm.flip.guide.navigation.html">Navigating the Model</a></li>
+<li><a href="ohm.flip.guide.observer.html">Writing a DocumentObserver</a></li>
+<li><a href="ohm.flip.guide.validator.html">Writing a DocumentValidator</a></li>
+<li><a href="ohm.flip.guide.undo.html">Using the Undo/Redo system</a></li>
+<li><a href="ohm.flip.guide.const.html">Managing Pseudo Const Members</a></li>
+<li><a href="ohm.flip.guide.mold.html">Using an ObjectMold</a></li>
+<li><a href="ohm.flip.guide.conversion.html">Writing a Converter</a></li>
+<li><a href="ohm.flip.guide.tweaker.html">Writing a DocumentTweaker</a></li>
+</ul>
+
+<div class="bottomspacer">&nbsp;</div>
+</div>
+
+<div id="content">
+
+<div class="nav" align="right"><a href="ohm.flip.guide.enums.html">previous</a><span>&nbsp;</span><a href="ohm.flip.guide.objectref.html">next</a></div>
+
+<h1>Using Blobs</h1>
+
+<p>This chapter will describe the use of
+<span class="code">flip::Blob</span> 
+with the Flip framework.</p>
+<p>In the following, we will show the step by step construction of an hypothetic
+<span class="code">MyClass</span> 
+class.</p>
+<p>This chapter will assume that your company is called ACME making the application “Product”.</p>
+<h2><a name="why">Why Use a Blob ?</a></h2>
+<p>The Flip framework offers a
+<span class="code">flip::Blob</span> 
+class that holds arbitrary opaque data.</p>
+<p>When deciding whether to use an
+<span class="code">flip::Array</span> 
+of objects representing bytes or
+a
+<span class="code">Blob</span> 
+, the following features should be considered :</p>
+<ul>
+<li>an
+<span class="code">flip::Array</span> 
+holding more than
+<span class="code">10000</span> 
+value will have an impact
+on performance, where as a
+<span class="code">10K</span> 
+bytes
+<span class="code">flip::Blob</span> 
+is quite a small blob
+</li>
+<li>accessing individual elements in the array is possible, whereas a change of
+the blob will send the whole blob. In particular this ensure that blobs cannot be
+concurrently merged, which would occur with arrays
+</li>
+</ul>
+<p>The
+<span class="code">flip::Blob</span> 
+class also offers character string facilities : it can be
+assigned a
+<span class="code">std::string</span> 
+and can be casted to a
+<span class="code">std::string</span> 
+using
+the method
+<span class="code">to_string</span> </p>
+<div class="codeblock">
+<p><strong>Listing</strong>Using a
+<span class="code">flip::Blob</span> 
+to hold a character string
+</p>
+<table>
+<tr><td><pre>std::string str ("Some text");</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>_my_blob.set (str);</pre></td></tr>
+<tr><td><pre>std::string text = _my_blob.to_string ();</pre></td></tr>
+</table>
+</div>
+<div class="warning"><p><strong>WARNING:</strong>The
+<span class="code">to_string</span> 
+method returns the string by value,
+<strong>not</strong> by reference.</p></div>
+<h2><a name="encoders">Encoders</a></h2>
+<p>The Flip framework offers a number of encoders for
+<span class="code">Blob</span> 
+.
+The encoders do not modify the
+<span class="code">Blob</span> 
+itself, but only how it
+is encoded for the back-end document writer.</p>
+<p>Encoder are used in the following use cases :</p>
+<ul>
+<li>The data is opaque (non human readable) and can get quite voluminous
+</li>
+<li>The data is not opaque and shall be displayed in the document in
+a human readable format if possible
+</li>
+</ul>
+<p>For the first case, Flip supports compression through the
+<span class="code">zlib</span> 
+<span class="code">deflate</span> 
+compression through
+<span class="code">Encoder_DEFLATE</span> 
+.</p>
+<p>For the second case, Flip supports a limited number of human readable format :</p>
+<ul>
+<li><span class="code">Encoder_ESCAPED_ASCII</span> 
+is usually used to encode strings in a format
+which match string literals representation. In particular carriage return, line
+feed and tabular characters are mapped to
+<span class="code">\r</span> 
+,
+<span class="code">\n</span> 
+and
+<span class="code">\t</span> 
+respectively.
+</li>
+<li><span class="code">Encoder_HEXADECIMAL</span> 
+is usually when representing the data as
+hexadecimal yield better readability.
+</li>
+</ul>
+<h2><a name="inline">Inline Property</a></h2>
+<p>The inline property available through
+<span class="code">set_inline</span> 
+do not modify the
+<span class="code">Blob</span> 
+itself,
+but only how it is encoded for the back-end document writer.</p>
+<p>When inlining is not used (which is the default), the blob member is written in a
+two stage in the document. The attribute description just mark the reference number of
+the blob, and the blob is written later. The following listing illutrates this :</p>
+<div class="codeblock">
+<p><strong>Listing</strong>Non-inlined blob
+</p>
+<table>
+<tr><td><pre>57 obj &lt;&lt;</pre></td></tr>
+<tr><td><pre>   /ClassName ohm.studio.ClientData</pre></td></tr>
+<tr><td><pre>      /AttributeName _user_name /Type /Blob /Ref 58</pre></td></tr>
+<tr><td><pre>&gt;&gt;</pre></td></tr>
+<tr><td><pre>endobj</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>58 obj &lt;&lt;</pre></td></tr>
+<tr><td><pre>   /Blob</pre></td></tr>
+<tr><td><pre>      /Length 6</pre></td></tr>
+<tr><td><pre>      /Filter [ /EscapedAsciiDecode ]</pre></td></tr>
+<tr><td><pre>&gt;&gt;</pre></td></tr>
+<tr><td><pre>stream</pre></td></tr>
+<tr><td><pre>raphael</pre></td></tr>
+<tr><td><pre>endstream</pre></td></tr>
+<tr><td><pre>endobj</pre></td></tr>
+</table>
+</div>
+<p>When inlining is used (by the way of
+<span class="code">set_inline</span> 
+, the blob member is written
+directly on the attribute line. The following listing illutrates this :</p>
+<div class="codeblock">
+<p><strong>Listing</strong>Inlined blob
+</p>
+<table>
+<tr><td><pre>57 obj &lt;&lt;</pre></td></tr>
+<tr><td><pre>   /ClassName ohm.studio.ClientData</pre></td></tr>
+<tr><td><pre>      /AttributeName _user_name /Type /Blob /Inline /Length 6 /Filter [ /EscapedAsciiDecode ] raphael</pre></td></tr>
+<tr><td><pre>&gt;&gt;</pre></td></tr>
+<tr><td><pre>endobj</pre></td></tr>
+</table>
+</div>
+<p>In particular for the
+<span class="code">Encoder_ESCAPED_ASCII</span> 
+and
+<span class="code">Encoder_HEXADECIMAL</span> 
+encoders,
+this can lead to better overall readibility, as well as a substantial smaller file size.</p>
+
+
+<div class="nav" align="right"><a href="ohm.flip.guide.enums.html">previous</a><span>&nbsp;</span><a href="ohm.flip.guide.objectref.html">next</a></div>
+
+<div class="bottomspacer">&nbsp;</div>
+
+</div>
+
+<footer>
+<a href="index.html">Ohm Force Developer Library</a> > <a href="ohm.flip.guide.about.html">Flip Programming Guide</a> > <a href="ohm.flip.guide.blob.html">Using Blobs</a>
+</footer>
+
+
+</body>
+
+</html>

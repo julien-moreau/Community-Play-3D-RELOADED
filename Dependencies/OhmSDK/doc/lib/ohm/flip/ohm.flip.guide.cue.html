@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Flip Programming Guide: Using Cues</title>
+<link rel="stylesheet" href="docpage.css" type="text/css" />
+</head>
+
+<script type="text/javascript">
+function searchfield_focus(obj)
+{
+obj.style.color="#000"
+if (obj.value=="Search Library")
+	{obj.value=""}
+}
+</script>
+
+
+<body>
+
+<div id="header">
+<div style="width: 1006px;">
+<!--<form method="get" class="search" style="padding-top: 5px;"  action="http://www.google.com/search">
+<input onfocus="searchfield_focus(this)" type="search" class="search" name="q" value="Search Library">
+<input type="hidden" name="sitesearch" value="">
+</form>-->
+</div>
+<p><a href="index.html">Ohm Force Developer Library</a><a href="ohm.flip.guide.about.html">Flip Programming Guide</a></p>
+</div>
+
+<div id="toc">
+<p>Flip Programming Guide</p>
+<ul>
+<li><a href="ohm.flip.guide.about.html">About Flip Programming Guide</a></li>
+<li><a href="ohm.flip.guide.design.html">Designing your Flip Application</a></li>
+<li><a href="ohm.flip.guide.class.html">Writing a Flip Class Part 1</a></li>
+<li><a href="ohm.flip.guide.class2.html">Writing a Flip Class Part 2</a></li>
+<li><a href="ohm.flip.guide.containers.html">Using Containers</a></li>
+<li><a href="ohm.flip.guide.enums.html">Using Enums</a></li>
+<li><a href="ohm.flip.guide.blob.html">Using Blobs</a></li>
+<li><a href="ohm.flip.guide.objectref.html">Using ObjectRefs</a></li>
+<li><a href="ohm.flip.guide.cue.html"><strong>Using Cues</strong></a>
+	<ul>
+	<li><a href="ohm.flip.guide.cue.html#overview">Overview</a></li>
+	<li><a href="ohm.flip.guide.cue.html#why">Why Use a Cue ?</a></li>
+	<li><a href="ohm.flip.guide.cue.html#diff">Differential Data Concept</a></li>
+	</ul>
+</li>
+<li><a href="ohm.flip.guide.navigation.html">Navigating the Model</a></li>
+<li><a href="ohm.flip.guide.observer.html">Writing a DocumentObserver</a></li>
+<li><a href="ohm.flip.guide.validator.html">Writing a DocumentValidator</a></li>
+<li><a href="ohm.flip.guide.undo.html">Using the Undo/Redo system</a></li>
+<li><a href="ohm.flip.guide.const.html">Managing Pseudo Const Members</a></li>
+<li><a href="ohm.flip.guide.mold.html">Using an ObjectMold</a></li>
+<li><a href="ohm.flip.guide.conversion.html">Writing a Converter</a></li>
+<li><a href="ohm.flip.guide.tweaker.html">Writing a DocumentTweaker</a></li>
+</ul>
+
+<div class="bottomspacer">&nbsp;</div>
+</div>
+
+<div id="content">
+
+<div class="nav" align="right"><a href="ohm.flip.guide.objectref.html">previous</a><span>&nbsp;</span><a href="ohm.flip.guide.navigation.html">next</a></div>
+
+<h1>Using Cues</h1>
+
+<p>This chapter will describe the use of
+<span class="code">flip::Cue</span> 
+with the Flip framework.</p>
+<p>In the following, we will show the step by step construction of an hypothetic
+<span class="code">MyClass</span> 
+class.</p>
+<p>This chapter will assume that your company is called ACME making the application “Product”.</p>
+<h2><a name="overview">Overview</a></h2>
+<p>The Flip framework offers a
+<span class="code">flip::Cue</span> 
+class that allows to signal objects
+with an optional piece of opaque data.
+<span class="code">flip::Cue</span> 
+objects have inherently
+no value.</p>
+<p><span class="code">Cue</span> 
+is to a GUI push button what
+<span class="code">Bool</span> 
+is to a GUI toggle such
+as a check box.</p>
+<h2><a name="why">Why Use a Cue ?</a></h2>
+<p>The Flip framework comes bundled with two signaling scheme.</p>
+<p>The first signaling scheme is available through the
+<span class="code">send_signal</span> 
+of
+<span class="code">Object</span> 
+.
+This means that every Flip objects support signals inherently. An object signal is propagated
+to the other Flip threads of the client, but not to the other clients. They are not embedded
+in a transaction but are received through the
+<span class="code">virtual</span> 
+method
+<span class="code">signal</span> 
+in the
+document observers. Sending a signal is immediate.</p>
+<p>On the other hand, the
+<span class="code">Cue</span> 
+signaling scheme implies that a Flip class must add
+a
+<span class="code">Cue</span> 
+in its member to access this feature. A
+<span class="code">Cue</span> 
+signal is propagated
+to the other Flip threads of the client, as well as the other clients and their Flip threads,
+as signaling a
+<span class="code">Cue</span> 
+is part of the transaction system. In particular,
+<span class="code">Cue</span> 
+signals are received through the
+<span class="code">virtual</span> 
+method
+<span class="code">document_changed</span> 
+of the
+document observers, like any other model change. Sending	a signal throuh a
+<span class="code">Cue</span> 
+is
+tied to the transaction system, and may be delayed to the end of user input handling
+before it is sent.</p>
+<p>The following table summarize the difference between the two signaling scheme.</p>
+<table>
+<tr><td><p></p></td><td><p><span class="code">send_signal</span> 
+</p></td><td><p><span class="code">Cue</span> 
+</p></td></tr>
+<tr><td><p>Other Flip Threads
+</p></td><td><p>Yes
+</p></td><td><p>Yes
+</p></td></tr>
+<tr><td><p>Other Flip Clients
+</p></td><td><p>No
+</p></td><td><p>Yes
+</p></td></tr>
+<tr><td><p>Transaction
+</p></td><td><p>No
+</p></td><td><p>Yes
+</p></td></tr>
+<tr><td><p>Delivery
+</p></td><td><p><span class="code">signal</span> 
+</p></td><td><p><span class="code">document_changed</span> 
+</p></td></tr>
+<tr><td><p>Sending
+</p></td><td><p>Immediate
+</p></td><td><p>Delayed (end of transaction)
+</p></td></tr>
+</table>
+<p>Because object signals are not synchronized to transactions, signals may be received
+in an other order that the transaction one. For example if a client make a transaction
+and then send a signal, it is very likely that the signal will be received before
+the transaction, as the signal will be sent immediatly while the transaction will be
+sent when the user input call ends, which is after the signal is sent.</p>
+<p>Therefore is synchronization is important, using a
+<span class="code">Cue</span> 
+is the solution. Because
+the
+<span class="code">Cue</span> 
+signal is sent to every clients, special precautions may have to be
+taken for the other clients to ignore the signal.</p>
+<h2><a name="diff">Differential Data Concept</a></h2>
+<p>Every atom of a Flip transaction represents a way to encode the difference
+between the old state and the new state of a basic Flip object.</p>
+<p>While
+<span class="code">Cue</span> 
+has not internal value, the atom still expresses the
+implicit difference of the object, which sense is to the client appreciation.</p>
+<p>In particular since every atom of a Flip transaction can be inverted, as
+this is how is handled the undo system as well as when rollbacking a transaction,
+the
+<span class="code">Cue</span> 
+supports the same system. Since the meaning of the implicit
+difference is left to the client, the meaning of the inverted implicit difference
+is also left to the client of the framework.</p>
+<p>A
+<span class="code">Cue</span> 
+might be signaled multiple times in a transaction. Each signal
+is recorded. If the transaction is executed forward, querying the cue for an
+element will return direction
+<span class="code">1</span> 
+. If the executed backward, like in
+an undo, querying the cue for an element will return direction
+<span class="code">-1</span> 
+.</p>
+
+
+<div class="nav" align="right"><a href="ohm.flip.guide.objectref.html">previous</a><span>&nbsp;</span><a href="ohm.flip.guide.navigation.html">next</a></div>
+
+<div class="bottomspacer">&nbsp;</div>
+
+</div>
+
+<footer>
+<a href="index.html">Ohm Force Developer Library</a> > <a href="ohm.flip.guide.about.html">Flip Programming Guide</a> > <a href="ohm.flip.guide.cue.html">Using Cues</a>
+</footer>
+
+
+</body>
+
+</html>

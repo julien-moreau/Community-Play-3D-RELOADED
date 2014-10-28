@@ -1,0 +1,119 @@
+/*****************************************************************************
+
+        PrimProgressBar.h
+        Copyright (c) 2011 Ohm Force
+
+        Author: Raphael Dinge <raphael.dinge@ohmforce.com>
+        Revision: 67009
+
+        This file is part of Ohm Force Libraries.
+
+        This program is free software; you can redistribute it and/or
+        modify it under the terms of the GNU General Public License
+        version 2 as published by the Free Software Foundation;
+
+        This program is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        GNU General Public License for more details.
+
+        You should have received a copy of the GNU General Public License
+        along with this program;
+        if not, write to the Free Software Foundation, Inc.,
+        59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+*Tab=3***********************************************************************/
+
+
+
+#if ! defined (ohm_opa_PrimProgressBar_HEADER_INCLUDED)
+#define  ohm_opa_PrimProgressBar_HEADER_INCLUDED
+
+#pragma once
+#if defined (_MSC_VER)
+   #pragma warning (4 : 4250) // "Inherits via dominance."
+#endif
+
+
+
+/*\\\ INCLUDE FILES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+
+#include "ohm/opa/prim/PrimWidget.h"
+#include "ohm/opak/base/TypeFloat.h"
+#include "ohm/opak/base/TypeTicker.h"
+
+
+
+namespace ohm
+{
+namespace opa
+{
+
+
+
+class PrimProgressBar
+:  public PrimWidget
+{
+
+/*\\\ PUBLIC \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+
+public:
+
+                  PrimProgressBar ();
+
+   virtual void   display (opak::GraphicContext & context);
+
+   opak::TypeFloat <PrimProgressBar>
+                  _width;
+   opak::TypeFloat <PrimProgressBar>
+                  _norm_value;
+
+   
+
+/*\\\ PROTECTED \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+
+protected:
+
+   virtual        ~PrimProgressBar ();
+
+
+
+/*\\\ PRIVATE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+
+private:
+
+   void           width_changed ();
+   void           something_changed ();
+
+   opak::TypeTicker <PrimProgressBar>
+                  _ticker;
+
+
+
+/*\\\ FORBIDDEN MEMBER FUNCTIONS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+
+private:
+                  PrimProgressBar (const PrimProgressBar &other);
+   PrimProgressBar & operator = (const PrimProgressBar &other);
+   bool           operator == (const PrimProgressBar &other) const;
+   bool           operator != (const PrimProgressBar &other) const;
+
+}; // class PrimProgressBar
+
+
+
+}  // namespace opa
+}  // namespace ohm
+
+
+
+//#include  "ohm/opa/PrimProgressBar.hpp"
+
+
+
+#endif   // ohm_opa_PrimProgressBar_HEADER_INCLUDED
+
+
+
+/*\\\ EOF \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+

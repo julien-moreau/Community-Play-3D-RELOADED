@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Flip Programming Guide: Writing a DocumentTweaker</title>
+<link rel="stylesheet" href="docpage.css" type="text/css" />
+</head>
+
+<script type="text/javascript">
+function searchfield_focus(obj)
+{
+obj.style.color="#000"
+if (obj.value=="Search Library")
+	{obj.value=""}
+}
+</script>
+
+
+<body>
+
+<div id="header">
+<div style="width: 1006px;">
+<!--<form method="get" class="search" style="padding-top: 5px;"  action="http://www.google.com/search">
+<input onfocus="searchfield_focus(this)" type="search" class="search" name="q" value="Search Library">
+<input type="hidden" name="sitesearch" value="">
+</form>-->
+</div>
+<p><a href="index.html">Ohm Force Developer Library</a><a href="ohm.flip.guide.about.html">Flip Programming Guide</a></p>
+</div>
+
+<div id="toc">
+<p>Flip Programming Guide</p>
+<ul>
+<li><a href="ohm.flip.guide.about.html">About Flip Programming Guide</a></li>
+<li><a href="ohm.flip.guide.design.html">Designing your Flip Application</a></li>
+<li><a href="ohm.flip.guide.class.html">Writing a Flip Class Part 1</a></li>
+<li><a href="ohm.flip.guide.class2.html">Writing a Flip Class Part 2</a></li>
+<li><a href="ohm.flip.guide.containers.html">Using Containers</a></li>
+<li><a href="ohm.flip.guide.enums.html">Using Enums</a></li>
+<li><a href="ohm.flip.guide.blob.html">Using Blobs</a></li>
+<li><a href="ohm.flip.guide.objectref.html">Using ObjectRefs</a></li>
+<li><a href="ohm.flip.guide.cue.html">Using Cues</a></li>
+<li><a href="ohm.flip.guide.navigation.html">Navigating the Model</a></li>
+<li><a href="ohm.flip.guide.observer.html">Writing a DocumentObserver</a></li>
+<li><a href="ohm.flip.guide.validator.html">Writing a DocumentValidator</a></li>
+<li><a href="ohm.flip.guide.undo.html">Using the Undo/Redo system</a></li>
+<li><a href="ohm.flip.guide.const.html">Managing Pseudo Const Members</a></li>
+<li><a href="ohm.flip.guide.mold.html">Using an ObjectMold</a></li>
+<li><a href="ohm.flip.guide.conversion.html">Writing a Converter</a></li>
+<li><a href="ohm.flip.guide.tweaker.html"><strong>Writing a DocumentTweaker</strong></a>
+	<ul>
+	<li><a href="ohm.flip.guide.tweaker.html#overview">Overview</a></li>
+	<li><a href="ohm.flip.guide.tweaker.html#setup">Setting Up</a></li>
+	</ul>
+</li>
+</ul>
+
+<div class="bottomspacer">&nbsp;</div>
+</div>
+
+<div id="content">
+
+<div class="nav" align="right"><a href="ohm.flip.guide.conversion.html">previous</a></div>
+
+<h1>Writing a DocumentTweaker</h1>
+
+<p>This chapter will describe the use of
+<span class="code">flip::DocumentTweaker</span> 
+with the Flip framework.</p>
+<h2><a name="overview">Overview</a></h2>
+<p>The Flip framework offers a
+<span class="code">flip::DocumentTweaker</span> 
+template class
+which is the basis to write a document tweaker. A document tweaker
+is loaded upon load of the Flip document by the server, but before
+any clients receive the document.</p>
+<p>This allows to make change to the document that couldn’t be done when
+the document is live.</p>
+<p>A typical example is to simplify the model with classes which objects can
+only be added but never removed. As those objects would keep polluting
+the model when they may not be all necessary, the tweaker is a way to
+clean the document before it is read by the clients.</p>
+<h2><a name="setup">Setting Up</a></h2>
+<p>To set up the tweaker, we have to make a
+<span class="code">DocumentTweaker</span> 
+for the
+<span class="code">Root</span> 
+class. For that we make a class that inherits from
+<span class="code">ohm::flip::DocumentTweaker</span> 
+which template parameter is
+<span class="code">Root</span> 
+.</p>
+<div class="codeblock">
+<p><strong>Listing</strong><span class="code">DocumentTweaker</span> 
+declaration
+</p>
+<table>
+<tr><td><pre>class DocumentTweaker</pre></td></tr>
+<tr><td><pre>:  public ohm::flip::DocumentTweaker &lt;Root&gt;</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>public:</pre></td></tr>
+<tr><td><pre>                  DocumentTweaker ();</pre></td></tr>
+<tr><td><pre>   virtual        DocumentTweaker () {}</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   // inherited from ohm::flip::DocumentTweaker &lt;model::Root&gt;</pre></td></tr>
+<tr><td><pre>   virtual void   process (Root & root);</pre></td></tr>
+<tr><td><pre>};</pre></td></tr>
+</table>
+</div>
+<p>Then the client will bind the tweaker to the Flip
+<span class="code">ohm::flip::DocumentServer</span> 
+. At this
+point the server will notify the tweaker each time a document is loaded to allow it to
+make changes to the model before the clients are reading the document.</p>
+
+
+<div class="nav" align="right"><a href="ohm.flip.guide.conversion.html">previous</a></div>
+
+<div class="bottomspacer">&nbsp;</div>
+
+</div>
+
+<footer>
+<a href="index.html">Ohm Force Developer Library</a> > <a href="ohm.flip.guide.about.html">Flip Programming Guide</a> > <a href="ohm.flip.guide.tweaker.html">Writing a DocumentTweaker</a>
+</footer>
+
+
+</body>
+
+</html>

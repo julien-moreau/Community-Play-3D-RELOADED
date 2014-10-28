@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Flip Overview: Document Format, Conversion</title>
+<link rel="stylesheet" href="docpage.css" type="text/css" />
+</head>
+
+<script type="text/javascript">
+function searchfield_focus(obj)
+{
+obj.style.color="#000"
+if (obj.value=="Search Library")
+	{obj.value=""}
+}
+</script>
+
+
+<body>
+
+<div id="header">
+<div style="width: 1006px;">
+<!--<form method="get" class="search" style="padding-top: 5px;"  action="http://www.google.com/search">
+<input onfocus="searchfield_focus(this)" type="search" class="search" name="q" value="Search Library">
+<input type="hidden" name="sitesearch" value="">
+</form>-->
+</div>
+<p><a href="index.html">Ohm Force Developer Library</a><a href="ohm.flip.overview.about.html">Flip Overview</a></p>
+</div>
+
+<div id="toc">
+<p>Flip Overview</p>
+<ul>
+<li><a href="ohm.flip.overview.about.html">About Flip</a></li>
+<li><a href="ohm.flip.overview.how.html">How it Works</a></li>
+<li><a href="ohm.flip.overview.model.html">Interfacing with the Model</a></li>
+<li><a href="ohm.flip.overview.undo.html">Undo/Redo System</a></li>
+<li><a href="ohm.flip.overview.threading.html">Threading System</a></li>
+<li><a href="ohm.flip.overview.document.html"><strong>Document Format, Conversion</strong></a>
+	<ul>
+	<li><a href="ohm.flip.overview.document.html#format">Document Format</a></li>
+	<li><a href="ohm.flip.overview.document.html#format">Conversion</a></li>
+	</ul>
+</li>
+</ul>
+
+<div class="bottomspacer">&nbsp;</div>
+</div>
+
+<div id="content">
+
+<div class="nav" align="right"><a href="ohm.flip.overview.threading.html">previous</a></div>
+
+<h1>Document Format, Conversion</h1>
+
+<p>Flip provides an unique document format. Document versions are maintained so that
+it allows document from different versions to be converted to some other
+version. Convenient classes are provided for the latter to simplify work.</p>
+<h2><a name="format">Document Format</a></h2>
+<p>Flip comes with its document format, which is the only back-end for flip model
+persistent writes. The document format was designed to be easily read by a
+client (to detect problems) as well as parsed very fast (rather than using
+XML). The format itself is very similar to PDF, but only for its structural
+part. This allows for future extension easily, should it be needed.</p>
+<div class="note"><p><strong>Note:</strong>The format is similar to the PDF format but is
+<strong>not</strong> the PDF format</p></div>
+<p>The listing below shows a piece of a typical document as stored by Flip.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>%OSF-1.0</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>1 obj &lt;&lt;</pre></td></tr>
+<tr><td><pre>   /ClassName ohm.studio.Root</pre></td></tr>
+<tr><td><pre>      /AttributeName _client_data_coll /Type /Collection /Ref ( 2251799813685249 )</pre></td></tr>
+<tr><td><pre>      /AttributeName _client_audio_midi_data_coll /Type /Collection /Ref ( 2533274790395907 )</pre></td></tr>
+<tr><td><pre>      /AttributeName _tempo_coll /Type /Collection /Ref ( 9 )</pre></td></tr>
+<tr><td><pre>      /AttributeName _signature_coll /Type /Collection /Ref ( 12 )</pre></td></tr>
+<tr><td><pre>      /AttributeName _rack_arr /Type /Array /Ref [ 0.880cb2e 16 0.f8f4c6c1f4c 44 0.fe4bf19e79ce58 2533274790395910 ]</pre></td></tr>
+<tr><td><pre>      /AttributeName _connection_coll /Type /Collection /Ref ( 81 2533274790395996 )</pre></td></tr>
+<tr><td><pre>      /AttributeName _sample_coll /Type /Collection /Ref ( 2533274790396001 2533274790396030 )</pre></td></tr>
+<tr><td><pre>&gt;&gt;</pre></td></tr>
+<tr><td><pre>endobj</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>2251799813685249 obj &lt;&lt;</pre></td></tr>
+<tr><td><pre>   /ClassName ohm.studio.ClientData</pre></td></tr>
+<tr><td><pre>      /AttributeName _user_name /Type /Blob /Inline /Length 11 /Filter [ /EscapedAsciiDecode ] main_client</pre></td></tr>
+<tr><td><pre>      /AttributeName _focus_region /Type /Enum ohm.studio.ClientData.FocusRegion /Value FocusRegion_SEQUENCE</pre></td></tr>
+<tr><td><pre>      /AttributeName _primary_tool_cue /Type /Cue</pre></td></tr>
+<tr><td><pre>      /AttributeName _momentary_tool_cue /Type /Cue</pre></td></tr>
+<tr><td><pre>      /AttributeName _tool_state_cue /Type /Cue</pre></td></tr>
+<tr><td><pre>      /AttributeName _current_pattern_instance_cue /Type /Cue</pre></td></tr>
+<tr><td><pre>      /AttributeName _snap_flag /Type /Bool /Value /true</pre></td></tr>
+<tr><td><pre>      /AttributeName _snap_time /Type /Float64 /Value 0x3fd0000000000000</pre></td></tr>
+<tr><td><pre>      /AttributeName _snap_relative_flag /Type /Bool /Value /true</pre></td></tr>
+<tr><td><pre>      /AttributeName _snap_adaptative_flag /Type /Bool /Value /true</pre></td></tr>
+<tr><td><pre>      /AttributeName _click_flag /Type /Bool /Value /false</pre></td></tr>
+<tr><td><pre>      /AttributeName _click_freq /Type /Int64 /Value 4</pre></td></tr>
+<tr><td><pre>      /AttributeName _click_norm_vol /Type /Float64 /Value 0x3ff0000000000000</pre></td></tr>
+<tr><td><pre>      /AttributeName _selection_sequence /Type /Object /Ref 2251799813685263</pre></td></tr>
+<tr><td><pre>      /AttributeName _selection_plugin_rack /Type /Object /Ref 2251799813685265</pre></td></tr>
+<tr><td><pre>      /AttributeName _selection_inspector /Type /Object /Ref 2251799813685267</pre></td></tr>
+<tr><td><pre>      /AttributeName _view_layout_info /Type /Object /Ref 2251799813685269</pre></td></tr>
+<tr><td><pre>      /AttributeName _view_sequence_info /Type /Object /Ref 2251799813685272</pre></td></tr>
+<tr><td><pre>      /AttributeName _view_plugin_rack_info /Type /Object /Ref 2251799813685293</pre></td></tr>
+<tr><td><pre>      /AttributeName _view_mix_info /Type /Object /Ref 2251799813685301</pre></td></tr>
+<tr><td><pre>      /AttributeName _view_inspector_info /Type /Object /Ref 2251799813685311</pre></td></tr>
+<tr><td><pre>      /AttributeName _playhead_info /Type /Object /Ref 2251799813685312</pre></td></tr>
+<tr><td><pre>      /AttributeName _soundcloud_info /Type /Object /Ref 2251799813685319</pre></td></tr>
+<tr><td><pre>&gt;&gt;</pre></td></tr>
+<tr><td><pre>endobj</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>2251799813685263 obj &lt;&lt;</pre></td></tr>
+<tr><td><pre>   /ClassName ohm.studio.Selection</pre></td></tr>
+<tr><td><pre>      /AttributeName _coll /Type /Collection /Ref ( )</pre></td></tr>
+<tr><td><pre>&gt;&gt;</pre></td></tr>
+<tr><td><pre>endobj</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><small><pre>[... skipped content ...]</pre></small></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>xref</pre></td></tr>
+<tr><td><pre>58</pre></td></tr>
+<tr><td><pre>0000000010</pre></td></tr>
+<tr><td><pre>0000000633</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><small><pre>[... skipped content ...]</pre></small></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>trailer &lt;&lt;</pre></td></tr>
+<tr><td><pre>   /Root 1</pre></td></tr>
+<tr><td><pre>   /Revision 72</pre></td></tr>
+<tr><td><pre>   /Version OhmStudio.Beta.Rev69859</pre></td></tr>
+<tr><td><pre>   /User main_client /Id 1</pre></td></tr>
+<tr><td><pre>&gt;&gt;</pre></td></tr>
+<tr><td><pre>startxref</pre></td></tr>
+<tr><td><pre>22925</pre></td></tr>
+<tr><td><pre>%%EOF</pre></td></tr>
+</table>
+</div>
+<p>The document can be easily navigated by using a simple text editor (typically your IDE editor)
+and its bundled “find” feature. With a little experience, navigating file even as big as
+100 MBytes is not a big issue.</p>
+<h2><a name="format">Conversion</a></h2>
+<p>Bundled with Flip comes a set of convenience classes to ease the conversion process of
+converting, for example, a document from its 1.0 format to it 2.0 format.</p>
+<p>The client provides a version tree, and how to transition from one version format to
+another. This way, a complex version system can be easily maintained, allowing even
+A/B testing.</p>
+<p>The convenient classes themselves decode the document to show it already structured,
+but with strings. This allows not to maintain model of older versions, while keeping the
+old model structure implicitely in the conversion classes.</p>
+<p>The convenient classes also allow for easy insertion/deletion of members, global tree
+manipulation, etc.</p>
+
+
+<div class="nav" align="right"><a href="ohm.flip.overview.threading.html">previous</a></div>
+
+<div class="bottomspacer">&nbsp;</div>
+
+</div>
+
+<footer>
+<a href="index.html">Ohm Force Developer Library</a> > <a href="ohm.flip.overview.about.html">Flip Overview</a> > <a href="ohm.flip.overview.document.html">Document Format, Conversion</a>
+</footer>
+
+
+</body>
+
+</html>

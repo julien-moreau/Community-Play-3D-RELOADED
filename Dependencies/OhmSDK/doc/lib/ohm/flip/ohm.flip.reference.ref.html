@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Flip Reference: Ref Type Reference</title>
+<link rel="stylesheet" href="docpage.css" type="text/css" />
+</head>
+
+<script type="text/javascript">
+function searchfield_focus(obj)
+{
+obj.style.color="#000"
+if (obj.value=="Search Library")
+	{obj.value=""}
+}
+</script>
+
+
+<body>
+
+<div id="header">
+<div style="width: 1006px;">
+<!--<form method="get" class="search" style="padding-top: 5px;"  action="http://www.google.com/search">
+<input onfocus="searchfield_focus(this)" type="search" class="search" name="q" value="Search Library">
+<input type="hidden" name="sitesearch" value="">
+</form>-->
+</div>
+<p><a href="index.html">Ohm Force Developer Library</a><a href="ohm.flip.reference.overview.html">Flip Reference</a></p>
+</div>
+
+<div id="toc">
+<p>Flip Reference</p>
+<ul>
+<li><a href="ohm.flip.reference.overview.html">Overview</a></li>
+<li><a href="ohm.flip.reference.args.html">Args Class Reference</a></li>
+<li><a href="ohm.flip.reference.array.html">Array Template Class Reference</a></li>
+<li><a href="ohm.flip.reference.bool.html">Bool Class Reference</a></li>
+<li><a href="ohm.flip.reference.blob.html">Blob Class Reference</a></li>
+<li><a href="ohm.flip.reference.classdescmgr.html">ClassDescManager Class Reference</a></li>
+<li><a href="ohm.flip.reference.classdesc.html">ClassDescription Template Class Reference</a></li>
+<li><a href="ohm.flip.reference.collection.html">Collection Template Class Reference</a></li>
+<li><a href="ohm.flip.reference.cue.html">Cue Class Reference</a></li>
+<li><a href="ohm.flip.reference.docbase.html">DocumentBase Class Reference</a></li>
+<li><a href="ohm.flip.reference.docclient.html">DocumentClient Class Reference</a></li>
+<li><a href="ohm.flip.reference.doclocal.html">DocumentLocal Class Reference</a></li>
+<li><a href="ohm.flip.reference.docserver.html">DocumentServer Class Reference</a></li>
+<li><a href="ohm.flip.reference.docsignal.html">DocumentSignal Class Reference</a></li>
+<li><a href="ohm.flip.reference.doctweaker.html">DocumentTweaker Template Class Reference</a></li>
+<li><a href="ohm.flip.reference.docvalid.html">DocumentValidator Template Class Reference</a></li>
+<li><a href="ohm.flip.reference.enum.html">Enum Template Class Reference</a></li>
+<li><a href="ohm.flip.reference.enumdescmgr.html">EnumDescManager Class Reference</a></li>
+<li><a href="ohm.flip.reference.enumdesc.html">EnumDescription Template Class Reference</a></li>
+<li><a href="ohm.flip.reference.findmask.html">FindMask Enum Reference</a></li>
+<li><a href="ohm.flip.reference.float64.html">Float64 Class Reference</a></li>
+<li><a href="ohm.flip.reference.int64.html">Int64 Class Reference</a></li>
+<li><a href="ohm.flip.reference.object.html">Object Class Reference</a></li>
+<li><a href="ohm.flip.reference.objectmold.html">ObjectMold Class Reference</a></li>
+<li><a href="ohm.flip.reference.objectmolddata.html">ObjectMoldData Class Reference</a></li>
+<li><a href="ohm.flip.reference.objectref.html">ObjectRef Template Class Reference</a></li>
+<li><a href="ohm.flip.reference.pasteboard.html">PasteBoard Class Reference</a></li>
+<li><a href="ohm.flip.reference.ref.html"><strong>Ref Type Reference</strong></a>
+	<ul>
+	<li><a href="ohm.flip.reference.ref.html#overview">Overview</a></li>
+	</ul>
+</li>
+<li><a href="ohm.flip.reference.scribe.html">Scribe Class Reference</a></li>
+<li><a href="ohm.flip.reference.txguard.html">TxSessionGuard Class Reference</a></li>
+<li><a href="ohm.flip.reference.validwriter.html">ValidationReportWriter Class Reference</a></li>
+</ul>
+
+<div class="bottomspacer">&nbsp;</div>
+</div>
+
+<div id="content">
+
+<div class="nav" align="right"><a href="ohm.flip.reference.pasteboard.html">previous</a><span>&nbsp;</span><a href="ohm.flip.reference.scribe.html">next</a></div>
+
+<h1>Ref Type Reference</h1>
+
+<table>
+<tr><td><p>Namespace
+</p></td><td><p><span class="code">ohm::flip</span> 
+</p></td></tr>
+<tr><td><p>Declared in
+</p></td><td><p><span class="code">ohm/flip/Ref.h</span> 
+</p></td></tr>
+</table>
+<h2><a name="overview">Overview</a></h2>
+<p>The
+<span class="code">Ref</span> 
+type is a 64 bits integer that represents a Flip reference number.</p>
+<p>The type itself can be seen as a bit field, splitted in the following way :</p>
+<center><img src="ohm.flip.reference.ref.bits.png" /></center>
+<p>Those constants are declared in
+<span class="code">ohm/flip/private/SeedGenerator.h</span> 
+.
+Their values are believed to be a good balance between the number of clients,
+threads and objects that can cohabitate in a document.</p>
+
+
+<div class="nav" align="right"><a href="ohm.flip.reference.pasteboard.html">previous</a><span>&nbsp;</span><a href="ohm.flip.reference.scribe.html">next</a></div>
+
+<div class="bottomspacer">&nbsp;</div>
+
+</div>
+
+<footer>
+<a href="index.html">Ohm Force Developer Library</a> > <a href="ohm.flip.reference.overview.html">Flip Reference</a> > <a href="ohm.flip.reference.ref.html">Ref Type Reference</a>
+</footer>
+
+
+</body>
+
+</html>

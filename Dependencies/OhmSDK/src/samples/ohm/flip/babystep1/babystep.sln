@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{DCB0CF20-4455-11E2-A25F-0800200C9A66}") = "babystep", "babystep.vcproj", "{1A0975C0-4456-11E2-A25F-0800200C9A66}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1A0975C0-4456-11E2-A25F-0800200C9A66}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1A0975C0-4456-11E2-A25F-0800200C9A66}.Debug|Win32.Build.0 = Debug|Win32
+		{1A0975C0-4456-11E2-A25F-0800200C9A66}.Release|Win32.ActiveCfg = Release|Win32
+		{1A0975C0-4456-11E2-A25F-0800200C9A66}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

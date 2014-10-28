@@ -1,0 +1,594 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Flip Programming Guide: Writing a DocumentObserver</title>
+<link rel="stylesheet" href="docpage.css" type="text/css" />
+</head>
+
+<script type="text/javascript">
+function searchfield_focus(obj)
+{
+obj.style.color="#000"
+if (obj.value=="Search Library")
+	{obj.value=""}
+}
+</script>
+
+
+<body>
+
+<div id="header">
+<div style="width: 1006px;">
+<!--<form method="get" class="search" style="padding-top: 5px;"  action="http://www.google.com/search">
+<input onfocus="searchfield_focus(this)" type="search" class="search" name="q" value="Search Library">
+<input type="hidden" name="sitesearch" value="">
+</form>-->
+</div>
+<p><a href="index.html">Ohm Force Developer Library</a><a href="ohm.flip.guide.about.html">Flip Programming Guide</a></p>
+</div>
+
+<div id="toc">
+<p>Flip Programming Guide</p>
+<ul>
+<li><a href="ohm.flip.guide.about.html">About Flip Programming Guide</a></li>
+<li><a href="ohm.flip.guide.design.html">Designing your Flip Application</a></li>
+<li><a href="ohm.flip.guide.class.html">Writing a Flip Class Part 1</a></li>
+<li><a href="ohm.flip.guide.class2.html">Writing a Flip Class Part 2</a></li>
+<li><a href="ohm.flip.guide.containers.html">Using Containers</a></li>
+<li><a href="ohm.flip.guide.enums.html">Using Enums</a></li>
+<li><a href="ohm.flip.guide.blob.html">Using Blobs</a></li>
+<li><a href="ohm.flip.guide.objectref.html">Using ObjectRefs</a></li>
+<li><a href="ohm.flip.guide.cue.html">Using Cues</a></li>
+<li><a href="ohm.flip.guide.navigation.html">Navigating the Model</a></li>
+<li><a href="ohm.flip.guide.observer.html"><strong>Writing a DocumentObserver</strong></a>
+	<ul>
+	<li><a href="ohm.flip.guide.observer.html#overview">Overview</a></li>
+	<li><a href="ohm.flip.guide.observer.html#setup">Setting Up</a></li>
+	<li><a href="ohm.flip.guide.observer.html#parsing">Parsing the Model Tree</a></li>
+	<li><a href="ohm.flip.guide.observer.html#referencing">Referencing Objects</a></li>
+	<li><a href="ohm.flip.guide.observer.html#signals">Handling Signals</a></li>
+	</ul>
+</li>
+<li><a href="ohm.flip.guide.validator.html">Writing a DocumentValidator</a></li>
+<li><a href="ohm.flip.guide.undo.html">Using the Undo/Redo system</a></li>
+<li><a href="ohm.flip.guide.const.html">Managing Pseudo Const Members</a></li>
+<li><a href="ohm.flip.guide.mold.html">Using an ObjectMold</a></li>
+<li><a href="ohm.flip.guide.conversion.html">Writing a Converter</a></li>
+<li><a href="ohm.flip.guide.tweaker.html">Writing a DocumentTweaker</a></li>
+</ul>
+
+<div class="bottomspacer">&nbsp;</div>
+</div>
+
+<div id="content">
+
+<div class="nav" align="right"><a href="ohm.flip.guide.navigation.html">previous</a><span>&nbsp;</span><a href="ohm.flip.guide.validator.html">next</a></div>
+
+<h1>Writing a DocumentObserver</h1>
+
+<p>This chapter will describe the use of
+<span class="code">flip::DocumentObserver</span> 
+with the Flip framework.</p>
+<h2><a name="overview">Overview</a></h2>
+<p>The Flip framework offers a
+<span class="code">flip::DocumentObserver</span> 
+template class
+which is the basis to write a document observer. A document observer allows
+to receive model changes, and parse the model tree effectively.</p>
+<p>In the following, it will be assumed that the model has the format listed
+in the listings below. In particular,
+<span class="code">Root</span> 
+will be the root class
+of the model. The listings skip all functions just to show the needed members
+for clarity.</p>
+<p>The example is an hypothetic taxi company, where the taxis can change of color.
+The taxi company has a boss, which can be happy or upset. The taxi company
+also maintains the total number of courses since the beginning of time.</p>
+<div class="codeblock">
+<table>
+<tr><td><pre>class Boss</pre></td></tr>
+<tr><td><pre>:  public ohm::flip::Object</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>public:</pre></td></tr>
+<tr><td><pre>   bool                 did_happyness_change () const;</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>private:</pre></td></tr>
+<tr><td><pre>   ohm::flip::Bool      _happy_flag;</pre></td></tr>
+<tr><td><pre>};</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>class Taxi</pre></td></tr>
+<tr><td><pre>:  public ohm::flip::Object</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>public:</pre></td></tr>
+<tr><td><pre>   bool                 did_color_change () const;</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>private:</pre></td></tr>
+<tr><td><pre>   ohm::flip::Int64     _color;</pre></td></tr>
+<tr><td><pre>};</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>typedef ohm::flip::Collection &lt;Taxi&gt;   TaxiColl;</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>class Root</pre></td></tr>
+<tr><td><pre>:  public ohm::flip::Object</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>public:</pre></td></tr>
+<tr><td><pre>   bool                 did_nbr_taxi_course_change () const;</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>private:</pre></td></tr>
+<tr><td><pre>   ohm::flip::Int64     _nbr_taxi_course;</pre></td></tr>
+<tr><td><pre>   Boss                 _boss;</pre></td></tr>
+<tr><td><pre>   TaxiColl             _taxi_coll;</pre></td></tr>
+<tr><td><pre>};</pre></td></tr>
+</table>
+</div>
+<h2><a name="setup">Setting Up</a></h2>
+<p>To set up the model, we have to make a
+<span class="code">DocumentObserver</span> 
+for the
+<span class="code">Root</span> 
+class. For that we make a class that inherits from
+<span class="code">ohm::flip::DocumentObserver</span> 
+which template parameter is
+<span class="code">Root</span> 
+.</p>
+<p>Its constructor takes a
+<span class="code">flip::DocumentClient</span> 
+on which we will bind the observer.</p>
+<div class="codeblock">
+<p><strong>Listing</strong><span class="code">DocumentObserver</span> 
+declaration
+</p>
+<table>
+<tr><td><pre>class DocumentObserver</pre></td></tr>
+<tr><td><pre>:  public ohm::flip::DocumentObserver &lt;Root&gt;</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>public:</pre></td></tr>
+<tr><td><pre>                  DocumentObserver (ohm::flip::DocumentClient & document);</pre></td></tr>
+<tr><td><pre>   virtual        ~DocumentObserver () {}</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   // inherited from ohm::flip::DocumentObserver &lt;model::Root&gt;</pre></td></tr>
+<tr><td><pre>   virtual void   document_changed (model::Root & root);</pre></td></tr>
+<tr><td><pre>   virtual void   signal (flip::Object * obj_ptr, archi::UInt32 type, const flip::DataMaster & signal_data);</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>private:</pre></td></tr>
+<tr><td><pre>   </pre></td></tr>
+<tr><td><pre>};</pre></td></tr>
+</table>
+</div>
+<p>The following code bind our observer to the Flip document. At this point
+any model change to the document will be notified through the
+<span class="code">document_changed</span> 
+<span class="code">virtual</span> 
+method, and any model signal will be notified through the
+<span class="code">signal</span> 
+<span class="code">virtual</span> 
+method.</p>
+<div class="codeblock">
+<p><strong>Listing</strong><span class="code">DocumentObserver</span> 
+constructor definition
+</p>
+<table>
+<tr><td><pre>DocumentObserver::DocumentObserver (flip::DocumentClient & document)</pre></td></tr>
+<tr><td><pre>: _document (document)</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   _document.bind (*this);</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<h2><a name="parsing">Parsing the Model Tree</a></h2>
+<p>Before we put write the implementation of
+<span class="code">document_changed</span> 
+we are going
+to add some
+<span class="code">private</span> 
+methods to keep the code clean</p>
+<div class="codeblock">
+<p><strong>Listing</strong><span class="code">DocumentObserver</span> 
+declaration
+</p>
+<table>
+<tr><td><small><pre>class DocumentObserver</pre></small></td></tr>
+<tr><td><small><pre>:  public ohm::flip::DocumentObserver &lt;Root&gt;</pre></small></td></tr>
+<tr><td><small><pre>{</pre></small></td></tr>
+<tr><td><small><pre>public:</pre></small></td></tr>
+<tr><td><small><pre>                  DocumentObserver (ohm::flip::DocumentClient & document);</pre></small></td></tr>
+<tr><td><small><pre>   virtual        ~DocumentObserver () {}</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>   // inherited from ohm::flip::DocumentObserver &lt;model::Root&gt;</pre></small></td></tr>
+<tr><td><strong><pre>   virtual void   document_changed (model::Root & root);</pre></strong></td></tr>
+<tr><td><small><pre>   virtual void   signal (flip::Object * obj_ptr, archi::UInt32 type, const flip::DataMaster & signal_data);</pre></small></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><strong><pre>private:</pre></strong></td></tr>
+<tr><td><strong><pre>   void           document_changed (Boss & boss);</pre></strong></td></tr>
+<tr><td><strong><pre>   void           document_changed (Taxi & taxi);</pre></strong></td></tr>
+<tr><td><small><pre>}</pre></small></td></tr>
+</table>
+</div>
+<p>The code to handle each class is always to check changes for its direct basic typed members.
+To keep the code clean, each compound object should have its own
+<span class="code">document_changed</span> 
+method as illutrated here.</p>
+<div class="codeblock">
+<p><strong>Listing</strong><span class="code">document_changed (Root &)</span> 
+definition
+</p>
+<table>
+<tr><td><pre>void  DocumentObserver::document_changed (Root & root)</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   if (root.did_nbr_taxi_course_change ())</pre></td></tr>
+<tr><td><pre>   {</pre></td></tr>
+<tr><td><pre>      // display the number of taxi course</pre></td></tr>
+<tr><td><pre>   }</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   if (_boss.is_invalid ())</pre></td></tr>
+<tr><td><pre>   {</pre></td></tr>
+<tr><td><pre>      // _boss contains a modification</pre></td></tr>
+<tr><td><pre>      document_changed (_boss);</pre></td></tr>
+<tr><td><pre>   }</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   if (_taxi_coll.is_invalid ())</pre></td></tr>
+<tr><td><pre>   {</pre></td></tr>
+<tr><td><pre>      // the taxi collection contains a modification, check every taxi</pre></td></tr>
+<tr><td><pre>      TaxiColl::iterator it = _taxi_coll.begin ();</pre></td></tr>
+<tr><td><pre>      const TaxiColl::iterator it_end = _taxi_coll.end ();</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>      for (; it != it_end ; ++it)</pre></td></tr>
+<tr><td><pre>      {</pre></td></tr>
+<tr><td><pre>         Taxi & taxi = *it;</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>         if (taxi.is_invalid ())</pre></td></tr>
+<tr><td><pre>         {</pre></td></tr>
+<tr><td><pre>            document_changed (taxi);</pre></td></tr>
+<tr><td><pre>         }</pre></td></tr>
+<tr><td><pre>      }</pre></td></tr>
+<tr><td><pre>   }</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<div class="note"><p><strong>Note:</strong>In theory, every call to
+<span class="code">is_invalid</span> 
+can be omited. But this is done for speed.</p></div>
+<div class="codeblock">
+<p><strong>Listing</strong><span class="code">document_changed (Boss &)</span> 
+definition
+</p>
+<table>
+<tr><td><pre>void  DocumentObserver::document_changed (Boss & boss)</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   if (boss.did_happyness_change ())</pre></td></tr>
+<tr><td><pre>   {</pre></td></tr>
+<tr><td><pre>      // display the new boss face</pre></td></tr>
+<tr><td><pre>   }</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<div class="codeblock">
+<p><strong>Listing</strong><span class="code">document_changed (Taxi &)</span> 
+definition
+</p>
+<table>
+<tr><td><pre>void  DocumentObserver::document_changed (Taxi & taxi)</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   if (taxi.did_color_change ())</pre></td></tr>
+<tr><td><pre>   {</pre></td></tr>
+<tr><td><pre>      // display the new taxi color</pre></td></tr>
+<tr><td><pre>   }</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<h2><a name="referencing">Referencing Objects</a></h2>
+<p>Many times you will want to associate some kind of object to a model object,
+for example a graphic object. Objects will need to be created when model
+objects are created, released when model objects are released and be accessed.</p>
+<p>In the following listings, we will consider that we want to associate 
+a graphical object
+<span class="code">WidgetTaxi</span> 
+to the model class
+<span class="code">Taxi</span> 
+.
+The
+<span class="code">WidgetTaxi</span> 
+will need to be embeded in the root graphical
+object denoted
+<span class="code">WidgetRoot</span> 
+and associated to the model class
+<span class="code">Root</span> 
+.</p>
+<div class="codeblock">
+<p><strong>Listing</strong><span class="code">document_changed (Root &)</span> 
+definition
+</p>
+<table>
+<tr><td><small><pre>void  DocumentObserver::document_changed (Root & root)</pre></small></td></tr>
+<tr><td><small><pre>{</pre></small></td></tr>
+<tr><td><strong><pre>   WidgetRoot * widget_ptr = 0;</pre></strong></td></tr>
+<tr><td><strong><pre></pre></strong></td></tr>
+<tr><td><strong><pre>   if (root.was_inited ())</pre></strong></td></tr>
+<tr><td><strong><pre>   {</pre></strong></td></tr>
+<tr><td><strong><pre>      widget_ptr = new WidgetRoot;</pre></strong></td></tr>
+<tr><td><strong><pre>      </pre></strong></td></tr>
+<tr><td><strong><pre>      root.reset_data (widget_ptr);                // 1.</pre></strong></td></tr>
+<tr><td><strong><pre>   }</pre></strong></td></tr>
+<tr><td><strong><pre>   else</pre></strong></td></tr>
+<tr><td><strong><pre>   {</pre></strong></td></tr>
+<tr><td><strong><pre>      widget_ptr = root.get_data &lt;WidgetRoot&gt; ();  // 2.</pre></strong></td></tr>
+<tr><td><strong><pre>   }</pre></strong></td></tr>
+<tr><td><strong><pre></pre></strong></td></tr>
+<tr><td><small><pre>   if (root.did_nbr_taxi_course_change ())</pre></small></td></tr>
+<tr><td><small><pre>   {</pre></small></td></tr>
+<tr><td><small><pre>      // display the number of taxi course</pre></small></td></tr>
+<tr><td><small><pre>   }</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>   if (_boss.is_invalid ())</pre></small></td></tr>
+<tr><td><small><pre>   {</pre></small></td></tr>
+<tr><td><small><pre>      // _boss contains a modification</pre></small></td></tr>
+<tr><td><small><pre>      document_changed (_boss);</pre></small></td></tr>
+<tr><td><small><pre>   }</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>   if (_taxi_coll.is_invalid ())</pre></small></td></tr>
+<tr><td><small><pre>   {</pre></small></td></tr>
+<tr><td><small><pre>      // the taxi collection contains a modification, check every taxi</pre></small></td></tr>
+<tr><td><small><pre>      TaxiColl::iterator it = _taxi_coll.begin ();</pre></small></td></tr>
+<tr><td><small><pre>      const TaxiColl::iterator it_end = _taxi_coll.end ();</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>      for (; it != it_end ; ++it)</pre></small></td></tr>
+<tr><td><small><pre>      {</pre></small></td></tr>
+<tr><td><small><pre>         Taxi & taxi = *it;</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>         if (taxi.is_invalid ())</pre></small></td></tr>
+<tr><td><small><pre>         {</pre></small></td></tr>
+<tr><td><small><pre>            document_changed (taxi);</pre></small></td></tr>
+<tr><td><small><pre>         }</pre></small></td></tr>
+<tr><td><small><pre>      }</pre></small></td></tr>
+<tr><td><small><pre>   }</pre></small></td></tr>
+<tr><td><strong><pre></pre></strong></td></tr>
+<tr><td><strong><pre>   if (root.was_restored ())</pre></strong></td></tr>
+<tr><td><strong><pre>   {</pre></strong></td></tr>
+<tr><td><strong><pre>      delete widget_ptr;</pre></strong></td></tr>
+<tr><td><strong><pre>      widget_ptr = 0;</pre></strong></td></tr>
+<tr><td><strong><pre>      </pre></strong></td></tr>
+<tr><td><strong><pre>      root.reset_data &lt;WidgetRoot&gt; ();             // 3.</pre></strong></td></tr>
+<tr><td><strong><pre>   }</pre></strong></td></tr>
+<tr><td><small><pre>}</pre></small></td></tr>
+</table>
+</div>
+<ol>
+<li>Set the referenced object associated to type
+<span class="code">WidgetRoot</span> 
+to the root object
+</li>
+<li>Retrieve the referenced object associated to type
+<span class="code">WidgetRoot</span> 
+of the root object
+</li>
+<li>Reset the referenced object associated to type
+<span class="code">WidgetRoot</span> 
+of the root object
+</li>
+</ol>
+<p>And finally for the taxi</p>
+<div class="codeblock">
+<p><strong>Listing</strong><span class="code">document_changed (Taxi &)</span> 
+definition
+</p>
+<table>
+<tr><td><pre>void  DocumentObserver::document_changed (Taxi & taxi)</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><strong><pre>   Root & root = taxi.get_ancestor &lt;Root&gt; ();</pre></strong></td></tr>
+<tr><td><strong><pre>   WidgetRoot * widget_root_ptr = root.get_data &lt;WidgetRoot&gt; ();</pre></strong></td></tr>
+<tr><td><strong><pre></pre></strong></td></tr>
+<tr><td><strong><pre>   WidgetTaxi * widget_ptr = 0;</pre></strong></td></tr>
+<tr><td><strong><pre></pre></strong></td></tr>
+<tr><td><strong><pre>   if (taxi.was_inited ())</pre></strong></td></tr>
+<tr><td><strong><pre>   {</pre></strong></td></tr>
+<tr><td><strong><pre>      widget_ptr = new WidgetTaxi (*widget_root_ptr);</pre></strong></td></tr>
+<tr><td><strong><pre>      </pre></strong></td></tr>
+<tr><td><strong><pre>      taxi.reset_data (widget_ptr);</pre></strong></td></tr>
+<tr><td><strong><pre>   }</pre></strong></td></tr>
+<tr><td><strong><pre>   else</pre></strong></td></tr>
+<tr><td><strong><pre>   {</pre></strong></td></tr>
+<tr><td><strong><pre>      widget_ptr = taxi.get_data &lt;WidgetTaxi&gt; ();</pre></strong></td></tr>
+<tr><td><strong><pre>   }</pre></strong></td></tr>
+<tr><td><strong><pre></pre></strong></td></tr>
+<tr><td><pre>   if (taxi.did_color_change ())</pre></td></tr>
+<tr><td><pre>   {</pre></td></tr>
+<tr><td><pre>      widget_ptr-&gt;set_color (taxi.get_color ());</pre></td></tr>
+<tr><td><pre>   }</pre></td></tr>
+<tr><td><strong><pre></pre></strong></td></tr>
+<tr><td><strong><pre>   if (taxi.was_restored ())</pre></strong></td></tr>
+<tr><td><strong><pre>   {</pre></strong></td></tr>
+<tr><td><strong><pre>      delete widget_ptr;</pre></strong></td></tr>
+<tr><td><strong><pre>      widget_ptr = 0;</pre></strong></td></tr>
+<tr><td><strong><pre>      </pre></strong></td></tr>
+<tr><td><strong><pre>      taxi.reset_data &lt;WidgetTaxi&gt; ();</pre></strong></td></tr>
+<tr><td><strong><pre>   }</pre></strong></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<h2><a name="signals">Handling Signals</a></h2>
+<p>To handle a signal, we need to send one. We are going to say that if the number
+of taxi courses change, as it is always increasing in this example, this is going
+to make the boss happy.</p>
+<p>We cannot change the model while parsing it, but we can send signals, and it is possible
+to modify the model within a signal.</p>
+<p>We are going to complete the
+<span class="code">Boss</span> 
+class so that it can produce a signal
+and every thing needed to make him happy in the model.</p>
+<div class="codeblock">
+<table>
+<tr><td><small><pre>class Boss</pre></small></td></tr>
+<tr><td><small><pre>:  public ohm::flip::Object</pre></small></td></tr>
+<tr><td><small><pre>{</pre></small></td></tr>
+<tr><td><small><pre>public:</pre></small></td></tr>
+<tr><td><strong><pre>   enum Signal</pre></strong></td></tr>
+<tr><td><strong><pre>   {</pre></strong></td></tr>
+<tr><td><strong><pre>      Signal_MAKE_HAPPY = 0,</pre></strong></td></tr>
+<tr><td><strong><pre>   };</pre></strong></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><strong><pre>   void                 signal_make_happy ();</pre></strong></td></tr>
+<tr><td><strong><pre>   void                 tx_make_happy ();</pre></strong></td></tr>
+<tr><td><small><pre>   bool                 did_happyness_change () const;</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>private:</pre></small></td></tr>
+<tr><td><small><pre>   ohm::flip::Bool      _happy_flag;</pre></small></td></tr>
+<tr><td><strong><pre>   ohm::flip::TxSessionGuard</pre></strong></td></tr>
+<tr><td><strong><pre>                        _tx_session_guard;</pre></strong></td></tr>
+<tr><td><small><pre>};</pre></small></td></tr>
+</table>
+</div>
+<div class="codeblock">
+<table>
+<tr><td><pre>void  DocumentObserver::signal_make_happy ()</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   send_signal (Signal_MAKE_HAPPY);</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<div class="codeblock">
+<table>
+<tr><td><pre>void  DocumentObserver::tx_make_happy ()</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   if (!_tx_session_guard.start ()) return;</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   _happy_flag = true;</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   _tx_session_guard.commit ();</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<p>Now we are going to send the signal when the number of taxi courses changes, by
+modifying the code above.</p>
+<div class="codeblock">
+<p><strong>Listing</strong><span class="code">document_changed (Root &)</span> 
+definition
+</p>
+<table>
+<tr><td><small><pre>void  DocumentObserver::document_changed (Root & root)</pre></small></td></tr>
+<tr><td><small><pre>{</pre></small></td></tr>
+<tr><td><small><pre>   if (root.did_nbr_taxi_course ())</pre></small></td></tr>
+<tr><td><small><pre>   {</pre></small></td></tr>
+<tr><td><strong><pre>      _boss.signal_make_happy ();</pre></strong></td></tr>
+<tr><td><small><pre>   }</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>   [... skipped content ...]</pre></small></td></tr>
+<tr><td><small><pre>}</pre></small></td></tr>
+</table>
+</div>
+<p>And now we can implement the
+<span class="code">signal</span> 
+method which will handle
+the signal.
+Before we put write the implementation of
+<span class="code">signal</span> 
+we are going
+to add some
+<span class="code">private</span> 
+methods to keep the code clean</p>
+<div class="codeblock">
+<p><strong>Listing</strong><span class="code">DocumentObserver</span> 
+declaration
+</p>
+<table>
+<tr><td><small><pre>class DocumentObserver</pre></small></td></tr>
+<tr><td><small><pre>:  public ohm::flip::DocumentObserver &lt;Root&gt;</pre></small></td></tr>
+<tr><td><small><pre>{</pre></small></td></tr>
+<tr><td><small><pre>public:</pre></small></td></tr>
+<tr><td><small><pre>                  DocumentObserver (ohm::flip::DocumentClient & document);</pre></small></td></tr>
+<tr><td><small><pre>   virtual        ~DocumentObserver () {}</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><small><pre>   // inherited from ohm::flip::DocumentObserver &lt;model::Root&gt;</pre></small></td></tr>
+<tr><td><small><pre>   virtual void   document_changed (model::Root & root);</pre></small></td></tr>
+<tr><td><strong><pre>   virtual void   signal (flip::Object * obj_ptr, archi::UInt32 type, const flip::DataMaster & signal_data);</pre></strong></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><small><pre>private:</pre></small></td></tr>
+<tr><td><small><pre>   void           document_changed (Boss & boss);</pre></small></td></tr>
+<tr><td><small><pre>   void           document_changed (Taxi & taxi);</pre></small></td></tr>
+<tr><td><small><pre></pre></small></td></tr>
+<tr><td><strong><pre>   void           signal (model::Boss & boss, archi::UInt32 type, const flip::DataMaster & signal_data);</pre></strong></td></tr>
+<tr><td><strong><pre>   void           signal_make_happy (model::Boss & boss, const flip::DataMaster & signal_data);</pre></strong></td></tr>
+<tr><td><small><pre>}</pre></small></td></tr>
+</table>
+</div>
+<p>The following listing is the main dispatcher, acting on types.</p>
+<div class="codeblock">
+<p><strong>Listing</strong><span class="code">signal</span> 
+definition
+</p>
+<table>
+<tr><td><pre>void  DocumentObserver::signal (flip::Object * obj_ptr, archi::UInt32 type, const flip::DataMaster & signal_data)</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   flip::DocumentClient::AutoUserInputs auto_ui (_document);   // 1.</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   bool continue_flag = true;</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>   if (continue_flag)                                          // 2.</pre></td></tr>
+<tr><td><pre>   {</pre></td></tr>
+<tr><td><pre>      Boss * cast_ptr = dynamic_cast &lt;Boss *&gt; (obj_ptr);</pre></td></tr>
+<tr><td><pre></pre></td></tr>
+<tr><td><pre>      if (cast_ptr != 0)</pre></td></tr>
+<tr><td><pre>      {</pre></td></tr>
+<tr><td><pre>         signal (*cast_ptr, type, signal_data);</pre></td></tr>
+<tr><td><pre>         continue_flag = false;</pre></td></tr>
+<tr><td><pre>      }</pre></td></tr>
+<tr><td><pre>   }</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<ol>
+<li>Automatic variable that enables the possibility to create transactions within the signal.
+</li>
+<li>The same pattern is to be repeated over and over again for every types supported
+by the signal
+</li>
+</ol>
+<p>The following listing is the
+<span class="code">Boss</span> 
+dispatcher, acting on signal types.</p>
+<div class="codeblock">
+<p><strong>Listing</strong><span class="code">signal</span> 
+definition
+</p>
+<table>
+<tr><td><pre>void  DocumentObserver::signal (Boss & boss, archi::UInt32 type, const flip::DataMaster & signal_data)</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   switch (type)</pre></td></tr>
+<tr><td><pre>   {</pre></td></tr>
+<tr><td><pre>   case Boss::Signal_MAKE_HAPPY:</pre></td></tr>
+<tr><td><pre>      signal_make_happy (boos, signal_data);</pre></td></tr>
+<tr><td><pre>      break;</pre></td></tr>
+<tr><td><pre>   }</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+<p>And finally the signal handling change the model.</p>
+<div class="codeblock">
+<p><strong>Listing</strong><span class="code">signal</span> 
+definition
+</p>
+<table>
+<tr><td><pre>void  DocumentObserver::signal_make_happy (Boss & boss, const flip::DataMaster & signal_data)</pre></td></tr>
+<tr><td><pre>{</pre></td></tr>
+<tr><td><pre>   boss.tx_make_happy ();</pre></td></tr>
+<tr><td><pre>}</pre></td></tr>
+</table>
+</div>
+
+
+<div class="nav" align="right"><a href="ohm.flip.guide.navigation.html">previous</a><span>&nbsp;</span><a href="ohm.flip.guide.validator.html">next</a></div>
+
+<div class="bottomspacer">&nbsp;</div>
+
+</div>
+
+<footer>
+<a href="index.html">Ohm Force Developer Library</a> > <a href="ohm.flip.guide.about.html">Flip Programming Guide</a> > <a href="ohm.flip.guide.observer.html">Writing a DocumentObserver</a>
+</footer>
+
+
+</body>
+
+</html>
