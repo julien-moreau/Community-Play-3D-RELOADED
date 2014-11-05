@@ -30,6 +30,9 @@
     <Filter Include="Editor\GUIElements\GUIFileSelector">
       <UniqueIdentifier>{dfd36628-b1da-4333-ade4-3d60077ee116}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\UserInterfaces\EditionTools\SceneNodeEditionTools">
+      <UniqueIdentifier>{2057a16c-d34a-43ee-9de0-78977d7191be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Stdafx.h">
@@ -67,6 +70,12 @@
     </ClInclude>
     <ClInclude Include="Editor\GUIElements\GUIFileSelector\CGUIFileSelector.h">
       <Filter>Editor\GUIElements\GUIFileSelector</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\UserInterfaces\CCP3DCustomView.h">
+      <Filter>Editor\UserInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\UserInterfaces\EditionTools\SceneNodeEditionTools\CCP3DSceneNodeAnimators.h">
+      <Filter>Editor\UserInterfaces\EditionTools\SceneNodeEditionTools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -108,6 +117,12 @@
     </ClCompile>
     <ClCompile Include="Editor\GUIElements\GUIFileSelector\CGUIFileSelector.cpp">
       <Filter>Editor\GUIElements\GUIFileSelector</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\UserInterfaces\CCP3DCustomView.cpp">
+      <Filter>Editor\UserInterfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\UserInterfaces\EditionTools\SceneNodeEditionTools\CCP3DSceneNodeAnimators.cpp">
+      <Filter>Editor\UserInterfaces\EditionTools\SceneNodeEditionTools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

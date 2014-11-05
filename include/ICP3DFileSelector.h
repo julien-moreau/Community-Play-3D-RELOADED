@@ -31,6 +31,9 @@ public:
 	//! \param texture: the texture to draw
 	virtual void addPlacePaths(wchar_t* name, irr::core::stringw path, irr::video::ITexture* texture) = 0;
 
+	//! Enum for file selector mode
+	//! EFST_OPEN_DIALOG for an open dialog
+	//! EFST_SAVE_DIALOG for a save dialog
 	enum E_FILESELECTOR_TYPE {
 		EFST_OPEN_DIALOG = 0,
 		EFST_SAVE_DIALOG,

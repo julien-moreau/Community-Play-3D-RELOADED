@@ -14,15 +14,15 @@
     <ProjectGuid>{1A0975C0-4456-11E2-A25F-0800200C9A66}</ProjectGuid>
     <RootNamespace>babystep</RootNamespace>
     <Keyword>ManagedCProj</Keyword>
-    <ProjectName>OhmSDK</ProjectName>
+    <ProjectName>CP3DCollaborativeEngine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -39,22 +39,21 @@
     <_ProjectFileVersion>11.0.61030.0</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)Dependencies\OhmSDK\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)Dependencies\OhmSDK\libs\</OutDir>
     <IntDir>Intermediate\$(Configuration)-$(PlatformTarget)\</IntDir>
     <GenerateManifest>false</GenerateManifest>
     <TargetName>$(ProjectName)_d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
-    <IntDir>$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)Dependencies\OhmSDK\libs\</OutDir>
+    <IntDir>Intermediate\$(Configuration)-$(PlatformTarget)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\..\lib\zlib;..\..\..\..\lib\freetype\include;..\..\..\..\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\lib\zlib;..\..\..\..\lib\freetype\include;..\..\..\..\lib;$(SolutionDir)include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>FT2_BUILD_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
@@ -62,29 +61,20 @@
       <AdditionalDependencies>winmm.lib;d3d9.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <PostBuildEvent>
-      <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)Dependencies\OhmSDK\libs\$(TargetName)$(TargetExt)" /y</Command>
-    </PostBuildEvent>
-    <Lib>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\..\..\lib\zlib;..\..\..\..\lib\freetype\include;..\..\..\..\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\lib\zlib;..\..\..\..\lib\freetype\include;..\..\..\..\lib;$(SolutionDir)include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>FT2_BUILD_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <AdditionalDependencies>winmm.lib;d3d9.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PostBuildEvent>
-      <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)Dependencies\OhmSDK\libs\$(TargetName)$(TargetExt)" /y</Command>
-    </PostBuildEvent>
-    <Lib>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\..\..\CP3DCollaborativeEngine\CP3DCollaborativeEngine.h" />
     <ClInclude Include="..\..\..\..\lib\ohm\archi\CpuId.h" />
     <ClInclude Include="..\..\..\..\lib\ohm\archi\CpuId.hpp" />
     <ClInclude Include="..\..\..\..\lib\ohm\archi\def.h" />
@@ -936,6 +926,7 @@
     <ClInclude Include="..\..\..\..\lib\zlib\zutil.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\..\..\CP3DCollaborativeEngine\CP3DCollaborativeEngine.cpp" />
     <ClCompile Include="..\..\..\..\lib\ohm\archi\CpuId_common.cpp" />
     <ClCompile Include="..\..\..\..\lib\ohm\archi\win32\CpuId.cpp" />
     <ClCompile Include="..\..\..\..\lib\ohm\archi\x86\CpuIdx86.cpp" />

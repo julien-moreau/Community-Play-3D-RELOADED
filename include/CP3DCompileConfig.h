@@ -31,6 +31,10 @@ namespace cp3d {
 		class ICP3DEngine;
 	}
 
+	namespace data {
+		class ICP3DCollaborativeEngine;
+	}
+
 	#if defined(CP3DR_COMPILE_RENDERING_ENGINE)
 	//! Creates a new rendering engine
 	//! \param device: the irrlicht device used by the rendering engine
@@ -46,6 +50,10 @@ namespace cp3d {
 	#if defined(CP3DR_COMPILE_EDITOR)
 	//! Creates a new editor. Can be used by external softwares
 	extern "C" CP3DR_LIB_API ICP3DEditor *createEditor();
+	#endif
+
+	#if defined(CP3DR_COMPILE_COLLABORATIVE)
+	extern "C" CP3DR_LIB_API data::ICP3DCollaborativeEngine *createCollaborativeEngine(const char *documentPath);
 	#endif
 } /// End namespace cp3d
 

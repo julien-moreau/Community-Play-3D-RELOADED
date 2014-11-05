@@ -2,154 +2,154 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="lib">
-      <UniqueIdentifier>{d44fb7c1-7414-49dc-b6d7-0c91a19d8255}</UniqueIdentifier>
+      <UniqueIdentifier>{2ce14b37-8dec-4c4e-a194-3007feeb3557}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm">
-      <UniqueIdentifier>{2d4a24bd-20c2-4eeb-aaad-8cf1c7d4b08e}</UniqueIdentifier>
+      <UniqueIdentifier>{558b40fb-1fce-4944-992c-e1222f1620af}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\archi">
-      <UniqueIdentifier>{7efd7853-f6fa-4942-9b88-8b7d11e0a6f5}</UniqueIdentifier>
+      <UniqueIdentifier>{2a72f510-22ad-471f-86cd-94924bec11a6}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\archi\win32">
-      <UniqueIdentifier>{8798461a-9b84-4279-a2eb-482ba84bab1e}</UniqueIdentifier>
+      <UniqueIdentifier>{dee7c4e5-b32c-4f68-b4e4-7b88cd464b37}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\archi\x86">
-      <UniqueIdentifier>{982204a0-0a3f-48af-8052-1aa061984f86}</UniqueIdentifier>
+      <UniqueIdentifier>{da64c4ac-55c4-491a-aab0-2348e621f7ba}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\conc">
-      <UniqueIdentifier>{505043fa-79bd-458a-a41a-9a05ce64479c}</UniqueIdentifier>
+      <UniqueIdentifier>{4162bad4-afe0-428c-927d-6500ef8e8ef9}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\flip">
-      <UniqueIdentifier>{2815c0cc-7d1e-420e-b0c1-3342047a6585}</UniqueIdentifier>
+      <UniqueIdentifier>{e66e22f4-3d0a-44a1-9927-13ec730664bd}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\flip\conv">
-      <UniqueIdentifier>{1107e48f-bdb6-45c9-91ee-b9830381c09c}</UniqueIdentifier>
+      <UniqueIdentifier>{6fecb1f8-5054-4cef-9f5c-bf8d38bf9a9c}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\flip\local">
-      <UniqueIdentifier>{36618292-74c5-4164-ae38-441023b1a9ef}</UniqueIdentifier>
+      <UniqueIdentifier>{33ea53ff-12fe-4410-a066-7d6a57274be2}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\flip\private">
-      <UniqueIdentifier>{2f34b346-7070-4e7e-b545-3394d3a6a818}</UniqueIdentifier>
+      <UniqueIdentifier>{808113e6-5584-4837-89b7-21379041c27c}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\lang">
-      <UniqueIdentifier>{57a1e314-248b-4b0e-99ba-084fdb67f52b}</UniqueIdentifier>
+      <UniqueIdentifier>{132061a7-7cce-4e50-958e-f9cf27e23d31}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\math">
-      <UniqueIdentifier>{8a759189-a53a-48ef-aefe-875e8992a987}</UniqueIdentifier>
+      <UniqueIdentifier>{20daafba-b9b1-4a00-9166-fb2e5fcb23ed}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\mem">
-      <UniqueIdentifier>{64d9272b-a144-44a2-83fb-168c257b5f8c}</UniqueIdentifier>
+      <UniqueIdentifier>{09adeda6-1af9-49eb-93f8-5cdbd1409d6c}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\mem\mmgr">
-      <UniqueIdentifier>{751c4961-390f-496e-aa71-20f8b102b95d}</UniqueIdentifier>
+      <UniqueIdentifier>{17d35244-1bd6-40f5-ba03-c4ced3606978}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\mon">
-      <UniqueIdentifier>{adbae1a6-2923-488b-9d1a-da412189b1d1}</UniqueIdentifier>
+      <UniqueIdentifier>{012c525c-78a6-4da1-a2a2-f898df9219aa}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\odbg">
-      <UniqueIdentifier>{b98d183a-71e4-4ccc-8e16-862e02f8759e}</UniqueIdentifier>
+      <UniqueIdentifier>{58d9f690-5023-4f8e-9ee9-25528724fa04}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\opa">
-      <UniqueIdentifier>{f2e5f127-a7ff-4b54-9e58-b6661407d622}</UniqueIdentifier>
+      <UniqueIdentifier>{d8a9976c-0982-4609-bd14-a77c1f511a5a}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\opa\base">
-      <UniqueIdentifier>{cd15344f-8ff6-4396-aec8-c0557a40d6a9}</UniqueIdentifier>
+      <UniqueIdentifier>{2eac7341-2826-45e2-95f1-4147f93cf366}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\opa\frame">
-      <UniqueIdentifier>{49bd0d0a-b219-4ddc-a4f8-742058b5a238}</UniqueIdentifier>
+      <UniqueIdentifier>{81751f05-f50d-4ca2-8121-b55efdb16ab0}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\opa\prim">
-      <UniqueIdentifier>{d78b2165-60b7-40e5-b8fb-c7e0ac037c4a}</UniqueIdentifier>
+      <UniqueIdentifier>{3ee63454-9de9-4a97-a125-bc42e602f0a5}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\opa\private">
-      <UniqueIdentifier>{af0aef98-cdfc-4055-a586-489ad37f86c5}</UniqueIdentifier>
+      <UniqueIdentifier>{64aa364e-05bf-42db-aecd-588affeef2b0}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\opak">
-      <UniqueIdentifier>{e921e72a-295c-49d3-a491-4c0c54d2a8b7}</UniqueIdentifier>
+      <UniqueIdentifier>{5f919bfa-0a88-4c84-b9f6-4a6f106717d6}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\opak\base">
-      <UniqueIdentifier>{7cf0121b-ce15-466f-be7b-3bdfb8f96d67}</UniqueIdentifier>
+      <UniqueIdentifier>{496648e4-61b9-4628-9b8b-6f54d295b4e2}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\opak\private">
-      <UniqueIdentifier>{85a6b172-9080-46ab-b95e-115fa4ec2c25}</UniqueIdentifier>
+      <UniqueIdentifier>{60bbf278-d38c-4ec8-accb-34d48f931afa}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\opal">
-      <UniqueIdentifier>{2d54addc-2a2c-41fb-b3c8-31f70c0e083a}</UniqueIdentifier>
+      <UniqueIdentifier>{1531ecc7-f72d-4b45-9320-413994301e72}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\opal\base">
-      <UniqueIdentifier>{6ac7ee1f-b30b-4675-97d2-bf2185467a1f}</UniqueIdentifier>
+      <UniqueIdentifier>{32fcfe73-db74-4119-a82a-90f2f4fd9d6d}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\opal\dsp">
-      <UniqueIdentifier>{d8d8c510-ea88-460d-886a-7e1f9ca1c534}</UniqueIdentifier>
+      <UniqueIdentifier>{0c7ff9d3-c505-44a3-8215-faa2193c1302}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\opal\freetype">
-      <UniqueIdentifier>{6a513745-f805-404a-a719-1a30ccd6c1a1}</UniqueIdentifier>
+      <UniqueIdentifier>{ede1ae71-4430-4994-bf13-f2eed9054a22}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\opal\private">
-      <UniqueIdentifier>{2d2f7fb6-e852-474f-9af4-4343531a5a3c}</UniqueIdentifier>
+      <UniqueIdentifier>{8d68bd68-dfba-41db-9e19-39f810794791}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\opal\directx">
-      <UniqueIdentifier>{f03d4f21-5d1c-4193-8dd5-050bc127405f}</UniqueIdentifier>
+      <UniqueIdentifier>{42b1fb91-e68b-4c16-bb31-a2eee41f88e3}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\opal\win32">
-      <UniqueIdentifier>{2554cd2a-f508-4c3d-95b5-94a1316ac9ac}</UniqueIdentifier>
+      <UniqueIdentifier>{7bb65353-aa2e-4928-90de-e873f1e50623}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\opal\shader">
-      <UniqueIdentifier>{cb1d9d07-c31d-4a33-8796-5a58e4c1b91d}</UniqueIdentifier>
+      <UniqueIdentifier>{3489c049-cfec-4d8d-9b6a-7914188e7721}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\pibase">
-      <UniqueIdentifier>{eebef1bc-9ba1-46cc-8994-b2d36e1669e4}</UniqueIdentifier>
+      <UniqueIdentifier>{0e4e7d37-86de-40de-9d37-7fb9ba071ed8}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\sys">
-      <UniqueIdentifier>{1b8c3ba8-5150-48d3-b2bd-de9db3aa8340}</UniqueIdentifier>
+      <UniqueIdentifier>{b673078d-c98d-4e87-baa9-80fce19dd916}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\sys\win32">
-      <UniqueIdentifier>{c6343aa7-dbd2-45a0-a946-da3f2b2c8f19}</UniqueIdentifier>
+      <UniqueIdentifier>{f0453e76-f37a-4ad3-9287-e6e64bf3e1a5}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\task">
-      <UniqueIdentifier>{961da8c4-db10-478e-b972-d99d0049de79}</UniqueIdentifier>
+      <UniqueIdentifier>{b31647fb-614d-4be5-ac58-768ee5523af8}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\task\private">
-      <UniqueIdentifier>{ec8b9737-2c7b-4803-8ee5-ba520aa0e37f}</UniqueIdentifier>
+      <UniqueIdentifier>{ae33b908-11c5-485c-81d2-6a589b05afb1}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\task\win32">
-      <UniqueIdentifier>{df72c434-d0fb-4958-b98a-f2c437476347}</UniqueIdentifier>
+      <UniqueIdentifier>{0bba7631-9226-4639-96e1-291362bead47}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\txt">
-      <UniqueIdentifier>{2621dc33-9a24-43ae-be8a-e9a3a1ef619d}</UniqueIdentifier>
+      <UniqueIdentifier>{a6ba3897-30f7-4c60-af8e-b1883d1b90aa}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\txt\ascii">
-      <UniqueIdentifier>{caafe5f3-66fc-405b-a42f-efdfdd0cc61f}</UniqueIdentifier>
+      <UniqueIdentifier>{d04628ee-01e9-4d96-ae38-1294b3a820b0}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\txt\out">
-      <UniqueIdentifier>{269ed79d-b8ec-465f-b22b-91e2bdf2f47e}</UniqueIdentifier>
+      <UniqueIdentifier>{98794479-125a-4f41-8cac-21a9181835de}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\txt\unicode">
-      <UniqueIdentifier>{5ae98512-ef9f-4d7c-b5a6-10a801d239e3}</UniqueIdentifier>
+      <UniqueIdentifier>{e3e74d49-e48d-455c-b6b2-13f6d8c253e1}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\txt\utf16">
-      <UniqueIdentifier>{8803df1d-34ce-4591-a8d7-1feed98ae007}</UniqueIdentifier>
+      <UniqueIdentifier>{66233edb-0279-4597-8b58-d6b74a3301a4}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\txt\utf8">
-      <UniqueIdentifier>{c5a05610-6125-4586-b202-a1104e4ad905}</UniqueIdentifier>
+      <UniqueIdentifier>{fe4e77cb-aae0-464d-9387-5d8c074e964a}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\ohm\util">
-      <UniqueIdentifier>{43017b2c-f504-4af4-9139-f4a38a08be7e}</UniqueIdentifier>
+      <UniqueIdentifier>{e852c423-4f26-4075-aa61-f8068ad22f4a}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\freetype">
-      <UniqueIdentifier>{8f362a06-3aca-4670-91d7-e437279479b2}</UniqueIdentifier>
+      <UniqueIdentifier>{1ab3409c-e6e9-4497-8168-7e54d233f5c8}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\freetype\src">
-      <UniqueIdentifier>{c7f43cbc-06d5-484d-93ad-a6b7412aaf5f}</UniqueIdentifier>
+      <UniqueIdentifier>{1588d28e-48d9-45eb-82d0-dcf7b3b5f556}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\freetype\src\base">
-      <UniqueIdentifier>{6dd4d37d-6d6a-4ed4-b6dc-61277578f523}</UniqueIdentifier>
+      <UniqueIdentifier>{7e314284-2e55-4ffd-b7a6-2a652ae6476a}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\libpng">
-      <UniqueIdentifier>{b7c3b1e5-9556-433c-b064-1017ea9bd015}</UniqueIdentifier>
+      <UniqueIdentifier>{0a5ccce6-26f5-4535-a272-c459247b2c8e}</UniqueIdentifier>
     </Filter>
     <Filter Include="lib\zlib">
-      <UniqueIdentifier>{eb297a4a-0514-495f-b6d4-ee3d46d40a1a}</UniqueIdentifier>
+      <UniqueIdentifier>{7000d15f-0c48-4c98-90e3-9d1924c2a388}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2700,6 +2700,7 @@
     <ClInclude Include="..\..\..\..\lib\zlib\zutil.h">
       <Filter>lib\zlib</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\CP3DCollaborativeEngine\CP3DCollaborativeEngine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\lib\ohm\archi\CpuId_common.cpp">
@@ -4259,6 +4260,7 @@
     <ClCompile Include="..\..\..\..\lib\zlib\zutil.c">
       <Filter>lib\zlib</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\CP3DCollaborativeEngine\CP3DCollaborativeEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\..\..\lib\ohm\opa\ohm_opa.rc">

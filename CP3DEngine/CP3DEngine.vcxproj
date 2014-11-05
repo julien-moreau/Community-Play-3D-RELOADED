@@ -101,6 +101,8 @@
     <ClInclude Include="..\include\CP3DCompileConfig.h" />
     <ClInclude Include="..\include\CP3DEngine.h" />
     <ClInclude Include="..\include\CP3DRenderingEngine.h" />
+    <ClInclude Include="..\include\ICP3DCollaborativeEngine.h" />
+    <ClInclude Include="..\include\ICP3DCustomView.h" />
     <ClInclude Include="..\include\ICP3DEditionTool.h" />
     <ClInclude Include="..\include\ICP3DFileSelector.h" />
     <ClInclude Include="..\include\ICP3DInterface.h" />

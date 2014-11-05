@@ -66,7 +66,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Irrlicht_d.lib;CP3DRenderingEngine_d.lib;CP3DEngine_d.lib;OhmSDK_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Irrlicht_d.lib;CP3DRenderingEngine_d.lib;CP3DEngine_d.lib;CP3DCollaborativeEngine_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\Irrlicht181\Output\;$(SolutionDir)CP3DRenderingEngine\Output\;$(SolutionDir)CP3DEngine\Output\;$(SolutionDir)Dependencies\OhmSDK\libs\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>$(OutDir)$(TargetName).lib</ImportLibrary>
     </Link>
@@ -84,7 +84,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>Irrlicht.lib;CP3DRenderingEngine.lib;CP3DEngine.lib;OhmSDK.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Irrlicht.lib;CP3DRenderingEngine.lib;CP3DEngine.lib;CP3DCollaborativeEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\Irrlicht181\Output\;$(SolutionDir)CP3DRenderingEngine\Output\;$(SolutionDir)CP3DEngine\Output\;$(SolutionDir)Dependencies\OhmSDK\libs\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>$(OutDir)$(TargetName).lib</ImportLibrary>
     </Link>
@@ -103,11 +103,13 @@
     <ClInclude Include="Editor\GUIElements\GUIFileSelector\CGUIFileSelector.h" />
     <ClInclude Include="Editor\GUIElements\GUIPanel\CGUIPanel.h" />
     <ClInclude Include="Editor\UserInterfaces\CCP3DContextMenu.h" />
+    <ClInclude Include="Editor\UserInterfaces\CCP3DCustomView.h" />
     <ClInclude Include="Editor\UserInterfaces\CCP3DEditionTool.h" />
     <ClInclude Include="Editor\UserInterfaces\CCP3DMainToolbar.h" />
     <ClInclude Include="Editor\UserInterfaces\CCP3DSceneGraph.h" />
     <ClInclude Include="Editor\UserInterfaces\CCP3DToolsToolbar.h" />
     <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolSceneNode.h" />
+    <ClInclude Include="Editor\UserInterfaces\EditionTools\SceneNodeEditionTools\CCP3DSceneNodeAnimators.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stdafx.h" />
   </ItemGroup>
@@ -119,11 +121,13 @@
     <ClCompile Include="Editor\GUIElements\GUIFileSelector\CGUIFileSelector.cpp" />
     <ClCompile Include="Editor\GUIElements\GUIPanel\CGUIPanel.cpp" />
     <ClCompile Include="Editor\UserInterfaces\CCP3DContextMenu.cpp" />
+    <ClCompile Include="Editor\UserInterfaces\CCP3DCustomView.cpp" />
     <ClCompile Include="Editor\UserInterfaces\CCP3DEditionTool.cpp" />
     <ClCompile Include="Editor\UserInterfaces\CCP3DMainToolbar.cpp" />
     <ClCompile Include="Editor\UserInterfaces\CCP3DSceneGraph.cpp" />
     <ClCompile Include="Editor\UserInterfaces\CCP3DToolsToolbar.cpp" />
     <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolSceneNode.cpp" />
+    <ClCompile Include="Editor\UserInterfaces\EditionTools\SceneNodeEditionTools\CCP3DSceneNodeAnimators.cpp" />
     <ClCompile Include="Stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

@@ -334,6 +334,8 @@ bool CCP3DEditionTool::OnEvent(const SEvent &event) {
 		if (event.MouseInput.Event == EMIE_MOUSE_WHEEL) {
 
 			const s32 tabIndex = TabCtrl->getActiveTab();
+			if (tabIndex == -1)
+				return false;
 			ui::CGUIPanel *panel = Panels[tabIndex];
 			IGUIElement *focus = Gui->getFocus();
 

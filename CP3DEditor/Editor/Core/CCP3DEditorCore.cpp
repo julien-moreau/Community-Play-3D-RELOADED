@@ -3,6 +3,7 @@
 
 #define CP3DR_PROJECT_NAME "Community Play 3D Editor"
 #define CP3DR_COMPILE_ENGINE
+#define CP3DR_COMPILE_COLLABORATIVE
 #include <CP3DCompileConfig.h>
 
 #include "CCP3DEditorCore.h"
@@ -12,6 +13,7 @@
 #include "../UserInterfaces/CCP3DToolsToolbar.h"
 #include "../UserInterfaces/CCP3DEditionTool.h"
 #include "../UserInterfaces/CCP3DSceneGraph.h"
+#include "../UserInterfaces/CCP3DCustomView.h"
 #include "../GUIElements/GUIFileSelector/CGUIFileSelector.h"
 
 using namespace irr;
@@ -28,6 +30,8 @@ CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), 
 	device->setResizable(true);
 	device->maximizeWindow();
 	device->getVideoDriver()->OnResize(device->getVideoDriver()->getScreenSize());
+	device->getSceneManager()->getRootSceneNode()->setName("Smgr:RootSceneNode");
+
 	Driver = device->getVideoDriver();
 
 	/// Configure engine
@@ -59,6 +63,7 @@ CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), 
 	ToolsToolbar = new CCP3DToolsToolbar(this);
 	(EditionTool = new CCP3DEditionTool(this))->createDefaultControllers();
 	SceneGraph = new CCP3DSceneGraph(this);
+	CustomView = new CCP3DCustomView(this);
 
 	/// Finish
 	WorkingDirectory = ProjectDirectory = device->getFileSystem()->getWorkingDirectory() + "/";
@@ -111,7 +116,10 @@ void CCP3DEditorCore::OnPreUpdate() {
 	viewPort.UpperLeftCorner.X = EditionTool->getElementToResize()->getRelativePosition().getWidth();
 	viewPort.UpperLeftCorner.Y = positionY;
 	viewPort.LowerRightCorner.X = Driver->getScreenSize().Width - SceneGraph->getElementToResize()->getRelativePosition().getWidth();
-	viewPort.LowerRightCorner.Y = Driver->getScreenSize().Height;
+	if (CustomView->getElementToResize()->isVisible())
+		viewPort.LowerRightCorner.Y = Driver->getScreenSize().Height - CustomView->getElementToResize()->getRelativePosition().getHeight();
+	else
+		viewPort.LowerRightCorner.Y = Driver->getScreenSize().Height;
 
 	Rengine->getHandler()->setViewPort(viewPort);
 }

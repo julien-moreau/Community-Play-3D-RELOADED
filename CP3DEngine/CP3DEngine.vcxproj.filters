@@ -33,6 +33,9 @@
     <Filter Include="include\editor">
       <UniqueIdentifier>{ce285ca4-fb69-4c38-abd1-f830896864e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\collaborative">
+      <UniqueIdentifier>{e375e567-4b9a-409a-a43c-64727eb13e67}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\CP3DCompileConfig.h">
@@ -89,9 +92,6 @@
     <ClInclude Include="..\include\ICP3DCustomDepthPass.h">
       <Filter>include\rendering</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\ICP3DInterface.h">
-      <Filter>include\engine</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\ICP3DEventReceiver.h">
       <Filter>include\engine</Filter>
     </ClInclude>
@@ -111,6 +111,15 @@
       <Filter>include\editor</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DFileSelector.h">
+      <Filter>include\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ICP3DCollaborativeEngine.h">
+      <Filter>include\collaborative</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ICP3DCustomView.h">
+      <Filter>include\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ICP3DInterface.h">
       <Filter>include\editor</Filter>
     </ClInclude>
   </ItemGroup>

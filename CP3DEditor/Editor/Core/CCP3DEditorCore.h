@@ -15,6 +15,11 @@ class CCP3DToolsToolbar;
 class CCP3DEditionTool;
 class CCP3DSceneGraph;
 class CCP3DInterfaceController;
+class CCP3DCustomView;
+
+namespace collaborative {
+	class ICP3DCollaborativeEngine;
+}
 
 class CCP3DEditorCore : public ICP3DEditor, public engine::ICP3DUpdate
 						#if defined (_DEBUG)
@@ -52,6 +57,8 @@ public:
 	CCP3DInterfaceController *getInterfaceController() { return InterfaceController; }
 
 	CCP3DEditionTool *getEditionTool() { return EditionTool; }
+	CCP3DSceneGraph *getSceneGraph() { return SceneGraph; }
+	CCP3DCustomView *getCustomView() { return CustomView; }
 
 	#if defined(_DEBUG)
 	bool OnEvent(const irr::SEvent &event);
@@ -78,6 +85,7 @@ private:
 	CCP3DToolsToolbar *ToolsToolbar;
 	CCP3DEditionTool *EditionTool;
 	CCP3DSceneGraph *SceneGraph;
+	CCP3DCustomView *CustomView;
 
 	irr::core::stringc ProjectName, ProjectDirectory;
 	irr::core::stringc WorkingDirectory;

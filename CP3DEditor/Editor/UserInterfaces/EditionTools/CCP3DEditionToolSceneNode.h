@@ -9,6 +9,7 @@ namespace cp3d {
 
 class CCP3DEditionTool;
 class CCP3DEditorCore;
+class CCP3DSceneNodeAnimators;
 
 /*
 Class that will manage the editon for ESNT_MESH type scene
@@ -32,11 +33,13 @@ public:
 private:
 	/// Irrlicht
 	irr::video::IVideoDriver *Driver;
+	irr::scene::ISceneManager *Smgr;
 	irr::gui::IGUIEnvironment *Gui;
 
 	/// CP3D
 	CCP3DEditorCore *EditorCore;
 	CCP3DEditionTool *EditionTool;
+	CCP3DSceneNodeAnimators *AnimatorsController;
 
 	/// Rendering
 	rendering::ICP3DHandler *Handler;
@@ -45,6 +48,8 @@ private:
 	irr::gui::IGUITab *GeneralTab;
 	irr::gui::IGUITab *MaterialTab;
 	irr::gui::IGUITab *AnimatorsTab;
+
+	irr::gui::IGUIContextMenu *AnimatorsCtxMenu;
 
 	/// General
 	SCP3DInterfaceData SceneNodeName;
@@ -60,6 +65,18 @@ private:
 	SCP3DInterfaceData MaterialTextures[irr::video::MATERIAL_MAX_TEXTURES];
 	SCP3DInterfaceData MaterialMatType;
 	SCP3DInterfaceData MaterialShininess;
+
+	SCP3DInterfaceData MaterialNormalizeNormals; /// Flags
+	SCP3DInterfaceData MaterialBackFaceCulling, MaterialFrontFaceCulling;
+	SCP3DInterfaceData MaterialLighting;
+	SCP3DInterfaceData MaterialAntialiasing, MaterialBilinearFilter, MaterialTrilinearFilter, MaterialAnisotropicFilter;
+	SCP3DInterfaceData MaterialUseMipMaps;
+	SCP3DInterfaceData MaterialZWrite, MaterialZBuffer;
+	SCP3DInterfaceData MaterialTextureWrap;
+	SCP3DInterfaceData MaterialColorMask, MaterialColorMaterial;
+	SCP3DInterfaceData MaterialPolygonOffset;
+
+	SCP3DInterfaceData MaterialPolygonOffsetDirectionCombo, MaterialPolygonOffsetFactorCombo;
 
 	/// Animators
 	SCP3DInterfaceData SceneNodeAnimators;

@@ -125,7 +125,13 @@ void CCP3DInterfaceController::OnPreUpdate() {
 		
 		SelectedNode->getKey()->getElementToResize()->setRelativePosition(position);
 
+		/// Resize the selected element
 		SelectedNode->getKey()->OnResize();
+
+		/// And resize all other elements
+		core::map<ICP3DInterface *, SControlDescriptor>::ConstIterator it = Parameters.getIterator();
+		for (; !it.atEnd(); it++)
+			it.getNode()->getKey()->OnResize();
 	}
 
 }

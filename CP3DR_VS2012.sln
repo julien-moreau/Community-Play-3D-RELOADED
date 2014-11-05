@@ -7,12 +7,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CP3DRLauncher", "CP3DLaunch
 		{E08E042A-6C45-411B-92BE-3CC31331019F} = {E08E042A-6C45-411B-92BE-3CC31331019F}
 		{E3ACF751-9166-4E27-90C7-9827A6E32C9D} = {E3ACF751-9166-4E27-90C7-9827A6E32C9D}
 		{B7F74BB1-1FCE-4615-A8EC-B2BDC179D071} = {B7F74BB1-1FCE-4615-A8EC-B2BDC179D071}
+		{1A0975C0-4456-11E2-A25F-0800200C9A66} = {1A0975C0-4456-11E2-A25F-0800200C9A66}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Irrlicht", "Dependencies\Irrlicht181\Sources\Irrlicht11.0.vcxproj", "{E08E042A-6C45-411B-92BE-3CC31331019F}"
-	ProjectSection(ProjectDependencies) = postProject
-		{1A0975C0-4456-11E2-A25F-0800200C9A66} = {1A0975C0-4456-11E2-A25F-0800200C9A66}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CP3DRenderingEngine", "CP3DRenderingEngine\CP3DRenderingEngine.vcxproj", "{B7F74BB1-1FCE-4615-A8EC-B2BDC179D071}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -39,7 +37,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CP3DRenderingTests", "CP3DR
 		{B7F74BB1-1FCE-4615-A8EC-B2BDC179D071} = {B7F74BB1-1FCE-4615-A8EC-B2BDC179D071}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OhmSDK", "Dependencies\OhmSDK\src\samples\ohm\flip\babystep0\babystep.vcxproj", "{1A0975C0-4456-11E2-A25F-0800200C9A66}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CP3DCollaborativeEngine", "Dependencies\OhmSDK\src\samples\ohm\flip\babystep3\babystep.vcxproj", "{1A0975C0-4456-11E2-A25F-0800200C9A66}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

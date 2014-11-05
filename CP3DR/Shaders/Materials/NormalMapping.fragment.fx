@@ -86,24 +86,24 @@ float4 pixelMain( in PS_INPUT IN ) : COLOR
 	float3 fvTangent   = -float3(abs(IN.Normal.y) + abs(IN.Normal.z), abs(IN.Normal.x), 0); 
 	float3 fvBinormal  = cross(fvTangent,IN.Normal);
 	float3 fvNormal    = mul(IN.Normal, ModelViewMatrix); 
-	fvTangent          = mul( cross(fvBinormal, IN.Normal), ModelViewMatrix ); 
-	fvBinormal         = mul( fvBinormal, ModelViewMatrix ); 
+	fvTangent          = mul(cross(fvBinormal, IN.Normal), ModelViewMatrix); 
+	fvBinormal         = mul(fvBinormal, ModelViewMatrix); 
 
 	float3 fvViewDirection  =  - fvObjectPosition.xyz; 
 	float3 ViewDirection	= float3(0.0, 0.0, 0.0);
-	ViewDirection.x			= dot( fvTangent, fvViewDirection ); 
-	ViewDirection.y			= dot( fvBinormal, fvViewDirection ); 
-	ViewDirection.z			= dot( fvNormal, fvViewDirection ); 
+	ViewDirection.x			= dot(fvTangent, fvViewDirection); 
+	ViewDirection.y			= dot(fvBinormal, fvViewDirection); 
+	ViewDirection.z			= dot(fvNormal, fvViewDirection); 
 
 	/// End added vertex
 
-	float4 color = float4(0,0,0,0);
-	float3  fvNormal2 = tex2D( bumpMap, IN.Texcoord ).yxz; 
+	float4 color	 = float4(0.0, 0.0, 0.0, 0.0);
+	float3 fvNormal2 = tex2D(bumpMap, IN.Texcoord).yxz; 
    
-	fvNormal2.xy*=2.0; 
-	fvNormal2.xy-=1.0;
-	fvNormal2=(float3(0.0,0.0,1.0)-fvNormal2)*fBumpStrength+fvNormal2; 
-	fvNormal2=normalize(fvNormal2);
+	fvNormal2.xy *= 2.0; 
+	fvNormal2.xy -= 1.0;
+	fvNormal2 = (float3(0.0, 0.0, 1.0) - fvNormal2) * fBumpStrength+fvNormal2; 
+	fvNormal2 = normalize(fvNormal2);
    
 	float4  fvBaseColor      = tex2D( baseMap, IN.Texcoord );
 	float4  fvTotalAmbient   = fvAmbient * fvBaseColor;
@@ -116,28 +116,27 @@ float4 pixelMain( in PS_INPUT IN ) : COLOR
 		float3 fvLightDirection1 = (fvLightPos1.xyz - fvObjectPosition.xyz);
 
 		float3 LightDirection1;
-		LightDirection1.x  = dot( fvTangent, fvLightDirection1.xyz ); 
-		LightDirection1.y  = dot( fvBinormal, fvLightDirection1.xyz ); 
-		LightDirection1.z  = dot( fvNormal, fvLightDirection1.xyz );
+		LightDirection1.x  = dot(fvTangent, fvLightDirection1.xyz); 
+		LightDirection1.y  = dot(fvBinormal, fvLightDirection1.xyz); 
+		LightDirection1.z  = dot(fvNormal, fvLightDirection1.xyz);
 
-		float3  fvLightDirection2 = normalize( LightDirection1 );
-
-		float LightDistMultiplier=1.0/(getLengthSQR (fvLightDirection1)/(fLightStrength[i]*10000.0)); 
+		float3 fvLightDirection2  = normalize(LightDirection1);
+		float LightDistMultiplier = 1.0 / (getLengthSQR(fvLightDirection1) / (fLightStrength[i] * 10000.0)); 
 		/// End added pixel
 
 		float fNDotL1            = max(dot(fvNormal2, fvLightDirection2),0.0)-0.1;  
-		float3  fvReflection1    = normalize( ( ( 2.0 * fvNormal2 )  ) - fvLightDirection2 );  
-		float3  fvViewDirection2 = normalize( ViewDirection ); 
-		float fRDotV1            = max( 0.0, dot( fvReflection1, fvViewDirection2 ) ); 
+		float3 fvReflection1     = normalize(((2.0 * fvNormal2)) - fvLightDirection2);  
+		float3 fvViewDirection2  = normalize(ViewDirection);
+		float fRDotV1            = max(0.0, dot(fvReflection1, fvViewDirection2)); 
 
-		fvTotalDiffuse			 += fvLightColor[i] * fNDotL1* fvBaseColor*LightDistMultiplier;  
-		fvTotalSpecular			 += fNDotL1*fvLightColor[i] * ( pow( fRDotV1, fSpecularPower ) )*LightDistMultiplier;
+		fvTotalDiffuse			 += fvLightColor[i] * fNDotL1 * fvBaseColor*LightDistMultiplier;  
+		fvTotalSpecular			 += fNDotL1 * fvLightColor[i] * (pow(fRDotV1, fSpecularPower)) * LightDistMultiplier;
 	}
 
-	color=( fvTotalAmbient + fvTotalDiffuse+ (fvTotalSpecular*fSpecularStrength)); 
-	if(color.r>1.0){color.gb+=color.r-1.0;} 
-	if(color.g>1.0){color.rb+=color.g-1.0;} 
-	if(color.b>1.0){color.rg+=color.b-1.0;} 
+	color = (fvTotalAmbient + fvTotalDiffuse + (fvTotalSpecular*fSpecularStrength)); 
+	if(color.r > 1.0) { color.gb += color.r - 1.0; } 
+	if(color.g > 1.0) { color.rb += color.g - 1.0; } 
+	if(color.b > 1.0) { color.rg += color.b - 1.0; } 
    
    return color;
 }
