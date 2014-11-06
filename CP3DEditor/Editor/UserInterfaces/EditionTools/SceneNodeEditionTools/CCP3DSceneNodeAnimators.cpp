@@ -40,7 +40,7 @@ void CCP3DSceneNodeAnimators::setAnimator(irr::scene::ISceneNodeAnimator *animat
 
 	/// Create GUI interface
 	Gui->addStaticText(L"Name :", rect<s32>(10, 5, 150, 25), true, true, Panel, -1, false);
-	AnimatorName = Gui->addEditBox(stringw(Animator->getName()).c_str(), rect<s32>(150, 5, 300,25), true, Panel, -1);
+	AnimatorName = Gui->addEditBox(stringw(Animator->getName()).c_str(), rect<s32>(150, 5, 300,25), false, Panel, -1);
 
 	/// Create GUI interface from attributes
 	if (Attributes)
@@ -84,18 +84,18 @@ s32 CCP3DSceneNodeAnimators::createCommonInterface(s32 middle) {
 		if (type == EAT_FLOAT || type == EAT_INT || type == EAT_STRING) {
 			Gui->addStaticText(name.c_str(), rect<s32>(10, loffset, 150, loffset + 20), true, true, Panel, -1, false);
 			if (type == EAT_INT)
-				Gui->addEditBox(stringw(Attributes->getAttributeAsInt(i)).c_str(), rect<s32>(150, loffset, 300, loffset + 20), true, Panel, -1)->setName(name);
+				Gui->addEditBox(stringw(Attributes->getAttributeAsInt(i)).c_str(), rect<s32>(150, loffset, 300, loffset + 20), false, Panel, -1)->setName(name);
 			else if (type == EAT_STRING)
-				Gui->addEditBox(stringw(Attributes->getAttributeAsString(i)).c_str(), rect<s32>(150, loffset, 300, loffset + 20), true, Panel, -1)->setName(name);
+				Gui->addEditBox(stringw(Attributes->getAttributeAsString(i)).c_str(), rect<s32>(150, loffset, 300, loffset + 20), false, Panel, -1)->setName(name);
 			else
-				Gui->addEditBox(stringw(Attributes->getAttributeAsFloat(i)).c_str(), rect<s32>(150, loffset, 300, loffset + 20), true, Panel, -1)->setName(name);
+				Gui->addEditBox(stringw(Attributes->getAttributeAsFloat(i)).c_str(), rect<s32>(150, loffset, 300, loffset + 20), false, Panel, -1)->setName(name);
 		}
 		else if (type == EAT_VECTOR3D) { /// On the right side
 			Gui->addStaticText(name.c_str(), rect<s32>(middle + 10, roffset, middle + 140, roffset + 20), true, true, Panel, -1, false);
 
-			Gui->addEditBox(stringw(Attributes->getAttributeAsVector3d(i).X).c_str(), rect<s32>(middle + 140, roffset, middle + 290, roffset + 20), true, Panel, -1)->setName(name + "X");
-			Gui->addEditBox(stringw(Attributes->getAttributeAsVector3d(i).Y).c_str(), rect<s32>(middle + 140, roffset + 20, middle + 290, roffset + 40), true, Panel, -1)->setName(name + "Y");
-			Gui->addEditBox(stringw(Attributes->getAttributeAsVector3d(i).Z).c_str(), rect<s32>(middle + 140, roffset + 40, middle + 290, roffset + 60), true, Panel, -1)->setName(name + "Z");
+			Gui->addEditBox(stringw(Attributes->getAttributeAsVector3d(i).X).c_str(), rect<s32>(middle + 140, roffset, middle + 290, roffset + 20), false, Panel, -1)->setName(name + "X");
+			Gui->addEditBox(stringw(Attributes->getAttributeAsVector3d(i).Y).c_str(), rect<s32>(middle + 140, roffset + 20, middle + 290, roffset + 40), false, Panel, -1)->setName(name + "Y");
+			Gui->addEditBox(stringw(Attributes->getAttributeAsVector3d(i).Z).c_str(), rect<s32>(middle + 140, roffset + 40, middle + 290, roffset + 60), false, Panel, -1)->setName(name + "Z");
 
 			Gui->addStaticText(stringw("X").c_str(), rect<s32>(middle + 290, roffset, middle + 310, roffset + 20), true, true, Panel, -1, false);
 			Gui->addStaticText(stringw("Y").c_str(), rect<s32>(middle + 290, roffset + 20, middle + 310, roffset + 40), true, true, Panel, -1, false);
@@ -153,7 +153,11 @@ bool CCP3DSceneNodeAnimators::OnEvent(const SEvent &event) {
 		EGUI_EVENT_TYPE type = event.GUIEvent.EventType;
 		if (caller && caller->getParent() == Panel && Animator) {
 
-			if (type == EGET_CHECKBOX_CHANGED || type == EGET_EDITBOX_CHANGED)
+			if (caller == AnimatorName) {
+				Animator->setName(AnimatorName->getText());
+				return true;
+			}
+			else if (type == EGET_CHECKBOX_CHANGED || type == EGET_EDITBOX_CHANGED)
 			{
 				stringc name = caller->getName();
 				stringc text = caller->getText();

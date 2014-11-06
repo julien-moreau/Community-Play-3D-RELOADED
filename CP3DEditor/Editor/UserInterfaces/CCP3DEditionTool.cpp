@@ -366,7 +366,7 @@ SCP3DInterfaceData CCP3DEditionTool::createTextBoxField(IGUITab *tab, ui::CGUIPa
 	e.TextElement = Gui->addStaticText(L"Text", rect<s32>(5, offset, width / 3, offset + 20), true, false, panel, -1, true);
 	((IGUIStaticText*)e.TextElement)->setTextAlignment(EGUIA_UPPERLEFT, EGUIA_CENTER);
 
-	e.TextBox = Gui->addEditBox(L"", rect<s32>(width / 3, offset, width - 10, offset + 20), true, panel, -1);
+	e.TextBox = Gui->addEditBox(L"", rect<s32>(width / 3, offset, width - 10, offset + 20), false, panel, -1);
 
 	return e;
 }
@@ -414,10 +414,10 @@ SCP3DInterfaceData CCP3DEditionTool::createTextureField(irr::gui::IGUITab *tab, 
 	e.TextElement = Gui->addStaticText(L"", rect<s32>(5, offset, width - 5, offset + 20), false, true, panel, -1, false);
 	e.TextureData.Image = Gui->addImage(rect<s32>(5, offset + 20, 75, offset + 20 + 70), panel, -1, L"Texture", false);
 	e.TextureData.Image->setScaleImage(true);
-	e.TextureData.EditBoxPath = Gui->addEditBox(L"", rect<s32>(75, offset + 20, width - 5, offset + 40), true, panel, -1);
+	e.TextureData.EditBoxPath = Gui->addEditBox(L"", rect<s32>(81, offset + 20, width - 15, offset + 40), false, panel, -1);
 	e.TextureData.EditBoxPath->setEnabled(false);
-	e.TextureData.BrowseButton = Gui->addButton(rect<s32>(75, offset + 40, width - 5, offset + 60), panel, -1, L"Browse...", L"Browse texture...");
-	e.TextureData.RemoveButton = Gui->addButton(rect<s32>(75, offset + 60, width - 5, offset + 80), panel, -1, L"Unset", L"Unsets the texture");
+	e.TextureData.BrowseButton = Gui->addButton(rect<s32>(80, offset + 40, width - 15, offset + 60), panel, -1, L"Browse...", L"Browse texture...");
+	e.TextureData.RemoveButton = Gui->addButton(rect<s32>(80, offset + 60, width - 15, offset + 80), panel, -1, L"Unset", L"Unsets the texture");
 	e.TextureData.BrowseDialog = 0;
 
 	return e;
