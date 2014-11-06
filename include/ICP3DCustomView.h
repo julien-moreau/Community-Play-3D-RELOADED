@@ -34,6 +34,9 @@ public:
 	*/
 	virtual irr::gui::IGUIElement *getParentGUIElement() = 0;
 
+	//! Splits the screen. Height = ScreenSize / 2
+	virtual void splitScreen() = 0;
+
 };
 
 } /// End cp3d namespace

@@ -21,10 +21,7 @@ namespace collaborative {
 	class ICP3DCollaborativeEngine;
 }
 
-class CCP3DEditorCore : public ICP3DEditor, public engine::ICP3DUpdate
-						#if defined (_DEBUG)
-						, public irr::IEventReceiver
-						#endif
+class CCP3DEditorCore : public ICP3DEditor, public engine::ICP3DUpdate, public irr::IEventReceiver
 {
 public:
 
@@ -60,9 +57,7 @@ public:
 	CCP3DSceneGraph *getSceneGraph() { return SceneGraph; }
 	CCP3DCustomView *getCustomView() { return CustomView; }
 
-	#if defined(_DEBUG)
 	bool OnEvent(const irr::SEvent &event);
-	#endif
 
 private:
 	/// Device
@@ -92,9 +87,7 @@ private:
 
 	/// Methods
 	void createComponents();
-	#if defined(_DEBUG)
 	void createTestScene();
-	#endif
 };
 
 } /// End namespace cp3d

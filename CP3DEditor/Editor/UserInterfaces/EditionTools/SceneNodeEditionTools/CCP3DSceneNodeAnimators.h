@@ -29,15 +29,21 @@ public:
 	irr::scene::ISceneNodeAnimator *getAnimator() { return Animator; }
 
 private:
+	/// Methods
+	irr::s32 createCommonInterface(irr::s32 middle);
+	irr::s32 createVariableInterface(irr::s32 middle);
+
 	/// Irrlicht
 	irr::scene::ISceneNodeAnimator *Animator;
+	irr::scene::ESCENE_NODE_ANIMATOR_TYPE AnimatorType;
+
+	irr::io::IAttributes *Attributes;
 
 	/// CP3D
 	CCP3DEditorCore *EditorCore;
 
 	/// GUI
 	ui::CGUIPanel *Panel;
-
 	irr::gui::IGUIEditBox *AnimatorName;
 
 };

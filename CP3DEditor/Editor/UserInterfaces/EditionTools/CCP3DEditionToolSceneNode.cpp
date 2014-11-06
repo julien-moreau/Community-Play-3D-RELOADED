@@ -240,6 +240,7 @@ void CCP3DEditionToolSceneNode::apply() {
 
 	/// Materials
 	SceneNode->getMaterial(CurrentMaterialID).Name = MaterialName.TextBox->getText();
+	SceneNode->getMaterial(CurrentMaterialID).MaterialType = (E_MATERIAL_TYPE)MaterialMatType.ComboBox->getSelected();
 	SceneNode->getMaterial(CurrentMaterialID).Shininess = core::fast_atof(stringc(MaterialShininess.TextBox->getText()).c_str());
 	{
 		/// Flags
@@ -316,6 +317,7 @@ bool CCP3DEditionToolSceneNode::OnEvent(const SEvent &event) {
 				}
 
 				SceneNodeAnimators.ListData.List->removeItem(index);
+				AnimatorsController->setAnimator(0);
 
 				return true;
 			}

@@ -32,6 +32,7 @@ public:
 	/// ICP3DCustomView
 	void clearView();
 	irr::gui::IGUIElement *getParentGUIElement();
+	void splitScreen();
 
 private:
 	/// Irrlicht

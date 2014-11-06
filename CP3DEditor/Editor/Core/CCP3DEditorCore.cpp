@@ -72,10 +72,8 @@ CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), 
 	/// Tests
 	/// Configure scene
 	createComponents();
-	#if defined(_DEBUG)
 	Engine->getEventReceiver()->addEventReceiver(this);
 	createTestScene();
-	#endif
 	Engine->getCustomUpdater()->addCustomUpdate(this);
 	SceneGraph->fillGraph();
 }
@@ -144,8 +142,10 @@ ui::ICP3DFileSelector *CCP3DEditorCore::createFileOpenDialog(irr::core::stringw 
 
 } /// End namespace cp3d
 
+/*
+Manages events and creates the default scene
+*/
 namespace cp3d {
-#if defined(_DEBUG)
 
 bool CCP3DEditorCore::OnEvent(const SEvent &event) {
 	if (event.EventType == EET_KEY_INPUT_EVENT) {
@@ -226,7 +226,5 @@ void CCP3DEditorCore::createTestScene() {
 	Handler->setAmbientColor(SColor(255, 32, 32, 32));
 
 }
-
-#endif
 
 } /// End namespace cp3d

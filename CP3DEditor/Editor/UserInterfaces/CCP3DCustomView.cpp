@@ -38,6 +38,7 @@ CCP3DCustomView::CCP3DCustomView(CCP3DEditorCore *editorCore) : EditorCore(edito
 	Window->setDrawTitlebar(false);
 	Window->getCloseButton()->setVisible(false);
 	Window->getMinimizeButton()->setVisible(true);
+	Window->getMaximizeButton()->setVisible(true);
 
 	Panel = new ui::CGUIPanel(Gui, Window, -1, rect<s32>(0, 0, 0, 0));
 
@@ -65,11 +66,18 @@ void CCP3DCustomView::OnResize() {
 	position.LowerRightCorner.X = Driver->getScreenSize().Width - SceneGraph->getElementToResize()->getRelativePosition().getWidth();
 
 	if (position.getHeight() <= CCP3DCustomViewMinHeight)
-		position.UpperLeftCorner.Y = Driver->getScreenSize().Height - CCP3DCustomViewMinHeight + 5;
+		position.UpperLeftCorner.Y = Driver->getScreenSize().Height - CCP3DCustomViewMinHeight - 5;
 
 	Window->setRelativePosition(position);
 
 	Panel->setRelativePosition(rect<s32>(5, 20, position.getWidth() - 5, position.getHeight() - 5));
+}
+
+void CCP3DCustomView::splitScreen() {
+	rect<s32> position = Window->getRelativePosition();
+	position.UpperLeftCorner.Y = Driver->getScreenSize().Height / 2;
+	Window->setRelativePosition(position);
+	OnResize();
 }
 
 bool CCP3DCustomView::OnEvent(const SEvent &event) {
@@ -80,6 +88,29 @@ bool CCP3DCustomView::OnEvent(const SEvent &event) {
 			if (event.GUIEvent.Caller == Window->getMinimizeButton()) {
 				Window->setVisible(false);
 				return true;
+			}
+			else if (event.GUIEvent.Caller == Window->getMaximizeButton()) {
+				splitScreen();
+				return true;
+			}
+
+		}
+	}
+
+	else if (event.EventType == EET_MOUSE_INPUT_EVENT) {
+		if (event.MouseInput.Event == EMIE_MOUSE_WHEEL) {
+
+			IGUIElement *focus = Gui->getFocus();
+
+			if (focus == Panel || (focus && focus->getParent() == Panel))
+			{
+				Panel->getScrollBar()->setPos(Panel->getScrollBar()->getPos() - s32(event.MouseInput.Wheel * 2.0));
+
+				SEvent ev;
+				ev.EventType = EET_GUI_EVENT;
+				ev.GUIEvent.Caller = Panel->getScrollBar();
+				ev.GUIEvent.EventType = EGET_SCROLL_BAR_CHANGED;
+				Panel->OnEvent(ev);
 			}
 
 		}

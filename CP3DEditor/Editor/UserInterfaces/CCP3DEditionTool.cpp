@@ -409,7 +409,7 @@ SCP3DInterfaceData CCP3DEditionTool::createTextureField(irr::gui::IGUITab *tab, 
 	s32 width = getPanelWidth(panel);
 	s32 offset = getElementPositionOffset(tab, panel);
 
-	e.TextureData.Zone = Gui->addStaticText(L"", rect<s32>(2, offset - 2, width - 2, offset + 92), false, false, panel, -1, true);
+	e.TextureData.Zone = Gui->addStaticText(L"", rect<s32>(2, offset - 2 - 20, width - 2, offset + 92), false, false, panel, -1, true);
 	((IGUIStaticText*)e.TextureData.Zone)->setBackgroundColor(SColor(255, 48, 48, 48));
 	e.TextElement = Gui->addStaticText(L"", rect<s32>(5, offset, width - 5, offset + 20), false, true, panel, -1, false);
 	e.TextureData.Image = Gui->addImage(rect<s32>(5, offset + 20, 75, offset + 20 + 70), panel, -1, L"Texture", false);

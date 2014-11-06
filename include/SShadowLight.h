@@ -67,7 +67,7 @@ public:
 	}
 
 	//! Sets the light's view matrix.
-	void setViewMatrix(const irr::core::matrix4& matrix) {
+	inline void setViewMatrix(const irr::core::matrix4& matrix) {
 		ViewMat = matrix;
 		irr::core::matrix4 vInverse;
 		ViewMat.getInverse(vInverse);
@@ -75,7 +75,7 @@ public:
 	}
 
 	//! Sets the light's projection matrix.
-	void setProjectionMatrix(const irr::core::matrix4& matrix) {
+	inline void setProjectionMatrix(const irr::core::matrix4& matrix) {
 		ProjMat = matrix;
 	}
 
@@ -123,7 +123,7 @@ public:
 
 	//! Sets if the light must recalculate
 	//! \param mustRecalculate: true if light must recalculate
-	void setMustRecalculate(const bool mustRecalculate) {
+	inline void setMustRecalculate(const bool mustRecalculate) {
 		MustRecalculate = mustRecalculate;
 	}
 
