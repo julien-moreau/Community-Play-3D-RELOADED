@@ -118,6 +118,8 @@ void CCP3DEditionToolSceneNode::createInterface() {
 		MaterialColorMaterial = EditionTool->addField(MaterialTab, EGUIET_CHECK_BOX, DefaultEditionToolCallback("Color Material"));
 		MaterialPolygonOffset = EditionTool->addField(MaterialTab, EGUIET_CHECK_BOX, DefaultEditionToolCallback("Polygon Offset"));
 
+		/// Rendering
+		EditionTool->setNewZone(MaterialTab, "Polygon Offset");
 		MaterialPolygonOffsetDirectionCombo = EditionTool->addField(MaterialTab, EGUIET_COMBO_BOX, DefaultEditionToolCallback("Polygon Offset Direction :"));
 		{
 			u32 i = 0;
@@ -130,6 +132,13 @@ void CCP3DEditionToolSceneNode::createInterface() {
 		{
 			for (u32 i=0; i < 8; i++)
 				MaterialPolygonOffsetFactorCombo.ComboBox->addItem(stringw(i).c_str());
+		}
+
+		EditionTool->setNewZone(MaterialTab, "Antialiasing mode");
+		u32 i = 0;
+		while (AntiAliasingModeNames[i] != 0) {
+			MaterialAntiAliasMode[i] = EditionTool->addField(MaterialTab, EGUIET_CHECK_BOX, DefaultEditionToolCallback(AntiAliasingModeNames[i]));
+			i++;
 		}
 	}
 
@@ -182,7 +191,14 @@ void CCP3DEditionToolSceneNode::configure() {
 		}
 
 		/// Paramters
-		MaterialMatType.ComboBox->setSelected(SceneNode->getMaterial(CurrentMaterialID).MaterialType);
+		rendering::ICP3DRenderingEngine *renderingEngine = EditorCore->getRenderingEngine();
+		core::map<E_MATERIAL_TYPE, E_MATERIAL_TYPE>::Iterator it = renderingEngine->Materials.getIterator();
+		for (; !it.atEnd(); it++) {
+			if (it.getNode()->getValue() == SceneNode->getMaterial(CurrentMaterialID).MaterialType) {
+				MaterialMatType.ComboBox->setSelected(it.getNode()->getKey());
+				break;
+			}
+		}
 		MaterialShininess.TextBox->setText(stringw(SceneNode->getMaterial(CurrentMaterialID).Shininess).c_str());
 
 		/// Flags
@@ -203,6 +219,16 @@ void CCP3DEditionToolSceneNode::configure() {
 
 		MaterialPolygonOffsetDirectionCombo.ComboBox->setSelected(SceneNode->getMaterial(CurrentMaterialID).PolygonOffsetDirection);
 		MaterialPolygonOffsetFactorCombo.ComboBox->setSelected(SceneNode->getMaterial(CurrentMaterialID).PolygonOffsetFactor);
+
+		for (u32 i=0; i < 7; i++)
+			MaterialAntiAliasMode[i].CheckBox->setChecked(false);
+		if (SceneNode->getMaterial(CurrentMaterialID).AntiAliasing & EAAM_OFF) MaterialAntiAliasMode[0].CheckBox->setChecked(true);
+		if (SceneNode->getMaterial(CurrentMaterialID).AntiAliasing & EAAM_SIMPLE) MaterialAntiAliasMode[1].CheckBox->setChecked(true);
+		if (SceneNode->getMaterial(CurrentMaterialID).AntiAliasing & EAAM_QUALITY) MaterialAntiAliasMode[2].CheckBox->setChecked(true);
+		if (SceneNode->getMaterial(CurrentMaterialID).AntiAliasing & EAAM_LINE_SMOOTH) MaterialAntiAliasMode[3].CheckBox->setChecked(true);
+		if (SceneNode->getMaterial(CurrentMaterialID).AntiAliasing & EAAM_POINT_SMOOTH) MaterialAntiAliasMode[4].CheckBox->setChecked(true);
+		if (SceneNode->getMaterial(CurrentMaterialID).AntiAliasing & EAAM_FULL_BASIC) MaterialAntiAliasMode[5].CheckBox->setChecked(true);
+		if (SceneNode->getMaterial(CurrentMaterialID).AntiAliasing & EAAM_ALPHA_TO_COVERAGE) MaterialAntiAliasMode[6].CheckBox->setChecked(true);
 	}
 
 	/// Animators
@@ -240,7 +266,7 @@ void CCP3DEditionToolSceneNode::apply() {
 
 	/// Materials
 	SceneNode->getMaterial(CurrentMaterialID).Name = MaterialName.TextBox->getText();
-	SceneNode->getMaterial(CurrentMaterialID).MaterialType = (E_MATERIAL_TYPE)MaterialMatType.ComboBox->getSelected();
+	SceneNode->getMaterial(CurrentMaterialID).MaterialType = EditorCore->getRenderingEngine()->Materials[(E_MATERIAL_TYPE)MaterialMatType.ComboBox->getSelected()];
 	SceneNode->getMaterial(CurrentMaterialID).Shininess = core::fast_atof(stringc(MaterialShininess.TextBox->getText()).c_str());
 	{
 		/// Flags
@@ -261,6 +287,22 @@ void CCP3DEditionToolSceneNode::apply() {
 
 		SceneNode->getMaterial(CurrentMaterialID).PolygonOffsetDirection = (E_POLYGON_OFFSET)MaterialPolygonOffsetDirectionCombo.ComboBox->getSelected();
 		SceneNode->getMaterial(CurrentMaterialID).PolygonOffsetFactor = (u8)MaterialPolygonOffsetFactorCombo.ComboBox->getSelected();
+
+		u8 antiAliasMode = EAAM_SIMPLE;
+		if (MaterialAntiAliasMode[0].CheckBox->isChecked()) {
+			antiAliasMode = EAAM_OFF;
+			for (u32 i=1; i < 7; i++)
+				MaterialAntiAliasMode[i].CheckBox->setChecked(false);
+		} else {
+			if (MaterialAntiAliasMode[1].CheckBox->isChecked()) antiAliasMode = antiAliasMode | EAAM_SIMPLE;
+			if (MaterialAntiAliasMode[2].CheckBox->isChecked()) antiAliasMode = antiAliasMode | EAAM_QUALITY;
+			if (MaterialAntiAliasMode[3].CheckBox->isChecked()) antiAliasMode = antiAliasMode | EAAM_LINE_SMOOTH;
+			if (MaterialAntiAliasMode[4].CheckBox->isChecked()) antiAliasMode = antiAliasMode | EAAM_POINT_SMOOTH;
+			if (MaterialAntiAliasMode[5].CheckBox->isChecked()) antiAliasMode = antiAliasMode | EAAM_FULL_BASIC;
+			if (MaterialAntiAliasMode[6].CheckBox->isChecked()) antiAliasMode = antiAliasMode | EAAM_ALPHA_TO_COVERAGE;
+			SceneNode->getMaterial(CurrentMaterialID).AntiAliasing = antiAliasMode;
+		}
+
 	}
 
 }

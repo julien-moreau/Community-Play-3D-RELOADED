@@ -163,8 +163,8 @@ int main(int argc, char* argv[]) {
 
 	/// Create the normal mapping material
 	cpre->createNormalMappingMaterial();
-	cubeNode->setMaterialType(cpre->NormalMappingMaterialSolid);
-	planeNode->setMaterialType(cpre->NormalMappingMaterialSolid);
+	cubeNode->setMaterialType(cpre->Materials[EMT_NORMAL_MAP_SOLID]);
+	planeNode->setMaterialType(cpre->Materials[EMT_NORMAL_MAP_SOLID]);
 
 	cp3d::rendering::ICP3DLightSceneNode *light = cpre->createLightSceneNode(true, true);
 	light->setPosition(vector3df(0.f, 100.f, 100.f));

@@ -77,7 +77,23 @@ void CCP3DSceneGraph::OnResize() {
 
 bool CCP3DSceneGraph::OnEvent(const SEvent &event) {
 
-	if (event.EventType == EET_GUI_EVENT) {
+	if (event.EventType == EET_MOUSE_INPUT_EVENT) {
+		if (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN) {
+			IGUIElement *focus = Gui->getFocus();
+			if (focus == Graph) {
+
+				SEvent ev;
+				ev.EventType = EET_GUI_EVENT;
+				ev.GUIEvent.EventType = EGET_TREEVIEW_NODE_SELECT;
+				ev.GUIEvent.Caller = focus;
+				ev.GUIEvent.Element = focus;
+				return OnEvent(ev);
+
+			}
+		}
+	}
+
+	else if (event.EventType == EET_GUI_EVENT) {
 
 		if (event.GUIEvent.EventType == EGET_TREEVIEW_NODE_SELECT) {
 			if (event.GUIEvent.Caller == Graph) {

@@ -174,6 +174,19 @@ namespace video
 		EAAM_ALPHA_TO_COVERAGE=16
 	};
 
+	//! Names for anti aliasing mode
+	const c8* const AntiAliasingModeNames[] =
+	{
+		"Off",
+		"Simple",
+		"Quality",
+		"Line Smooth",
+		"Point Smooth",
+		"Full Basic",
+		"Alpha to Coverage",
+		0
+	};
+
 	//! These flags allow to define the interpretation of vertex color when lighting is enabled
 	/** Without lighting being enabled the vertex color is the only value defining the fragment color.
 	Once lighting is enabled, the four values for diffuse, ambient, emissive, and specular take over.

@@ -25,8 +25,15 @@ namespace rendering {
 
 CCP3DRenderingEngine::CCP3DRenderingEngine(IrrlichtDevice *device) : NormalMapMaterialType(0)
 {
+	/// Configure
 	Handler = new CCP3DHandler(device, device->getVideoDriver()->getScreenSize(), true, true, true);
-	//((CCP3DHandler*)Handler)->setUseVSM(false);
+	
+	/// Configure materials
+	u32 i = 0;
+	while (sBuiltInMaterialTypeNames[i] != 0) {
+		Materials[(E_MATERIAL_TYPE)i] = (E_MATERIAL_TYPE)i;
+		i++;
+	}
 }
 
 CCP3DRenderingEngine::~CCP3DRenderingEngine() {
@@ -84,13 +91,13 @@ void CCP3DRenderingEngine::destroyNormalMappingMaterial() {
 		delete NormalMapMaterialType;
 	NormalMapMaterialType = 0;
 
-	getVideoDriver()->getMaterialRenderer(NormalMappingMaterialSolid)->drop();
-	getVideoDriver()->getMaterialRenderer(NormalMappingMaterialTransAdd)->drop();
-	getVideoDriver()->getMaterialRenderer(NormalMappingMaterialTransAlphaRef)->drop();
+	getVideoDriver()->getMaterialRenderer(Materials[EMT_NORMAL_MAP_SOLID])->drop();
+	getVideoDriver()->getMaterialRenderer(Materials[EMT_NORMAL_MAP_TRANSPARENT_ADD_COLOR])->drop();
+	getVideoDriver()->getMaterialRenderer(Materials[EMT_NORMAL_MAP_TRANSPARENT_VERTEX_ALPHA])->drop();
 
-	NormalMappingMaterialSolid = (E_MATERIAL_TYPE)-1;
-	NormalMappingMaterialTransAdd = (E_MATERIAL_TYPE)-1;
-	NormalMappingMaterialTransAlphaRef = (E_MATERIAL_TYPE)-1;
+	Materials[EMT_NORMAL_MAP_SOLID] = (E_MATERIAL_TYPE)-1;
+	Materials[EMT_NORMAL_MAP_TRANSPARENT_ADD_COLOR] = (E_MATERIAL_TYPE)-1;
+	Materials[EMT_NORMAL_MAP_TRANSPARENT_VERTEX_ALPHA] = (E_MATERIAL_TYPE)-1;
 }
 
 } /// End namespace rendering

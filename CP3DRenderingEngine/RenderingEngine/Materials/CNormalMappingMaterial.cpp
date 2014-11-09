@@ -21,13 +21,14 @@ CNormalMappingMaterial::CNormalMappingMaterial(CCP3DRenderingEngine *renderingEn
 	m.addDefine("__CP3D__MAX_LIGHTS__", stringc(__CP3D__MAX_LIGHTS__));
 
 	s32 MatType = m.createMaterialFromFiles("Shaders/Materials/NormalMapping.vertex.fx", "Shaders/Materials/NormalMapping.fragment.fx", EMT_SOLID, this);
-	renderingEngine->NormalMappingMaterialSolid = (E_MATERIAL_TYPE)MatType;
+	RenderingEngine->Materials[EMT_NORMAL_MAP_SOLID] = (E_MATERIAL_TYPE)MatType;
 
 	MatType = m.createMaterialFromFiles("Shaders/Materials/NormalMapping.vertex.fx", "Shaders/Materials/NormalMapping.fragment.fx", EMT_TRANSPARENT_ADD_COLOR, this);
-	renderingEngine->NormalMappingMaterialTransAdd = (E_MATERIAL_TYPE)MatType;
+	renderingEngine->Materials[EMT_NORMAL_MAP_TRANSPARENT_ADD_COLOR] = (E_MATERIAL_TYPE)MatType;
 
 	MatType = m.createMaterialFromFiles("Shaders/Materials/NormalMapping.vertex.fx", "Shaders/Materials/NormalMapping.fragment.fx", EMT_TRANSPARENT_ALPHA_CHANNEL_REF, this);
-	renderingEngine->NormalMappingMaterialTransAlphaRef = (E_MATERIAL_TYPE)MatType;
+	renderingEngine->Materials[EMT_NORMAL_MAP_TRANSPARENT_VERTEX_ALPHA] = (E_MATERIAL_TYPE)MatType;
+
 }
 
 CNormalMappingMaterial::~CNormalMappingMaterial() {
@@ -62,6 +63,10 @@ void CNormalMappingMaterial::computeArrays() {
 		}
 	}
 
+}
+
+void CNormalMappingMaterial::OnSetMaterial(const SMaterial& material) {
+	Material = &material;
 }
 
 void CNormalMappingMaterial::OnSetConstants(irr::video::IMaterialRendererServices *services, irr::s32 userData) {
@@ -110,8 +115,10 @@ void CNormalMappingMaterial::OnSetConstants(irr::video::IMaterialRendererService
 	if (services->getVideoDriver()->getDriverType() == EDT_OPENGL) {
 		s32 baseMap = 0;
 		s32 bumpMap = 1;
+		s32 specularMap = 2;
 		services->setPixelShaderConstant("baseMap", &baseMap, 1);
 		services->setPixelShaderConstant("bumpMap", &bumpMap, 1);
+		services->setPixelShaderConstant("specularMap", &specularMap, 1);
 	}
 
 	f32 fvAmbiant[4] = { 1.f, 1.f, 1.f, 1.f };
@@ -125,6 +132,7 @@ void CNormalMappingMaterial::OnSetConstants(irr::video::IMaterialRendererService
     services->setPixelShaderConstant(("fSpecularPower"), &fSpecularPower, 1);
     services->setPixelShaderConstant(("fSpecularStrength"), &fSpecularStrength, 1);
     services->setPixelShaderConstant(("fBumpStrength"), &fBumpStrength, 1);
+	services->setPixelShaderConstant(("shininess"), &Material->Shininess, 1);
 
 	services->setPixelShaderConstant("numLights", &lightsCount, 1);
 }

@@ -23,9 +23,12 @@ simply include :
 class ICP3DRenderingEngine {
 public:
 
-	irr::video::E_MATERIAL_TYPE NormalMappingMaterialSolid;
-	irr::video::E_MATERIAL_TYPE NormalMappingMaterialTransAdd;
-	irr::video::E_MATERIAL_TYPE NormalMappingMaterialTransAlphaRef;
+	//! Contains the default materials created by Irrlicht and CP3D
+	//! EMT_SOLID:					   CP3D's Default Material
+	//! EMT_NORMAL_MAP:				   CP3D's Normal Map Material
+	//! EMT_NORMAL_MAP_TRANS_ADD:	   CP3D's Normal Map Material with transparence
+	//! EMT_NORMAL_MAP_TRANS_ALPHAREF: CP3D's Normal Map Material with alpha ref
+	irr::core::map<irr::video::E_MATERIAL_TYPE, irr::video::E_MATERIAL_TYPE> Materials;
 
 	//! Returns the Irrlicht device
 	virtual irr::IrrlichtDevice *getDevice() = 0;

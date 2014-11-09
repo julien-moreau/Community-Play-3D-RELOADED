@@ -19,12 +19,15 @@ CCP3DSceneNodeCreator::CCP3DSceneNodeCreator(rendering::ICP3DRenderingEngine *re
 	Device = Rengine->getDevice();
 	Driver = Rengine->getVideoDriver();
 	Smgr = Rengine->getSceneManager();
+
+	EmptyTexture = Driver->getTexture("Textures/empty.jpg");
 }
 
 CCP3DSceneNodeCreator::~CCP3DSceneNodeCreator() {
 
 }
 
+/// Creates a cloud scene node
 irr::scene::ISceneNode *CCP3DSceneNodeCreator::createCloudNode(const vector2df &translation, ITexture *texture,
 															   const f32 textureScale, const f32 centerHeight, const f32 innerHeight,
 															   const f32 outerHeight, ICP3DSceneNodeCreatorCallback callback)
@@ -36,9 +39,63 @@ irr::scene::ISceneNode *CCP3DSceneNodeCreator::createCloudNode(const vector2df &
 	cloud->setTextureScale(textureScale);
 	cloud->setName("Cloud Layer 1");
 
+	configureSceneNode(cloud);
 	callback(cloud);
 
 	return cloud;
+}
+
+/// Creates a cube scene node
+irr::scene::ISceneNode *CCP3DSceneNodeCreator::createCubeSceneNode(const f32 size, ICP3DSceneNodeCreatorCallback callback) {
+	ISceneNode *cube = Smgr->addCubeSceneNode(size);
+
+	configureSceneNode(cube);
+	callback(cube);
+
+	return cube;
+}
+
+/// Configures scene node to default values
+void CCP3DSceneNodeCreator::configureSceneNode(irr::scene::ISceneNode *node) {
+	if (!node)
+		return;
+
+	ESCENE_NODE_TYPE type = node->getType();
+	IMeshManipulator *manipulator = Smgr->getMeshManipulator();
+	IMesh *m = 0;
+	
+	if (type == ESNT_MESH || type == ESNT_OCTREE || type == ESNT_CUBE ||
+		type == ESNT_SPHERE)
+	{
+		IMeshSceneNode *n = (IMeshSceneNode *)node;
+		m = manipulator->createForsythOptimizedMesh(n->getMesh());
+		Smgr->getMeshCache()->removeMesh(n->getMesh());
+		n->setMesh(m);
+	}
+	else if (type == ESNT_TERRAIN) {
+		ITerrainSceneNode *n = (ITerrainSceneNode *)node;
+		m = n->getMesh();
+	}
+	else if (type == ESNT_ANIMATED_MESH) {
+		IAnimatedMeshSceneNode *n = (IAnimatedMeshSceneNode *)node;
+		m = n->getMesh();
+	}
+
+	if (m) {
+		manipulator->recalculateNormals(m, true, true);
+		manipulator->recalculateTangents(m, false, true, true);
+	}
+
+	for (u32 i=0; i < node->getMaterialCount(); i++) {
+		node->getMaterial(i).PolygonOffsetDirection = EPO_FRONT;
+		node->getMaterial(i).PolygonOffsetFactor = 0;
+
+		for (u32 j=0; j < video::MATERIAL_MAX_TEXTURES; j++) {
+			if (node->getMaterial(i).TextureLayer[j].Texture == 0) {
+				node->getMaterial(i).TextureLayer[j].Texture = EmptyTexture;
+			}
+		}
+	}
 }
 
 } /// End namespace engine

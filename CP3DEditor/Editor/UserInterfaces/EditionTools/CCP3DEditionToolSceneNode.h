@@ -77,6 +77,7 @@ private:
 	SCP3DInterfaceData MaterialPolygonOffset;
 
 	SCP3DInterfaceData MaterialPolygonOffsetDirectionCombo, MaterialPolygonOffsetFactorCombo;
+	SCP3DInterfaceData MaterialAntiAliasMode[7];
 
 	/// Animators
 	SCP3DInterfaceData SceneNodeAnimators;

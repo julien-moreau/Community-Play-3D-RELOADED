@@ -66,7 +66,7 @@ namespace rendering {
 		}
 
 		//! Returns the array of scene nodes rendering by the pass
-		const irr::core::array<irr::scene::ISceneNode *> &getSceneNodes() const {
+		inline const irr::core::array<irr::scene::ISceneNode *> &getSceneNodes() const {
 			return SceneNodes;
 		}
 

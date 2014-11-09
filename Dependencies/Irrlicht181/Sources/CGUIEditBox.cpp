@@ -891,8 +891,8 @@ void CGUIEditBox::draw()
 				setTextRect(cursorLine);
 				CurrentTextRect.UpperLeftCorner.X += charcursorpos;
 
-				font->draw(L"_", CurrentTextRect,
-					OverrideColorEnabled ? OverrideColor : skin->getColor(EGDC_BUTTON_TEXT),
+				font->draw(L"|", CurrentTextRect,
+					OverrideColorEnabled ? OverrideColor : video::SColor(255, 0, 0, 0),
 					false, true, &localClipRect);
 			}
 		}

@@ -12,14 +12,22 @@ class CNormalMappingMaterial : public irr::video::IShaderConstantSetCallBack {
 
 public:
     
+	/// Constructor & Destructor
     CNormalMappingMaterial(CCP3DRenderingEngine *renderingEngine);
     ~CNormalMappingMaterial();
 
+	/// IShaderConstantSetCallback
+	void OnSetMaterial(const irr::video::SMaterial& material);
 	void OnSetConstants(irr::video::IMaterialRendererServices *services, irr::s32 userData);
 
 private:
+	/// Methods
 	void computeArrays();
 
+	/// Datas
+	const irr::video::SMaterial *Material;
+
+	/// Rendering
 	CCP3DRenderingEngine *RenderingEngine;
 
 	irr::core::array<irr::f32> LightStrengthArray;

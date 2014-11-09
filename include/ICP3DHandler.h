@@ -99,6 +99,13 @@ namespace rendering {
 		//! Remove a custom pass (see cp3d::rendering::ICP3DCustomPass)
 		virtual void removeCustomPass(ICP3DCustomPass *pass) = 0;
 
+		//! Returns custom pass count.
+		virtual const irr::u32 getCustomPassCount() const = 0;
+
+		//! Returns a custom pass
+		//! \param index: the index of the custom pass
+		virtual ICP3DCustomPass *getCustomPass(const irr::u32 index) = 0;
+
 		//! Adds a post-process from a file
 		//! \param filename: the file containing the shader's code
 		//! \param callback: the callback derived from cp3d::rendering::IPostProcessingRenderCallback

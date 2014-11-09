@@ -122,6 +122,14 @@ public:
 			CustomPasses.erase(index);
 	}
 
+	const irr::u32 getCustomPassCount() const {
+		return CustomPasses.size();
+	}
+
+	ICP3DCustomPass *getCustomPass(const irr::u32 index) {
+		return CustomPasses[index];
+	}
+
 private:
 
 	struct SShadowNode {

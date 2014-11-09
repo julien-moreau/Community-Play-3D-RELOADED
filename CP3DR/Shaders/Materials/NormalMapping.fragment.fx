@@ -8,9 +8,11 @@ uniform vec4 fvLightColor[__CP3D__MAX_LIGHTS__];
 uniform float fSpecularPower;
 uniform float fSpecularStrength;
 uniform float fBumpStrength;
+uniform float shininess;
 
 uniform sampler2D baseMap;
 uniform sampler2D bumpMap;
+uniform sampler2D specularMap;
 
 varying vec2  Texcoord;
 varying vec3  ViewDirection;
@@ -40,7 +42,9 @@ void main( void )
         fvTotalSpecular += fNDotL * fvLightColor[i] * ( pow( fRDotV, fSpecularPower ) ) * LightDistMultiplier[i];
     }
     
+	fvTotalSpecular *= fvTotalSpecular + texture2D(specularMap, Texcoord) * shininess;
     vec4 color = ( fvTotalAmbient + fvTotalDiffuse + (fvTotalSpecular * fSpecularStrength));
+
     if(color.r>1.0) { color.gb += color.r - 1.0; }
     if(color.g>1.0) { color.rb += color.g - 1.0; }
     if(color.b>1.0) { color.rg += color.b - 1.0; }
@@ -58,11 +62,13 @@ float4 fvAmbient;
 float4 fvLightColor[__CP3D__MAX_LIGHTS__];
 float fSpecularPower; 
 float fSpecularStrength; 
-float fBumpStrength; 
+float fBumpStrength;
+float shininess;
 int numLights;
 
-sampler2D baseMap      : register(s0); 
-sampler2D bumpMap      : register(s1); 
+sampler2D baseMap      : register(s0);
+sampler2D bumpMap      : register(s1);
+sampler2D specularMap  : register(s2);
 
 struct PS_INPUT
 {   
@@ -133,7 +139,9 @@ float4 pixelMain( in PS_INPUT IN ) : COLOR
 		fvTotalSpecular			 += fNDotL1 * fvLightColor[i] * (pow(fRDotV1, fSpecularPower)) * LightDistMultiplier;
 	}
 
-	color = (fvTotalAmbient + fvTotalDiffuse + (fvTotalSpecular*fSpecularStrength)); 
+	fvTotalSpecular *= fvTotalSpecular + tex2D(specularMap, IN.Texcoord) * shininess;
+	color = (fvTotalAmbient + fvTotalDiffuse + (fvTotalSpecular*fSpecularStrength));
+
 	if(color.r > 1.0) { color.gb += color.r - 1.0; } 
 	if(color.g > 1.0) { color.rb += color.g - 1.0; } 
 	if(color.b > 1.0) { color.rg += color.b - 1.0; } 

@@ -14,12 +14,21 @@ class ICP3DSceneNodeCreator {
 public:
 
 	//! Creates a new cloud scene node
-	//! \param translation: 
+	//! \param translation: cloud's translation
 	//! \param texture: the video texture to apply
 	//! \param scale: the cloud scale
 	virtual irr::scene::ISceneNode *createCloudNode(const irr::core::vector2df &translation, irr::video::ITexture *texture,
 													const irr::f32 textureScale, const irr::f32 centerHeight, const irr::f32 innerHeight,
 													const irr::f32 outerHeight, ICP3DSceneNodeCreatorCallback callback = ICP3D_SN_CREATOR_DEFAULT_CB) = 0;
+
+	//! Creates a cube scene node
+	//! \param size: the cube's size
+	//! \param callback: callback called after scene node was created
+	virtual irr::scene::ISceneNode *createCubeSceneNode(const irr::f32 size, ICP3DSceneNodeCreatorCallback callback = ICP3D_SN_CREATOR_DEFAULT_CB) = 0;
+
+	//! Configures scene node to default values
+	//! \param node: the node to configure
+	virtual void configureSceneNode(irr::scene::ISceneNode *node) = 0;
 
 };
 

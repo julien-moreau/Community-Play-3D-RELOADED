@@ -68,6 +68,10 @@ void CCP3DInterfaceController::OnPreUpdate() {
 		IGUIElement *element = it.getNode()->getKey()->getElementToResize();
 		const s32 flags = it.getNode()->getValue().Flags;
 
+		element->updateAbsolutePosition();
+		if (!element->getRelativePosition().isPointInside(cpos))
+			continue;
+
 		/// Check right side
 		if ((flags & EICC_RIGHT) != 0) {
 			const s32 x = element->getRelativePosition().LowerRightCorner.X;

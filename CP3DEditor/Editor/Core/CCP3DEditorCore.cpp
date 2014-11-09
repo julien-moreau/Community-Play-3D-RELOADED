@@ -169,6 +169,7 @@ void CCP3DEditorCore::createTestScene() {
 	planeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
 	planeNode->setMaterialFlag(EMF_LIGHTING, false);
 	Handler->addShadowToNode(planeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_RECEIVE);
+	Engine->getSceneNodeCreator()->configureSceneNode(planeNode);
 
 	IMeshSceneNode *cubeNode = smgr->addCubeSceneNode(50.f, 0, -1, vector3df(0.f, 25.f, 0.f), vector3df(0.f, 45.f, 0.f));
 	cubeNode->setName("Cube");
@@ -178,8 +179,9 @@ void CCP3DEditorCore::createTestScene() {
 	smgr->getMeshManipulator()->recalculateNormals(cubeNode->getMesh(), true, false);
 	cubeNode->setMaterialFlag(EMF_LIGHTING, false);
 	Handler->addShadowToNode(cubeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_BOTH);
+	Engine->getSceneNodeCreator()->configureSceneNode(cubeNode);
 
-	cp3d::rendering::ICP3DLightSceneNode *light = Rengine->createLightSceneNode(false, true);
+	cp3d::rendering::ICP3DLightSceneNode *light = Rengine->createLightSceneNode(true, true);
 	light->setName("Light");
 	light->setPosition(vector3df(0.f, 0.f, 0.f));
 	light->getLightData().DiffuseColor = SColorf(1.f, 0.f, 0.f, 1.f);
@@ -193,10 +195,11 @@ void CCP3DEditorCore::createTestScene() {
 	Handler->addShadowToNode(emptySceneNode, rendering::EFT_NONE, rendering::ESM_EXCLUDE);
 	light->setParent(emptySceneNode);
 	emptySceneNode->setDebugDataVisible(EDS_BBOX);
+	Engine->getSceneNodeCreator()->configureSceneNode(emptySceneNode);
 
 	Rengine->createNormalMappingMaterial();
-	planeNode->setMaterialType(Rengine->NormalMappingMaterialSolid);
-	cubeNode->setMaterialType(Rengine->NormalMappingMaterialSolid);
+	planeNode->setMaterialType(Rengine->Materials[EMT_NORMAL_MAP_SOLID]);
+	cubeNode->setMaterialType(Rengine->Materials[EMT_NORMAL_MAP_SOLID]);
 
 	ISceneNode* skyboxNode = smgr->addSkyBoxSceneNode(
 		driver->getTexture("Textures/Skybox/glacier_up.png"),
@@ -212,6 +215,7 @@ void CCP3DEditorCore::createTestScene() {
 	skyboxNode->getMaterial(3).Name = "Right";
 	skyboxNode->getMaterial(4).Name = "Front";
 	skyboxNode->getMaterial(5).Name = "Back";
+	Engine->getSceneNodeCreator()->configureSceneNode(skyboxNode);
 
 	u32 count = 0;
 	auto callback = [&](ISceneNode *node) {
