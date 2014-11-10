@@ -100,6 +100,7 @@
   <ItemGroup>
     <ClInclude Include="Editor\Core\CCP3DEditorCore.h" />
     <ClInclude Include="Editor\Core\CCP3DInterfaceController.h" />
+    <ClInclude Include="Editor\GUIElements\GUIColorDialog\CGUIColorDialog.h" />
     <ClInclude Include="Editor\GUIElements\GUIFileSelector\CGUIFileSelector.h" />
     <ClInclude Include="Editor\GUIElements\GUIPanel\CGUIPanel.h" />
     <ClInclude Include="Editor\UserInterfaces\CCP3DContextMenu.h" />
@@ -108,6 +109,7 @@
     <ClInclude Include="Editor\UserInterfaces\CCP3DMainToolbar.h" />
     <ClInclude Include="Editor\UserInterfaces\CCP3DSceneGraph.h" />
     <ClInclude Include="Editor\UserInterfaces\CCP3DToolsToolbar.h" />
+    <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolLightSceneNode.h" />
     <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolSceneNode.h" />
     <ClInclude Include="Editor\UserInterfaces\EditionTools\SceneNodeEditionTools\CCP3DSceneNodeAnimators.h" />
     <ClInclude Include="resource.h" />
@@ -118,6 +120,7 @@
     <ClCompile Include="CP3DEditor.cpp" />
     <ClCompile Include="Editor\Core\CCP3DEditorCore.cpp" />
     <ClCompile Include="Editor\Core\CCP3DInterfaceController.cpp" />
+    <ClCompile Include="Editor\GUIElements\GUIColorDialog\CGUIColorDialog.cpp" />
     <ClCompile Include="Editor\GUIElements\GUIFileSelector\CGUIFileSelector.cpp" />
     <ClCompile Include="Editor\GUIElements\GUIPanel\CGUIPanel.cpp" />
     <ClCompile Include="Editor\UserInterfaces\CCP3DContextMenu.cpp" />
@@ -126,6 +129,7 @@
     <ClCompile Include="Editor\UserInterfaces\CCP3DMainToolbar.cpp" />
     <ClCompile Include="Editor\UserInterfaces\CCP3DSceneGraph.cpp" />
     <ClCompile Include="Editor\UserInterfaces\CCP3DToolsToolbar.cpp" />
+    <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolLightSceneNode.cpp" />
     <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolSceneNode.cpp" />
     <ClCompile Include="Editor\UserInterfaces\EditionTools\SceneNodeEditionTools\CCP3DSceneNodeAnimators.cpp" />
     <ClCompile Include="Stdafx.cpp">

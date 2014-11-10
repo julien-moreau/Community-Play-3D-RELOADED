@@ -33,6 +33,9 @@
     <Filter Include="Editor\UserInterfaces\EditionTools\SceneNodeEditionTools">
       <UniqueIdentifier>{2057a16c-d34a-43ee-9de0-78977d7191be}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\GUIElements\GUIColorDialog">
+      <UniqueIdentifier>{0f506ea2-196e-43a4-9b57-137381fc24de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Stdafx.h">
@@ -76,6 +79,12 @@
     </ClInclude>
     <ClInclude Include="Editor\UserInterfaces\EditionTools\SceneNodeEditionTools\CCP3DSceneNodeAnimators.h">
       <Filter>Editor\UserInterfaces\EditionTools\SceneNodeEditionTools</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\GUIElements\GUIColorDialog\CGUIColorDialog.h">
+      <Filter>Editor\GUIElements\GUIColorDialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolLightSceneNode.h">
+      <Filter>Editor\UserInterfaces\EditionTools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -123,6 +132,12 @@
     </ClCompile>
     <ClCompile Include="Editor\UserInterfaces\EditionTools\SceneNodeEditionTools\CCP3DSceneNodeAnimators.cpp">
       <Filter>Editor\UserInterfaces\EditionTools\SceneNodeEditionTools</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\GUIElements\GUIColorDialog\CGUIColorDialog.cpp">
+      <Filter>Editor\GUIElements\GUIColorDialog</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolLightSceneNode.cpp">
+      <Filter>Editor\UserInterfaces\EditionTools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

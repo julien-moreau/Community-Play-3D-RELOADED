@@ -3,8 +3,10 @@
 #include "../Core/CCP3DEditorCore.h"
 #include "../Core/CCP3DInterfaceController.h"
 #include "../GUIElements/GUIPanel/CGUIPanel.h"
+#include "../GUIElements/GUIColorDialog/CGUIColorDialog.h"
 
 #include "EditionTools/CCP3DEditionToolSceneNode.h"
+#include "EditionTools/CCP3DEditionToolLightSceneNode.h"
 
 #include "CCP3DEditionTool.h"
 
@@ -158,6 +160,9 @@ void CCP3DEditionTool::OnResize() {
 			elements.push_back((*itd).ListData.List);
 		else if ((*itd).Type == EGUIET_CHECK_BOX)
 			elements.push_back((*itd).CheckBox);
+		else if ((*itd).Type == EGUIET_COLOR_SELECT_DIALOG) {
+			
+		}
 
 		for (u32 i=0; i < elements.size(); i++) {
 			rect<s32> position = elements[i]->getRelativePosition();
@@ -170,6 +175,7 @@ void CCP3DEditionTool::OnResize() {
 
 void CCP3DEditionTool::createDefaultControllers() {
 	CCP3DEditionToolSceneNode *EditionToolSceneNode = new CCP3DEditionToolSceneNode(EditorCore);
+	CCP3DEditionToolLightSceneNode *EditionToolLightSceneNode = new CCP3DEditionToolLightSceneNode(EditorCore);
 
 	addController(ESNT_MESH, EditionToolSceneNode);
 	addController(ESNT_ANIMATED_MESH, EditionToolSceneNode);
@@ -185,6 +191,8 @@ void CCP3DEditionTool::createDefaultControllers() {
 	addController(ESNT_TEXT, EditionToolSceneNode);
 	addController(ESNT_VOLUME_LIGHT, EditionToolSceneNode);
 	addController(ESNT_WATER_SURFACE, EditionToolSceneNode);
+
+	addController(ESNT_LIGHT, EditionToolLightSceneNode);
 }
 
 bool CCP3DEditionTool::addController(ESCENE_NODE_TYPE type, ICP3DEditionToolController *controller) {
@@ -241,6 +249,7 @@ SCP3DInterfaceData CCP3DEditionTool::addField(IGUITab *tab, EGUI_ELEMENT_TYPE ty
 	case EGUIET_COMBO_BOX: e = createComboBoxField(tab, panel); break;
 	case EGUIET_IMAGE: e = createTextureField(tab, panel); break;
 	case EGUIET_CHECK_BOX: e = createCheckBoxField(tab, panel); break;
+	case EGUIET_COLOR_SELECT_DIALOG: e = createColorField(tab, panel); break;
 
 	default: break;
 	}
@@ -432,6 +441,19 @@ SCP3DInterfaceData CCP3DEditionTool::createCheckBoxField(irr::gui::IGUITab *tab,
 	e.CheckBox = Gui->addCheckBox(false, rect<s32>(5, offset, width - 5, offset + 20), panel, -1, L"");
 
 	return e;
+}
+
+SCP3DInterfaceData CCP3DEditionTool::createColorField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel) {
+	SCP3DInterfaceData e(EGUIET_COLOR_SELECT_DIALOG);
+
+	s32 width = panel->getRelativePosition().getWidth();
+	s32 offset = getElementPositionOffset(tab, panel);
+
+	e.TextElement = Gui->addStaticText(L"Text", rect<s32>(5, offset, width / 3, offset + 20), true, false, panel, -1, true);
+	e.ColorData.ColorElement = new ui::CGUIColorDialog(Gui, panel, -1, rect<s32>(width / 3, offset, width / 3 + 20, offset + 20));
+
+	return e;
+
 }
 
 s32 CCP3DEditionTool::getPanelWidth(IGUIElement *panel) {

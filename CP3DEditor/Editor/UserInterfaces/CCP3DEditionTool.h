@@ -84,6 +84,7 @@ private:
 	SCP3DInterfaceData createComboBoxField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel);
 	SCP3DInterfaceData createTextureField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel);
 	SCP3DInterfaceData createCheckBoxField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel);
+	SCP3DInterfaceData createColorField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel);
 
 	irr::core::list<SCP3DInterfaceData> InterfaceDatas;
 

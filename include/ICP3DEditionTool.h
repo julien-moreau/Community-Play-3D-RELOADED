@@ -4,6 +4,8 @@
 #include <irrlicht.h>
 #include <functional>
 
+#include <ICP3DColorDialog.h>
+
 namespace cp3d {
 
 //! Custom GUI events for CP3D
@@ -53,6 +55,7 @@ struct SCP3DInterfaceData {
 		irr::gui::IGUIListBox *List;
 	};
 
+	//! Structure that contains Texture elements (ITexture)
 	struct STextureData {
 		irr::gui::IGUIImage *Image;
 		irr::gui::IGUIEditBox *EditBoxPath;
@@ -62,9 +65,15 @@ struct SCP3DInterfaceData {
 		irr::gui::IGUIElement *Zone;
 	};
 
+	//! Structure that contains Color elements
+	struct SColorData {
+		ui::ICP3DColorDialog *ColorElement;
+	};
+
 	union {
 		SListData ListData;
 		STextureData TextureData;
+		SColorData ColorData;
 		irr::gui::IGUIEditBox *TextBox;
 		irr::gui::IGUIComboBox *ComboBox;
 		irr::gui::IGUICheckBox *CheckBox;

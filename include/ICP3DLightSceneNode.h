@@ -72,6 +72,15 @@ public:
 		return Node->getLightData();
 	}
 
+	//! Sets the light's color
+	//! \param color: the new color of the light
+	void setLightColor(const irr::video::SColorf &color) {
+		Node->getLightData().DiffuseColor = color;
+
+		if (ShadowLight)
+			ShadowLight->setLightColor(color);
+	}
+
 	//! Sets the light's position
 	inline void setPosition(const irr::core::vector3df& position) {
 		Node->setPosition(position);

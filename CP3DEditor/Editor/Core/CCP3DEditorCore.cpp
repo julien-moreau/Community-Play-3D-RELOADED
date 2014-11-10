@@ -185,6 +185,7 @@ void CCP3DEditorCore::createTestScene() {
 	light->setName("Light");
 	light->setPosition(vector3df(0.f, 0.f, 0.f));
 	light->getLightData().DiffuseColor = SColorf(1.f, 0.f, 0.f, 1.f);
+	//light->setLightColor(SColorf(1.0, 0.0, 0.0, 1.0));
 	light->getShadowLight()->setMustAutoRecalculate(true);
 	light->setLightStrength(1.f);
 

@@ -28,7 +28,6 @@ CCP3DEditionToolSceneNode::CCP3DEditionToolSceneNode(CCP3DEditorCore *editorCore
 	AnimatorsController = new CCP3DSceneNodeAnimators(editorCore);
 
 	editorCore->getEngine()->getEventReceiver()->addEventReceiver(this);
-
 }
 
 CCP3DEditionToolSceneNode::~CCP3DEditionToolSceneNode() {
@@ -265,44 +264,46 @@ void CCP3DEditionToolSceneNode::apply() {
 		Handler->addShadowToNode(SceneNode, filterType, shadowMode);
 
 	/// Materials
-	SceneNode->getMaterial(CurrentMaterialID).Name = MaterialName.TextBox->getText();
-	SceneNode->getMaterial(CurrentMaterialID).MaterialType = EditorCore->getRenderingEngine()->Materials[(E_MATERIAL_TYPE)MaterialMatType.ComboBox->getSelected()];
-	SceneNode->getMaterial(CurrentMaterialID).Shininess = core::fast_atof(stringc(MaterialShininess.TextBox->getText()).c_str());
-	{
-		/// Flags
-		SceneNode->getMaterial(CurrentMaterialID).NormalizeNormals = MaterialNormalizeNormals.CheckBox->isChecked();
-		SceneNode->getMaterial(CurrentMaterialID).FrontfaceCulling = MaterialFrontFaceCulling.CheckBox->isChecked();
-		SceneNode->getMaterial(CurrentMaterialID).BackfaceCulling = MaterialBackFaceCulling.CheckBox->isChecked();
-		SceneNode->getMaterial(CurrentMaterialID).Lighting = MaterialLighting.CheckBox->isChecked();
-		SceneNode->getMaterial(CurrentMaterialID).setFlag(EMF_ANTI_ALIASING, MaterialAntialiasing.CheckBox->isChecked());
-		SceneNode->getMaterial(CurrentMaterialID).setFlag(EMF_BILINEAR_FILTER, MaterialBilinearFilter.CheckBox->isChecked());
-		SceneNode->getMaterial(CurrentMaterialID).setFlag(EMF_TRILINEAR_FILTER, MaterialTrilinearFilter.CheckBox->isChecked());
-		SceneNode->getMaterial(CurrentMaterialID).setFlag(EMF_ANISOTROPIC_FILTER, MaterialAnisotropicFilter.CheckBox->isChecked());
-		SceneNode->getMaterial(CurrentMaterialID).UseMipMaps = MaterialUseMipMaps.CheckBox->isChecked();
-		SceneNode->getMaterial(CurrentMaterialID).ZWriteEnable = MaterialZWrite.CheckBox->isChecked();
-		SceneNode->getMaterial(CurrentMaterialID).setFlag(EMF_ZBUFFER, MaterialZBuffer.CheckBox->isChecked());
-		SceneNode->getMaterial(CurrentMaterialID).setFlag(EMF_COLOR_MASK, MaterialColorMask.CheckBox->isChecked());
-		SceneNode->getMaterial(CurrentMaterialID).setFlag(EMF_COLOR_MATERIAL, MaterialColorMaterial.CheckBox->isChecked());
-		SceneNode->getMaterial(CurrentMaterialID).setFlag(EMF_POLYGON_OFFSET, MaterialPolygonOffset.CheckBox->isChecked());
+	if (SceneNode->getType() != ESNT_LIGHT) {
+		SceneNode->getMaterial(CurrentMaterialID).Name = MaterialName.TextBox->getText();
+		SceneNode->getMaterial(CurrentMaterialID).MaterialType = EditorCore->getRenderingEngine()->Materials[(E_MATERIAL_TYPE)MaterialMatType.ComboBox->getSelected()];
+		SceneNode->getMaterial(CurrentMaterialID).Shininess = core::fast_atof(stringc(MaterialShininess.TextBox->getText()).c_str());
+		{
+			/// Flags
+			SceneNode->getMaterial(CurrentMaterialID).NormalizeNormals = MaterialNormalizeNormals.CheckBox->isChecked();
+			SceneNode->getMaterial(CurrentMaterialID).FrontfaceCulling = MaterialFrontFaceCulling.CheckBox->isChecked();
+			SceneNode->getMaterial(CurrentMaterialID).BackfaceCulling = MaterialBackFaceCulling.CheckBox->isChecked();
+			SceneNode->getMaterial(CurrentMaterialID).Lighting = MaterialLighting.CheckBox->isChecked();
+			SceneNode->getMaterial(CurrentMaterialID).setFlag(EMF_ANTI_ALIASING, MaterialAntialiasing.CheckBox->isChecked());
+			SceneNode->getMaterial(CurrentMaterialID).setFlag(EMF_BILINEAR_FILTER, MaterialBilinearFilter.CheckBox->isChecked());
+			SceneNode->getMaterial(CurrentMaterialID).setFlag(EMF_TRILINEAR_FILTER, MaterialTrilinearFilter.CheckBox->isChecked());
+			SceneNode->getMaterial(CurrentMaterialID).setFlag(EMF_ANISOTROPIC_FILTER, MaterialAnisotropicFilter.CheckBox->isChecked());
+			SceneNode->getMaterial(CurrentMaterialID).UseMipMaps = MaterialUseMipMaps.CheckBox->isChecked();
+			SceneNode->getMaterial(CurrentMaterialID).ZWriteEnable = MaterialZWrite.CheckBox->isChecked();
+			SceneNode->getMaterial(CurrentMaterialID).setFlag(EMF_ZBUFFER, MaterialZBuffer.CheckBox->isChecked());
+			SceneNode->getMaterial(CurrentMaterialID).setFlag(EMF_COLOR_MASK, MaterialColorMask.CheckBox->isChecked());
+			SceneNode->getMaterial(CurrentMaterialID).setFlag(EMF_COLOR_MATERIAL, MaterialColorMaterial.CheckBox->isChecked());
+			SceneNode->getMaterial(CurrentMaterialID).setFlag(EMF_POLYGON_OFFSET, MaterialPolygonOffset.CheckBox->isChecked());
 
-		SceneNode->getMaterial(CurrentMaterialID).PolygonOffsetDirection = (E_POLYGON_OFFSET)MaterialPolygonOffsetDirectionCombo.ComboBox->getSelected();
-		SceneNode->getMaterial(CurrentMaterialID).PolygonOffsetFactor = (u8)MaterialPolygonOffsetFactorCombo.ComboBox->getSelected();
+			SceneNode->getMaterial(CurrentMaterialID).PolygonOffsetDirection = (E_POLYGON_OFFSET)MaterialPolygonOffsetDirectionCombo.ComboBox->getSelected();
+			SceneNode->getMaterial(CurrentMaterialID).PolygonOffsetFactor = (u8)MaterialPolygonOffsetFactorCombo.ComboBox->getSelected();
 
-		u8 antiAliasMode = EAAM_SIMPLE;
-		if (MaterialAntiAliasMode[0].CheckBox->isChecked()) {
-			antiAliasMode = EAAM_OFF;
-			for (u32 i=1; i < 7; i++)
-				MaterialAntiAliasMode[i].CheckBox->setChecked(false);
-		} else {
-			if (MaterialAntiAliasMode[1].CheckBox->isChecked()) antiAliasMode = antiAliasMode | EAAM_SIMPLE;
-			if (MaterialAntiAliasMode[2].CheckBox->isChecked()) antiAliasMode = antiAliasMode | EAAM_QUALITY;
-			if (MaterialAntiAliasMode[3].CheckBox->isChecked()) antiAliasMode = antiAliasMode | EAAM_LINE_SMOOTH;
-			if (MaterialAntiAliasMode[4].CheckBox->isChecked()) antiAliasMode = antiAliasMode | EAAM_POINT_SMOOTH;
-			if (MaterialAntiAliasMode[5].CheckBox->isChecked()) antiAliasMode = antiAliasMode | EAAM_FULL_BASIC;
-			if (MaterialAntiAliasMode[6].CheckBox->isChecked()) antiAliasMode = antiAliasMode | EAAM_ALPHA_TO_COVERAGE;
-			SceneNode->getMaterial(CurrentMaterialID).AntiAliasing = antiAliasMode;
+			u8 antiAliasMode = EAAM_SIMPLE;
+			if (MaterialAntiAliasMode[0].CheckBox->isChecked()) {
+				antiAliasMode = EAAM_OFF;
+				for (u32 i=1; i < 7; i++)
+					MaterialAntiAliasMode[i].CheckBox->setChecked(false);
+			} else {
+				if (MaterialAntiAliasMode[1].CheckBox->isChecked()) antiAliasMode = antiAliasMode | EAAM_SIMPLE;
+				if (MaterialAntiAliasMode[2].CheckBox->isChecked()) antiAliasMode = antiAliasMode | EAAM_QUALITY;
+				if (MaterialAntiAliasMode[3].CheckBox->isChecked()) antiAliasMode = antiAliasMode | EAAM_LINE_SMOOTH;
+				if (MaterialAntiAliasMode[4].CheckBox->isChecked()) antiAliasMode = antiAliasMode | EAAM_POINT_SMOOTH;
+				if (MaterialAntiAliasMode[5].CheckBox->isChecked()) antiAliasMode = antiAliasMode | EAAM_FULL_BASIC;
+				if (MaterialAntiAliasMode[6].CheckBox->isChecked()) antiAliasMode = antiAliasMode | EAAM_ALPHA_TO_COVERAGE;
+				SceneNode->getMaterial(CurrentMaterialID).AntiAliasing = antiAliasMode;
+			}
+
 		}
-
 	}
 
 }

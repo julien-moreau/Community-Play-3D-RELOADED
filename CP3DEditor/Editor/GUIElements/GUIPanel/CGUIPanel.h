@@ -8,34 +8,33 @@
 namespace cp3d {
 namespace ui {
 
-	class CGUIPanel : public irr::gui::IGUIElement, public engine::ICP3DUpdate {
-	public:
+class CGUIPanel : public irr::gui::IGUIElement, public engine::ICP3DUpdate {
+public:
 
-		/// Constructor & Destructor
-		CGUIPanel(irr::gui::IGUIEnvironment* gui, irr::gui::IGUIElement* parent, irr::s32 id, irr::core::rect<irr::s32> rectangle);
-		~CGUIPanel();
+	/// Constructor & Destructor
+	CGUIPanel(irr::gui::IGUIEnvironment* gui, irr::gui::IGUIElement* parent, irr::s32 id, irr::core::rect<irr::s32> rectangle);
+	~CGUIPanel();
 
-		/// Inheritance
-		bool OnEvent(const irr::SEvent& event);
-		void OnPreUpdate();
-		//! Draws the element and its children
-		void draw();
+	/// Inheritance
+	bool OnEvent(const irr::SEvent& event);
+	//! Draws the element and its children
+	void draw();
 
-		/// Resizes the element (including scrollbar)
-		void setRelativePosition(const irr::core::rect<irr::s32> &r);
+	/// Resizes the element (including scrollbar)
+	void setRelativePosition(const irr::core::rect<irr::s32> &r);
 
-		irr::gui::IGUIScrollBar *getScrollBar() {
-			return ScrollBar;
-		}
+	irr::gui::IGUIScrollBar *getScrollBar() {
+		return ScrollBar;
+	}
 
-		void recalculateScrollBar();
+	void recalculateScrollBar();
 
-	private:
-		irr::gui::IGUIScrollBar *ScrollBar;
+private:
+	irr::gui::IGUIScrollBar *ScrollBar;
 
-		irr::s32 LastScrollBarPosition;
+	irr::s32 LastScrollBarPosition;
 
-	};
+};
 
 
 } // end namespace ui

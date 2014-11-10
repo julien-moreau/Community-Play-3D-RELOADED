@@ -61,10 +61,6 @@ bool CGUIPanel::OnEvent(const SEvent& event)
 	return IGUIElement::OnEvent(event);
 }
 
-void CGUIPanel::OnPreUpdate() {
-
-}
-
 void CGUIPanel::setRelativePosition(const irr::core::rect<irr::s32> &r) {
 	/// Resize scrollbar
 	const s32 size = Environment->getSkin()->getSize(EGDS_SCROLLBAR_SIZE);
