@@ -45,6 +45,7 @@ void CCP3DEditionToolSceneNode::createInterface() {
 	EditionTool->setNewZone(GeneralTab, "General");
 	SceneNodeName = EditionTool->addField(GeneralTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Name :"));
 	SceneNodeID = EditionTool->addField(GeneralTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("ID :"));
+	SceneNodeVisible = EditionTool->addField(GeneralTab, EGUIET_CHECK_BOX, DefaultEditionToolCallback("Visible"));
 
 	EditionTool->setNewZone(GeneralTab, "Transforms");
 	SceneNodePositionX = EditionTool->addField(GeneralTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Position X :"));
@@ -153,6 +154,7 @@ void CCP3DEditionToolSceneNode::configure() {
 	/// General
 	SceneNodeName.TextBox->setText(stringw(SceneNode->getName()).c_str());
 	SceneNodeID.TextBox->setText(stringw(SceneNode->getID()).c_str());
+	SceneNodeVisible.CheckBox->setChecked(SceneNode->isVisible());
 
 	SceneNodePositionX.TextBox->setText(stringw(SceneNode->getPosition().X).c_str());
 	SceneNodePositionY.TextBox->setText(stringw(SceneNode->getPosition().Y).c_str());
@@ -241,6 +243,8 @@ void CCP3DEditionToolSceneNode::configure() {
 void CCP3DEditionToolSceneNode::apply() {
 	/// General
 	SceneNode->setName(SceneNodeName.TextBox->getText());
+	SceneNode->setID((s32)core::fast_atof(stringc(SceneNodeID.TextBox->getText()).c_str()));
+	SceneNode->setVisible(SceneNodeVisible.CheckBox->isChecked());
 
 	vector3df position(core::fast_atof(stringc(SceneNodePositionX.TextBox->getText()).c_str()), /// Position
 					   core::fast_atof(stringc(SceneNodePositionY.TextBox->getText()).c_str()),

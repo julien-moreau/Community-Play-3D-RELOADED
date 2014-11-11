@@ -16,11 +16,17 @@ CCP3DCustomUpdater::~CCP3DCustomUpdater() {
 }
 
 void CCP3DCustomUpdater::OnPreUpdate() {
+	#ifdef CP3DR_COMPILE_WITH_OPENMP
+	#pragma omp for schedule(dynamic)
+	#endif
 	for (u32 i=0; i < Updates.size(); i++)
 		Updates[i]->OnPreUpdate();
 }
 
 void CCP3DCustomUpdater::OnPostUpdate() {
+	#ifdef CP3DR_COMPILE_WITH_OPENMP
+	#pragma omp for schedule(dynamic)
+	#endif
 	for (u32 i=0; i < Updates.size(); i++)
 		Updates[i]->OnPostUpdate();
 }

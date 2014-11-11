@@ -156,18 +156,32 @@ void CCP3DEditionTool::OnResize() {
 			elements.push_back((*itd).TextureData.RemoveButton);
 			elements.push_back((*itd).TextureData.Zone);
 		}
-		else if ((*itd).Type == EGUIET_LIST_BOX)
+		else if ((*itd).Type == EGUIET_LIST_BOX) {
 			elements.push_back((*itd).ListData.List);
-		else if ((*itd).Type == EGUIET_CHECK_BOX)
+			const s32 diff = (*itd).ListData.List->getRelativePosition().LowerRightCorner.X - (*itd).ListData.AddButton->getRelativePosition().LowerRightCorner.X;
+			(*itd).ListData.AddButton->move(vector2di(diff, 0));
+			(*itd).ListData.RemoveButton->move(vector2di(diff, 0));
+			(*itd).ListData.EditButton->move(vector2di(diff, 0));
+			rect<s32> position = (*itd).TextElement->getRelativePosition();
+			position.LowerRightCorner.X = (*itd).ListData.EditButton->getRelativePosition().UpperLeftCorner.X;
+			(*itd).TextElement->setRelativePosition(position);
+
+		} else if ((*itd).Type == EGUIET_CHECK_BOX)
 			elements.push_back((*itd).CheckBox);
 		else if ((*itd).Type == EGUIET_COLOR_SELECT_DIALOG) {
-			
+			rect<s32> position = (*itd).ColorData.ColorElement->getRelativePosition();
+			position.LowerRightCorner.X = getPanelWidth((*itd).ColorData.ColorElement->getParent()) - 5; /// Color element
+			position.UpperLeftCorner.X = position.LowerRightCorner.X - 20;
+			(*itd).ColorData.ColorElement->setRelativePosition(position);
+			position.LowerRightCorner.X = position.UpperLeftCorner.X; /// Text element
+			position.UpperLeftCorner.X = 5;
+			(*itd).TextElement->setRelativePosition(position);
+
 		}
 
 		for (u32 i=0; i < elements.size(); i++) {
 			rect<s32> position = elements[i]->getRelativePosition();
 			position.LowerRightCorner.X = getPanelWidth(elements[i]->getParent()) - 5;
-			//elements[i]->getParent()->getRelativePosition().getWidth() - 5;
 			elements[i]->setRelativePosition(rect<s32>(position));
 		}
 	}
@@ -278,6 +292,11 @@ bool CCP3DEditionTool::OnEvent(const SEvent &event) {
 				ESCENE_NODE_TYPE type = node->getType();
 				core::map<ESCENE_NODE_TYPE, array<ICP3DEditionToolController *>>::Node *it = EditionTools.find(type);
 
+				/// Get the current value of active tab (scrollbar and name)
+				IGUITab *lastActiveTab = TabCtrl->getTab(TabCtrl->getActiveTab());
+				stringw lastActiveTabText = lastActiveTab != 0 ? lastActiveTab->getText() : L"";
+				const s32 scrollBarSize = lastActiveTab != 0 ? Panels[lastActiveTab->getNumber()]->getScrollBar()->getPos() : 0;
+
 				if (type != LastSceneNodeType)
 					clearTabs();
 
@@ -294,6 +313,22 @@ bool CCP3DEditionTool::OnEvent(const SEvent &event) {
 				LastSceneNodeType = type;
 				if (TabCtrl->getTabCount() >= LastSelectedTab)
 					TabCtrl->setActiveTab(LastSelectedTab);
+
+				/// If the new active tab has the same name then we recalculate to scroll bar :)
+				IGUITab *newActiveTab = TabCtrl->getTab(TabCtrl->getActiveTab());
+				if (newActiveTab && lastActiveTab) {
+					stringw newActiveTabText = newActiveTab->getText();
+
+					if (newActiveTabText == lastActiveTabText) {
+						Panels[newActiveTab->getNumber()]->getScrollBar()->setPos(scrollBarSize);
+						SEvent ev;
+						ev.EventType = EET_GUI_EVENT;
+						ev.GUIEvent.EventType = EGET_SCROLL_BAR_CHANGED;
+						ev.GUIEvent.Caller = Panels[newActiveTab->getNumber()]->getScrollBar();
+						ev.GUIEvent.Element = 0;
+						Panels[newActiveTab->getNumber()]->OnEvent(ev);
+					}
+				}
 
 				return false;
 			}
@@ -446,11 +481,11 @@ SCP3DInterfaceData CCP3DEditionTool::createCheckBoxField(irr::gui::IGUITab *tab,
 SCP3DInterfaceData CCP3DEditionTool::createColorField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel) {
 	SCP3DInterfaceData e(EGUIET_COLOR_SELECT_DIALOG);
 
-	s32 width = panel->getRelativePosition().getWidth();
+	s32 width = getPanelWidth(panel);
 	s32 offset = getElementPositionOffset(tab, panel);
 
-	e.TextElement = Gui->addStaticText(L"Text", rect<s32>(5, offset, width / 3, offset + 20), true, false, panel, -1, true);
-	e.ColorData.ColorElement = new ui::CGUIColorDialog(Gui, panel, -1, rect<s32>(width / 3, offset, width / 3 + 20, offset + 20));
+	e.TextElement = Gui->addStaticText(L"Text", rect<s32>(5, offset, width - 25, offset + 20), true, false, panel, -1, true);
+	e.ColorData.ColorElement = new ui::CGUIColorDialog(Gui, panel, -1, rect<s32>(width - 25, offset, width - 5, offset + 20));
 
 	return e;
 

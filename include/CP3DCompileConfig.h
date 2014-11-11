@@ -55,6 +55,30 @@ namespace cp3d {
 	#if defined(CP3DR_COMPILE_COLLABORATIVE)
 	extern "C" CP3DR_LIB_API data::ICP3DCollaborativeEngine *createCollaborativeEngine(const char *documentPath);
 	#endif
+
+	//! Compiles the CP3D Engine with OpenMP support
+	//! Uncomment this line to enable OpenMP support
+	//#define CP3DR_COMPILE_WITH_OPENMP
+
+	//! If uncommented, enable proper sRGB and linear color handling
+	//! Uncomment this line to enable
+	//#define CP3DR_HANDLE_SRGB
+
+	//! If uncommented, specifies if the device should use high precision FPU setting
+	//! This is only relevant for DirectX Devices, which switch to low FPU precision by default for performance reasons
+	//#define CP3DR_HIGH_PRECISION_FPU
+
+	//! If uncommented, CP3D will used the multithreaded driver
+	//! So far only on DirectX
+	//#define CP3DR_DRIVER_MULTITHREADED
+
+	//! This should be usually enabled, in order to avoid render
+	//! artifacts on the visible framebuffer. However, it might be
+	//! useful to use only one buffer on very small devices. If no
+	//! doublebuffering is available, the drivers will fall back to
+	//! single buffers
+	//#define CP3DR_DOUBLE_BUFFER
+
 } /// End namespace cp3d
 
 #endif

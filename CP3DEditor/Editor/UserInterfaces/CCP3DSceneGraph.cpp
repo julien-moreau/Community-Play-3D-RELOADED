@@ -85,8 +85,8 @@ bool CCP3DSceneGraph::OnEvent(const SEvent &event) {
 				SEvent ev;
 				ev.EventType = EET_GUI_EVENT;
 				ev.GUIEvent.EventType = EGET_TREEVIEW_NODE_SELECT;
-				ev.GUIEvent.Caller = focus;
-				ev.GUIEvent.Element = focus;
+				ev.GUIEvent.Caller = Graph;
+				ev.GUIEvent.Element = 0;
 				return OnEvent(ev);
 
 			}

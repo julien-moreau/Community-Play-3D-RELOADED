@@ -128,6 +128,9 @@
     <ClInclude Include="..\include\ICP3DColorDialog.h">
       <Filter>include\editor\ui</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\ECP3DGUIEvents.h">
+      <Filter>include\editor\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DEngine.cpp">

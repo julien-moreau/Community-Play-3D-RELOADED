@@ -16,7 +16,9 @@ CCP3DEventReceiver::~CCP3DEventReceiver() {
 }
 
 bool CCP3DEventReceiver::OnEvent(const irr::SEvent &event) {
-	
+	#ifdef CP3DR_COMPILE_WITH_OPENMP
+	#pragma omp for schedule(dynamic)
+	#endif
 	for (u32 i=0; i < Receivers.size(); i++)
 		if (Receivers[i]->OnEvent(event))
 			return true;

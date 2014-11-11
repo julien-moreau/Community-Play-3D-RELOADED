@@ -54,6 +54,7 @@ private:
 	/// General
 	SCP3DInterfaceData SceneNodeName;
 	SCP3DInterfaceData SceneNodeID;
+	SCP3DInterfaceData SceneNodeVisible;
 	SCP3DInterfaceData SceneNodePositionX, SceneNodePositionY, SceneNodePositionZ;
 	SCP3DInterfaceData SceneNodeRotationX, SceneNodeRotationY, SceneNodeRotationZ;
 	SCP3DInterfaceData SceneNodeScaleX, SceneNodeScaleY, SceneNodeScaleZ;

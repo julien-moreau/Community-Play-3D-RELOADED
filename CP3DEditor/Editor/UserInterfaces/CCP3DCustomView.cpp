@@ -71,6 +71,17 @@ void CCP3DCustomView::OnResize() {
 	Window->setRelativePosition(position);
 
 	Panel->setRelativePosition(rect<s32>(5, 20, position.getWidth() - 5, position.getHeight() - 5));
+
+	const u32 elementCount = Panel->getChildren().size();
+	if (elementCount == 2) { /// Then there is a "full size" element like a view port or texture
+		core::list<IGUIElement *>::ConstIterator it = Panel->getChildren().begin();
+		for (; it != Panel->getChildren().end(); ++it) {
+			if (*it == Panel->getScrollBar())
+				continue;
+
+			(*it)->setRelativePosition(rect<s32>(5, 5, Panel->getRelativePosition().getWidth() - 20, Panel->getRelativePosition().getHeight() - 5));
+		}
+	}
 }
 
 void CCP3DCustomView::splitScreen() {

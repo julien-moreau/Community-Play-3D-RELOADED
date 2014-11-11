@@ -1,5 +1,6 @@
 
 #include "Stdafx.h"
+#include <ECP3DGUIEvents.h>
 
 #include "CGUIColorDialog.h"
 
@@ -15,7 +16,8 @@ CGUIColorDialog::CGUIColorDialog(IGUIEnvironment* environment, IGUIElement* pare
 	: ICP3DColorDialog(EGUIET_COLOR_SELECT_DIALOG, environment, parent, id, rectangle),
 	  SelectingColor(false), Color(1.0, 1.0, 1.0, 1.0)
 {
-	ColorPicker = new CGUIColorPicker(environment, parent);
+	ColorPicker = new CGUIColorPicker(environment, environment->getRootGUIElement(), this);
+	ColorPicker->setVisible(false);
 }
 
 CGUIColorDialog::~CGUIColorDialog() {
@@ -77,10 +79,11 @@ void CGUIColorDialog::draw() {
 
 	/// Draw color picking
 	if (SelectingColor) {
-		frameRect = rect<s32>(RelativeRect);
+		updateAbsolutePosition();
+		frameRect = rect<s32>(AbsoluteRect);
 		ColorPicker->setVisible(true);
 
-		Parent->bringToFront(ColorPicker);
+		Environment->getRootGUIElement()->bringToFront(ColorPicker);
 
 		vector2di r(frameRect.LowerRightCorner.X, frameRect.UpperLeftCorner.Y);
 		const u32 height = frameRect.LowerRightCorner.Y + 256;
@@ -107,7 +110,7 @@ void CGUIColorDialog::setColor(const irr::video::SColorf &color) {
 }
 
 const irr::video::SColorf &CGUIColorDialog::getColor() const {
-	return ColorPicker->getColor();
+	return Color;
 }
 
 } // end namespace ui
@@ -116,9 +119,11 @@ const irr::video::SColorf &CGUIColorDialog::getColor() const {
 namespace cp3d {
 namespace ui {
 
-CGUIColorPicker::CGUIColorPicker(IGUIEnvironment *gui, IGUIElement *parent)
+CGUIColorPicker::CGUIColorPicker(IGUIEnvironment *gui, IGUIElement *parent, CGUIColorDialog *dialog)
 	: ICP3DColorPicker(gui, parent)
 {
+	ColorDialog = dialog;
+
 	IVideoDriver *driver = Environment->getVideoDriver();
 
 	ColorTexture = driver->getTexture("CP3D:ColorTexture");
@@ -145,23 +150,48 @@ void CGUIColorPicker::draw() {
 	if (!IsVisible)
 		return;
 
-	core::rect<s32> viewPort = AbsoluteRect;
+	/*core::rect<s32> viewPort = AbsoluteRect;
 	viewPort.LowerRightCorner.X -= 1;
 	viewPort.LowerRightCorner.Y -= 1;
 	viewPort.UpperLeftCorner.X += 1;
 	viewPort.UpperLeftCorner.Y += 1;
-	viewPort.clipAgainst(AbsoluteClippingRect);
+	viewPort.clipAgainst(AbsoluteClippingRect);*/
 	core::rect<s32> frameRect(AbsoluteRect);
 
 	Environment->getVideoDriver()->draw2DImage(ColorTexture, frameRect.UpperLeftCorner);
 }
 
 bool CGUIColorPicker::OnEvent(const SEvent &event) {
+	if (event.EventType == EET_MOUSE_INPUT_EVENT) {
+		if (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN) {
+
+			updateAbsolutePosition();
+			
+			const f32 inv = 1.f / 255.f;
+			s32 y = event.MouseInput.Y - AbsoluteRect.UpperLeftCorner.Y;
+			s32 x = event.MouseInput.X - AbsoluteClippingRect.UpperLeftCorner.X;
+			SColor c(255, y, x < 255 ? x : 255, x < 255 ? 0 : x - 255);
+
+			ColorDialog->Color.r = c.getRed() * inv;
+			ColorDialog->Color.g = c.getGreen() * inv;
+			ColorDialog->Color.b = c.getBlue() * inv;
+			Color = c;
+
+			ColorDialog->SelectingColor = false;
+
+			SEvent ev;
+			ev.EventType = EET_GUI_EVENT;
+			ev.GUIEvent.Caller = ColorDialog;
+			ev.GUIEvent.EventType = (EGUI_EVENT_TYPE)ECGET_COLOR_SELECTED;
+			ev.GUIEvent.Element = 0;
+			return Parent->OnEvent(ev);
+		}
+	}
 
 	return IGUIElement::OnEvent(event);
 }
 
-const irr::video::SColorf &CGUIColorPicker::getColor() const {
+const irr::video::SColor &CGUIColorPicker::getColor() const {
 	return Color;
 }
 

@@ -15,7 +15,7 @@ using namespace scene;
 namespace cp3d {
 namespace rendering {
 
-CNormalMappingMaterial::CNormalMappingMaterial(CCP3DRenderingEngine *renderingEngine) : RenderingEngine(renderingEngine)
+CNormalMappingMaterial::CNormalMappingMaterial(CCP3DRenderingEngine *renderingEngine) : RenderingEngine(renderingEngine), LightCount(0)
 {
 	CMaterialCreator m(renderingEngine->getVideoDriver());
 	m.addDefine("__CP3D__MAX_LIGHTS__", stringc(__CP3D__MAX_LIGHTS__));
@@ -39,6 +39,7 @@ void CNormalMappingMaterial::computeArrays() {
 	LightColorArray.clear();
 	LightPositionArray.clear();
 	LightStrengthArray.clear();
+	LightCount = 0;
 
 	for (u32 i=0;  i < RenderingEngine->getLightCount(); i++) {
 		ICP3DLightSceneNode *l = RenderingEngine->getLightSceneNode(i);
@@ -56,10 +57,12 @@ void CNormalMappingMaterial::computeArrays() {
 			LightPositionArray.push_back(position.Y);
 			LightPositionArray.push_back(position.Z);
 
-			LightColorArray.push_back(ln->getLightData().DiffuseColor.getRed());
-			LightColorArray.push_back(ln->getLightData().DiffuseColor.getGreen());
-			LightColorArray.push_back(ln->getLightData().DiffuseColor.getBlue());
-			LightColorArray.push_back(ln->getLightData().DiffuseColor.getAlpha());
+			LightColorArray.push_back(ln->getLightData().SpecularColor.getRed());
+			LightColorArray.push_back(ln->getLightData().SpecularColor.getGreen());
+			LightColorArray.push_back(ln->getLightData().SpecularColor.getBlue());
+			LightColorArray.push_back(ln->getLightData().SpecularColor.getAlpha());
+
+			LightCount++;
 		}
 	}
 
@@ -107,9 +110,8 @@ void CNormalMappingMaterial::OnSetConstants(irr::video::IMaterialRendererService
 		services->setPixelShaderConstant("fLightStrength", LightStrengthArray.pointer(), LightStrengthArray.size());
 	}
 
-	s32 lightsCount = RenderingEngine->getLightCount();
 	if (services->getVideoDriver()->getDriverType() == EDT_OPENGL)
-		services->setVertexShaderConstant("numLights", (s32 *)&lightsCount, 1);
+		services->setVertexShaderConstant("numLights", &LightCount, 1);
 
 	/// Pixel
 	if (services->getVideoDriver()->getDriverType() == EDT_OPENGL) {
@@ -134,7 +136,7 @@ void CNormalMappingMaterial::OnSetConstants(irr::video::IMaterialRendererService
     services->setPixelShaderConstant(("fBumpStrength"), &fBumpStrength, 1);
 	services->setPixelShaderConstant(("shininess"), &Material->Shininess, 1);
 
-	services->setPixelShaderConstant("numLights", &lightsCount, 1);
+	services->setPixelShaderConstant("numLights", &LightCount, 1);
 }
 
 } /// End namespace rendering

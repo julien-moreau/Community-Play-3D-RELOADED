@@ -149,9 +149,11 @@ namespace cp3d {
 
 bool CCP3DEditorCore::OnEvent(const SEvent &event) {
 	if (event.EventType == EET_KEY_INPUT_EVENT) {
+		#ifdef _DEBUG
 		if (event.KeyInput.Key == KEY_ESCAPE) {
 			Device->closeDevice();
 		}
+		#endif
 	}
 
 	return false;
@@ -184,8 +186,8 @@ void CCP3DEditorCore::createTestScene() {
 	cp3d::rendering::ICP3DLightSceneNode *light = Rengine->createLightSceneNode(true, true);
 	light->setName("Light");
 	light->setPosition(vector3df(0.f, 0.f, 0.f));
-	light->getLightData().DiffuseColor = SColorf(1.f, 0.f, 0.f, 1.f);
-	//light->setLightColor(SColorf(1.0, 0.0, 0.0, 1.0));
+	light->setLightColor(SColorf(1.f, 1.f, 1.f, 1.f));
+	light->getLightData().SpecularColor = SColorf(1.f, 0.5f, 0.f, 1.f);
 	light->getShadowLight()->setMustAutoRecalculate(true);
 	light->setLightStrength(1.f);
 

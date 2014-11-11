@@ -40,7 +40,7 @@ class CGUIColorPicker : public ICP3DColorPicker {
 public:
 
 	/// Constructor & Destructor
-	CGUIColorPicker(irr::gui::IGUIEnvironment *gui, irr::gui::IGUIElement *parent);
+	CGUIColorPicker(irr::gui::IGUIEnvironment *gui, irr::gui::IGUIElement *parent, CGUIColorDialog *dialog);
 	~CGUIColorPicker();
 
 	/// Inheritance
@@ -48,12 +48,14 @@ public:
 	/// Draws the element and its children
 	void draw();
 
-	const irr::video::SColorf &getColor() const;
+	const irr::video::SColor &getColor() const;
 
 private:
 	/// Datas
-	irr::video::SColorf Color;
+	irr::video::SColor Color;
 	irr::video::ITexture *ColorTexture;
+
+	CGUIColorDialog *ColorDialog;
 
 };
 

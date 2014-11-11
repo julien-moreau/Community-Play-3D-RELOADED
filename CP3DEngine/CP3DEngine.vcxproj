@@ -71,7 +71,8 @@
       <ImportLibrary>$(OutDir)$(TargetName).lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)CP3DR\$(TargetName)$(TargetExt)" /y</Command>
+      <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)CP3DR\$(TargetName)$(TargetExt)" /y
+copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -89,7 +90,8 @@
       <ImportLibrary>$(OutDir)$(TargetName).lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)CP3DR\$(TargetName)$(TargetExt)" /y</Command>
+      <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)CP3DR\$(TargetName)$(TargetExt)" /y
+copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -101,6 +103,7 @@
     <ClInclude Include="..\include\CP3DCompileConfig.h" />
     <ClInclude Include="..\include\CP3DEngine.h" />
     <ClInclude Include="..\include\CP3DRenderingEngine.h" />
+    <ClInclude Include="..\include\ECP3DGUIEvents.h" />
     <ClInclude Include="..\include\ICP3DCollaborativeEngine.h" />
     <ClInclude Include="..\include\ICP3DColorDialog.h" />
     <ClInclude Include="..\include\ICP3DCustomView.h" />

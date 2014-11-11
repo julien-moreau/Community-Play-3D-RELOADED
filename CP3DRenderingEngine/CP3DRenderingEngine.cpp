@@ -62,6 +62,7 @@ ICP3DMaterialCreator *CCP3DRenderingEngine::createMaterialCreator() {
 	return new CMaterialCreator(((CCP3DHandler*)Handler)->getIrrlichtDevice()->getVideoDriver());
 }
 
+/// Lights
 ICP3DLightSceneNode *CCP3DRenderingEngine::createLightSceneNode(const bool computeNormalMapping, const bool computeShadows) {
 	CCP3DHandler *Chandler = (CCP3DHandler *)Handler;
 
@@ -81,6 +82,38 @@ ICP3DLightSceneNode *CCP3DRenderingEngine::createLightSceneNode(const bool compu
 	return light;
 }
 
+irr::s32 CCP3DRenderingEngine::setLightSceneNodeComputeShadows(const irr::u32 index, const bool compute) {
+	if (index < 0 || index >= Lights.size())
+		return -1;
+
+	return setLightSceneNodeComputeShadows(Lights[index], compute);
+}
+s32 CCP3DRenderingEngine::setLightSceneNodeComputeShadows(ICP3DLightSceneNode *node, const bool compute) {
+	if (!node)
+		return -1;
+
+	if (node->ShadowLight && compute)
+		return node->ShadowLightIndex;
+
+	if (!compute) {
+		((CCP3DHandler*)Handler)->removeShadowLight(node->ShadowLightIndex);
+		node->ShadowLightIndex = -1;
+		node->ShadowLight = 0;
+		return -1;
+	}
+
+	SShadowLight shadowLight;
+	shadowLight.DiffuseColor = node->getLightData().DiffuseColor;
+	shadowLight.LightScenenode = *node;
+
+	s32 shadowLightIndex = (s32)((CCP3DHandler*)Handler)->addShadowLight(shadowLight);
+	node->ShadowLightIndex = shadowLightIndex;
+	node->ShadowLight = ((CCP3DHandler*)Handler)->getShadowLightPtr(shadowLightIndex);
+
+	return shadowLightIndex;
+}
+
+/// Materials
 void CCP3DRenderingEngine::createNormalMappingMaterial() {
 	if (!NormalMapMaterialType)
 		NormalMapMaterialType = new CNormalMappingMaterial(this);

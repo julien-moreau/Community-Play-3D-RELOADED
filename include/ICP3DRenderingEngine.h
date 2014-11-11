@@ -59,6 +59,17 @@ public:
 	//! \param index: the index of the light
 	virtual ICP3DLightSceneNode *getLightSceneNode(const irr::u32 index) = 0;
 
+	//! Sets if the light scene node computes shadows or not
+	//! \param node: the node to compute
+	//! \param compute: true if the light computes shadows
+	//! returns the shadow light index to use with ICP3DHandler (-1 if shadow light removed)
+	virtual irr::s32 setLightSceneNodeComputeShadows(ICP3DLightSceneNode *node, const bool compute) = 0;
+	//! Sets if the light scene node computes shadows or not
+	//! \param index: the index of the light scene node
+	//! \param compute: true if the light computes shadows
+	//! returns the shadow light index to use with ICP3DHandler (-1 if shadow light removed)
+	virtual irr::s32 setLightSceneNodeComputeShadows(const irr::u32 index, const bool compute) = 0;
+
 	//! Creates the normal mapping material
 	//! Sets the cp3d::rendering::NormalMappingMaterial etc.
 	virtual void createNormalMappingMaterial() = 0;

@@ -363,7 +363,8 @@
       <Version>1.8</Version>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)CP3DR\$(TargetName)$(TargetExt)" /y</Command>
+      <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)CP3DR\$(TargetName)$(TargetExt)" /y
+copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -446,7 +447,8 @@
       <Version>1.8</Version>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)CP3DR\$(TargetName)$(TargetExt)" /y</Command>
+      <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)CP3DR\$(TargetName)$(TargetExt)" /y
+copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -534,8 +536,8 @@
       <Version>1.8</Version>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)..\..\SSWETests\Output\$(TargetName)$(TargetExt)" /y
-copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)..\..\..\SSWE\$(TargetName)$(TargetExt)" /y</Command>
+      <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)CP3DR\$(TargetName)$(TargetExt)" /y
+copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release - Fast FPU|x64'">
@@ -612,8 +614,8 @@ copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)..\..\..\SSWE\$(TargetN
       <OutputFile>..\..\lib\Win32-visualstudio\Irrlicht.lib</OutputFile>
     </Lib>
     <PostBuildEvent>
-      <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)..\..\SSWETests\Output\$(TargetName)$(TargetExt)" /y
-copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)..\..\..\SSWE\$(TargetName)$(TargetExt)" /y</Command>
+      <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)CP3DR\$(TargetName)$(TargetExt)" /y
+copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Static lib - Debug|x64'">
@@ -680,8 +682,8 @@ copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)..\..\..\SSWE\$(TargetN
       <OutputFile>..\..\lib\Win32-visualstudio\Irrlicht.lib</OutputFile>
     </Lib>
     <PostBuildEvent>
-      <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)..\..\SSWETests\Output\$(TargetName)$(TargetExt)" /y
-copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)..\..\..\SSWE\$(TargetName)$(TargetExt)" /y</Command>
+      <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)CP3DR\$(TargetName)$(TargetExt)" /y
+copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Static lib - Release|x64'">
@@ -758,8 +760,8 @@ copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)..\..\..\SSWE\$(TargetN
       <TargetMachine>MachineX86</TargetMachine>
     </Lib>
     <PostBuildEvent>
-      <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)..\..\SSWETests\Output\$(TargetName)$(TargetExt)" /y
-copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)..\..\..\SSWE\$(TargetName)$(TargetExt)" /y</Command>
+      <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)CP3DR\$(TargetName)$(TargetExt)" /y
+copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Static lib - Release - Fast FPU|x64'">
@@ -841,8 +843,8 @@ copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)..\..\..\SSWE\$(TargetN
       <Version>1.8</Version>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)..\..\SSWETests\Output\$(TargetName)$(TargetExt)" /y
-copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)..\..\..\SSWE\$(TargetName)$(TargetExt)" /y</Command>
+      <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)CP3DR\$(TargetName)$(TargetExt)" /y
+copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='SDL-Debug|x64'">

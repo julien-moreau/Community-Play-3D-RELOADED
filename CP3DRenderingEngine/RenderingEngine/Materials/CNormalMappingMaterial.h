@@ -34,6 +34,8 @@ private:
     irr::core::array<irr::f32> LightPositionArray;
     irr::core::array<irr::f32> LightColorArray;
 
+	irr::s32 LightCount;
+
 };
 
 } /// End namespace rendering

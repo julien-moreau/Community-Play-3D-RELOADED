@@ -41,7 +41,7 @@ public:
 	{ }
 
 	//! Returns the selected color
-	virtual const irr::video::SColorf &getColor() const = 0;
+	virtual const irr::video::SColor &getColor() const = 0;
 
 };
 

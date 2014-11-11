@@ -31,6 +31,7 @@ public:
 
 	/// Shadows
 	irr::u32 addShadowLight(SShadowLight& shadowLight);
+	bool removeShadowLight(const irr::u32 index);
 	SShadowLight &getShadowLight(const irr::u32 index) { return LightList[index]; }
 	SShadowLight *getShadowLightPtr(const irr::u32 index) { return &LightList[index]; }
 	const irr::u32 getShadowLightCount() const {
@@ -172,6 +173,7 @@ private:
 	irr::s32 DepthT;
 
 	irr::s32 Shadow[EFT_COUNT];
+	irr::s32 ShadowRoundedSpot[EFT_COUNT];
 	irr::s32 LightModulate;
 	irr::s32 Simple;
 	irr::s32 WhiteWash;

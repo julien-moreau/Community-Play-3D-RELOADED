@@ -30,7 +30,8 @@ public:
 				 irr::f32 nearValue = 10.0f, irr::f32 farValue = 400.0f,
 				 irr::f32 fov = 90.0f * irr::core::DEGTORAD64, bool directional = false)
 				 :	Pos(position), Tar(target), FarPlane(directional ? 1.0f : farValue), DiffuseColor(lightColor), 
-					MapRes(shadowMapResolution), AutoRecalculate(true), MustRecalculate(true)
+					MapRes(shadowMapResolution), AutoRecalculate(true), MustRecalculate(true), UseRoundSpotLight(false),
+					IsDirectional(directional), NearValue(nearValue), Fov(fov)
 	{
 		nearValue = nearValue <= 0.0f ? 0.1f : nearValue;
 
@@ -94,6 +95,44 @@ public:
 		return FarPlane;
 	}
 
+	//! Sets the new far value of the shadow light
+	//! \param farValue: the new far value
+	void setFarValue(const irr::f32 farValue) {
+		if (farValue > NearValue)
+			FarPlane = farValue;
+		else
+			FarPlane = NearValue + 1.f;
+		updateProjectionMatrix();
+	}
+
+	//! Gets the near value of the shadow light
+	inline irr::f32 getNearValue() const {
+		return NearValue;
+	}
+
+	//! Sets the new near value of the light
+	//! \param nearValue: the new near value
+	void setNearValue(irr::f32 nearValue) {
+		nearValue = nearValue <= 0.0f ? 0.1f : nearValue;
+		NearValue = nearValue;
+		updateProjectionMatrix();
+	}
+
+	//! Gets the front of view of the shadow light
+	inline irr::f32 getFrontOfView() const {
+		return Fov;
+	}
+
+	//! Sets the new front of view value of the shadow light
+	//! \param fov: the new front of view value
+	void setFOV(const irr::f32 fov) {
+		if (fov != 0.f)
+			Fov = fov;
+		else
+			Fov = 0.1f;
+		updateProjectionMatrix();
+	}
+
 	//! Gets the light's color.
 	inline const irr::video::SColorf& getLightColor() const {
 		return DiffuseColor;
@@ -138,6 +177,29 @@ public:
 		AutoRecalculate = autoRecalculate;
 	}
 
+	//! Returns if the shadow light uses rounded spot light
+	inline const bool usingRoundSpotLight() const {
+		return UseRoundSpotLight;
+	}
+
+	//! Sets if the light uses rounded spot light
+	//! \param useRoundSpotLight: if the light uses rounded spot light
+	void setUseRoundSpotLight(const bool useRoundSpotLight) {
+		UseRoundSpotLight = useRoundSpotLight;
+	}
+
+	//! Gets if the shadow light is directional
+	inline bool isDirectional() const {
+		return IsDirectional;
+	}
+
+	//! Sets if the shadow light is directional or not
+	//! \param directional: true if the shadow light is directional
+	void setDirectionalLight(const bool directional) {
+		IsDirectional = directional;
+		updateProjectionMatrix();
+	}
+
 private:
 
 	void updateViewMatrix() {
@@ -146,13 +208,24 @@ private:
 			irr::core::vector3df(0.0f, 0.0f, 1.0f) : irr::core::vector3df(0.0f, 1.0f, 0.0f)); 
 	}
 
+	void updateProjectionMatrix() {
+		updateViewMatrix();
+
+		if(IsDirectional)
+			ProjMat.buildProjectionMatrixOrthoLH(Fov, Fov, NearValue, FarPlane);
+		else
+			ProjMat.buildProjectionMatrixPerspectiveFovLH(Fov, 1.0f, NearValue, FarPlane);
+	}
+
 	irr::scene::ILightSceneNode *LightScenenode;
 	irr::video::SColorf DiffuseColor;
 	irr::core::vector3df Pos, Tar;
-	irr::f32 FarPlane;
+	irr::f32 FarPlane, NearValue, Fov;
 	irr::core::matrix4 ViewMat, ProjMat;
 	irr::u32 MapRes;
 	bool AutoRecalculate, MustRecalculate;
+	bool UseRoundSpotLight;
+	bool IsDirectional;
 };
 
 } /// End namespace rendering

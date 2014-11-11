@@ -71,15 +71,12 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 		WhiteWashTAdd = gpu->addHighLevelShaderMaterial(
 			sPP.ppShader(SHADOW_PASS_1V[shaderExt]).c_str(), "vertexMain", video::EVST_VS_2_0,
 			sPP.ppShader(WHITE_WASH_P_ADD[shaderExt]).c_str(), "pixelMain", video::EPST_PS_2_0,
-			DepthMC, video::EMT_TRANSPARENT_ALPHA_CHANNEL);
+			DepthMC, video::EMT_TRANSPARENT_ADD_COLOR);
 
 		WhiteWashTAlpha = gpu->addHighLevelShaderMaterial(
 			sPP.ppShader(SHADOW_PASS_1V[shaderExt]).c_str(), "vertexMain", video::EVST_VS_2_0,
 			sPP.ppShader(WHITE_WASH_P[shaderExt]).c_str(), "pixelMain", video::EPST_PS_2_0,
 			DepthMC, video::EMT_TRANSPARENT_ALPHA_CHANNEL);
-
-		if(useRoundSpotLights)
-			sPP.addShaderDefine("ROUND_SPOTLIGHTS");
 
 		if(useVSMShadows)
 			sPP.addShaderDefine("VSM");
@@ -92,13 +89,19 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 		const E_PIXEL_SHADER_TYPE pixelProfile = 
 			driver->queryFeature(video::EVDF_PIXEL_SHADER_3_0) ? EPST_PS_3_0 : EPST_PS_2_0;
 
-		for(u32 i = 0;i < EFT_COUNT;i++)
-		{
+		for(u32 i = 0;i < EFT_COUNT;i++) {
 			sPP.addShaderDefine("SAMPLE_AMOUNT", core::stringc(sampleCounts[i]));
-			Shadow[i] = gpu->addHighLevelShaderMaterial(
-				sPP.ppShader(SHADOW_PASS_2V[shaderExt]).c_str(), "vertexMain", vertexProfile,
-				sPP.ppShader(SHADOW_PASS_2P[shaderExt]).c_str(), "pixelMain", pixelProfile,
-				ShadowMC, video::EMT_SOLID);
+			Shadow[i] = gpu->addHighLevelShaderMaterial(sPP.ppShader(SHADOW_PASS_2V[shaderExt]).c_str(), "vertexMain", vertexProfile,
+														sPP.ppShader(SHADOW_PASS_2P[shaderExt]).c_str(), "pixelMain", pixelProfile,
+														ShadowMC, video::EMT_SOLID);
+
+			if (useRoundSpotLights) {
+				sPP.addShaderDefine("ROUND_SPOTLIGHTS");
+				ShadowRoundedSpot[i] = gpu->addHighLevelShaderMaterial(sPP.ppShader(SHADOW_PASS_2V[shaderExt]).c_str(), "vertexMain", vertexProfile,
+																	   sPP.ppShader(SHADOW_PASS_2P[shaderExt]).c_str(), "pixelMain", pixelProfile,
+																	   ShadowMC, video::EMT_SOLID);
+				sPP.removeShaderDefine("ROUND_SPOTLIGHTS");
+			}
 		}
 
 		// Set resolution preprocessor defines.
@@ -251,6 +254,15 @@ u32 CCP3DHandler::addShadowLight(SShadowLight &shadowLight) {
 	 return LightList.size() - 1;
 }
 
+bool CCP3DHandler::removeShadowLight(const irr::u32 index) {
+	if (index >= 0 && index < LightList.size())
+		LightList.erase(index);
+	else
+		return false;
+
+	return true;
+}
+
 void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 	if(shadowsUnsupported || smgr->getActiveCamera() == 0)
 		return;
@@ -336,12 +348,12 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 			driver->setTransform(ETS_VIEW, activeCam->getViewMatrix());
 			driver->setTransform(ETS_PROJECTION, activeCam->getProjectionMatrix());
 
-			ShadowMC->LightColour = LightList[l].getLightColor();
-			ShadowMC->LightLink = LightList[l].getPosition();
-			ShadowMC->FarLink = LightList[l].getFarValue();
-			ShadowMC->ViewLink = LightList[l].getViewMatrix();
-			ShadowMC->ProjLink = LightList[l].getProjectionMatrix();
-			ShadowMC->MapRes = (f32)LightList[l].getShadowMapResolution();
+			ShadowMC->LightColour = LightList[l].DiffuseColor;
+			ShadowMC->LightLink = LightList[l].Pos;
+			ShadowMC->FarLink = LightList[l].FarPlane;
+			ShadowMC->ViewLink = LightList[l].ViewMat;
+			ShadowMC->ProjLink = LightList[l].ProjMat;
+			ShadowMC->MapRes = (f32)LightList[l].MapRes;
 
 			/// Render all receive nodes
 			for(u32 i = 0;i < ShadowNodeArraySize;++i) {
@@ -356,7 +368,9 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 					BufferMaterialList.push_back(ShadowNodeArray[i].node->getMaterial(m).MaterialType);
 					BufferTextureList.push_back(ShadowNodeArray[i].node->getMaterial(m).getTexture(0));
 				
-					ShadowNodeArray[i].node->getMaterial(m).MaterialType = (E_MATERIAL_TYPE)Shadow[ShadowNodeArray[i].filterType];
+					ShadowNodeArray[i].node->getMaterial(m).MaterialType = (LightList[l].UseRoundSpotLight)
+																		   ? (E_MATERIAL_TYPE)ShadowRoundedSpot[ShadowNodeArray[i].filterType]
+																		   : (E_MATERIAL_TYPE)Shadow[ShadowNodeArray[i].filterType];
 					ShadowNodeArray[i].node->getMaterial(m).setTexture(0, currentShadowMapTexture);
 				}
 

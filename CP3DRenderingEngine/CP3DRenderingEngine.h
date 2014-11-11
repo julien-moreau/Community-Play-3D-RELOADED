@@ -43,6 +43,8 @@ public:
 	const irr::u32 getLightSceneNodeCount() const {
 		return Lights.size();
 	}
+	irr::s32 setLightSceneNodeComputeShadows(ICP3DLightSceneNode *node, const bool compute);
+	irr::s32 setLightSceneNodeComputeShadows(const irr::u32 index, const bool compute);
 
 	void createNormalMappingMaterial();
 	void destroyNormalMappingMaterial();

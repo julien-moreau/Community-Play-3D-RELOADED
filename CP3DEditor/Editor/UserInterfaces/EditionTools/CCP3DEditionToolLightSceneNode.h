@@ -44,16 +44,24 @@ private:
 	CCP3DEditionTool *EditionTool;
 	CCP3DSceneNodeAnimators *AnimatorsController;
 
+	rendering::ICP3DRenderingEngine *Rengine;
 	rendering::ICP3DLightSceneNode *LightSceneNode;
-
-	/// Rendering
-	rendering::ICP3DHandler *Handler;
 
 	/// GUI
 	irr::gui::IGUITab *LightTab;
 
 	/// Shadow light
 	SCP3DInterfaceData ComputeShadows;
+	SCP3DInterfaceData ComputeRoundedSpot;
+	SCP3DInterfaceData ShadowMapFarValue, ShadowMapNearValue, ShadowMapFov;
+	SCP3DInterfaceData ShadowMapDirectional;
+	SCP3DInterfaceData ShadowMapResolution;
+
+	SCP3DInterfaceData ShadowMapTexture;
+
+	/// Normal Mapping
+	SCP3DInterfaceData ComputeNormalMapping;
+	SCP3DInterfaceData NormalMappingStrength;
 
 	/// Color
 	SCP3DInterfaceData DiffuseColor, SpecularColor, AmbiantColor;

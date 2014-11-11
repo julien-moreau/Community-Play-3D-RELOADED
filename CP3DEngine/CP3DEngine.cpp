@@ -8,6 +8,10 @@
 #include "CP3DEngine.h"
 #include "Engine/Core/CCP3DEventReceiver.h"
 
+#if defined(CP3DR_COMPILE_WITH_OPENMP) && defined(_IRR_WINDOWS_API_)
+#include <omp.h>
+#endif
+
 using namespace irr;
 using namespace video;
 using namespace core;
@@ -52,20 +56,31 @@ void CCP3DEngine::runEngine() {
 		if (!Device->isWindowActive())
 			continue;
 
-		Driver->beginScene(true, true, SColor(0x0));
+		#ifdef CP3DR_COMPILE_WITH_OPENMP
+		#pragma omp parallel sections
+		{
+		#pragma omp section
+		{
+		#endif
 
-		Updater->OnPreUpdate();
+			Driver->beginScene(true, true, SColor(0x0));
 
-		Handler->update();
+			Updater->OnPreUpdate();
 
-		Driver->setViewPort(rect<s32>(0, 0, Driver->getScreenSize().Width, Driver->getScreenSize().Height));
-		if (DrawGUI)
-			Gui->drawAll();
+			Handler->update();
 
-		Updater->OnPostUpdate();
+			Driver->setViewPort(rect<s32>(0, 0, Driver->getScreenSize().Width, Driver->getScreenSize().Height));
+			if (DrawGUI)
+				Gui->drawAll();
 
-		Device->getVideoDriver()->endScene();
+			Updater->OnPostUpdate();
 
+			Device->getVideoDriver()->endScene();
+
+		#ifdef CP3DR_COMPILE_WITH_OPENMP
+		}
+		}
+		#endif
 	}
 }
 
