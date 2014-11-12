@@ -8,6 +8,7 @@
 
 #include "CCP3DEditorCore.h"
 #include "CCP3DInterfaceController.h"
+#include "CCP3DEditorTransformer.h"
 #include "../UserInterfaces/CCP3DContextMenu.h"
 #include "../UserInterfaces/CCP3DMainToolbar.h"
 #include "../UserInterfaces/CCP3DToolsToolbar.h"
@@ -36,6 +37,7 @@ CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), 
 
 	/// Configure engine
 	Engine = cp3d::createEngine(device);
+	Engine->getCustomUpdater()->addCustomUpdate(this);
 
 	/// Configure rendering engine
 	Rengine = Engine->getRenderingEngine();
@@ -65,6 +67,9 @@ CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), 
 	SceneGraph = new CCP3DSceneGraph(this);
 	CustomView = new CCP3DCustomView(this);
 
+	/// Create transformers
+	EditorTransformer = new CCP3DEditorTransformer(this);
+
 	/// Finish
 	WorkingDirectory = ProjectDirectory = device->getFileSystem()->getWorkingDirectory() + "/";
 	setProjectName(ProjectName);
@@ -74,7 +79,6 @@ CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), 
 	createComponents();
 	Engine->getEventReceiver()->addEventReceiver(this);
 	createTestScene();
-	Engine->getCustomUpdater()->addCustomUpdate(this);
 	SceneGraph->fillGraph();
 }
 
@@ -120,6 +124,7 @@ void CCP3DEditorCore::OnPreUpdate() {
 		viewPort.LowerRightCorner.Y = Driver->getScreenSize().Height;
 
 	Rengine->getHandler()->setViewPort(viewPort);
+	EditorTransformer->setViewPort(viewPort);
 }
 
 /// Runs the editor

@@ -101,6 +101,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Editor\Core\CCP3DEditorCore.h" />
+    <ClInclude Include="Editor\Core\CCP3DEditorTransformer.h" />
     <ClInclude Include="Editor\Core\CCP3DInterfaceController.h" />
     <ClInclude Include="Editor\GUIElements\GUIColorDialog\CGUIColorDialog.h" />
     <ClInclude Include="Editor\GUIElements\GUIFileSelector\CGUIFileSelector.h" />
@@ -121,6 +122,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="CP3DEditor.cpp" />
     <ClCompile Include="Editor\Core\CCP3DEditorCore.cpp" />
+    <ClCompile Include="Editor\Core\CCP3DEditorTransformer.cpp" />
     <ClCompile Include="Editor\Core\CCP3DInterfaceController.cpp" />
     <ClCompile Include="Editor\GUIElements\GUIColorDialog\CGUIColorDialog.cpp" />
     <ClCompile Include="Editor\GUIElements\GUIFileSelector\CGUIFileSelector.cpp" />

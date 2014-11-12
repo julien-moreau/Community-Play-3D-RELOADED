@@ -86,6 +86,9 @@
     <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolLightSceneNode.h">
       <Filter>Editor\UserInterfaces\EditionTools</Filter>
     </ClInclude>
+    <ClInclude Include="Editor\Core\CCP3DEditorTransformer.h">
+      <Filter>Editor\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DEditor.cpp">
@@ -138,6 +141,9 @@
     </ClCompile>
     <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolLightSceneNode.cpp">
       <Filter>Editor\UserInterfaces\EditionTools</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\Core\CCP3DEditorTransformer.cpp">
+      <Filter>Editor\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

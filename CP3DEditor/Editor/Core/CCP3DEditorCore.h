@@ -16,6 +16,7 @@ class CCP3DEditionTool;
 class CCP3DSceneGraph;
 class CCP3DInterfaceController;
 class CCP3DCustomView;
+class CCP3DEditorTransformer;
 
 namespace collaborative {
 	class ICP3DCollaborativeEngine;
@@ -74,6 +75,7 @@ private:
 
 	/// Datas
 	CCP3DInterfaceController *InterfaceController;
+	CCP3DEditorTransformer *EditorTransformer;
 
 	CCP3DContextMenu *ContextMenu;
 	CCP3DMainToolbar *MainToolbar;

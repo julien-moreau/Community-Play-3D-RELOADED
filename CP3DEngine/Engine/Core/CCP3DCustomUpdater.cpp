@@ -40,6 +40,15 @@ bool CCP3DCustomUpdater::addCustomUpdate(ICP3DUpdate *update) {
 	return true;
 }
 
+bool CCP3DCustomUpdater::addCustomUpdateToFront(ICP3DUpdate *update) {
+	s32 index = Updates.binary_search(update);
+	if (index != -1)
+		return false;
+
+	Updates.push_front(update);
+	return true;
+}
+
 bool CCP3DCustomUpdater::removeCustomUpdate(ICP3DUpdate *update) {
 	s32 index = Updates.binary_search(update);
 	if (index != -1)

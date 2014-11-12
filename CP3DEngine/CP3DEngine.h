@@ -9,6 +9,7 @@
 #include "Engine/Core/CCP3DEventReceiver.h"
 #include "Engine/Core/CCP3DCustomUpdater.h"
 #include "Engine/Scene/CCP3DSceneNodeCreator.h"
+#include "Engine/Scene/CCP3DGeometryCreator.h"
 
 namespace cp3d {
 namespace engine {
@@ -28,6 +29,7 @@ public:
 
 	/// Scene
 	CCP3DSceneNodeCreator *getSceneNodeCreator();
+	CCP3DGeometryCreator *getGeometryCreator();
 
 	/// Rendering
 	rendering::ICP3DRenderingEngine *getRenderingEngine();
@@ -35,6 +37,10 @@ public:
 	/// GUI
 	const bool isDrawingGUI() const;
 	void setDrawGUI(const bool draw);
+
+	/// Scene manager
+	void addSceneManager(irr::scene::ISceneManager *smgr);
+	void removeSceneManager(irr::scene::ISceneManager *smgr);
 
 private:
 	/// Irrlicht
@@ -45,9 +51,11 @@ private:
 	/// Events & Update
 	CCP3DEventReceiver *EventReceiver;
 	CCP3DCustomUpdater *Updater;
+	irr::core::array<irr::scene::ISceneManager *> CustomSceneManagers;
 
 	/// Scene
 	CCP3DSceneNodeCreator *SceneNodeCreator;
+	CCP3DGeometryCreator *GeometryCreator;
 
 	/// Rendering
 	rendering::ICP3DRenderingEngine *Rengine;

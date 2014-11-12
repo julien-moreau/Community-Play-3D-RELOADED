@@ -131,6 +131,15 @@
     <ClInclude Include="..\include\ECP3DGUIEvents.h">
       <Filter>include\editor\ui</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\ICP3DTransformer.h">
+      <Filter>include\editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ICP3DGeometryCreator.h">
+      <Filter>include\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\CCP3DGeometryCreator.h">
+      <Filter>Engine\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DEngine.cpp">
@@ -156,6 +165,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Scene\Clouds\CCloudSceneNode.cpp">
       <Filter>Engine\Scene\Clouds</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scene\CCP3DGeometryCreator.cpp">
+      <Filter>Engine\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

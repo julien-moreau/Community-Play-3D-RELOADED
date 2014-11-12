@@ -5,5 +5,6 @@
 #include "ICP3DEventReceiver.h"
 #include "ICP3DCustomUpdate.h"
 #include "ICP3DSceneNodeCreator.h"
+#include "ICP3DGeometryCreator.h"
 
 #endif

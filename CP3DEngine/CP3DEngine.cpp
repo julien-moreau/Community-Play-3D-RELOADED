@@ -41,6 +41,7 @@ CCP3DEngine::CCP3DEngine(irr::IrrlichtDevice *device) : Device(device)
 
 	/// Scene
 	SceneNodeCreator = new CCP3DSceneNodeCreator(Rengine);
+	GeometryCreator = new CCP3DGeometryCreator(Rengine->getSceneManager());
 
 	/// Finish
 	Gui = device->getGUIEnvironment();
@@ -69,6 +70,9 @@ void CCP3DEngine::runEngine() {
 
 			Handler->update();
 
+			for (u32 i=0; i < CustomSceneManagers.size(); i++)
+				CustomSceneManagers[i]->drawAll();
+
 			Driver->setViewPort(rect<s32>(0, 0, Driver->getScreenSize().Width, Driver->getScreenSize().Height));
 			if (DrawGUI)
 				Gui->drawAll();
@@ -84,6 +88,7 @@ void CCP3DEngine::runEngine() {
 	}
 }
 
+/// Gui
 void CCP3DEngine::setDrawGUI(const bool draw) {
 	DrawGUI = draw;
 }
@@ -92,6 +97,7 @@ const bool CCP3DEngine::isDrawingGUI() const {
 	return DrawGUI;
 }
 
+/// Core
 CCP3DEventReceiver *CCP3DEngine::getEventReceiver() {
 	return EventReceiver;
 }
@@ -100,12 +106,30 @@ CCP3DCustomUpdater *CCP3DEngine::getCustomUpdater() {
 	return Updater;
 }
 
+/// Scene
 CCP3DSceneNodeCreator *CCP3DEngine::getSceneNodeCreator() {
 	return SceneNodeCreator;
 }
+CCP3DGeometryCreator *CCP3DEngine::getGeometryCreator() {
+	return GeometryCreator;
+}
 
+/// Rendering
 rendering::ICP3DRenderingEngine *CCP3DEngine::getRenderingEngine() {
 	return Rengine;
+}
+
+void CCP3DEngine::addSceneManager(irr::scene::ISceneManager *smgr) {
+	if (!smgr)
+		return;
+
+	CustomSceneManagers.push_back(smgr);
+}
+
+void CCP3DEngine::removeSceneManager(irr::scene::ISceneManager *smgr) {
+	s32 index = CustomSceneManagers.binary_search(smgr);
+	if (index != -1)
+		CustomSceneManagers.erase(index);
 }
 
 } /// End namespace engine

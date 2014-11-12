@@ -17,6 +17,7 @@ public:
 	void OnPostUpdate();
 
 	bool addCustomUpdate(ICP3DUpdate *update);
+	bool addCustomUpdateToFront(ICP3DUpdate *update);
 	bool removeCustomUpdate(ICP3DUpdate *update);
 
 private:

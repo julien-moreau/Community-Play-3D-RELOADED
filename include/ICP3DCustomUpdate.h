@@ -46,6 +46,10 @@ public:
 	*/
 	virtual bool addCustomUpdate(ICP3DUpdate *update) = 0;
 
+	//! Adds a custom update at the first position
+	//! \param update: the instance of the custom update
+	virtual bool addCustomUpdateToFront(ICP3DUpdate *update) = 0;
+
 	//! Removes a custom update
 	//! \param update: the update to remove
 	virtual bool removeCustomUpdate(ICP3DUpdate *update) = 0;
