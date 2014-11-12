@@ -15,6 +15,14 @@ using namespace video;
 using namespace core;
 using namespace gui;
 
+#define CP3D_TRANSFORMER_X_COLOR SColor(255, 255, 0, 0)
+#define CP3D_TRANSFORMER_Y_COLOR SColor(255, 0, 255, 0)
+#define CP3D_TRANSFORMER_Z_COLOR SColor(255, 0, 0, 255)
+
+#define CP3D_TRANSFORMER_X_COLOR_SELECTED SColor(255, 128, 0, 0)
+#define CP3D_TRANSFORMER_Y_COLOR_SELECTED SColor(255, 0, 128, 0)
+#define CP3D_TRANSFORMER_Z_COLOR_SELECTED SColor(255, 9, 0, 128)
+
 namespace cp3d {
 
 CCP3DEditorTransformer::CCP3DEditorTransformer(CCP3DEditorCore *editorCore) : EditorCore(editorCore), SelectedTransformer(0), CtrlActive(false)
@@ -28,10 +36,9 @@ CCP3DEditorTransformer::CCP3DEditorTransformer(CCP3DEditorCore *editorCore) : Ed
 	CursorControl = editorCore->getDevice()->getCursorControl();
 
 	/// Create
-	auto configureNode = [&](ISceneNode *node) {
+	auto configureNode = [&](ISceneNode *node, IMesh *mesh) {
 		node->setMaterialType(EMT_SOLID);
 		node->setMaterialFlag(EMF_LIGHTING, false);
-		//node->setMaterialFlag(EMF_ZBUFFER, false);
 		ITriangleSelector *s = Smgr->createTriangleSelectorFromBoundingBox(node);
 		node->setTriangleSelector(s);
 	};
@@ -39,36 +46,56 @@ CCP3DEditorTransformer::CCP3DEditorTransformer(CCP3DEditorCore *editorCore) : Ed
 	/// Arrows (position)
 	IAnimatedMesh *arrowMesh = Smgr->addArrowMesh("CP3D:TransformerPositionX", 0xffff0000, 0xffff0000);
 	ArrowX = Smgr->addAnimatedMeshSceneNode(arrowMesh);
-	configureNode(ArrowX);
+	configureNode(ArrowX, arrowMesh);
 	ArrowX->setRotation(vector3df(0.f, 0.f, -90.f));
 
 	arrowMesh = Smgr->addArrowMesh("CP3D:TransformerPositionY", 0x66BB00, 0x66BB00);
 	ArrowY = Smgr->addAnimatedMeshSceneNode(arrowMesh);
-	configureNode(ArrowY);
+	configureNode(ArrowY, arrowMesh);
 
 	arrowMesh = Smgr->addArrowMesh("CP3D:TransformerPositionZ", 0x3300DD, 0x3300DD);
 	ArrowZ = Smgr->addAnimatedMeshSceneNode(arrowMesh);
-	configureNode(ArrowZ);
+	configureNode(ArrowZ, arrowMesh);
 	ArrowZ->setRotation(vector3df(90.f, 0.f, 0.f));
 
 	/// Rings (rotation)
-	/*IMesh *ringMesh = EditorCore->getEngine()->getGeometryCreator()->createRingMesh(30.f, 4.f, 25, SColor(255, 255, 0, 0));
+	IMesh *ringMesh = EditorCore->getEngine()->getGeometryCreator()->createRingMesh(2.f, 0.4f, 25, SColor(255, 255, 0, 0));
 	RingX = Smgr->addMeshSceneNode(ringMesh);
-	configureNode(RingX);
+	configureNode(RingX, arrowMesh);
 	RingX->setRotation(vector3df(0.f, 0.f, -90.f));
+	RingX->setMaterialFlag(EMF_BACK_FACE_CULLING, false);
 
-	ringMesh = EditorCore->getEngine()->getGeometryCreator()->createRingMesh(30.f, 4.f, 25, SColor(255, 0, 255, 0));
+	ringMesh = EditorCore->getEngine()->getGeometryCreator()->createRingMesh(2.f, 0.4f, 25, SColor(255, 0, 255, 0));
 	RingY = Smgr->addMeshSceneNode(ringMesh);
-	configureNode(RingY);
+	configureNode(RingY, arrowMesh);
+	RingY->setMaterialFlag(EMF_BACK_FACE_CULLING, false);
 	
-	ringMesh = EditorCore->getEngine()->getGeometryCreator()->createRingMesh(30.f, 4.f, 25, SColor(255, 0, 0, 255));
+	ringMesh = EditorCore->getEngine()->getGeometryCreator()->createRingMesh(2.f, 0.4f, 25, SColor(255, 0, 0, 255));
 	RingZ = Smgr->addMeshSceneNode(ringMesh);
-	configureNode(RingZ);
-	RingZ->setRotation(vector3df(90.f, 0.f, 0.f));*/
+	configureNode(RingZ, arrowMesh);
+	RingZ->setRotation(vector3df(90.f, 0.f, 0.f));
+	RingZ->setMaterialFlag(EMF_BACK_FACE_CULLING, false);
+
+	/// Masses (scale)
+	IMesh *massMesh = EditorCore->getEngine()->getGeometryCreator()->createMassMesh(0.4f, 1.f, SColor(255, 255, 0, 0));
+	MassX = Smgr->addMeshSceneNode(massMesh);
+	configureNode(MassX, arrowMesh);
+	MassX->setRotation(vector3df(0.f, 0.f, -90.f));
+
+	massMesh = EditorCore->getEngine()->getGeometryCreator()->createMassMesh(0.4f, 1.f, SColor(255, 0, 255, 0));
+	MassY = Smgr->addMeshSceneNode(massMesh);
+	configureNode(MassY, arrowMesh);
+	
+	massMesh = EditorCore->getEngine()->getGeometryCreator()->createMassMesh(0.4f, 1.f, SColor(255, 0, 0, 255));
+	MassZ = Smgr->addMeshSceneNode(massMesh);
+	configureNode(MassZ, arrowMesh);
+	MassZ->setRotation(vector3df(90.f, 0.f, 0.f));
 
 	/// Finish
 	Camera = Smgr->addCameraSceneNode();
 	editorCore->getEngine()->addSceneManager(Smgr);
+
+	setTransformerType(ETT_NONE);
 }
 
 CCP3DEditorTransformer::~CCP3DEditorTransformer() {
@@ -77,6 +104,59 @@ CCP3DEditorTransformer::~CCP3DEditorTransformer() {
 
 void CCP3DEditorTransformer::setViewPort(const irr::core::rect<s32> &viewPort) {
 	ViewPort = viewPort;
+}
+
+void CCP3DEditorTransformer::setTransformerType(E_TRANSFORMER_TYPE type) {
+	ArrowX->setVisible(false);
+	ArrowY->setVisible(false);
+	ArrowZ->setVisible(false);
+
+	RingX->setVisible(false);
+	RingY->setVisible(false);
+	RingZ->setVisible(false);
+
+	MassX->setVisible(false);
+	MassY->setVisible(false);
+	MassZ->setVisible(false);
+
+	if (type == ETT_POSITION) {
+		ArrowX->setVisible(true);
+		ArrowY->setVisible(true);
+		ArrowZ->setVisible(true);
+	}
+	else if (type == ETT_ROTATION) {
+		RingX->setVisible(true);
+		RingY->setVisible(true);
+		RingZ->setVisible(true);
+	}
+	else if (type == ETT_SCALE) {
+		MassX->setVisible(true);
+		MassY->setVisible(true);
+		MassZ->setVisible(true);
+	}
+	
+	TransformerType = type;
+}
+
+void CCP3DEditorTransformer::setTransformerColor(ISceneNode *node, SColor color) {
+	IMesh *mesh = 0;
+
+	if (node->getType() == ESNT_ANIMATED_MESH)
+		mesh = ((IAnimatedMeshSceneNode *)node)->getMesh();
+	else if (node->getType() == ESNT_MESH)
+		mesh = ((IMeshSceneNode *)node)->getMesh();
+
+	if (!mesh)
+		return;
+
+	for (u32 i=0; i < mesh->getMeshBufferCount(); i++) {
+		IMeshBuffer *mb = mesh->getMeshBuffer(i);
+
+		S3DVertex *vertices = (S3DVertex *)mb->getVertices();
+		for (u32 j=0; j < mb->getVertexCount(); j++) {
+			vertices[j].Color = color;
+		}
+	}
 }
 
 void CCP3DEditorTransformer::OnPreUpdate() {
@@ -96,33 +176,60 @@ void CCP3DEditorTransformer::OnPreUpdate() {
 	ArrowY->setScale(scale);
 	ArrowZ->setScale(scale);
 
+	RingX->setScale(scale);
+	RingY->setScale(scale);
+	RingZ->setScale(scale);
+
+	MassX->setScale(scale);
+	MassY->setScale(scale);
+	MassZ->setScale(scale);
+
 	/// Update camera
 	Camera->setPosition(OriginalSmgr->getActiveCamera()->getPosition());
 	Camera->setTarget(OriginalSmgr->getActiveCamera()->getTarget());
 
 	/// Update average transformation if multiple selected nodes
+	AveragePosition = vector3df(0.f);
 	AverageTransformation = vector3df(0.f);
 	bool visible = false;
 
 	if (NodesToTransform.size()) {
 		for (u32 i=0; i < NodesToTransform.size(); i++) {
 			NodesToTransform[i]->updateAbsolutePosition();
-			AverageTransformation += NodesToTransform[i]->getAbsolutePosition();
+			AveragePosition += NodesToTransform[i]->getAbsolutePosition();
+
+			if (TransformerType == ETT_ROTATION) {
+				AverageTransformation += NodesToTransform[i]->getRotation();
+			}
+			else if (TransformerType == ETT_SCALE) {
+				AverageTransformation += NodesToTransform[i]->getScale();
+			}
 		}
 
 		if (NodesToTransform.size())
-			AverageTransformation /= (f32)NodesToTransform.size();
+			AveragePosition /= (f32)NodesToTransform.size();
+
+		if (TransformerType == ETT_POSITION)
+			AverageTransformation = AveragePosition;
 
 		visible = true;
 	}
 
-	ArrowX->setPosition(AverageTransformation);
-	ArrowY->setPosition(AverageTransformation);
-	ArrowZ->setPosition(AverageTransformation);
+	ArrowX->setPosition(AveragePosition);
+	ArrowY->setPosition(AveragePosition);
+	ArrowZ->setPosition(AveragePosition);
 
-	ArrowX->setVisible(visible);
-	ArrowY->setVisible(visible);
-	ArrowZ->setVisible(visible);
+	RingX->setPosition(AveragePosition);
+	RingY->setPosition(AveragePosition);
+	RingZ->setPosition(AveragePosition);
+
+	MassX->setPosition(AveragePosition);
+	MassY->setPosition(AveragePosition);
+	MassZ->setPosition(AveragePosition);
+
+	if (visible) {
+		setTransformerType(TransformerType);
+	}
 }
 
 void CCP3DEditorTransformer::OnPostUpdate() {
@@ -163,7 +270,24 @@ bool CCP3DEditorTransformer::OnEvent(const SEvent &event) {
 	}
 
 	else if (event.EventType == EET_MOUSE_INPUT_EVENT) {
-		if (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN) {
+		if (event.MouseInput.Event == EMIE_MOUSE_WHEEL) {
+			f32 wheel = event.MouseInput.Wheel;
+
+			if (CtrlActive)
+				wheel /= 10.f;
+
+			for (u32 i=0; i < NodesToTransform.size(); i++) {
+				if (TransformerType == ETT_ROTATION)
+					NodesToTransform[i]->setRotation(NodesToTransform[i]->getRotation() + wheel);
+
+				else if (TransformerType == ETT_SCALE)
+					NodesToTransform[i]->setScale(NodesToTransform[i]->getScale() + wheel);
+			}
+
+			return false;
+		}
+
+		else if (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN) {
 
 			core::line3d<f32> ray = CollisionMgr->getRayFromScreenCoordinates(MousePositionInViewPort, Camera);
 			vector3df intersection;
@@ -173,12 +297,18 @@ bool CCP3DEditorTransformer::OnEvent(const SEvent &event) {
 
 			SelectedTransformer = selectedNode;
 
-			if (selectedNode == ArrowX)
-				Plane.setPlane(AverageTransformation, core::vector3df(0.f, 0.f, -1.f));
-			else if (selectedNode == ArrowY)
-				Plane.setPlane(AverageTransformation, core::vector3df(-1.f, 0.f, 0.f));
-			else if (selectedNode == ArrowZ)
-				Plane.setPlane(AverageTransformation, core::vector3df(0.f, -1.f, 0.f));
+			if (selectedNode == ArrowX || selectedNode == RingX || selectedNode == MassX) {
+				Plane.setPlane(AveragePosition, core::vector3df(0.f, 0.f, -1.f));
+				setTransformerColor(SelectedTransformer, CP3D_TRANSFORMER_X_COLOR_SELECTED);
+			}
+			else if (selectedNode == ArrowY || selectedNode == RingY || selectedNode == MassY) {
+				Plane.setPlane(AveragePosition, core::vector3df(-1.f, 0.f, 0.f));
+				setTransformerColor(SelectedTransformer, CP3D_TRANSFORMER_Y_COLOR_SELECTED);
+			}
+			else if (selectedNode == ArrowZ || selectedNode == RingZ || selectedNode == MassZ) {
+				Plane.setPlane(AveragePosition, core::vector3df(0.f, -1.f, 0.f));
+				setTransformerColor(SelectedTransformer, CP3D_TRANSFORMER_Z_COLOR_SELECTED);
+			}
 			else {
 				SelectedTransformer = 0;
 				OriginalSmgr->getActiveCamera()->setInputReceiverEnabled(true);
@@ -191,8 +321,19 @@ bool CCP3DEditorTransformer::OnEvent(const SEvent &event) {
 			return false;
 		}
 		else if (event.MouseInput.Event == EMIE_LMOUSE_LEFT_UP) {
+			if (SelectedTransformer) {
+				if (Plane.Normal.X == -1.f)
+					setTransformerColor(SelectedTransformer, CP3D_TRANSFORMER_Y_COLOR);
+				else if (Plane.Normal.Y == -1.f)
+					setTransformerColor(SelectedTransformer, CP3D_TRANSFORMER_Z_COLOR);
+				else if (Plane.Normal.Z == -1.f)
+					setTransformerColor(SelectedTransformer, CP3D_TRANSFORMER_X_COLOR);
+			}
+
 			SelectedTransformer = 0;
 			OriginalSmgr->getActiveCamera()->setInputReceiverEnabled(true);
+
+			return false;
 		}
 
 		else if (event.MouseInput.Event == EMIE_MOUSE_MOVED) {
@@ -200,16 +341,22 @@ bool CCP3DEditorTransformer::OnEvent(const SEvent &event) {
 			if (SelectedTransformer && findAndSetMousePositionInPlane()) {
 				vector3df newTransformation = AverageTransformation;
 
-				if (SelectedTransformer == ArrowX)
+				if (SelectedTransformer == ArrowX || SelectedTransformer == RingX || SelectedTransformer == MassX)
 					AverageTransformation.X = MousePositionInPlane.X - MousePosition.X;
-				else if (SelectedTransformer == ArrowY)
+				else if (SelectedTransformer == ArrowY || SelectedTransformer == RingY || SelectedTransformer == MassY)
 					AverageTransformation.Y = MousePositionInPlane.Y - MousePosition.Y;
-				else if (SelectedTransformer == ArrowZ)
+				else if (SelectedTransformer == ArrowZ || SelectedTransformer == RingZ || SelectedTransformer == MassZ)
 					AverageTransformation.Z = MousePositionInPlane.Z - MousePosition.Z;
 
 				for (u32 i=0; i < NodesToTransform.size(); i++) {
 					ISceneNode *n = NodesToTransform[i];
-					n->setPosition(AverageTransformation);
+					
+					if (TransformerType == ETT_POSITION)
+						n->setPosition(AverageTransformation);
+					else if (TransformerType == ETT_ROTATION)
+						n->setRotation(AverageTransformation);
+					else if (TransformerType == ETT_SCALE)
+						n->setScale(AverageTransformation);
 				}
 
 			}

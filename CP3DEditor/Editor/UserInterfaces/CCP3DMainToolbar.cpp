@@ -1,5 +1,6 @@
 
 #include "stdafx.h"
+#include "../Core/CCP3DEditorTransformer.h"
 #include "../Core/CCP3DEditorCore.h"
 
 #include "CCP3DMainToolbar.h"
@@ -33,9 +34,9 @@ CCP3DMainToolbar::CCP3DMainToolbar(CCP3DEditorCore *editorCore) : EditorCore(edi
 
 	Toolbar->addButton(-1, L"", L"", Driver->getTexture("GUI/separator.png"), false, true)->setVisible(false);
 
-	Toolbar->addButton(-1, L"", L"Set node's position", Driver->getTexture("GUI/position.png"), 0, true, true);
-	Toolbar->addButton(-1, L"", L"Set node's rotation", Driver->getTexture("GUI/rotation.png"), 0, true, true);
-	Toolbar->addButton(-1, L"", L"Set node's scale", Driver->getTexture("GUI/scale.png"), 0, true, true);
+	PositionButton = Toolbar->addButton(-1, L"", L"Set node's position", Driver->getTexture("GUI/position.png"), 0, true, true);
+	RotationButton = Toolbar->addButton(-1, L"", L"Set node's rotation", Driver->getTexture("GUI/rotation.png"), 0, true, true);
+	ScaleButton = Toolbar->addButton(-1, L"", L"Set node's scale", Driver->getTexture("GUI/scale.png"), 0, true, true);
 	Toolbar->addButton(-1, L"World", L"Set world transform", Driver->getTexture("GUI/worldtransform.png"), 0, true, true);
 
 	Toolbar->addButton(-1, L"", L"", Driver->getTexture("GUI/separator.png"), false, true)->setVisible(false);
@@ -53,6 +54,37 @@ CCP3DMainToolbar::~CCP3DMainToolbar() {
 }
 
 bool CCP3DMainToolbar::OnEvent(const SEvent &event) {
+
+	if (event.EventType == EET_GUI_EVENT) {
+		if (event.GUIEvent.EventType == EGET_BUTTON_CLICKED) {
+
+			/// Position, Rotation, Scale
+			IGUIElement *caller = event.GUIEvent.Caller;
+			if (caller == PositionButton || caller == RotationButton || caller == ScaleButton) {
+
+				/// Deactive buttons
+				if (caller != PositionButton)
+					PositionButton->setPressed(false);
+				if (caller != RotationButton)
+					RotationButton->setPressed(false);
+				if (caller != ScaleButton)
+					ScaleButton->setPressed(false);
+
+				/// Set transformer type
+				if (caller == PositionButton && PositionButton->isPressed())
+					EditorCore->getEditorTransformer()->setTransformerType(ETT_POSITION);
+				else if (caller == RotationButton && RotationButton->isPressed())
+					EditorCore->getEditorTransformer()->setTransformerType(ETT_ROTATION);
+				else if (caller == ScaleButton && ScaleButton->isPressed())
+					EditorCore->getEditorTransformer()->setTransformerType(ETT_SCALE);
+				else
+					EditorCore->getEditorTransformer()->setTransformerType(ETT_NONE);
+
+				return true;
+			}
+
+		}
+	}
 
 	return false;
 }

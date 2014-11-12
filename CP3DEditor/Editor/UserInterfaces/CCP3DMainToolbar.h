@@ -31,6 +31,9 @@ private:
 	/// Gui
 	irr::gui::IGUIToolBar *Toolbar;
 
+	/// Position, Rotation, Scale
+	irr::gui::IGUIButton *PositionButton, *RotationButton, *ScaleButton;
+
 };
 
 } /// End namespace cp3d

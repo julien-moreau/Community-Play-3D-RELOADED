@@ -53,6 +53,7 @@ public:
 
 	/// Interfaces
 	CCP3DInterfaceController *getInterfaceController() { return InterfaceController; }
+	CCP3DEditorTransformer *getEditorTransformer() { return EditorTransformer; }
 
 	CCP3DEditionTool *getEditionTool() { return EditionTool; }
 	CCP3DSceneGraph *getSceneGraph() { return SceneGraph; }

@@ -75,6 +75,40 @@ IMesh *CCP3DGeometryCreator::createRingMesh(f32 radius, f32 width, u32 sections,
 	return mesh;
 }
 
+IMesh *CCP3DGeometryCreator::createMassMesh(f32 size, f32 length, SColor color) {
+	/// Create meshes
+	IMesh *cubeMesh = Smgr->getGeometryCreator()->createCubeMesh(vector3df(size));
+	IMesh *lengthMesh = Smgr->getGeometryCreator()->createCubeMesh(vector3df(size / 4.f, length, size / 4.f));
+
+	/// set new pos of the mass
+	IMeshBuffer *mb = cubeMesh->getMeshBuffer(0); /// Only 1 mesh buffer for cubes
+	S3DVertex *vertices = (S3DVertex *)mb->getVertices();
+	for (u32 i=0; i < mb->getVertexCount(); i++) {
+		vertices[i].Pos.Y += length;
+		vertices[i].Color = color;
+	}
+	mb->recalculateBoundingBox();
+	mb->setDirty();
+
+	mb = lengthMesh->getMeshBuffer(0);
+	vertices = (S3DVertex *)mb->getVertices();
+	for (u32 i=0; i < mb->getVertexCount(); i++) {
+		vertices[i].Pos.Y += length / 2.f;
+		vertices[i].Color = color;
+	}
+	mb->recalculateBoundingBox();
+	mb->setDirty();
+
+	((SMesh *)cubeMesh)->addMeshBuffer(lengthMesh->getMeshBuffer(0));
+	((SMesh *)cubeMesh)->recalculateBoundingBox();
+
+	/// Configure final mesh
+	lengthMesh->drop();
+	cubeMesh->setDirty();
+
+	return cubeMesh;
+}
+
 irr::scene::IMesh *CCP3DGeometryCreator::createTorusMesh(irr::f32 diameter, irr::f32 thickness, irr::u32 tessellation, SColor color) {
 	CMeshBuffer<S3DVertex> *mb = new CMeshBuffer<S3DVertex>();
 

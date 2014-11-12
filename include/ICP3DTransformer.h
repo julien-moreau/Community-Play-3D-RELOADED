@@ -9,7 +9,9 @@ enum E_TRANSFORMER_TYPE {
 	ETT_POSITION = 0,
 	ETT_ROTATION,
 	ETT_SCALE,
-	ETT_FREE
+	ETT_FREE,
+
+	ETT_NONE
 };
 
 //! Handles the transformer's class (position, rotation, scale, free)

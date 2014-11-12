@@ -26,6 +26,7 @@ public:
 
 	irr::scene::IMesh *createRingMesh(irr::f32 radius, irr::f32 width, irr::u32 sections, irr::video::SColor color);
 	irr::scene::IMesh *createTorusMesh(irr::f32 diameter, irr::f32 thickness, irr::u32 tessellation, irr::video::SColor color);
+	irr::scene::IMesh *createMassMesh(irr::f32 size, irr::f32 length, irr::video::SColor color);
 
 private:
 	/// Irrlicht
