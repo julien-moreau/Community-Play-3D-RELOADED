@@ -46,7 +46,12 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 		ShadowMC = new ShadowShaderCB(this);
 
 		CustomDepthPassMgr = new CCustomDepthPass(driver, "CustomDepthPassManager");
+		CustomDepthPassMgr->setEnabled(true);
 		addCustomPass(CustomDepthPassMgr);
+
+		CustomGeneralPass = new CCustomGeneralPass(driver, "CustomGeneralPass");
+		CustomGeneralPass->setEnabled(true);
+		addCustomPass(CustomGeneralPass);
 
 		Depth = gpu->addHighLevelShaderMaterial(
 			sPP.ppShader(SHADOW_PASS_1V[shaderExt]).c_str(), "vertexMain", video::EVST_VS_2_0,
@@ -435,6 +440,7 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 	smgr->drawAll();
 
 	const u32 PostProcessingRoutinesSize = PostProcessingRoutines.size();
+	const u32 CustomPassesSize = CustomPasses.size();
 
 	driver->setRenderTarget(PostProcessingRoutinesSize  ? ScreenRTT : outputTarget, true, true, SColor(0x0));
 
@@ -447,7 +453,7 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 	ScreenQuad.render(driver);
 
 	// Perform custom passes after rendering, to ensure animations stay up to date
-	for (u32 i=0; i < CustomPasses.size(); i++) {
+	for (u32 i=0; i < CustomPassesSize; i++) {
 		if (CustomPasses[i]->isEnabled()) {
 			if (!CustomPasses[i]->setRenderTarget())
 				continue;
@@ -457,6 +463,8 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 				BufferMaterialList.set_used(0);
 				for(u32 g = 0;g < CustomPasses[i]->getSceneNodes()[j]->getMaterialCount(); ++g)
 					BufferMaterialList.push_back(CustomPasses[i]->getSceneNodes()[j]->getMaterial(g).MaterialType);
+
+				CustomPasses[i]->CurrentSceneNode = i;
 
 				CustomPasses[i]->onPreRender(CustomPasses[i]->getSceneNodes()[j]);
 				CustomPasses[i]->getSceneNodes()[j]->setMaterialType((E_MATERIAL_TYPE)CustomPasses[i]->getMaterialType());
@@ -468,10 +476,13 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 					CustomPasses[i]->getSceneNodes()[j]->getMaterial(g).MaterialType = (E_MATERIAL_TYPE)BufferMaterialList[g];
 			}
 
+			CustomPasses[i]->CurrentSceneNode = 0;
+
 		}
 	}
 
 	driver->setRenderTarget(0, false, false);
+	driver->setViewPort(ViewPort);
 	
 	if(PostProcessingRoutinesSize) {
 		bool Alter = false;

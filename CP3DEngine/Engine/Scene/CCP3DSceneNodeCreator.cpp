@@ -27,6 +27,10 @@ CCP3DSceneNodeCreator::~CCP3DSceneNodeCreator() {
 
 }
 
+//!--------------------------------------------------------------------------------------------------------------------------------------------
+//! SCENE NODES
+//!--------------------------------------------------------------------------------------------------------------------------------------------
+
 /// Creates a cloud scene node
 irr::scene::ISceneNode *CCP3DSceneNodeCreator::createCloudNode(const vector2df &translation, ITexture *texture,
 															   const f32 textureScale, const f32 centerHeight, const f32 innerHeight,
@@ -96,6 +100,29 @@ void CCP3DSceneNodeCreator::configureSceneNode(irr::scene::ISceneNode *node) {
 			}
 		}
 	}
+}
+
+//!--------------------------------------------------------------------------------------------------------------------------------------------
+//! MESHES
+//!--------------------------------------------------------------------------------------------------------------------------------------------
+
+IMesh *CCP3DSceneNodeCreator::getStaticMesh(stringc path, bool withTangents) {
+	/// Load the mesh
+	IMesh *mesh = Smgr->getMesh(path.c_str());
+	if (!mesh)
+		return 0;
+
+	/// Recalculate with tangents if needed
+	if (withTangents) {
+		IMesh *meshT = Smgr->getMeshManipulator()->createMeshWithTangents(mesh, true, true, true, true);
+		mesh->drop();
+		mesh = meshT;
+	}
+
+	/// Configure mesh
+	mesh->setHardwareMappingHint(EHM_STATIC, EBT_VERTEX_AND_INDEX);
+
+	return mesh;
 }
 
 } /// End namespace engine

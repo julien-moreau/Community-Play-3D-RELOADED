@@ -26,6 +26,10 @@ public:
 	CCP3DSceneNodeCreator(rendering::ICP3DRenderingEngine *renderingEngine);
 	~CCP3DSceneNodeCreator();
 
+	//!----------------------------------------------------------------
+	//! SCENE NODES
+	//!----------------------------------------------------------------
+
 	/// Creates cloud scene node
 	irr::scene::ISceneNode *createCloudNode(const irr::core::vector2df &translation, irr::video::ITexture *texture,
 											const irr::f32 textureScale, const irr::f32 centerHeight, const irr::f32 innerHeight,
@@ -36,6 +40,13 @@ public:
 
 	/// Configures scene node to default values
 	void configureSceneNode(irr::scene::ISceneNode *node);
+
+	//!----------------------------------------------------------------
+	//! MESHES
+	//!----------------------------------------------------------------
+
+	/// Loads and configures a static mesh
+	irr::scene::IMesh *getStaticMesh(irr::core::stringc path, bool withTangents = false);
 
 private:
 

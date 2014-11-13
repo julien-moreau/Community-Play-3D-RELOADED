@@ -104,6 +104,15 @@ bool CCP3DSceneGraph::OnEvent(const SEvent &event) {
 				if (SelectedSceneNode)
 					SelectedSceneNode->setDebugDataVisible(EDS_OFF);
 
+				if (node == SceneNode) {
+					SEvent ev;
+					ev.EventType = EET_USER_EVENT;
+					ev.UserEvent.UserData1 = EIE_SCENE_MANAGER_SELECTED;
+					ev.UserEvent.UserData2 = (s32)EditorCore->getRenderingEngine()->getSceneManager();
+					EditorCore->getEngine()->getEventReceiver()->OnEvent(ev);
+					return true;
+				}
+
 				/// Get node's data (ISceneNode *)
 				ISceneNode *sceneNode = (ISceneNode*)node->getData();
 				sceneNode = dynamic_cast<ISceneNode *>(sceneNode);
@@ -153,6 +162,24 @@ bool CCP3DSceneGraph::OnEvent(const SEvent &event) {
 			return false;
 		}
 
+		else if (event.UserEvent.UserData1 == EIE_NODE_ADDED) {
+			ISceneNode *node = (ISceneNode *)event.UserEvent.UserData2;
+			node = dynamic_cast<ISceneNode *>(node);
+
+			if (!node)
+				return false;
+
+			if (node->getParent() == Smgr->getRootSceneNode()) {
+				RootNode->addChildBack(stringw(node->getName()).c_str(), 0, getIconFromType(node->getType()), -1, node);
+			}
+			else {
+				IGUITreeViewNode *tn = getTreeNodeFromParentSceneNode(0, node);
+				tn->addChildBack(stringw(node->getName()).c_str(), 0, getIconFromType(node->getType()), -1, node);
+			}
+
+			return false;
+		}
+
 	}
 
 	return false;
@@ -164,6 +191,24 @@ void CCP3DSceneGraph::fillGraph(irr::scene::ISceneNode *start) {
 
 	fillGraphRecursively(start, SceneNode);
 	SceneNode->setExpanded(true);
+}
+
+IGUITreeViewNode *CCP3DSceneGraph::getTreeNodeFromParentSceneNode(IGUITreeViewNode *startNode, ISceneNode *node) {
+	if (startNode == 0)
+		startNode = RootNode->getFirstChild();
+
+	while (startNode) {
+		
+		ISceneNode *n = (ISceneNode *)startNode->getData();
+
+		if (node->getParent() == n) {
+			return startNode;
+		}
+
+		startNode = startNode->getNextSibling();
+	}
+	
+	return 0;
 }
 
 void CCP3DSceneGraph::fillGraphRecursively(ISceneNode *start, IGUITreeViewNode *treeNode) {

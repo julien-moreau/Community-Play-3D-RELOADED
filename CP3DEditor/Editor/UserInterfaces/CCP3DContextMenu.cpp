@@ -1,8 +1,9 @@
 
 #include "stdafx.h"
 #include "../Core/CCP3DEditorCore.h"
-
 #include "CCP3DContextMenu.h"
+
+#include <ICP3DEditionTool.h>
 
 using namespace irr;
 using namespace scene;
@@ -12,7 +13,7 @@ using namespace gui;
 
 namespace cp3d {
 
-CCP3DContextMenu::CCP3DContextMenu(CCP3DEditorCore *editorCore) : EditorCore(editorCore)
+CCP3DContextMenu::CCP3DContextMenu(CCP3DEditorCore *editorCore) : EditorCore(editorCore), AddStaticMeshOpenDialog(0)
 {
 	/// Configure
 	editorCore->getEngine()->getEventReceiver()->addEventReceiver(this);
@@ -85,8 +86,8 @@ CCP3DContextMenu::CCP3DContextMenu(CCP3DEditorCore *editorCore) : EditorCore(edi
 
 	/// --------------------------------------------------
 	/// Fill "scene"
-	SceneContextMenu->addItem(L"Add new terrain... (TO DO)", -1);
-	SceneContextMenu->addItem(L"Add static mesh... (TO DO)", -1);
+	SceneContextMenu->addItem(L"Add new terrain... (TO DO)", ESCM_ADD_NEW_TERRAIN);
+	SceneContextMenu->addItem(L"Add static mesh... (TO DO)", ESCM_ADD_STATIC_MESH);
 	SceneContextMenu->addItem(L"Add animated mesh... (TO DO)", -1);
 	SceneContextMenuLight = SceneContextMenu->getSubMenu(SceneContextMenu->addItem(L"Add light", -1, true, true));
 	SceneContextMenu->addSeparator();
@@ -118,6 +119,37 @@ void CCP3DContextMenu::setProjectName(irr::core::stringc name) {
 }
 
 bool CCP3DContextMenu::OnEvent(const SEvent &event) {
+
+	if (event.EventType == EET_GUI_EVENT) {
+		if (event.GUIEvent.EventType == EGET_MENU_ITEM_SELECTED) {
+
+			/// Scene context menu
+			if (event.GUIEvent.Caller == SceneContextMenu) {
+				if (SceneContextMenu->getSelectedItem() == ESCM_ADD_STATIC_MESH) {
+					AddStaticMeshOpenDialog = EditorCore->createFileOpenDialog(L"Select Static mesh...", 0, ui::ICP3DFileSelector::EFST_OPEN_DIALOG);
+				}
+
+				return true;
+			}
+
+		}
+
+		else if (event.GUIEvent.EventType == EGET_FILE_SELECTED) {
+			if (event.GUIEvent.Caller == AddStaticMeshOpenDialog) {
+				IMesh *m = EditorCore->getEngine()->getSceneNodeCreator()->getStaticMesh(AddStaticMeshOpenDialog->getFileName(), false);
+				ISceneNode *n = EditorCore->getRenderingEngine()->getSceneManager()->addMeshSceneNode(m);
+
+				SEvent ev;
+				ev.EventType = EET_USER_EVENT;
+				ev.UserEvent.UserData1 = EIE_NODE_ADDED;
+				ev.UserEvent.UserData2 = (s32)n;
+				EditorCore->getEngine()->getEventReceiver()->OnEvent(ev);
+
+				AddStaticMeshOpenDialog = 0;
+				return true;
+			}
+		}
+	}
 
 	return false;
 }

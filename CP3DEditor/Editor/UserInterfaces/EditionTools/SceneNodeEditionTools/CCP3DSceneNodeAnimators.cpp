@@ -15,13 +15,43 @@ using namespace io;
 
 namespace cp3d {
 
-CCP3DSceneNodeAnimators::CCP3DSceneNodeAnimators(CCP3DEditorCore *editorCore) : EditorCore(editorCore), Panel(0), Attributes(0)
+CCP3DSceneNodeAnimators::CCP3DSceneNodeAnimators(CCP3DEditorCore *editorCore) : EditorCore(editorCore), Panel(0), Attributes(0), Animator(0)
 {
 	editorCore->getEngine()->getEventReceiver()->addEventReceiver(this);
+	editorCore->getEngine()->getCustomUpdater()->addCustomUpdate(this);
 }
 
 CCP3DSceneNodeAnimators::~CCP3DSceneNodeAnimators() {
 	EditorCore->getEngine()->getEventReceiver()->removeEventReceiver(this);
+}
+
+void CCP3DSceneNodeAnimators::OnPostUpdate() {
+	if (!Animator)
+		return;
+
+	ESCENE_NODE_ANIMATOR_TYPE type = Animator->getType();
+
+	if (type == ESNAT_FOLLOW_SPLINE) {
+		array<vector3df> points;
+
+		for (u32 i=0; i < Attributes->getAttributeCount(); i++) {
+			if (stringc(Attributes->getAttributeName(i)).find("Point") != -1) { /// It is a point
+				points.push_back(Attributes->getAttributeAsVector3d(i));
+			}
+		}
+
+		IVideoDriver *driver = EditorCore->getDevice()->getVideoDriver();
+		rect<s32> viewPort = driver->getViewPort();
+		
+		/// render points
+		driver->setViewPort(EditorCore->getRenderingEngine()->getHandler()->getViewPort());
+		for (u32 i=0; i < points.size() - 1; i++) {
+			driver->draw3DLine(points[i], points[i + 1], SColor(255, 255, 255, 255));
+		}
+		driver->setViewPort(viewPort);
+
+		points.clear();
+	}
 }
 
 void CCP3DSceneNodeAnimators::setAnimator(irr::scene::ISceneNodeAnimator *animator) {

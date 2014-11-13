@@ -47,6 +47,9 @@ void CCP3DEditionToolSceneNode::createInterface() {
 	SceneNodeID = EditionTool->addField(GeneralTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("ID :"));
 	SceneNodeVisible = EditionTool->addField(GeneralTab, EGUIET_CHECK_BOX, DefaultEditionToolCallback("Visible"));
 
+	EditionTool->addSeparator(GeneralTab);
+	SceneNodeMaterialGeneral = EditionTool->addField(GeneralTab, EGUIET_COMBO_BOX, DefaultEditionToolCallback("General Material Type"));
+
 	EditionTool->setNewZone(GeneralTab, "Transforms");
 	SceneNodePositionX = EditionTool->addField(GeneralTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Position X :"));
 	SceneNodePositionY = EditionTool->addField(GeneralTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Position Y :"));
@@ -96,6 +99,7 @@ void CCP3DEditionToolSceneNode::createInterface() {
 			u32 i = 0;
 			while (sBuiltInMaterialTypeNames[i] != 0) {
 				MaterialMatType.ComboBox->addItem(stringw(sBuiltInMaterialTypeNames[i]).make_upper().c_str());
+				SceneNodeMaterialGeneral.ComboBox->addItem(stringw(sBuiltInMaterialTypeNames[i]).make_upper().c_str());
 				i++;
 			}
 		}
@@ -180,6 +184,7 @@ void CCP3DEditionToolSceneNode::configure() {
 	if (SceneNode->getType() != ESNT_LIGHT) {
 		/// General
 		MaterialName.TextBox->setText(stringw(SceneNode->getMaterial(CurrentMaterialID).Name).c_str());
+		MaterialSelector.ComboBox->clear();
 		for (u32 i=0; i < SceneNode->getMaterialCount(); i++) {
 			MaterialSelector.ComboBox->addItem(stringw(SceneNode->getMaterial(i).Name).c_str());
 		}
@@ -427,6 +432,11 @@ bool CCP3DEditionToolSceneNode::OnEvent(const SEvent &event) {
 				if (CurrentMaterialID < 0)
 					CurrentMaterialID = 0;
 				configure();
+				return true;
+			}
+			else if (event.GUIEvent.Caller == SceneNodeMaterialGeneral.ComboBox) {
+				SceneNode->setMaterialType(EditorCore->getRenderingEngine()->Materials[(E_MATERIAL_TYPE)SceneNodeMaterialGeneral.ComboBox->getSelected()]);
+				return true;
 			}
 		}
 
@@ -437,6 +447,7 @@ bool CCP3DEditionToolSceneNode::OnEvent(const SEvent &event) {
 				for (u32 i=0; i < SceneNode->getMaterialCount(); i++)
 					MaterialSelector.ComboBox->addItem(stringw(SceneNode->getMaterial(i).Name).c_str());
 				MaterialSelector.ComboBox->setSelected(selected);
+				return true;
 			}
 		}
 

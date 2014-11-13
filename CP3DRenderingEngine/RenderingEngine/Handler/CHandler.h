@@ -6,6 +6,7 @@
 #include "CScreenQuad.h"
 
 #include "../CustomPasses/CCustomDepthPass.h"
+#include "../CustomPasses/CCustomGeneralPass.h"
 
 #include <ICP3DHandler.h>
 
@@ -110,7 +111,8 @@ public:
 	irr::scene::ISceneManager* getActiveSceneManager() { return smgr; }
 	irr::f32 getTime() { return device->getTimer()->getTime() / 100.0f; }
 	void setClearColour(irr::video::SColor ClearCol) { ClearColour = ClearCol; }
-	void setViewPort(irr::core::rect<irr::s32> viewPort) { ViewPort = viewPort; }
+	void setViewPort(const irr::core::rect<irr::s32> viewPort) { ViewPort = viewPort; }
+	irr::core::rect<irr::s32> getViewPort() { return ViewPort; }
 
 	/// Custom Passes
 	void addCustomPass(ICP3DCustomPass *pass) {
@@ -129,6 +131,10 @@ public:
 
 	ICP3DCustomPass *getCustomPass(const irr::u32 index) {
 		return CustomPasses[index];
+	}
+
+	ICP3DCustomPass *getGeneralPassManager() {
+		return CustomGeneralPass;
 	}
 
 private:
@@ -166,6 +172,9 @@ private:
 	irr::video::IVideoDriver* driver;
 	irr::scene::ISceneManager* smgr;
 	irr::core::dimension2du mapRes;
+
+	/// Default custom passes
+	CCustomGeneralPass *CustomGeneralPass;
 	
 	/// Depth Pass
 	CCustomDepthPass *CustomDepthPassMgr;

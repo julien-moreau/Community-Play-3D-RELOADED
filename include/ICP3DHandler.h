@@ -50,11 +50,11 @@ namespace rendering {
 	public:
 		//! on pre-render callback
 		//! \param effect: the handler rendering the post-process
-		virtual void OnPreRender(ICP3DHandler* handler) = 0;
+		virtual void OnPreRender(ICP3DHandler* handler) { }
 
 		//! on post-render callback
 		//! \param effect: the handler rendering the post-process
-		virtual void OnPostRender(ICP3DHandler* handler) = 0;
+		virtual void OnPostRender(ICP3DHandler* handler) { }
 	};
 
 	class ICP3DHandler {
@@ -136,6 +136,17 @@ namespace rendering {
 		//! Allows you to add custom depth passes using multiple render targets
 		virtual ICP3DCustomDepthPass *getDepthPassManager() = 0;
 
+		//! Returns the general pass manager
+		//! It computes the normal pass, light scattering pass
+		/*
+		For light scattering pass :
+			if node is ESNT_BILLBOARD then the node is rendered normal
+			else the node is totally black
+		For the normal pass :
+			the normal texture is the second texture TextureLayer[1]
+		*/
+		virtual ICP3DCustomPass *getGeneralPassManager() = 0;
+
 		//! Generates a random texutre that can be used for SSAO post-prcess etc
 		//! \param dimensions: the texutre's dimensions
 		//! \param name: the name of the texture
@@ -147,7 +158,10 @@ namespace rendering {
 
 		//! Sets the view port where to render the scene
 		//! \param viewPort: the new view port
-		virtual void setViewPort(irr::core::rect<irr::s32> viewPort) = 0;
+		virtual void setViewPort(const irr::core::rect<irr::s32> viewPort) = 0;
+
+		//! Returns the current viewport of the handler
+		virtual irr::core::rect<irr::s32> getViewPort() = 0;
 
 		//! Returns the shadow mode for the given node
 		//! \param node: the node to test

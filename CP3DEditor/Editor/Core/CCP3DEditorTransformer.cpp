@@ -81,25 +81,36 @@ CCP3DEditorTransformer::CCP3DEditorTransformer(CCP3DEditorCore *editorCore) : Ed
 	MassX = Smgr->addMeshSceneNode(massMesh);
 	configureNode(MassX, arrowMesh);
 	MassX->setRotation(vector3df(0.f, 0.f, -90.f));
+	massMesh->drop();
 
 	massMesh = EditorCore->getEngine()->getGeometryCreator()->createMassMesh(0.4f, 1.f, SColor(255, 0, 255, 0));
 	MassY = Smgr->addMeshSceneNode(massMesh);
 	configureNode(MassY, arrowMesh);
+	massMesh->drop();
 	
 	massMesh = EditorCore->getEngine()->getGeometryCreator()->createMassMesh(0.4f, 1.f, SColor(255, 0, 0, 255));
 	MassZ = Smgr->addMeshSceneNode(massMesh);
 	configureNode(MassZ, arrowMesh);
 	MassZ->setRotation(vector3df(90.f, 0.f, 0.f));
+	massMesh->drop();
 
 	/// Finish
-	Camera = Smgr->addCameraSceneNode();
+	Camera = Smgr->addCameraSceneNode(0);
 	editorCore->getEngine()->addSceneManager(Smgr);
 
 	setTransformerType(ETT_NONE);
 }
 
 CCP3DEditorTransformer::~CCP3DEditorTransformer() {
-
+	ArrowX->remove();
+	ArrowY->remove();
+	ArrowZ->remove();
+	RingX->remove();
+	RingY->remove();
+	RingZ->remove();
+	MassX->remove();
+	MassY->remove();
+	MassZ->remove();
 }
 
 void CCP3DEditorTransformer::setViewPort(const irr::core::rect<s32> &viewPort) {
@@ -163,6 +174,11 @@ void CCP3DEditorTransformer::OnPreUpdate() {
 	/// Calculate mouse position in viewPort
 	IVideoDriver *driver = EditorCore->getDevice()->getVideoDriver();
 
+	if (ViewPort.getWidth() == 0 || ViewPort.getHeight() == 0) {
+		ViewPort.UpperLeftCorner = vector2di(0, 0);
+		ViewPort.LowerRightCorner = vector2di(1, 1);
+	}
+
 	vector2di cpos = CursorControl->getPosition() - ViewPort.UpperLeftCorner;
 	MousePositionInViewPort.X = (cpos.X * (driver->getScreenSize().Width  / 2)) / (ViewPort.getWidth() / 2);
 	MousePositionInViewPort.Y = (cpos.Y * (driver->getScreenSize().Height / 2)) / (ViewPort.getHeight() / 2);
@@ -185,8 +201,11 @@ void CCP3DEditorTransformer::OnPreUpdate() {
 	MassZ->setScale(scale);
 
 	/// Update camera
-	Camera->setPosition(OriginalSmgr->getActiveCamera()->getPosition());
-	Camera->setTarget(OriginalSmgr->getActiveCamera()->getTarget());
+	ICameraSceneNode *originalCamera = OriginalSmgr->getActiveCamera();
+	originalCamera->updateAbsolutePosition();
+	Camera->setPosition(originalCamera->getAbsolutePosition());
+	Camera->setTarget(originalCamera->getTarget());
+	Camera->setUpVector(originalCamera->getUpVector());
 
 	/// Update average transformation if multiple selected nodes
 	AveragePosition = vector3df(0.f);
@@ -206,8 +225,7 @@ void CCP3DEditorTransformer::OnPreUpdate() {
 			}
 		}
 
-		if (NodesToTransform.size())
-			AveragePosition /= (f32)NodesToTransform.size();
+		AveragePosition /= (f32)NodesToTransform.size();
 
 		if (TransformerType == ETT_POSITION)
 			AverageTransformation = AveragePosition;
@@ -227,9 +245,8 @@ void CCP3DEditorTransformer::OnPreUpdate() {
 	MassY->setPosition(AveragePosition);
 	MassZ->setPosition(AveragePosition);
 
-	if (visible) {
+	if (visible)
 		setTransformerType(TransformerType);
-	}
 }
 
 void CCP3DEditorTransformer::OnPostUpdate() {

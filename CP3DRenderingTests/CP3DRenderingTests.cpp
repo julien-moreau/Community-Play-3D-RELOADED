@@ -70,6 +70,44 @@ private:
 	ITexture *Tex;
 };
 
+/// Custom General Pass
+enum E_CUSTOM_GENERAL_PASS_TYPE {
+	ECGPT_NORMAL = 0,
+	ECGPT_LIGHT_SCATTERING
+};
+
+class CCustomGeneralPostProcess : public cp3d::rendering::IPostProcessingRenderCallback {
+public:
+
+	CCustomGeneralPostProcess(cp3d::rendering::ICP3DHandler *handler, IVideoDriver *driver, E_CUSTOM_GENERAL_PASS_TYPE type) {
+		stringc shader =
+		"##ifdef OPENGL_DRIVER\n"
+		"uniform sampler2D UserMapSampler;\n"
+		"void main() {\n"
+		"	gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0) - texture2D(UserMapSampler, gl_TexCoord[0].xy);\n"
+		"}\n"
+		"##else\n"
+		"sampler2D UserMapSampler : register(s0);\n"
+		"float4 pixelMain(float2 texCoord : TEXCOORD0) : COLOR0 {\n"
+		"	return float4(1.0, 1.0, 1.0, 1.0) - tex2D(UserMapSampler, texCoord);\n"
+		"}\n"
+		"##endif\n";
+		MatType = handler->addPostProcessingEffectFromString(shader, this);
+		
+		if (type == ECGPT_NORMAL)
+			Tex = driver->getTexture("CP3DNormalPass");
+
+	}
+
+	void OnPreRender(cp3d::rendering::ICP3DHandler *handler) {
+		handler->setPostProcessingTextureAtIndex(0, Tex);
+	}
+
+private:
+	s32 MatType;
+	ITexture *Tex;
+};
+
 /// Custom post process from file
 class CCustomPostProcessFile : public cp3d::rendering::IPostProcessingRenderCallback {
 public:
@@ -116,6 +154,8 @@ int main(int argc, char* argv[]) {
 
 	/// Create a device
 	IrrlichtDevice *device = createDevice(EDT_DIRECT3D9, dimension2du(1280, 800), 32, false, false, false, 0);
+	device->getLogger()->setLogLevel(ELL_NONE);
+
 	device->setEventReceiver(new CEventReceiver(device));
 	IVideoDriver *driver = device->getVideoDriver();
 	ISceneManager *smgr = device->getSceneManager();
@@ -132,19 +172,19 @@ int main(int argc, char* argv[]) {
 	/// Create a test scene
 	IAnimatedMesh *planeMesh = smgr->addHillPlaneMesh("plane_mesh", dimension2d<f32>(100.f, 100.f), dimension2d<u32>(50, 50),
 													  0, 0.f, dimension2d<f32>(0.f, 0.f), dimension2d<f32>(50.f, 50.f));
-	IAnimatedMeshSceneNode *planeNode = smgr->addAnimatedMeshSceneNode(planeMesh);
+	IMeshSceneNode *planeNode = smgr->addMeshSceneNode(planeMesh);
+	planeNode->setMesh(smgr->getMeshManipulator()->createMeshWithTangents(planeNode->getMesh(), true, true, false, true));
 	planeNode->setMaterialTexture(0, driver->getTexture("Textures/diffuse.tga"));
 	planeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
 	planeNode->setMaterialTexture(2, driver->getTexture("Textures/specular.tga"));
 	planeNode->setMaterialFlag(EMF_LIGHTING, false);
-	smgr->getMeshManipulator()->recalculateNormals(planeMesh, true, true);
 	handler->addShadowToNode(planeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_RECEIVE);
 
 	IMeshSceneNode *cubeNode = smgr->addCubeSceneNode(50.f, 0, -1, vector3df(0.f, 25.f, 0.f), vector3df(0.f, 45.f, 0.f));
+	cubeNode->setMesh(smgr->getMeshManipulator()->createMeshWithTangents(cubeNode->getMesh(), true, true, false, true));
 	cubeNode->setMaterialTexture(0, driver->getTexture("Textures/specular.tga"));
 	cubeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
-	cubeNode->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
-	smgr->getMeshManipulator()->recalculateNormals(cubeNode->getMesh(), true, true);
+	cubeNode->setMaterialFlag(EMF_NORMALIZE_NORMALS, false);
 	cubeNode->setMaterialFlag(EMF_LIGHTING, false);
 	handler->addShadowToNode(cubeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_BOTH);
 
@@ -161,6 +201,9 @@ int main(int argc, char* argv[]) {
 	//CCustomPostProcessFile *customPostProcessFile = new CCustomPostProcessFile(handler, driver);
 	//CCustomPostProcess *customPostProcess = new CCustomPostProcess(handler, driver);
 
+	//CCustomGeneralPostProcess *customPostProcessGeneral = new CCustomGeneralPostProcess(handler, driver, ECGPT_NORMAL);
+	//handler->getGeneralPassManager()->addNodeToPass(sceneNode);
+
 	/// Create the normal mapping material
 	cpre->createNormalMappingMaterial();
 	cubeNode->setMaterialType(cpre->Materials[EMT_NORMAL_MAP_SOLID]);
@@ -168,13 +211,18 @@ int main(int argc, char* argv[]) {
 
 	cp3d::rendering::ICP3DLightSceneNode *light = cpre->createLightSceneNode(true, true);
 	light->setPosition(vector3df(0.f, 100.f, 100.f));
-	light->getLightData().DiffuseColor = SColorf(1.f, 0.f, 0.f, 1.f);
+	light->setLightColor(SColorf(1.f, 1.f, 1.f, 1.f));
+	light->getLightData().SpecularColor = SColorf(1.f, 0.5f, 0.f, 1.f);
+	light->getShadowLight()->setUseRoundSpotLight(false);
 
 	/// Finish
 	handler->setAmbientColor(SColor(255, 32, 32, 32));
 
 	/// Update the application
 	while (device->run()) {
+		if (!device->isWindowActive())
+			continue;
+
 		driver->beginScene(true, true, SColor(0x0));
 		handler->update();
 		driver->endScene();

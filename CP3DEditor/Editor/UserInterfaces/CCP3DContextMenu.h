@@ -5,6 +5,11 @@
 
 namespace cp3d {
 
+enum ESCENE_CONTEXT_MENU {
+	ESCM_ADD_NEW_TERRAIN = 0,
+	ESCM_ADD_STATIC_MESH
+};
+
 class CCP3DEditorCore;
 
 /*
@@ -53,6 +58,8 @@ private:
 	/// Scene
 	irr::gui::IGUIContextMenu *SceneContextMenuLight;
 	/// --------------------------------------------------
+
+	irr::gui::IGUIFileOpenDialog *AddStaticMeshOpenDialog;
 
 };
 

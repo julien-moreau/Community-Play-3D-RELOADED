@@ -7,6 +7,7 @@
 
 #include "EditionTools/CCP3DEditionToolSceneNode.h"
 #include "EditionTools/CCP3DEditionToolLightSceneNode.h"
+#include "EditionTools/CCP3DEditionToolSceneManager.h"
 
 #include "CCP3DEditionTool.h"
 
@@ -190,6 +191,7 @@ void CCP3DEditionTool::OnResize() {
 void CCP3DEditionTool::createDefaultControllers() {
 	CCP3DEditionToolSceneNode *EditionToolSceneNode = new CCP3DEditionToolSceneNode(EditorCore);
 	CCP3DEditionToolLightSceneNode *EditionToolLightSceneNode = new CCP3DEditionToolLightSceneNode(EditorCore);
+	CCP3DEditionToolSceneManager *EditionToolSceneManager = new CCP3DEditionToolSceneManager(EditorCore);
 
 	addController(ESNT_MESH, EditionToolSceneNode);
 	addController(ESNT_ANIMATED_MESH, EditionToolSceneNode);
@@ -207,6 +209,8 @@ void CCP3DEditionTool::createDefaultControllers() {
 	addController(ESNT_WATER_SURFACE, EditionToolSceneNode);
 
 	addController(ESNT_LIGHT, EditionToolLightSceneNode);
+
+	addController(ESNT_SCENE_MANAGER, EditionToolSceneManager);
 }
 
 bool CCP3DEditionTool::addController(ESCENE_NODE_TYPE type, ICP3DEditionToolController *controller) {
@@ -281,7 +285,7 @@ bool CCP3DEditionTool::OnEvent(const SEvent &event) {
 	if (event.EventType == EET_USER_EVENT) {
 
 		/// update all edition tools with slected scene node
-		if (event.UserEvent.UserData1 == EIE_NODE_SELECTED) {
+		if (event.UserEvent.UserData1 == EIE_NODE_SELECTED ||event.UserEvent.UserData1 == EIE_SCENE_MANAGER_SELECTED) {
 			
 			ISceneNode *node = (ISceneNode *)event.UserEvent.UserData2;
 			node = dynamic_cast<ISceneNode *>(node);
@@ -289,7 +293,12 @@ bool CCP3DEditionTool::OnEvent(const SEvent &event) {
 			if (!node)
 				clearTabs();
 			else {
-				ESCENE_NODE_TYPE type = node->getType();
+				ESCENE_NODE_TYPE type;
+				if (event.UserEvent.UserData1 == EIE_NODE_SELECTED)
+					type = node->getType();
+				else
+					type = ESNT_SCENE_MANAGER;
+
 				core::map<ESCENE_NODE_TYPE, array<ICP3DEditionToolController *>>::Node *it = EditionTools.find(type);
 
 				/// Get the current value of active tab (scrollbar and name)

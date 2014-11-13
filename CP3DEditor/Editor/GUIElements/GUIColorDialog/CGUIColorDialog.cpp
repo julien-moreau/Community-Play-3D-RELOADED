@@ -107,6 +107,7 @@ void CGUIColorDialog::draw() {
 
 void CGUIColorDialog::setColor(const irr::video::SColorf &color) {
 	Color = color;
+	Color.a = 1.f;
 }
 
 const irr::video::SColorf &CGUIColorDialog::getColor() const {

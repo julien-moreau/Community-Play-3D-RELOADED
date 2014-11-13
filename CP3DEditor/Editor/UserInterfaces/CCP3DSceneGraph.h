@@ -57,6 +57,7 @@ private:
 	irr::s32 WindowWidth;
 
 	/// Methods
+	irr::gui::IGUITreeViewNode *getTreeNodeFromParentSceneNode(irr::gui::IGUITreeViewNode *startNode, irr::scene::ISceneNode *node);
 	irr::s32 getIconFromType(irr::scene::ESCENE_NODE_TYPE type);
 	void fillGraphRecursively(irr::scene::ISceneNode *start, irr::gui::IGUITreeViewNode *treeNode);
 	irr::u32 getLightSceneNodeIndex(irr::scene::ILightSceneNode *node);

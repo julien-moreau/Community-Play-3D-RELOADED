@@ -13,6 +13,10 @@ typedef std::function<void(irr::scene::ISceneNode *node)> ICP3DSceneNodeCreatorC
 class ICP3DSceneNodeCreator {
 public:
 
+	//!----------------------------------------------------------------
+	//! SCENE NODES
+	//!----------------------------------------------------------------
+
 	//! Creates a new cloud scene node
 	//! \param translation: cloud's translation
 	//! \param texture: the video texture to apply
@@ -29,6 +33,15 @@ public:
 	//! Configures scene node to default values
 	//! \param node: the node to configure
 	virtual void configureSceneNode(irr::scene::ISceneNode *node) = 0;
+
+	//!----------------------------------------------------------------
+	//! MESHES
+	//!----------------------------------------------------------------
+
+	//! Loads and returns a configured and optimized mesh
+	//! \param path: the mesh path on file system
+	//! \param withTangents: true if the configurator recalculates the mesh with tangents (irr::video::S3DVertexTangent)
+	virtual irr::scene::IMesh *getStaticMesh(irr::core::stringc path, bool withTangents = false) = 0;
 
 };
 

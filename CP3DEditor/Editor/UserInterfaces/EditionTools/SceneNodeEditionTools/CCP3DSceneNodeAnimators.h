@@ -2,6 +2,7 @@
 #define __H_C_CP3D_EDITION_TOOL_NODE_ANIMATORS_INCLUDED__
 
 #include <irrlicht.h>
+#include <ICP3DCustomUpdate.h>
 
 namespace cp3d {
 
@@ -14,7 +15,7 @@ class CCP3DEditorCore;
 Class that will use the custom view to edit animators (from the 
 CCP3DEditionToolSceneNode class).
 */
-class CCP3DSceneNodeAnimators : public irr::IEventReceiver {
+class CCP3DSceneNodeAnimators : public irr::IEventReceiver, public engine::ICP3DUpdate {
 public:
 
 	/// Constructor & Destructor
@@ -27,6 +28,9 @@ public:
 	/// CCP3DSceneNodeAnimators
 	void setAnimator(irr::scene::ISceneNodeAnimator *animator);
 	irr::scene::ISceneNodeAnimator *getAnimator() { return Animator; }
+
+	/// ICP3DUpdate
+	void OnPostUpdate();
 
 private:
 	/// Methods
