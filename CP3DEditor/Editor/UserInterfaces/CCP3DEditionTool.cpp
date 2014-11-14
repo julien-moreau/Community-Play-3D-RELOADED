@@ -284,8 +284,26 @@ bool CCP3DEditionTool::OnEvent(const SEvent &event) {
 
 	if (event.EventType == EET_USER_EVENT) {
 
+		/// Node changed, then configure all controllers
+		if (event.UserEvent.UserData1 == EIE_NODE_CHANGED) {
+			ISceneNode *node = (ISceneNode *)event.UserEvent.UserData2;
+			node = dynamic_cast<ISceneNode *>(node);
+
+			if (!node || node->getType() != LastSceneNodeType)
+				return false;
+
+			core::map<ESCENE_NODE_TYPE, array<ICP3DEditionToolController *>>::Node *it = EditionTools.find(node->getType());
+			for (u32 i=0; i < it->getValue().size(); i++) {
+				it->getValue()[i]->configure();
+			}
+
+			return false;
+		}
+
 		/// update all edition tools with slected scene node
-		if (event.UserEvent.UserData1 == EIE_NODE_SELECTED ||event.UserEvent.UserData1 == EIE_SCENE_MANAGER_SELECTED) {
+		else if (event.UserEvent.UserData1 == EIE_NODE_SELECTED
+			|| event.UserEvent.UserData1 == EIE_SCENE_MANAGER_SELECTED)
+		{
 			
 			ISceneNode *node = (ISceneNode *)event.UserEvent.UserData2;
 			node = dynamic_cast<ISceneNode *>(node);

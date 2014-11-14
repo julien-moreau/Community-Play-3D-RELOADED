@@ -38,8 +38,9 @@ private:
 
 	/// Irrlicht
 	irr::scene::ISceneManager *Smgr, *OriginalSmgr;
-	irr::scene::ICameraSceneNode *Camera;
+	irr::gui::IGUIEnvironment *Gui;
 
+	irr::scene::ICameraSceneNode *Camera;
 	irr::scene::IAnimatedMeshSceneNode *ArrowX, *ArrowY, *ArrowZ;
 	irr::scene::ISceneNode *RingX, *RingY, *RingZ;
 	irr::scene::ISceneNode *MassX, *MassY, *MassZ;
@@ -56,7 +57,7 @@ private:
 	irr::core::vector3df MousePositionInPlane, MousePosition;
 	irr::core::vector3df AverageTransformation, AveragePosition;
 	irr::core::vector2di MousePositionInViewPort;
-	bool CtrlActive;
+	bool CtrlActive, XYPositionActive;
 
 	E_TRANSFORMER_TYPE TransformerType;
 

@@ -25,13 +25,16 @@ using namespace gui;
 
 namespace cp3d {
 
-CCP3DEditorTransformer::CCP3DEditorTransformer(CCP3DEditorCore *editorCore) : EditorCore(editorCore), SelectedTransformer(0), CtrlActive(false)
+CCP3DEditorTransformer::CCP3DEditorTransformer(CCP3DEditorCore *editorCore) : EditorCore(editorCore), SelectedTransformer(0),
+	CtrlActive(false), XYPositionActive(false)
 {
 	/// Configure
 	editorCore->getEngine()->getEventReceiver()->addEventReceiver(this);
 	editorCore->getEngine()->getCustomUpdater()->addCustomUpdate(this);
 	OriginalSmgr = editorCore->getDevice()->getSceneManager();
 	Smgr = OriginalSmgr->createNewSceneManager(false);
+	Gui = editorCore->getDevice()->getGUIEnvironment();
+
 	CollisionMgr = Smgr->getSceneCollisionManager();
 	CursorControl = editorCore->getDevice()->getCursorControl();
 
@@ -146,6 +149,9 @@ void CCP3DEditorTransformer::setTransformerType(E_TRANSFORMER_TYPE type) {
 		MassZ->setVisible(true);
 	}
 	
+	if (type != TransformerType)
+		XYPositionActive = false;
+
 	TransformerType = type;
 }
 
@@ -265,6 +271,18 @@ bool CCP3DEditorTransformer::findAndSetMousePositionInPlane() {
 bool CCP3DEditorTransformer::OnEvent(const SEvent &event) {
 	if (event.EventType == EET_KEY_INPUT_EVENT) {
 		CtrlActive = event.KeyInput.Control;
+
+		if (event.KeyInput.Key == KEY_SPACE && !event.KeyInput.PressedDown) {
+			if (TransformerType == ETT_POSITION) {
+				XYPositionActive = !XYPositionActive;
+				Plane.setPlane(AveragePosition, core::vector3df(0.f, -1.f, 0.f));
+				if (findAndSetMousePositionInPlane()) {
+					for (u32 i=0; i < NodesToTransform.size(); i++)
+						NodesToTransform[i]->setPosition(vector3df(MousePositionInPlane.X, NodesToTransform[i]->getPosition().Y, MousePositionInPlane.Z));
+				}
+			}
+		}
+
 		return false;
 	}
 
@@ -287,14 +305,22 @@ bool CCP3DEditorTransformer::OnEvent(const SEvent &event) {
 	}
 
 	else if (event.EventType == EET_MOUSE_INPUT_EVENT) {
-		if (event.MouseInput.Event == EMIE_MOUSE_WHEEL) {
+		if (event.MouseInput.Event == EMIE_MOUSE_WHEEL && !Gui->getFocus()) {
 			f32 wheel = event.MouseInput.Wheel;
 
 			if (CtrlActive)
 				wheel /= 10.f;
 
 			for (u32 i=0; i < NodesToTransform.size(); i++) {
-				if (TransformerType == ETT_ROTATION)
+				if (TransformerType == ETT_POSITION) {
+					NodesToTransform[i]->setPosition(NodesToTransform[i]->getPosition() + vector3df(0.f, wheel, 0.f));
+					if (XYPositionActive) {
+						AveragePosition.Y += wheel;
+						Plane.setPlane(AveragePosition, Plane.Normal);
+					}
+				}
+
+				else if (TransformerType == ETT_ROTATION)
 					NodesToTransform[i]->setRotation(NodesToTransform[i]->getRotation() + wheel);
 
 				else if (TransformerType == ETT_SCALE)
@@ -304,7 +330,12 @@ bool CCP3DEditorTransformer::OnEvent(const SEvent &event) {
 			return false;
 		}
 
-		else if (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN) {
+		else if (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN && !Gui->getFocus()) {
+
+			if (XYPositionActive) {
+				XYPositionActive = false;
+				return false;
+			}
 
 			core::line3d<f32> ray = CollisionMgr->getRayFromScreenCoordinates(MousePositionInViewPort, Camera);
 			vector3df intersection;
@@ -355,16 +386,29 @@ bool CCP3DEditorTransformer::OnEvent(const SEvent &event) {
 
 		else if (event.MouseInput.Event == EMIE_MOUSE_MOVED) {
 
-			if (SelectedTransformer && findAndSetMousePositionInPlane()) {
+			if ((SelectedTransformer || XYPositionActive) && findAndSetMousePositionInPlane()) {
 				vector3df newTransformation = AverageTransformation;
 
-				if (SelectedTransformer == ArrowX || SelectedTransformer == RingX || SelectedTransformer == MassX)
-					AverageTransformation.X = MousePositionInPlane.X - MousePosition.X;
-				else if (SelectedTransformer == ArrowY || SelectedTransformer == RingY || SelectedTransformer == MassY)
-					AverageTransformation.Y = MousePositionInPlane.Y - MousePosition.Y;
-				else if (SelectedTransformer == ArrowZ || SelectedTransformer == RingZ || SelectedTransformer == MassZ)
-					AverageTransformation.Z = MousePositionInPlane.Z - MousePosition.Z;
+				if (!XYPositionActive) {
+					if (SelectedTransformer == ArrowX || SelectedTransformer == RingX || SelectedTransformer == MassX)
+						AverageTransformation.X = MousePositionInPlane.X - MousePosition.X;
+					else if (SelectedTransformer == ArrowY || SelectedTransformer == RingY || SelectedTransformer == MassY)
+						AverageTransformation.Y = MousePositionInPlane.Y - MousePosition.Y;
+					else if (SelectedTransformer == ArrowZ || SelectedTransformer == RingZ || SelectedTransformer == MassZ)
+						AverageTransformation.Z = MousePositionInPlane.Z - MousePosition.Z;
+				}
+				else if (XYPositionActive) {
+					AverageTransformation.X = MousePositionInPlane.X;
+					AverageTransformation.Z = MousePositionInPlane.Z;
+				}
 
+				/// Create node changed event
+				engine::ICP3DEventReceiver *eventReceiver = EditorCore->getEngine()->getEventReceiver();
+				SEvent ev;
+				ev.EventType = EET_USER_EVENT;
+				ev.UserEvent.UserData1 = EIE_NODE_CHANGED;
+
+				/// Update transformations
 				for (u32 i=0; i < NodesToTransform.size(); i++) {
 					ISceneNode *n = NodesToTransform[i];
 					
@@ -374,6 +418,10 @@ bool CCP3DEditorTransformer::OnEvent(const SEvent &event) {
 						n->setRotation(AverageTransformation);
 					else if (TransformerType == ETT_SCALE)
 						n->setScale(AverageTransformation);
+
+					/// Send event
+					ev.UserEvent.UserData2 = (s32)NodesToTransform[i];
+					eventReceiver->OnEvent(ev);
 				}
 
 			}
