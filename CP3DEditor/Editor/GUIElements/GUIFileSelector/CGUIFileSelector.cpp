@@ -320,7 +320,6 @@ bool CGUIFileSelector::OnEvent(const SEvent& event)
 
 		case EGET_LISTBOX_CHANGED:
 			{
-				s32 selected = FileBox->getSelected();
 				if (event.GUIEvent.Caller == FileBox)
 				{
 					s32 selected = FileBox->getSelected();

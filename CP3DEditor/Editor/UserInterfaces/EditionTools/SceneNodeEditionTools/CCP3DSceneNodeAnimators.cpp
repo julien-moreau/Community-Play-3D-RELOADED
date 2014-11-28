@@ -181,6 +181,7 @@ bool CCP3DSceneNodeAnimators::OnEvent(const SEvent &event) {
 		
 		IGUIElement *caller = event.GUIEvent.Caller;
 		EGUI_EVENT_TYPE type = event.GUIEvent.EventType;
+
 		if (caller && caller->getParent() == Panel && Animator) {
 
 			if (caller == AnimatorName) {
@@ -245,11 +246,11 @@ bool CCP3DSceneNodeAnimators::OnEvent(const SEvent &event) {
 				return true;
 			}
 			else if (type == EGET_BUTTON_CLICKED) {
-				ESCENE_NODE_ANIMATOR_TYPE type = (ESCENE_NODE_ANIMATOR_TYPE)caller->getID();
+				ESCENE_NODE_ANIMATOR_TYPE nodeType = (ESCENE_NODE_ANIMATOR_TYPE)caller->getID();
 				s32 elementCount = 1;
 				stringc name = "Point"; /// Default is Follow Spline
 
-				if (type == ESNAT_TEXTURE)
+				if (nodeType == ESNAT_TEXTURE)
 					name = "Texture";
 
 				for (u32 i=0; i < Attributes->getAttributeCount(); i++) {
@@ -260,11 +261,11 @@ bool CCP3DSceneNodeAnimators::OnEvent(const SEvent &event) {
 
 				name += elementCount;
 
-				if (type == ESNAT_FOLLOW_SPLINE) {
+				if (nodeType == ESNAT_FOLLOW_SPLINE) {
 					vector3df v(0.f);
 					Attributes->addVector3d(name.c_str(), v);
 				}
-				else if (type == ESNAT_TEXTURE) {
+				else if (nodeType == ESNAT_TEXTURE) {
 					ITexture *t = 0;
 					Attributes->addTexture(name.c_str(), t);
 				}
