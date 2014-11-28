@@ -406,7 +406,7 @@ bool CCP3DEditorTransformer::OnEvent(const SEvent &event) {
 				engine::ICP3DEventReceiver *eventReceiver = EditorCore->getEngine()->getEventReceiver();
 				SEvent ev;
 				ev.EventType = EET_USER_EVENT;
-				ev.UserEvent.UserData1 = EIE_NODE_CHANGED;
+				ev.UserEvent.UserData1 = EIE_NODE_EDITED;
 
 				/// Update transformations
 				for (u32 i=0; i < NodesToTransform.size(); i++) {

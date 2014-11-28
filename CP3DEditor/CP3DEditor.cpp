@@ -11,13 +11,22 @@
 namespace cp3d {
 
 	CP3DR_LIB_API ICP3DEditor *createEditor() {
+		/// Get desktop size
+		irr::IrrlichtDevice *device = irr::createDevice(irr::video::EDT_NULL);
+		
+		if (!device)
+			return 0;
 
+		irr::core::dimension2du desktopSize = device->getVideoModeList()->getDesktopResolution();
+		device->closeDevice();
+
+		/// Create device
 		irr::SIrrlichtCreationParameters params;
 		params.AntiAlias = true;
 		params.Bits = 32;
 		params.Fullscreen = false;
 		params.LoggingLevel = irr::ELL_INFORMATION;
-		params.WindowSize = irr::core::dimension2du(800, 600);
+		params.WindowSize = desktopSize;
 		params.WithAlphaChannel = false;
 		params.DriverType = irr::video::EDT_DIRECT3D9;
 
@@ -39,10 +48,11 @@ namespace cp3d {
 		params.Doublebuffer = false;
 		#endif
 
-		irr::IrrlichtDevice *device = irr::createDeviceEx(params);
+		device = irr::createDeviceEx(params);
 		if (!device)
 			exit(EXIT_FAILURE);
 
+		/// Return instance of editor core
 		return new CCP3DEditorCore(device);
 	}
 

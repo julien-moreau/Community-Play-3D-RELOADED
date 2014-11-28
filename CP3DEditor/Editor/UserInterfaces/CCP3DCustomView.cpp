@@ -33,7 +33,7 @@ CCP3DCustomView::CCP3DCustomView(CCP3DEditorCore *editorCore) : EditorCore(edito
 	SceneGraph = editorCore->getSceneGraph();
 
 	/// GUI
-	Window = Gui->addWindow(rect<s32>(0, Driver->getScreenSize().Height - 50, 0, Driver->getScreenSize().Height), false, L"", 0, -1);
+	Window = Gui->addWindow(rect<s32>(0, (Driver->getScreenSize().Height / 2) + 100, 0, Driver->getScreenSize().Height), false, L"", 0, -1);
 	Window->setDraggable(false);
 	Window->setDrawTitlebar(false);
 	Window->getCloseButton()->setVisible(false);

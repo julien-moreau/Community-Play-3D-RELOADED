@@ -9,9 +9,12 @@
 namespace cp3d {
 
 class CCP3DEditorCore;
+
 	namespace ui {
 		class CGUIPanel;
 	}
+
+typedef irr::core::map<irr::scene::ESCENE_NODE_TYPE, irr::core::array<ICP3DEditionToolController *>> EditionToolControllerNode;
 
 /*
 Class creating the main edition tool (left side of the window).

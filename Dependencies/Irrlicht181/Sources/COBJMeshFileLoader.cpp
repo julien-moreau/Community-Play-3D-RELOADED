@@ -295,6 +295,10 @@ IAnimatedMesh* COBJMeshFileLoader::createMesh(io::IReadFile* file)
 			}
 			else
 				mesh->addMeshBuffer( Materials[m]->Meshbuffer );
+
+			#ifdef _IRR_COMPILE_WITH_MATERIAL_NAME_
+			mesh->getMeshBuffer(mesh->getMeshBufferCount() - 1)->getMaterial().Name = Materials[m]->Name;
+			#endif
 		}
 	}
 

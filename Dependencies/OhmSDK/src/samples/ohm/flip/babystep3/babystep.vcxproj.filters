@@ -151,6 +151,9 @@
     <Filter Include="lib\zlib">
       <UniqueIdentifier>{7000d15f-0c48-4c98-90e3-9d1924c2a388}</UniqueIdentifier>
     </Filter>
+    <Filter Include="model">
+      <UniqueIdentifier>{9d0dc4f2-5bee-4636-86a8-f8c32a210e08}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\lib\ohm\archi\CpuId.h">
@@ -2701,6 +2704,9 @@
       <Filter>lib\zlib</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\CP3DCollaborativeEngine\CP3DCollaborativeEngine.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\CP3DCollaborativeEngine\model\CP3DCollaborativeEngineRoot.h">
+      <Filter>model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\lib\ohm\archi\CpuId_common.cpp">
@@ -4261,6 +4267,9 @@
       <Filter>lib\zlib</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\CP3DCollaborativeEngine\CP3DCollaborativeEngine.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\CP3DCollaborativeEngine\model\CP3DCollaborativeEngineRoot.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\..\..\lib\ohm\opa\ohm_opa.rc">

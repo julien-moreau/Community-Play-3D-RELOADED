@@ -51,7 +51,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\..\lib\zlib;..\..\..\..\lib\freetype\include;..\..\..\..\lib;$(SolutionDir)include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\lib\zlib;..\..\..\..\lib\freetype\include;..\..\..\..\lib;$(SolutionDir)include\;$(SolutionDir)Dependencies\Irrlicht181\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>FT2_BUILD_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -68,7 +68,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\..\..\lib\zlib;..\..\..\..\lib\freetype\include;..\..\..\..\lib;$(SolutionDir)include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\lib\zlib;..\..\..\..\lib\freetype\include;..\..\..\..\lib;$(SolutionDir)include\;$(SolutionDir)Dependencies\Irrlicht181\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>FT2_BUILD_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <OpenMPSupport>true</OpenMPSupport>
@@ -83,6 +83,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\..\CP3DCollaborativeEngine\CP3DCollaborativeEngine.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\CP3DCollaborativeEngine\model\CP3DCollaborativeEngineRoot.h" />
     <ClInclude Include="..\..\..\..\lib\ohm\archi\CpuId.h" />
     <ClInclude Include="..\..\..\..\lib\ohm\archi\CpuId.hpp" />
     <ClInclude Include="..\..\..\..\lib\ohm\archi\def.h" />
@@ -935,6 +936,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\..\..\CP3DCollaborativeEngine\CP3DCollaborativeEngine.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\CP3DCollaborativeEngine\model\CP3DCollaborativeEngineRoot.cpp" />
     <ClCompile Include="..\..\..\..\lib\ohm\archi\CpuId_common.cpp" />
     <ClCompile Include="..\..\..\..\lib\ohm\archi\win32\CpuId.cpp" />
     <ClCompile Include="..\..\..\..\lib\ohm\archi\x86\CpuIdx86.cpp" />

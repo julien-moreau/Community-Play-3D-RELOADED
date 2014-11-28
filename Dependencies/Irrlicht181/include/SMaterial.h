@@ -249,7 +249,10 @@ namespace video
 			PolygonOffsetFactor(0), PolygonOffsetDirection(EPO_FRONT),
 			Wireframe(false), PointCloud(false), GouraudShading(true),
 			Lighting(true), ZWriteEnable(true), BackfaceCulling(true), FrontfaceCulling(false),
-			FogEnable(false), NormalizeNormals(false), UseMipMaps(true), Name("New Material")
+			FogEnable(false), NormalizeNormals(false), UseMipMaps(true)
+			#ifdef _IRR_COMPILE_WITH_MATERIAL_NAME_
+			, Name("New Material")
+			#endif
 		{ }
 
 		//! Copy constructor
@@ -302,7 +305,9 @@ namespace video
 			PolygonOffsetFactor = other.PolygonOffsetFactor;
 			PolygonOffsetDirection = other.PolygonOffsetDirection;
 			UseMipMaps = other.UseMipMaps;
+			#ifdef _IRR_COMPILE_WITH_MATERIAL_NAME_
 			Name = other.Name;
+			#endif
 			return *this;
 		}
 
@@ -452,7 +457,9 @@ namespace video
 		bool UseMipMaps:1;
 
 		//! Handles the material's name
+		#ifdef _IRR_COMPILE_WITH_MATERIAL_NAME_
 		core::stringc Name;
+		#endif
 
 		//! Gets the texture transformation matrix for level i
 		/** \param i The desired level. Must not be larger than MATERIAL_MAX_TEXTURES.
@@ -669,8 +676,11 @@ namespace video
 				BlendOperation != b.BlendOperation ||
 				PolygonOffsetFactor != b.PolygonOffsetFactor ||
 				PolygonOffsetDirection != b.PolygonOffsetDirection ||
-				UseMipMaps != b.UseMipMaps ||
-				Name != b.Name;
+				UseMipMaps != b.UseMipMaps
+				#ifdef _IRR_COMPILE_WITH_MATERIAL_NAME_
+				|| Name != b.Name
+				#endif
+				;
 			for (u32 i=0; (i<MATERIAL_MAX_TEXTURES) && !different; ++i)
 			{
 				different |= (TextureLayer[i] != b.TextureLayer[i]);
