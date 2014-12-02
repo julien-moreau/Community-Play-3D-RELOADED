@@ -31,8 +31,8 @@ IMesh *CCP3DGeometryCreator::createRingMesh(f32 radius, f32 width, u32 sections,
     // position vertices
     for (u32 i=0; i < sections; ++i)
     {
-        const vector2df outer = vector2df(sin(segRadians*f32(i)), cos(segRadians*f32(i))) * radius;
-        const vector2df inner = vector2df(sin(segRadians*f32(i)), cos(segRadians*f32(i))) * (radius-width);
+        const vector2df outer = vector2df((f32)sin(segRadians*f32(i)), cos(segRadians*f32(i))) * radius;
+        const vector2df inner = vector2df((f32)sin(segRadians*f32(i)), cos(segRadians*f32(i))) * (radius-width);
 
         S3DVertex &v1 = mb->Vertices[i * 2 + 0];
         S3DVertex &v2 = mb->Vertices[i * 2 + 1];
