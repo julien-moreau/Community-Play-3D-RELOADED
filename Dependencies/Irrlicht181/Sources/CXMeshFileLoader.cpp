@@ -19,7 +19,7 @@
 #ifdef _DEBUG
 #define _XREADER_DEBUG
 #endif
-//#define BETTER_MESHBUFFER_SPLITTING_FOR_X
+#define BETTER_MESHBUFFER_SPLITTING_FOR_X
 
 namespace irr
 {
@@ -143,6 +143,10 @@ bool CXMeshFileLoader::load(io::IReadFile* file)
 					AnimatedMesh->getAllJoints()[mesh->AttachedJointID]->AttachedMeshes.push_back( AnimatedMesh->getMeshBuffers().size()-1 );
 				}
 			}
+
+			#ifdef _IRR_COMPILE_WITH_MATERIAL_NAME_
+			AnimatedMesh->getMeshBuffer(AnimatedMesh->getMeshBufferCount() - 1)->getMaterial().Name = mesh->Materials[i].Name;
+			#endif
 		}
 
 		if (!mesh->FaceMaterialIndices.size())

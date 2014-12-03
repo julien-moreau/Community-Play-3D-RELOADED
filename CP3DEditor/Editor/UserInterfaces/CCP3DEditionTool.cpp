@@ -217,7 +217,7 @@ bool CCP3DEditionTool::addController(ESCENE_NODE_TYPE type, ICP3DEditionToolCont
 	if (!EditionTools.find(type))
 		EditionTools.insert(type, 0);
 
-	core::map<ESCENE_NODE_TYPE, core::array<ICP3DEditionToolController *>>::Node *it = EditionTools.find(type);
+	EditionToolControllerNode::Node *it = EditionTools.find(type);
 	for (u32 i=0; i < it->getValue().size(); i++) {
 		if (it->getValue()[i] == controller)
 			return false;
@@ -284,14 +284,39 @@ bool CCP3DEditionTool::OnEvent(const SEvent &event) {
 
 	if (event.EventType == EET_USER_EVENT) {
 
+		/// Node changed, then configure all controllers
+		if (event.UserEvent.UserData1 == EIE_NODE_EDITED) {
+			ISceneNode *node = (ISceneNode *)event.UserEvent.UserData2;
+			node = dynamic_cast<ISceneNode *>(node);
+
+			if (!node || node->getType() != LastSceneNodeType)
+				return false;
+
+			EditionToolControllerNode::Node *it = EditionTools.find(node->getType());
+			for (u32 i=0; i < it->getValue().size(); i++) {
+				it->getValue()[i]->configure();
+			}
+
+			return false;
+		}
+
 		/// update all edition tools with slected scene node
-		if (event.UserEvent.UserData1 == EIE_NODE_SELECTED ||event.UserEvent.UserData1 == EIE_SCENE_MANAGER_SELECTED) {
+		else if (event.UserEvent.UserData1 == EIE_NODE_SELECTED
+			|| event.UserEvent.UserData1 == EIE_SCENE_MANAGER_SELECTED)
+		{
 			
 			ISceneNode *node = (ISceneNode *)event.UserEvent.UserData2;
 			node = dynamic_cast<ISceneNode *>(node);
 
-			if (!node)
+			if (!node) {
 				clearTabs();
+
+				EditionToolControllerNode::Node *it = EditionTools.find(LastSceneNodeType);
+				for (u32 i=0; i < it->getValue().size(); i++)
+					it->getValue()[i]->setSceneNode(0);
+
+				LastSceneNodeType = ESNT_UNKNOWN;
+			}
 			else {
 				ESCENE_NODE_TYPE type;
 				if (event.UserEvent.UserData1 == EIE_NODE_SELECTED)
@@ -299,7 +324,7 @@ bool CCP3DEditionTool::OnEvent(const SEvent &event) {
 				else
 					type = ESNT_SCENE_MANAGER;
 
-				core::map<ESCENE_NODE_TYPE, array<ICP3DEditionToolController *>>::Node *it = EditionTools.find(type);
+				EditionToolControllerNode::Node *it = EditionTools.find(type);
 
 				/// Get the current value of active tab (scrollbar and name)
 				IGUITab *lastActiveTab = TabCtrl->getTab(TabCtrl->getActiveTab());
@@ -363,7 +388,7 @@ bool CCP3DEditionTool::OnEvent(const SEvent &event) {
 				parent = parent->getParent();
 			}
 
-			core::map<ESCENE_NODE_TYPE, core::array<ICP3DEditionToolController *>>::Node *it = EditionTools.find(LastSceneNodeType);
+			EditionToolControllerNode::Node *it = EditionTools.find(LastSceneNodeType);
 
 			if (isChildOfTabCtrl && it && it->getValue().size() > 0) {
 				/// Update edition tools of LastSceneNodeType
@@ -379,6 +404,8 @@ bool CCP3DEditionTool::OnEvent(const SEvent &event) {
 					EditorCore->getEngine()->getEventReceiver()->OnEvent(ev);
 				}
 			}
+
+			return false;
 		}
 
 	}
@@ -392,8 +419,8 @@ bool CCP3DEditionTool::OnEvent(const SEvent &event) {
 			ui::CGUIPanel *panel = Panels[tabIndex];
 			IGUIElement *focus = Gui->getFocus();
 
-			if (focus == panel || focus == TabCtrl || focus == TabCtrl->getTab(tabIndex) ||
-				(focus && focus->getParent() == panel))
+			if (focus == panel || focus == TabCtrl || focus == TabCtrl->getTab(tabIndex)
+				|| (focus && focus->getParent() == panel) || focus == Window)
 			{
 				panel->getScrollBar()->setPos(panel->getScrollBar()->getPos() - s32(event.MouseInput.Wheel * 4.0));
 
@@ -402,6 +429,8 @@ bool CCP3DEditionTool::OnEvent(const SEvent &event) {
 				ev.GUIEvent.Caller = panel->getScrollBar();
 				ev.GUIEvent.EventType = EGET_SCROLL_BAR_CHANGED;
 				panel->OnEvent(ev);
+
+				return false;
 			}
 
 		}

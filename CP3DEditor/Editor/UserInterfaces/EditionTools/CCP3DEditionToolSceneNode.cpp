@@ -83,15 +83,6 @@ void CCP3DEditionToolSceneNode::createInterface() {
 		MaterialName = EditionTool->addField(MaterialTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Name :"));
 		MaterialSelector = EditionTool->addField(MaterialTab, EGUIET_COMBO_BOX, DefaultEditionToolCallback("Material :"));
 
-		/// Textures
-		EditionTool->setNewZone(MaterialTab, "Textures");
-		for (u32 i=0; i < irr::video::MATERIAL_MAX_TEXTURES; i++) {
-			stringw txt = stringw("Texture layer ") + stringw(i) + stringw(" :");
-			MaterialTextures[i] = EditionTool->addField(MaterialTab, EGUIET_IMAGE, DefaultEditionToolCallback(txt));
-			if (i != irr::video::MATERIAL_MAX_TEXTURES - 1)
-				EditionTool->addSeparator(MaterialTab);
-		}
-
 		/// Parameters
 		EditionTool->setNewZone(MaterialTab, "Parameters");
 		MaterialMatType = EditionTool->addField(MaterialTab, EGUIET_COMBO_BOX, DefaultEditionToolCallback("Material Type :"));
@@ -104,6 +95,15 @@ void CCP3DEditionToolSceneNode::createInterface() {
 			}
 		}
 		MaterialShininess = EditionTool->addField(MaterialTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Shininess :"));
+
+		/// Textures
+		EditionTool->setNewZone(MaterialTab, "Textures");
+		for (u32 i=0; i < irr::video::MATERIAL_MAX_TEXTURES; i++) {
+			stringw txt = stringw("Texture layer ") + stringw(i) + stringw(" :");
+			MaterialTextures[i] = EditionTool->addField(MaterialTab, EGUIET_IMAGE, DefaultEditionToolCallback(txt));
+			if (i != irr::video::MATERIAL_MAX_TEXTURES - 1)
+				EditionTool->addSeparator(MaterialTab);
+		}
 
 		/// Flags
 		EditionTool->setNewZone(MaterialTab, "Flags");
@@ -149,8 +149,6 @@ void CCP3DEditionToolSceneNode::createInterface() {
 	/// Animators
 	EditionTool->setNewZone(AnimatorsTab, "Animators");
 	SceneNodeAnimators = EditionTool->addField(AnimatorsTab, EGUIET_LIST_BOX, DefaultEditionToolCallback("Animators :"));
-
-	SMaterial m = SceneNode->getMaterial(CurrentMaterialID);
 	
 }
 
@@ -188,6 +186,7 @@ void CCP3DEditionToolSceneNode::configure() {
 		for (u32 i=0; i < SceneNode->getMaterialCount(); i++) {
 			MaterialSelector.ComboBox->addItem(stringw(SceneNode->getMaterial(i).Name).c_str());
 		}
+		MaterialSelector.ComboBox->setSelected(CurrentMaterialID);
 
 		/// Textures
 		for (u32 i=0; i < irr::video::MATERIAL_MAX_TEXTURES; i++) {

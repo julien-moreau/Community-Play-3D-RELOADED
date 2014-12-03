@@ -211,6 +211,10 @@ IAnimatedMesh* C3DSMeshFileLoader::createMesh(io::IReadFile* file)
 					tangentMesh->drop();
 				}
 				Mesh->MeshBuffers[i]->recalculateBoundingBox();
+
+				#ifdef _IRR_COMPILE_WITH_MATERIAL_NAME_
+				Mesh->MeshBuffers[i]->getMaterial().Name = MeshBufferNames[i];
+				#endif
 			}
 		}
 
