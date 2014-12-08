@@ -144,13 +144,7 @@
     <None Include="..\CP3DR\Shaders\Materials\NormalMapping.fragment.fx">
       <Filter>Shaders\Materials</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="..\CP3DR\Shaders\Materials\MultiplePass.fragment.fx">
-      <Filter>Shaders\Materials</Filter>
-    </FxCompile>
-    <FxCompile Include="..\CP3DR\Shaders\Materials\MultiplePass.vertex.fx">
-      <Filter>Shaders\Materials</Filter>
-    </FxCompile>
+    <None Include="..\CP3DR\Shaders\Materials\MultiplePass.fragment.fx" />
+    <None Include="..\CP3DR\Shaders\Materials\MultiplePass.vertex.fx" />
   </ItemGroup>
 </Project>
