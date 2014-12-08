@@ -71,6 +71,9 @@
     <ClInclude Include="RenderingEngine\CustomPasses\CCustomGeneralPass.h">
       <Filter>RenderingEngine\CustomPasses</Filter>
     </ClInclude>
+    <ClInclude Include="RenderingEngine\Materials\CSolidMaterial.h">
+      <Filter>RenderingEngine\Materials</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DRenderingEngine.cpp">
@@ -99,6 +102,9 @@
     </ClCompile>
     <ClCompile Include="RenderingEngine\CustomPasses\CCustomGeneralPass.cpp">
       <Filter>RenderingEngine\CustomPasses</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderingEngine\Materials\CSolidMaterial.cpp">
+      <Filter>RenderingEngine\Materials</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -146,5 +152,13 @@
     </None>
     <None Include="..\CP3DR\Shaders\Materials\MultiplePass.fragment.fx" />
     <None Include="..\CP3DR\Shaders\Materials\MultiplePass.vertex.fx" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\CP3DR\Shaders\Materials\Solid.fragment.fx">
+      <Filter>Shaders\Materials</Filter>
+    </FxCompile>
+    <FxCompile Include="..\CP3DR\Shaders\Materials\Solid.vertex.fx">
+      <Filter>Shaders\Materials</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

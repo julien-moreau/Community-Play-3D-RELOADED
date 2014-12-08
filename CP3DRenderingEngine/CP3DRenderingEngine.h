@@ -11,6 +11,7 @@ namespace cp3d {
 namespace rendering {
 
 class CNormalMappingMaterial;
+class CSolidMaterial;
 
 class CCP3DRenderingEngine : public ICP3DRenderingEngine {
 public:
@@ -52,6 +53,9 @@ public:
 private:
 	/// Rendering
 	ICP3DHandler *Handler;
+
+	/// Materials
+	CSolidMaterial *SolidMaterialType;
 	CNormalMappingMaterial *NormalMapMaterialType;
 
 	/// Datas

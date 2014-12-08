@@ -17,6 +17,8 @@ namespace rendering {
 
 CNormalMappingMaterial::CNormalMappingMaterial(CCP3DRenderingEngine *renderingEngine) : RenderingEngine(renderingEngine), LightCount(0)
 {
+	Driver = renderingEngine->getVideoDriver();
+
 	CMaterialCreator m(renderingEngine->getVideoDriver());
 	m.addDefine("__CP3D__MAX_LIGHTS__", stringc(__CP3D__MAX_LIGHTS__));
 
@@ -32,7 +34,9 @@ CNormalMappingMaterial::CNormalMappingMaterial(CCP3DRenderingEngine *renderingEn
 }
 
 CNormalMappingMaterial::~CNormalMappingMaterial() {
-
+	Driver->getMaterialRenderer(RenderingEngine->Materials[EMT_NORMAL_MAP_SOLID])->drop();
+	Driver->getMaterialRenderer(RenderingEngine->Materials[EMT_NORMAL_MAP_TRANSPARENT_ADD_COLOR])->drop();
+	Driver->getMaterialRenderer(RenderingEngine->Materials[EMT_NORMAL_MAP_TRANSPARENT_VERTEX_ALPHA])->drop();
 }
 
 void CNormalMappingMaterial::computeArrays() {
@@ -77,44 +81,44 @@ void CNormalMappingMaterial::OnSetConstants(irr::video::IMaterialRendererService
 
 	/// Vertex
 	matrix4 matWorldInverse;
-    matWorldInverse = services->getVideoDriver()->getTransform(ETS_WORLD);
+    matWorldInverse = Driver->getTransform(ETS_WORLD);
     matWorldInverse.makeInverse();
-	if (services->getVideoDriver()->getDriverType() == EDT_OPENGL)
+	if (Driver->getDriverType() == EDT_OPENGL)
 		services->setVertexShaderConstant("matWorldInverse", matWorldInverse.pointer(), 16);
 	else
 		services->setPixelShaderConstant("matWorldInverse", matWorldInverse.pointer(), 16);
 
-	if (services->getVideoDriver()->getDriverType() == EDT_DIRECT3D9) {
+	if (Driver->getDriverType() == EDT_DIRECT3D9) {
 		matrix4 worldView;
-		worldView *= services->getVideoDriver()->getTransform(ETS_VIEW);
-		worldView *= services->getVideoDriver()->getTransform(ETS_WORLD);
+		worldView *= Driver->getTransform(ETS_VIEW);
+		worldView *= Driver->getTransform(ETS_WORLD);
 		services->setPixelShaderConstant("ModelViewMatrix", worldView.pointer(), 16);
 
 		matrix4 worldViewProj;
-		worldViewProj *= services->getVideoDriver()->getTransform(ETS_PROJECTION);
-		worldViewProj *= services->getVideoDriver()->getTransform(ETS_VIEW);
-		worldViewProj *= services->getVideoDriver()->getTransform(ETS_WORLD);
+		worldViewProj *= Driver->getTransform(ETS_PROJECTION);
+		worldViewProj *= Driver->getTransform(ETS_VIEW);
+		worldViewProj *= Driver->getTransform(ETS_WORLD);
 		services->setVertexShaderConstant("ModelViewProjectionMatrix", worldViewProj.pointer(), 16);
 	} else {
         matrix4 worldView;
-		worldView *= services->getVideoDriver()->getTransform(ETS_VIEW);
-		worldView *= services->getVideoDriver()->getTransform(ETS_WORLD);
+		worldView *= Driver->getTransform(ETS_VIEW);
+		worldView *= Driver->getTransform(ETS_WORLD);
         services->setVertexShaderConstant("ModelViewMatrix", worldView.pointer(), 16);
 	}
 
-	if (services->getVideoDriver()->getDriverType() == EDT_OPENGL) {
-		services->setVertexShaderConstant("fvLightPosition", LightPositionArray.pointer(), LightPositionArray.size());
-		services->setVertexShaderConstant("fLightStrength", LightStrengthArray.pointer(), LightStrengthArray.size());
+	if (Driver->getDriverType() == EDT_OPENGL) {
+		services->setVertexShaderConstant("fvLightPosition[0]", LightPositionArray.pointer(), LightPositionArray.size());
+		services->setVertexShaderConstant("fLightStrength[0]", LightStrengthArray.pointer(), LightStrengthArray.size());
 	} else {
 		services->setPixelShaderConstant("fvLightPosition", LightPositionArray.pointer(), LightPositionArray.size());
 		services->setPixelShaderConstant("fLightStrength", LightStrengthArray.pointer(), LightStrengthArray.size());
 	}
 
-	if (services->getVideoDriver()->getDriverType() == EDT_OPENGL)
+	if (Driver->getDriverType() == EDT_OPENGL)
 		services->setVertexShaderConstant("numLights", &LightCount, 1);
 
 	/// Pixel
-	if (services->getVideoDriver()->getDriverType() == EDT_OPENGL) {
+	if (Driver->getDriverType() == EDT_OPENGL) {
 		s32 baseMap = 0;
 		s32 bumpMap = 1;
 		s32 specularMap = 2;
@@ -126,7 +130,7 @@ void CNormalMappingMaterial::OnSetConstants(irr::video::IMaterialRendererService
 	f32 fvAmbiant[4] = { 1.f, 1.f, 1.f, 1.f };
     services->setPixelShaderConstant(("fvAmbient"), fvAmbiant, 4);
 
-	services->setPixelShaderConstant("fvLightColor", LightColorArray.pointer(), LightColorArray.size() * 4);
+	services->setPixelShaderConstant("fvLightColor[0]", LightColorArray.pointer(), LightColorArray.size() * 4);
 
 	f32 fSpecularPower = 20.f;
     f32 fSpecularStrength = 1.9f;

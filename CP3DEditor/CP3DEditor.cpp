@@ -28,7 +28,7 @@ namespace cp3d {
 		params.LoggingLevel = irr::ELL_INFORMATION;
 		params.WindowSize = desktopSize;
 		params.WithAlphaChannel = false;
-		params.DriverType = irr::video::EDT_DIRECT3D9;
+		params.DriverType = irr::video::EDT_OPENGL;
 
 		#ifdef CP3DR_HANDLE_SRGB
 		params.HandleSRGB = true;

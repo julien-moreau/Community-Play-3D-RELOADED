@@ -5,6 +5,8 @@
 
 #include "RenderingEngine/Handler/CP3DHandler.h"
 #include "RenderingEngine/Materials/CMaterialCreator.h"
+
+#include "RenderingEngine/Materials/CSolidMaterial.h"
 #include "RenderingEngine/Materials/CNormalMappingMaterial.h"
 
 using namespace irr;
@@ -34,6 +36,8 @@ CCP3DRenderingEngine::CCP3DRenderingEngine(IrrlichtDevice *device) : NormalMapMa
 		Materials[(E_MATERIAL_TYPE)i] = (E_MATERIAL_TYPE)i;
 		i++;
 	}
+
+	SolidMaterialType = new CSolidMaterial(this);
 }
 
 CCP3DRenderingEngine::~CCP3DRenderingEngine() {
