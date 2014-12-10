@@ -35,10 +35,9 @@ CCP3DEditionToolLightSceneNode::~CCP3DEditionToolLightSceneNode() {
 }
 
 void CCP3DEditionToolLightSceneNode::createInterface() {
-	rendering::ICP3DRenderingEngine *rengine = EditorCore->getRenderingEngine();
-	for (u32 i=0; i < rengine->getLightSceneNodeCount(); i++) {
-		if (*rengine->getLightSceneNode(i) == SceneNode) {
-			LightSceneNode = rengine->getLightSceneNode(i);
+	for (u32 i=0; i < Rengine->getLightSceneNodeCount(); i++) {
+		if (*Rengine->getLightSceneNode(i) == SceneNode) {
+			LightSceneNode = Rengine->getLightSceneNode(i);
 			break;
 		}
 	}
@@ -114,6 +113,9 @@ void CCP3DEditionToolLightSceneNode::configure() {
 		ShadowMapDirectional.CheckBox->setEnabled(false);
 		ShadowMapResolution.ComboBox->setEnabled(false);
 	}
+
+	rendering::ICP3DLightSceneNode *light;
+	ILightSceneNode *lightIrrlicht = *light;
 
 	/// Normal Mapping
 	ComputeNormalMapping.CheckBox->setChecked(LightSceneNode->isComputingNormalMapping());

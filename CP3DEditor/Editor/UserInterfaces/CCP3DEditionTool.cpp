@@ -193,6 +193,7 @@ void CCP3DEditionTool::createDefaultControllers() {
 	CCP3DEditionToolLightSceneNode *EditionToolLightSceneNode = new CCP3DEditionToolLightSceneNode(EditorCore);
 	CCP3DEditionToolSceneManager *EditionToolSceneManager = new CCP3DEditionToolSceneManager(EditorCore);
 
+	//! No cameras for the moment ! =D
 	addController(ESNT_MESH, EditionToolSceneNode);
 	addController(ESNT_ANIMATED_MESH, EditionToolSceneNode);
 	addController(ESNT_LIGHT, EditionToolSceneNode);
