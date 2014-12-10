@@ -95,6 +95,9 @@
     <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolBillboardSceneNode.h">
       <Filter>Editor\UserInterfaces\EditionTools</Filter>
     </ClInclude>
+    <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolTextSceneNode.h">
+      <Filter>Editor\UserInterfaces\EditionTools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DEditor.cpp">
@@ -155,6 +158,9 @@
       <Filter>Editor\UserInterfaces\EditionTools</Filter>
     </ClCompile>
     <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolBillboardSceneNode.cpp">
+      <Filter>Editor\UserInterfaces\EditionTools</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolTextSceneNode.cpp">
       <Filter>Editor\UserInterfaces\EditionTools</Filter>
     </ClCompile>
   </ItemGroup>
