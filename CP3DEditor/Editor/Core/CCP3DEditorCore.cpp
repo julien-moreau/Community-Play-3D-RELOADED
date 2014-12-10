@@ -225,7 +225,15 @@ void CCP3DEditorCore::createTestScene() {
 	skyboxNode->getMaterial(5).Name = "Back";
 	Engine->getSceneNodeCreator()->configureSceneNode(skyboxNode);
 
-	smgr->addBillboardSceneNode();
+	IBillboardSceneNode * bill = smgr->addBillboardSceneNode(0, dimension2df(2.f, 2.f), vector3df(0.f, 100.f, 0.f));
+	Engine->getSceneNodeCreator()->configureSceneNode(bill);
+	Handler->addShadowToNode(bill, rendering::EFT_NONE, rendering::ESM_EXCLUDE);
+	bill->setMaterialType(EMT_SOLID);
+	bill->setColor(SColor(255, 255, 0, 0), SColor(255, 0, 255, 0));
+
+	driver->beginScene(true, true, SColor(0x0));
+	bill->setColor(SColor(255, 0, 0, 255), SColor(255, 0, 255, 0));
+	driver->endScene();
 
 	u32 count = 0;
 	auto callback = [&](ISceneNode *node) {

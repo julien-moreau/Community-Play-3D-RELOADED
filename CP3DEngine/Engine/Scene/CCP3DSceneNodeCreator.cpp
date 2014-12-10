@@ -64,6 +64,8 @@ void CCP3DSceneNodeCreator::configureSceneNode(irr::scene::ISceneNode *node) {
 	if (!node)
 		return;
 
+	node->setMaterialFlag(EMF_LIGHTING, false);
+
 	ESCENE_NODE_TYPE type = node->getType();
 	IMeshManipulator *manipulator = Smgr->getMeshManipulator();
 	IMesh *m = 0;
