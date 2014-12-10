@@ -9,6 +9,7 @@
 #include "EditionTools/CCP3DEditionToolLightSceneNode.h"
 #include "EditionTools/CCP3DEditionToolSceneManager.h"
 #include "EditionTools/CCP3DEditionToolBillboardSceneNode.h"
+#include "EditionTools/CCP3DEditionToolTextSceneNode.h"
 
 #include "CCP3DEditionTool.h"
 
@@ -194,8 +195,7 @@ void CCP3DEditionTool::createDefaultControllers() {
 	CCP3DEditionToolLightSceneNode *EditionToolLightSceneNode = new CCP3DEditionToolLightSceneNode(EditorCore);
 	CCP3DEditionToolSceneManager *EditionToolSceneManager = new CCP3DEditionToolSceneManager(EditorCore);
 	CCP3DEditionToolBillboardSceneNode *EditionToolBillboardSceneNode = new CCP3DEditionToolBillboardSceneNode(EditorCore);
-
-
+	CCP3DEditionToolTextSceneNode *EditionToolTextSceneNode = new CCP3DEditionToolTextSceneNode(EditorCore);
 
 	//! No cameras for the moment ! =D
 	addController(ESNT_MESH, EditionToolSceneNode);
@@ -218,6 +218,8 @@ void CCP3DEditionTool::createDefaultControllers() {
 	addController(ESNT_SCENE_MANAGER, EditionToolSceneManager);
 
 	addController(ESNT_BILLBOARD, EditionToolBillboardSceneNode);
+	addController(ESNT_TEXT, EditionToolTextSceneNode);
+	addController(ESNT_TEXT, EditionToolBillboardSceneNode);
 }
 
 bool CCP3DEditionTool::addController(ESCENE_NODE_TYPE type, ICP3DEditionToolController *controller) {
