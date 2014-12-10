@@ -196,7 +196,7 @@ void CCP3DEditorCore::createTestScene() {
 	light->getShadowLight()->setMustAutoRecalculate(true);
 	light->setLightStrength(1.f);
 
-	ISceneNode *emptySceneNode = smgr->addBillboardTextSceneNode(Gui->getSkin()->getFont(), L"Light :)", 0, dimension2df(30.f, 30.f), vector3df(0.f), -1, SColor(255, 255, 0, 0));
+	IBillboardTextSceneNode *emptySceneNode = smgr->addBillboardTextSceneNode(Gui->getSkin()->getFont(), L"Light :)", 0, dimension2df(30.f, 30.f), vector3df(0.f), -1, SColor(255, 255, 0, 0));
 	emptySceneNode->setName("Text Node");
 	emptySceneNode->setMaterialFlag(EMF_LIGHTING, false);
 	emptySceneNode->setPosition(vector3df(0.f, 100.f, 100.f));

@@ -114,9 +114,6 @@ void CCP3DEditionToolLightSceneNode::configure() {
 		ShadowMapResolution.ComboBox->setEnabled(false);
 	}
 
-	rendering::ICP3DLightSceneNode *light;
-	ILightSceneNode *lightIrrlicht = *light;
-
 	/// Normal Mapping
 	ComputeNormalMapping.CheckBox->setChecked(LightSceneNode->isComputingNormalMapping());
 	NormalMappingStrength.TextBox->setText(stringw(LightSceneNode->getLightStrength()).c_str());
