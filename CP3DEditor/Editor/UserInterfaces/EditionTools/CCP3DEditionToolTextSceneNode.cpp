@@ -45,11 +45,13 @@ void CCP3DEditionToolTextSceneNode::createInterface() {
 }
 
 void CCP3DEditionToolTextSceneNode::configure() {
-	ITextSceneNode *node = (ITextSceneNode *)SceneNode;
+	IBillboardTextSceneNode *node = (IBillboardTextSceneNode *)SceneNode;
+	Text.TextBox->setText(node->getText());
+	TextColor.ColorData.ColorElement->setColor(node->getTextColor());
 }
 
 void CCP3DEditionToolTextSceneNode::apply() {
-	ITextSceneNode *node = (ITextSceneNode *)SceneNode;
+	IBillboardTextSceneNode *node = (IBillboardTextSceneNode *)SceneNode;
 	node->setTextColor(TextColor.ColorData.ColorElement->getColor().toSColor());
 	node->setText(Text.TextBox->getText());
 
