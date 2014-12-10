@@ -225,7 +225,8 @@ void CCP3DEditorCore::createTestScene() {
 	skyboxNode->getMaterial(5).Name = "Back";
 	Engine->getSceneNodeCreator()->configureSceneNode(skyboxNode);
 
-	smgr->addBillboardSceneNode();
+	IBillboardSceneNode *billboard = smgr->addBillboardSceneNode();
+	billboard->setName("Billboard");
 
 	u32 count = 0;
 	auto callback = [&](ISceneNode *node) {

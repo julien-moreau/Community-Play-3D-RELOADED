@@ -55,12 +55,21 @@ void CCP3DEditionToolBillboardSceneNode::configure() {
 	node->getColor(top, bottom);
 	BillboardColorTop.ColorData.ColorElement->setColor(top);
 	BillboardColorBottom.ColorData.ColorElement->setColor(bottom);
+
+	dimension2d<f32> size = node->getSize();
+	BillboardSizeW.TextBox->setText(stringw(size.Width).c_str());
+	BillboardSizeH.TextBox->setText(stringw(size.Height).c_str());
 }
 
 void CCP3DEditionToolBillboardSceneNode::apply() {
 	IBillboardSceneNode *node = (IBillboardSceneNode *)SceneNode;
 
 	node->setColor(BillboardColorTop.ColorData.ColorElement->getColor().toSColor(), BillboardColorBottom.ColorData.ColorElement->getColor().toSColor());
+
+	dimension2d<f32> size;
+	size.Width = core::fast_atof(stringc(BillboardSizeW.TextBox->getText()).c_str());
+	size.Height = core::fast_atof(stringc(BillboardSizeH.TextBox->getText()).c_str());
+	node->setSize(size);
 
 }
 
