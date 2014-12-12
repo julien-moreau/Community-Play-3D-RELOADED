@@ -152,7 +152,11 @@
     </None>
     <None Include="..\CP3DR\Shaders\Materials\MultiplePass.fragment.fx" />
     <None Include="..\CP3DR\Shaders\Materials\MultiplePass.vertex.fx" />
-    <None Include="..\CP3DR\Shaders\Materials\Solid.fragment.fx" />
-    <None Include="..\CP3DR\Shaders\Materials\Solid.vertex.fx" />
+    <None Include="..\CP3DR\Shaders\Materials\Solid.fragment.fx">
+      <Filter>Shaders\Materials</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\Materials\Solid.vertex.fx">
+      <Filter>Shaders\Materials</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -38,7 +38,7 @@ void CCP3DEditionToolTextSceneNode::createInterface() {
 	/// Tabs
 	TextTab = EditionTool->addTab("Text");
 	
-	/// Shadow light
+	/// Parameters for IBillBoardTextSceneNode
 	EditionTool->setNewZone(TextTab, "Text");
 	TextColor = EditionTool->addField(TextTab, EGUIET_COLOR_SELECT_DIALOG, DefaultEditionToolCallback("Text color"));
 	Text = EditionTool->addField(TextTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Text"));
@@ -46,13 +46,21 @@ void CCP3DEditionToolTextSceneNode::createInterface() {
 
 void CCP3DEditionToolTextSceneNode::configure() {
 	IBillboardTextSceneNode *node = (IBillboardTextSceneNode *)SceneNode;
+
+	/// Draw text
 	Text.TextBox->setText(node->getText());
+
+	/// Draw color
 	TextColor.ColorData.ColorElement->setColor(node->getTextColor());
 }
 
 void CCP3DEditionToolTextSceneNode::apply() {
 	IBillboardTextSceneNode *node = (IBillboardTextSceneNode *)SceneNode;
+
+	/// Set color
 	node->setTextColor(TextColor.ColorData.ColorElement->getColor().toSColor());
+
+	/// Set text
 	node->setText(Text.TextBox->getText());
 
 }
