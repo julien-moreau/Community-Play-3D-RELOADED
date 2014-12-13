@@ -3,7 +3,7 @@
 
 #include <irrlicht.h>
 #include "CShaderPre.h"
-#include "CScreenQuad.h"
+#include <CScreenQuad.h>
 
 #include "../CustomPasses/CCustomDepthPass.h"
 #include "../CustomPasses/CCustomGeneralPass.h"

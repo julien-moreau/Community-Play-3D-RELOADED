@@ -39,6 +39,9 @@
     <Filter Include="include\editor\ui">
       <UniqueIdentifier>{3f495270-f5f1-43de-98df-c9b4d7f2a445}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Scene\MeshSceneNodeInstances">
+      <UniqueIdentifier>{585db4e8-c199-423f-ab07-97d9ead79111}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\CP3DCompileConfig.h">
@@ -140,6 +143,12 @@
     <ClInclude Include="Engine\Scene\CCP3DGeometryCreator.h">
       <Filter>Engine\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\CScreenQuad.h">
+      <Filter>include\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\MeshSceneNodeInstances\CMeshSceneNodeInstances.h">
+      <Filter>Engine\Scene\MeshSceneNodeInstances</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DEngine.cpp">
@@ -168,6 +177,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Scene\CCP3DGeometryCreator.cpp">
       <Filter>Engine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scene\MeshSceneNodeInstances\CMeshSceneNodeInstances.cpp">
+      <Filter>Engine\Scene\MeshSceneNodeInstances</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

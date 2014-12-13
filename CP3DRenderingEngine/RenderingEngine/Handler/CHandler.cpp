@@ -23,6 +23,10 @@ ScreenRTTSize(screenRTTSize.getArea() == 0 ? dev->getVideoDriver()->getScreenSiz
 ClearColour(0x0), shadowsUnsupported(false), DepthMC(0), ShadowMC(0),
 AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 {
+	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+	ScreenQuad.initializeD3D11(driver);
+	#endif
+
 	bool tempTexFlagMipMaps = driver->getTextureCreationFlag(ETCF_CREATE_MIP_MAPS);
 	bool tempTexFlag32 = driver->getTextureCreationFlag(ETCF_ALWAYS_32_BIT);
 
@@ -35,12 +39,19 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 
 	CShaderPreprocessor sPP(driver);
 
+	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+	E_SHADER_EXTENSION shaderExt = (driver->getDriverType() == EDT_DIRECT3D9 || driver->getDriverType() == EDT_DIRECT3D11) ? ESE_HLSL : ESE_GLSL;
+	#else
 	E_SHADER_EXTENSION shaderExt = (driver->getDriverType() == EDT_DIRECT3D9) ? ESE_HLSL : ESE_GLSL;
+	#endif
 
 	video::IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
 	
-	if(gpu && ((driver->getDriverType() == EDT_OPENGL && driver->queryFeature(EVDF_ARB_GLSL)) ||
-			   (driver->getDriverType() == EDT_DIRECT3D9 && driver->queryFeature(EVDF_PIXEL_SHADER_2_0))))
+	if (gpu && ((driver->getDriverType() == EDT_OPENGL && driver->queryFeature(EVDF_ARB_GLSL)) || ((driver->getDriverType() == EDT_DIRECT3D9)
+		#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+		|| driver->getDriverType() == EDT_DIRECT3D11)
+		#endif
+		&& driver->queryFeature(EVDF_PIXEL_SHADER_2_0))))
 	{
 		DepthMC = new DepthShaderCB(this);
 		ShadowMC = new ShadowShaderCB(this);
@@ -469,7 +480,7 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 				CustomPasses[i]->onPreRender(CustomPasses[i]->getSceneNodes()[j]);
 				CustomPasses[i]->getSceneNodes()[j]->setMaterialType((E_MATERIAL_TYPE)CustomPasses[i]->getMaterialType());
 				CustomPasses[i]->getSceneNodes()[j]->OnAnimate(device->getTimer()->getTime());
-				CustomPasses[i]->getSceneNodes()[j]->render();
+				//CustomPasses[i]->getSceneNodes()[j]->render();
 				CustomPasses[i]->onPostRender(CustomPasses[i]->getSceneNodes()[j]);
 
 				for(u32 g = 0;g < CustomPasses[i]->getSceneNodes()[j]->getMaterialCount();++g)

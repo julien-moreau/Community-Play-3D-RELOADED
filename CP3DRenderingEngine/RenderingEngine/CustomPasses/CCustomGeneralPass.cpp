@@ -65,7 +65,8 @@ void CCustomGeneralPass::OnSetConstants(IMaterialRendererServices* services, s32
 	if (type == ESNT_BILLBOARD)
 		renderNormal = true;
 
-	services->setPixelShaderConstant("LSRenderNormal", &renderNormal, 1);
+	s32 renderNormals32 = (s32)renderNormal;
+	services->setPixelShaderConstant("LSRenderNormal", &renderNormals32, 1);
 }
 
 } /// End namespace rendering

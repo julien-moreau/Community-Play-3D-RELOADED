@@ -153,8 +153,14 @@ private:
 int main(int argc, char* argv[]) {
 
 	/// Create a device
-	IrrlichtDevice *device = createDevice(EDT_DIRECT3D9, dimension2du(1280, 800), 32, false, false, false, 0);
-	device->getLogger()->setLogLevel(ELL_NONE);
+	irr::video::E_DRIVER_TYPE driverType = EDT_DIRECT3D9;
+	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+	// Automatically test the D3D11 driver
+	driverType = EDT_DIRECT3D11;
+	#endif
+
+	IrrlichtDevice *device = createDevice(driverType, dimension2du(1280, 800), 32, false, false, false, 0);
+	device->getLogger()->setLogLevel(ELL_INFORMATION);
 
 	device->setEventReceiver(new CEventReceiver(device));
 	IVideoDriver *driver = device->getVideoDriver();
@@ -173,7 +179,7 @@ int main(int argc, char* argv[]) {
 	IAnimatedMesh *planeMesh = smgr->addHillPlaneMesh("plane_mesh", dimension2d<f32>(100.f, 100.f), dimension2d<u32>(50, 50),
 													  0, 0.f, dimension2d<f32>(0.f, 0.f), dimension2d<f32>(50.f, 50.f));
 	IMeshSceneNode *planeNode = smgr->addMeshSceneNode(planeMesh);
-	planeNode->setMesh(smgr->getMeshManipulator()->createMeshWithTangents(planeNode->getMesh(), true, true, false, true));
+	//planeNode->setMesh(smgr->getMeshManipulator()->createMeshWithTangents(planeNode->getMesh(), true, true, false, true));
 	planeNode->setMaterialTexture(0, driver->getTexture("Textures/diffuse.tga"));
 	planeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
 	planeNode->setMaterialTexture(2, driver->getTexture("Textures/specular.tga"));
@@ -181,7 +187,7 @@ int main(int argc, char* argv[]) {
 	handler->addShadowToNode(planeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_RECEIVE);
 
 	IMeshSceneNode *cubeNode = smgr->addCubeSceneNode(50.f, 0, -1, vector3df(0.f, 25.f, 0.f), vector3df(0.f, 45.f, 0.f));
-	cubeNode->setMesh(smgr->getMeshManipulator()->createMeshWithTangents(cubeNode->getMesh(), true, true, false, true));
+	//cubeNode->setMesh(smgr->getMeshManipulator()->createMeshWithTangents(cubeNode->getMesh(), true, true, false, true));
 	cubeNode->setMaterialTexture(0, driver->getTexture("Textures/specular.tga"));
 	cubeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
 	cubeNode->setMaterialFlag(EMF_NORMALIZE_NORMALS, false);
@@ -193,9 +199,9 @@ int main(int argc, char* argv[]) {
 	//handler->addShadowLight(light1);
 
 	/// Add a custom depth pass
-	cp3d::rendering::ICP3DCustomDepthPass *customDepthPassMgr = handler->getDepthPassManager();
-	customDepthPassMgr->addNodeToPass(cubeNode);
-	customDepthPassMgr->addPass("CustomDepthPassRTT");
+	//cp3d::rendering::ICP3DCustomDepthPass *customDepthPassMgr = handler->getDepthPassManager();
+	//customDepthPassMgr->addNodeToPass(cubeNode);
+	//customDepthPassMgr->addPass("CustomDepthPassRTT");
 
 	/// Add a custom filter (rendering the custom depth pass result)
 	//CCustomPostProcessFile *customPostProcessFile = new CCustomPostProcessFile(handler, driver);
@@ -205,9 +211,9 @@ int main(int argc, char* argv[]) {
 	//handler->getGeneralPassManager()->addNodeToPass(sceneNode);
 
 	/// Create the normal mapping material
-	cpre->createNormalMappingMaterial();
-	cubeNode->setMaterialType(cpre->Materials[EMT_NORMAL_MAP_SOLID]);
-	planeNode->setMaterialType(cpre->Materials[EMT_NORMAL_MAP_SOLID]);
+	//cpre->createNormalMappingMaterial();
+	//cubeNode->setMaterialType(cpre->Materials[EMT_NORMAL_MAP_SOLID]);
+	//planeNode->setMaterialType(cpre->Materials[EMT_NORMAL_MAP_SOLID]);
 
 	cp3d::rendering::ICP3DLightSceneNode *light = cpre->createLightSceneNode(true, true);
 	light->setPosition(vector3df(0.f, 100.f, 100.f));
