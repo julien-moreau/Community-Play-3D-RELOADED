@@ -49,7 +49,7 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 	
 	if (gpu && ((driver->getDriverType() == EDT_OPENGL && driver->queryFeature(EVDF_ARB_GLSL)) || ((driver->getDriverType() == EDT_DIRECT3D9)
 		#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
-		|| driver->getDriverType() == EDT_DIRECT3D11)
+		|| (driver->getDriverType() == EDT_DIRECT3D11)
 		#endif
 		&& driver->queryFeature(EVDF_PIXEL_SHADER_2_0))))
 	{
@@ -128,9 +128,15 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 		ScreenQuadCB* SQCB = new ScreenQuadCB(this, true);
 
 		// Light modulate.
+		#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+		LightModulate = gpu->addHighLevelShaderMaterial(
+			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ScreenQuad.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
+			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/LightModulate.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile, SQCB);
+		#else
 		LightModulate = gpu->addHighLevelShaderMaterial(
 			sPP.ppShader(SCREEN_QUAD_V[shaderExt]).c_str(), "vertexMain", vertexProfile,
 			sPP.ppShader(LIGHT_MODULATE_P[shaderExt]).c_str(), "pixelMain", pixelProfile, SQCB);
+		#endif
 
 		// Simple present.
 		Simple = gpu->addHighLevelShaderMaterial(
@@ -464,7 +470,7 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 	ScreenQuad.render(driver);
 
 	// Perform custom passes after rendering, to ensure animations stay up to date
-	for (u32 i=0; i < CustomPassesSize; i++) {
+	for (u32 i = CustomPassesSize; i < CustomPassesSize; i++) {
 		if (CustomPasses[i]->isEnabled()) {
 			if (!CustomPasses[i]->setRenderTarget())
 				continue;
