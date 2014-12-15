@@ -131,7 +131,7 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 		#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
 		LightModulate = gpu->addHighLevelShaderMaterial(
 			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ScreenQuad.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
-			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/LightModulate.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile, SQCB);
+			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ScreenQuad.vertex.fx").c_str()).c_str(), "pixelMain", pixelProfile, SQCB);
 		#else
 		LightModulate = gpu->addHighLevelShaderMaterial(
 			sPP.ppShader(SCREEN_QUAD_V[shaderExt]).c_str(), "vertexMain", vertexProfile,

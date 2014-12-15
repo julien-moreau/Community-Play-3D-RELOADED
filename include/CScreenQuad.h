@@ -19,8 +19,12 @@ public:
 	}
 
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+	~CScreenQuad() {
+		Buffer->drop();
+	}
+
 	virtual void initializeD3D11(irr::video::IVideoDriver *driver) {
-		irr::video::IVertexDescriptor *vertexDescriptor = driver->addVertexDescriptor("CScreenQuadVertexDescriptor");
+		irr::video::IVertexDescriptor *vertexDescriptor = driver->getVertexDescriptor(0);
 		Buffer = new irr::scene::CMeshBuffer<irr::video::S3DVertex>(vertexDescriptor, irr::video::EIT_16BIT);
 
 		for (irr::u32 i = 0; i < 4; i++)
@@ -41,7 +45,7 @@ public:
 		driver->setTransform(irr::video::ETS_WORLD, irr::core::matrix4());
 
 		#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
-		driver->drawIndexedTriangleList(true, VertexBuffer, true, IndexBuffer, 4);
+		driver->drawIndexedTriangleList(false, VertexBuffer, false, IndexBuffer, 2);
 		#else
 		const irr::u16 indices[6] = { 0, 1, 2, 0, 2, 3 };
 		driver->drawIndexedTriangleList(&Vertices[0], 4, &indices[0], 2);

@@ -30,6 +30,9 @@
     <Filter Include="RenderingEngine\Materials">
       <UniqueIdentifier>{189dcb5a-cdbb-45e7-81a3-7b1863f587bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\InternalHandler">
+      <UniqueIdentifier>{5c159030-d034-4f2a-8c8f-f74d1a80b290}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RenderingEngine\Handler\CP3DHandler.h">
@@ -147,12 +150,22 @@
     <None Include="..\CP3DR\Shaders\Materials\NormalMapping.fragment.fx">
       <Filter>Shaders\Materials</Filter>
     </None>
-    <None Include="..\CP3DR\Shaders\Materials\MultiplePass.fragment.fx" />
-    <None Include="..\CP3DR\Shaders\Materials\MultiplePass.vertex.fx" />
     <None Include="..\CP3DR\Shaders\Materials\Solid.fragment.fx">
       <Filter>Shaders\Materials</Filter>
     </None>
     <None Include="..\CP3DR\Shaders\Materials\Solid.vertex.fx">
+      <Filter>Shaders\Materials</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\InternalHandler\ScreenQuad.vertex.fx">
+      <Filter>Shaders\InternalHandler</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\InternalHandler\LightModulate.fragment.fx">
+      <Filter>Shaders\InternalHandler</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\Materials\MultiplePass.vertex.fx">
+      <Filter>Shaders\Materials</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\Materials\MultiplePass.fragment.fx">
       <Filter>Shaders\Materials</Filter>
     </None>
   </ItemGroup>

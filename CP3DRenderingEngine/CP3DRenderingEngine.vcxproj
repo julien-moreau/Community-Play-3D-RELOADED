@@ -287,6 +287,14 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CP3DR\Shaders\InternalHandler\LightModulate.fragment.fx">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\CP3DR\Shaders\InternalHandler\ScreenQuad.vertex.fx">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
