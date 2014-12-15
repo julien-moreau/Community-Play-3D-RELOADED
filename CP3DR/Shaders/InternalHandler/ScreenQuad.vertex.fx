@@ -30,18 +30,3 @@ VS_OUTPUT vertexMain(float3 Position : POSITION, float4 TexCoords : TEXTURE0)
 
 	return (OUT);
 }
-
-Texture2D ColorMapSampler  : register(t0);
-Texture2D ScreenMapSampler : register(t1);
-
-SamplerState ColorMapSamplerST : register(s0);
-SamplerState ScreenMapSamplerST : register(s1);
-
-float4 pixelMain(VS_OUTPUT In) : SV_TARGET
-{
-	float4 finalCol = ColorMapSampler.Sample(ColorMapSamplerST, In.TexCoords);
-	float4 lightCol = ScreenMapSampler.Sample(ScreenMapSamplerST, In.TexCoords);
-
-	return finalCol * lightCol;
-}
-
