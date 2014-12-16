@@ -31,7 +31,7 @@ const char* LIGHT_MODULATE_P[ESE_COUNT] = {"uniform sampler2D ColorMapSampler;\n
 "	float4 lightCol = tex2D(ScreenMapSampler, TexCoords);\n"
 ""
 "	return finalCol * lightCol;\n"
-"}"};
+"}\n"};
 
 
 const char* SHADOW_PASS_1P[ESE_COUNT] = {"void main() "
@@ -45,7 +45,7 @@ const char* SHADOW_PASS_1P[ESE_COUNT] = {"void main() "
 "{"
 "	float depth = ClipPos.z / ClipPos.x;\n"
 "	return float4(depth, depth * depth, 0.0, 0.0);\n"
-"}"};
+"}\n"};
 
 const char* SHADOW_PASS_1PT[ESE_COUNT] = {"uniform sampler2D ColorMapSampler;\n"
 ""
@@ -69,7 +69,7 @@ const char* SHADOW_PASS_1PT[ESE_COUNT] = {"uniform sampler2D ColorMapSampler;\n"
 "	float alpha = tex2D(ColorMapSampler, Texcoords).a;\n"
 "	"
 "	return float4(depth, depth * depth, 0.0, alpha);\n"
-"}"};
+"}\n"};
 
 const char* SHADOW_PASS_1V[ESE_COUNT] = {"uniform mat4 mWorldViewProj;\n"
 "uniform float MaxD;\n"
@@ -104,7 +104,7 @@ const char* SHADOW_PASS_1V[ESE_COUNT] = {"uniform mat4 mWorldViewProj;\n"
 "	OUT.Texcoords = Texcoords;\n"
 "	OUT.VColor = vColor;\n"
 "	return(OUT);\n"
-"}"};
+"}\n"};
 
 const char* SHADOW_PASS_2P[ESE_COUNT] = {
 "uniform sampler2D ShadowMapSampler;\n"
@@ -289,7 +289,7 @@ const char* SHADOW_PASS_2P[ESE_COUNT] = {
 "	}\n"
 "	return finalCol;\n"
 "##endif\n"
-"}"};
+"}\n"};
 
 const char* SHADOW_PASS_2V[ESE_COUNT] = {"struct VS_OUTPUT "
 "{"
@@ -365,7 +365,7 @@ const char* SHADOW_PASS_2V[ESE_COUNT] = {"struct VS_OUTPUT "
 "	OUT.TexCoords = TexCoords;\n"
 "	"
 "	return(OUT);\n"
-"}"};
+"}\n"};
 
 
 const char* SIMPLE_P[ESE_COUNT] = {"uniform sampler2D ColorMapSampler;\n"
@@ -382,7 +382,7 @@ const char* SIMPLE_P[ESE_COUNT] = {"uniform sampler2D ColorMapSampler;\n"
 "{		"
 "	float4 finalCol = tex2D(ColorMapSampler, TexCoords);\n"
 "	return finalCol;\n"
-"}"};
+"}\n"};
 
 
 const char* WHITE_WASH_P[ESE_COUNT] = {"uniform sampler2D ColorMapSampler;\n"
@@ -401,7 +401,7 @@ const char* WHITE_WASH_P[ESE_COUNT] = {"uniform sampler2D ColorMapSampler;\n"
 "	float alpha = tex2D(ColorMapSampler, Texcoords).a;\n"
 ""
 "	return float4(1.0, 1.0, 1.0, alpha);\n"
-"}"};
+"}\n"};
 
 
 const char* WHITE_WASH_P_ADD[ESE_COUNT] = {"uniform sampler2D ColorMapSampler;\n"
@@ -430,7 +430,7 @@ const char* WHITE_WASH_P_ADD[ESE_COUNT] = {"uniform sampler2D ColorMapSampler;\n
 "	diffuseTex *= VColor;\n"
 ""
 "	return float4(1.0, 1.0, 1.0, luminance(diffuseTex.rgb));\n"
-"}"};
+"}\n"};
 
 const char* SCREEN_QUAD_V[ESE_COUNT] = {"uniform float screenX, screenY; \n"
 "uniform vec3 LineStarts0, LineStarts1, LineStarts2, LineStarts3; \n"
@@ -477,7 +477,7 @@ const char* SCREEN_QUAD_V[ESE_COUNT] = {"uniform float screenX, screenY; \n"
 "	OUT.LEnd = lerp(tLEnd, bLEnd, OUT.TexCoords.y); \n" 
 "	OUT.ScreenSize = float2(screenX, screenY); \n"
 "	return(OUT); \n"
-"} \n"};
+"}\n"};
 
 
 const char* VSM_BLUR_P[ESE_COUNT] = {"uniform sampler2D ColorMapSampler;\n"

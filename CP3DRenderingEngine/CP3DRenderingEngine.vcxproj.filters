@@ -168,5 +168,20 @@
     <None Include="..\CP3DR\Shaders\Materials\MultiplePass.fragment.fx">
       <Filter>Shaders\Materials</Filter>
     </None>
+    <None Include="..\CP3DR\Shaders\InternalHandler\Simple.fragment.fx">
+      <Filter>Shaders\InternalHandler</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\InternalHandler\Depth.fragment.fx">
+      <Filter>Shaders\InternalHandler</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\InternalHandler\Depth.vertex.fx">
+      <Filter>Shaders\InternalHandler</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\InternalHandler\ShadowPass.fragment.fx">
+      <Filter>Shaders\InternalHandler</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\InternalHandler\ShadowPass.vertex.fx">
+      <Filter>Shaders\InternalHandler</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -28,7 +28,8 @@ namespace rendering {
 CCP3DRenderingEngine::CCP3DRenderingEngine(IrrlichtDevice *device) : NormalMapMaterialType(0)
 {
 	/// Configure
-	Handler = new CCP3DHandler(device, device->getVideoDriver()->getScreenSize(), true, true, true);
+	Handler = new CCP3DHandler(device, device->getVideoDriver()->getScreenSize(), false, true, true);
+	((CCP3DHandler *)Handler)->setUseVSM(false);
 	
 	/// Configure materials
 	u32 i = 0;
@@ -37,7 +38,7 @@ CCP3DRenderingEngine::CCP3DRenderingEngine(IrrlichtDevice *device) : NormalMapMa
 		i++;
 	}
 
-	SolidMaterialType = new CSolidMaterial(this);
+	//SolidMaterialType = new CSolidMaterial(this);
 }
 
 CCP3DRenderingEngine::~CCP3DRenderingEngine() {

@@ -283,7 +283,16 @@ void CD3D11Texture::createRenderTarget(const ECOLOR_FORMAT format)
 	}
 	TextureSize = TextureSize.getOptimalSize(!Driver->queryFeature(EVDF_TEXTURE_NPOT), !Driver->queryFeature(EVDF_TEXTURE_NSQUARE), true, Driver->getMaxTextureSize().Width);
 
-	DXGI_FORMAT d3dformat = Driver->getD3DColorFormat();
+	DXGI_FORMAT d3dformat;
+	switch (format)
+	{
+	case ECF_G32R32F:
+		d3dformat = DXGI_FORMAT_R32G32_FLOAT;
+		break;
+	default:
+		d3dformat = Driver->getD3DColorFormat();
+		break;
+	}
 
 	if(ColorFormat == ECF_UNKNOWN)
 	{

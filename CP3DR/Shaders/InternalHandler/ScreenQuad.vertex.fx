@@ -4,7 +4,7 @@ float3 LineEnds0, LineEnds1, LineEnds2, LineEnds3;
 
 struct VS_OUTPUT
 {
-	float4 Position		: SV_POSITION;
+	float4 Position		: SV_Position;
 	float2 TexCoords	: TEXCOORD0;
 	float3 LStart		: TEXCOORD1;
 	float3 LEnd			: TEXCOORD2;

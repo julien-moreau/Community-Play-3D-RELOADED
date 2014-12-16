@@ -290,9 +290,37 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
   <ItemGroup>
     <None Include="..\CP3DR\Shaders\InternalHandler\LightModulate.fragment.fx">
       <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">false</ExcludedFromBuild>
     </None>
     <None Include="..\CP3DR\Shaders\InternalHandler\ScreenQuad.vertex.fx">
       <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">false</ExcludedFromBuild>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CP3DR\Shaders\InternalHandler\Simple.fragment.fx">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">false</ExcludedFromBuild>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CP3DR\Shaders\InternalHandler\Depth.fragment.fx">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">false</ExcludedFromBuild>
+    </None>
+    <None Include="..\CP3DR\Shaders\InternalHandler\Depth.vertex.fx">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">false</ExcludedFromBuild>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CP3DR\Shaders\InternalHandler\ShadowPass.fragment.fx">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">false</ExcludedFromBuild>
+    </None>
+    <None Include="..\CP3DR\Shaders\InternalHandler\ShadowPass.vertex.fx">
+      <FileType>Document</FileType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">false</ExcludedFromBuild>
     </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

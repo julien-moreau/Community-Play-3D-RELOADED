@@ -38,6 +38,15 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 	driver->setTextureCreationFlag(ETCF_ALWAYS_32_BIT, tempTexFlag32);
 
 	CShaderPreprocessor sPP(driver);
+	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+	if (driver->getDriverType() == EDT_DIRECT3D11)
+		sPP.addShaderDefine("DIRECT3D_11", "1");
+	else
+	#endif
+	if (driver->getDriverType() == EDT_DIRECT3D9)
+		sPP.addShaderDefine("DIRECT3D_9", "1");
+	else
+		sPP.addShaderDefine("OPENGL", "1");
 
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
 	E_SHADER_EXTENSION shaderExt = (driver->getDriverType() == EDT_DIRECT3D9 || driver->getDriverType() == EDT_DIRECT3D11) ? ESE_HLSL : ESE_GLSL;
@@ -65,14 +74,16 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 		addCustomPass(CustomGeneralPass);
 
 		Depth = gpu->addHighLevelShaderMaterial(
-			sPP.ppShader(SHADOW_PASS_1V[shaderExt]).c_str(), "vertexMain", video::EVST_VS_2_0,
-			sPP.ppShader(SHADOW_PASS_1P[shaderExt]).c_str(), "pixelMain", video::EPST_PS_2_0,
+			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/Depth.vertex.fx").c_str()).c_str(), "vertexMain", video::EVST_VS_2_0,
+			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/Depth.fragment.fx").c_str()).c_str(), "pixelMain", video::EPST_PS_2_0,
 			DepthMC, video::EMT_SOLID);
 
+		sPP.addShaderDefine("ALPHA_ENABLED", "1");
 		DepthT = gpu->addHighLevelShaderMaterial(
-			sPP.ppShader(SHADOW_PASS_1V[shaderExt]).c_str(), "vertexMain", video::EVST_VS_2_0,
-			sPP.ppShader(SHADOW_PASS_1PT[shaderExt]).c_str(), "pixelMain", video::EPST_PS_2_0,
+			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/Depth.vertex.fx").c_str()).c_str(), "vertexMain", video::EVST_VS_2_0,
+			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/Depth.fragment.fx").c_str()).c_str(), "pixelMain", video::EPST_PS_2_0,
 			DepthMC, video::EMT_TRANSPARENT_ALPHA_CHANNEL_REF);
+		sPP.removeShaderDefine("ALPHA_ENABLED");
 
 		WhiteWash = gpu->addHighLevelShaderMaterial(
 			sPP.ppShader(SHADOW_PASS_1V[shaderExt]).c_str(), "vertexMain", video::EVST_VS_2_0,
@@ -99,49 +110,45 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 
 		const u32 sampleCounts[EFT_COUNT] = {1, 4, 8, 12, 16};
 
-		const E_VERTEX_SHADER_TYPE vertexProfile = 
+		E_VERTEX_SHADER_TYPE vertexProfile = 
 			driver->queryFeature(video::EVDF_VERTEX_SHADER_3_0) ? EVST_VS_3_0 : EVST_VS_2_0;
 
-		const E_PIXEL_SHADER_TYPE pixelProfile = 
+		E_PIXEL_SHADER_TYPE pixelProfile = 
 			driver->queryFeature(video::EVDF_PIXEL_SHADER_3_0) ? EPST_PS_3_0 : EPST_PS_2_0;
 
 		for(u32 i = 0;i < EFT_COUNT;i++) {
 			sPP.addShaderDefine("SAMPLE_AMOUNT", core::stringc(sampleCounts[i]));
-			Shadow[i] = gpu->addHighLevelShaderMaterial(sPP.ppShader(SHADOW_PASS_2V[shaderExt]).c_str(), "vertexMain", vertexProfile,
-														sPP.ppShader(SHADOW_PASS_2P[shaderExt]).c_str(), "pixelMain", pixelProfile,
-														ShadowMC, video::EMT_SOLID);
-
+			Shadow[i] = gpu->addHighLevelShaderMaterial(
+				sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
+				sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile,
+				ShadowMC, video::EMT_SOLID);
+			
 			if (useRoundSpotLights) {
 				sPP.addShaderDefine("ROUND_SPOTLIGHTS");
-				ShadowRoundedSpot[i] = gpu->addHighLevelShaderMaterial(sPP.ppShader(SHADOW_PASS_2V[shaderExt]).c_str(), "vertexMain", vertexProfile,
-																	   sPP.ppShader(SHADOW_PASS_2P[shaderExt]).c_str(), "pixelMain", pixelProfile,
-																	   ShadowMC, video::EMT_SOLID);
+				ShadowRoundedSpot[i] = gpu->addHighLevelShaderMaterial(
+					sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
+					sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile,
+					ShadowMC, video::EMT_SOLID);
 				sPP.removeShaderDefine("ROUND_SPOTLIGHTS");
 			}
 		}
 
 		// Set resolution preprocessor defines.
 		sPP.addShaderDefine("SCREENX", core::stringc(ScreenRTTSize.Width));
-		sPP.addShaderDefine("SCREENY", core::stringc(ScreenRTTSize.Height));	
+		sPP.addShaderDefine("SCREENY", core::stringc(ScreenRTTSize.Height));
 
 		// Create screen quad shader callback.
 		ScreenQuadCB* SQCB = new ScreenQuadCB(this, true);
 
 		// Light modulate.
-		#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
 		LightModulate = gpu->addHighLevelShaderMaterial(
 			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ScreenQuad.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
 			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/LightModulate.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile, SQCB);
-		#else
-		LightModulate = gpu->addHighLevelShaderMaterial(
-			sPP.ppShader(SCREEN_QUAD_V[shaderExt]).c_str(), "vertexMain", vertexProfile,
-			sPP.ppShader(LIGHT_MODULATE_P[shaderExt]).c_str(), "pixelMain", pixelProfile, SQCB);
-		#endif
 
 		// Simple present.
 		Simple = gpu->addHighLevelShaderMaterial(
-			sPP.ppShader(SCREEN_QUAD_V[shaderExt]).c_str(), "vertexMain", vertexProfile,
-			sPP.ppShader(SIMPLE_P[shaderExt]).c_str(), "pixelMain", pixelProfile, SQCB,
+			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ScreenQuad.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
+			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/Simple.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile, SQCB,
 			video::EMT_TRANSPARENT_ADD_COLOR);
 
 		// VSM blur.
@@ -486,7 +493,7 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 				CustomPasses[i]->onPreRender(CustomPasses[i]->getSceneNodes()[j]);
 				CustomPasses[i]->getSceneNodes()[j]->setMaterialType((E_MATERIAL_TYPE)CustomPasses[i]->getMaterialType());
 				CustomPasses[i]->getSceneNodes()[j]->OnAnimate(device->getTimer()->getTime());
-				//CustomPasses[i]->getSceneNodes()[j]->render();
+				CustomPasses[i]->getSceneNodes()[j]->render();
 				CustomPasses[i]->onPostRender(CustomPasses[i]->getSceneNodes()[j]);
 
 				for(u32 g = 0;g < CustomPasses[i]->getSceneNodes()[j]->getMaterialCount();++g)
@@ -526,7 +533,6 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 
 	}
 }
-
 
 irr::video::ITexture* CCP3DHandler::getShadowMapTexture(const irr::u32 resolution, const bool secondary) {
 	core::stringc shadowMapName = core::stringc("CP3DHandler_SM_") + core::stringc(resolution);
