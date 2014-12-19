@@ -289,6 +289,15 @@ void CD3D11Texture::createRenderTarget(const ECOLOR_FORMAT format)
 	case ECF_G32R32F:
 		d3dformat = DXGI_FORMAT_R32G32_FLOAT;
 		break;
+	case ECF_G16R16F:
+		d3dformat = DXGI_FORMAT_R16G16_FLOAT;
+		break;
+	case ECF_A32B32G32R32F:
+		d3dformat = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		break;
+	case ECF_A16B16G16R16F:
+		d3dformat = DXGI_FORMAT_R16G16B16A16_FLOAT;
+		break;
 	default:
 		d3dformat = Driver->getD3DColorFormat();
 		break;

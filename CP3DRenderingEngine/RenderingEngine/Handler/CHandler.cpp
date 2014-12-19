@@ -64,7 +64,7 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 	{
 		DepthMC = new DepthShaderCB(this);
 		ShadowMC = new ShadowShaderCB(this);
-
+		
 		CustomDepthPassMgr = new CCustomDepthPass(driver, "CustomDepthPassManager");
 		CustomDepthPassMgr->setEnabled(true);
 		addCustomPass(CustomDepthPassMgr);
@@ -72,7 +72,7 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 		CustomGeneralPass = new CCustomGeneralPass(driver, "CustomGeneralPass");
 		CustomGeneralPass->setEnabled(true);
 		addCustomPass(CustomGeneralPass);
-
+		
 		Depth = gpu->addHighLevelShaderMaterial(
 			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/Depth.vertex.fx").c_str()).c_str(), "vertexMain", video::EVST_VS_2_0,
 			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/Depth.fragment.fx").c_str()).c_str(), "pixelMain", video::EPST_PS_2_0,
@@ -118,6 +118,10 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 
 		for(u32 i = 0;i < EFT_COUNT;i++) {
 			sPP.addShaderDefine("SAMPLE_AMOUNT", core::stringc(sampleCounts[i]));
+
+			stringc v = sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.vertex.fx").c_str()).c_str();
+			stringc p = sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.fragment.fx").c_str()).c_str();
+
 			Shadow[i] = gpu->addHighLevelShaderMaterial(
 				sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
 				sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile,
@@ -477,7 +481,7 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 	ScreenQuad.render(driver);
 
 	// Perform custom passes after rendering, to ensure animations stay up to date
-	for (u32 i = CustomPassesSize; i < CustomPassesSize; i++) {
+	for (u32 i = 0; i < CustomPassesSize; i++) {
 		if (CustomPasses[i]->isEnabled()) {
 			if (!CustomPasses[i]->setRenderTarget())
 				continue;

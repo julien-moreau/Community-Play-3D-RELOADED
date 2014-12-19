@@ -43,12 +43,20 @@ public:
 	virtual void OnSetConstants(video::IMaterialRendererServices* services, s32 userData) {
 		IVideoDriver* driver = services->getVideoDriver();
 
+		#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+		if (driver->getDriverType() == EDT_DIRECT3D9 || driver->getDriverType() == EDT_DIRECT3D11) {
+			core::matrix4 worldTransposed = driver->getTransform(video::ETS_WORLD);
+			worldTransposed = worldTransposed.getTransposed();
+			services->setVertexShaderConstant("mWorldTrans", worldTransposed.pointer(), 16);
+		}
+		#endif
+
 		matrix4 worldViewProj = driver->getTransform(video::ETS_PROJECTION);			
 		worldViewProj *= driver->getTransform(video::ETS_VIEW);
 		worldViewProj *= driver->getTransform(video::ETS_WORLD);
 		services->setVertexShaderConstant("mWorldViewProj", worldViewProj.pointer(), 16);
 
-		worldViewProj = ProjLink;			
+		worldViewProj = ProjLink;
 		worldViewProj *= ViewLink;
 		worldViewProj *= driver->getTransform(video::ETS_WORLD);
 		services->setVertexShaderConstant("mWorldViewProj2", worldViewProj.pointer(), 16);

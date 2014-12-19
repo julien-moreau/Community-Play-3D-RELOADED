@@ -178,6 +178,7 @@ int main(int argc, char* argv[]) {
 	/// Create a test scene
 	IAnimatedMesh *planeMesh = smgr->addHillPlaneMesh("plane_mesh", dimension2d<f32>(100.f, 100.f), dimension2d<u32>(50, 50),
 													  0, 0.f, dimension2d<f32>(0.f, 0.f), dimension2d<f32>(50.f, 50.f));
+
 	IMeshSceneNode *planeNode = smgr->addMeshSceneNode(planeMesh);
 	//planeNode->setMesh(smgr->getMeshManipulator()->createMeshWithTangents(planeNode->getMesh(), true, true, false, true));
 	planeNode->setMaterialTexture(0, driver->getTexture("Textures/diffuse.tga"));
@@ -220,6 +221,11 @@ int main(int argc, char* argv[]) {
 	light->setLightColor(SColorf(1.f, 1.f, 1.f, 1.f));
 	light->getLightData().SpecularColor = SColorf(1.f, 0.5f, 0.f, 1.f);
 	light->getShadowLight()->setUseRoundSpotLight(false);
+
+	ISceneNodeAnimator *anim = smgr->createFlyCircleAnimator(vector3df(0.f, 100.f, 0.f), 100.f);
+	ILightSceneNode *l = *light;
+	l->addAnimator(anim);
+	anim->drop();
 
 	/// Finish
 	handler->setAmbientColor(SColor(255, 32, 32, 32));

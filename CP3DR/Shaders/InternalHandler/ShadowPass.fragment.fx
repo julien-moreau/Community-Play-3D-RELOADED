@@ -12,7 +12,6 @@ struct VS_OUTPUT
 	float4 Position				: SV_Position;
 	float4 ShadowMapSamplingPos : TEXCOORD0;
 	float4 MVar        			: TEXCOORD1;
-	float2 TexCoords            : TEXCOORD2;
 };
 
 ##ifdef VSM
