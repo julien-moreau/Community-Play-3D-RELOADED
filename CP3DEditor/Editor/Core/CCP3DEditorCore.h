@@ -88,6 +88,8 @@ private:
 	irr::core::stringc ProjectName, ProjectDirectory;
 	irr::core::stringc WorkingDirectory;
 
+	irr::core::dimension2du ScreenSize;
+
 	/// Methods
 	void createComponents();
 	void createTestScene();

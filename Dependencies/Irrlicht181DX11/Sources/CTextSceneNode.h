@@ -39,6 +39,12 @@ namespace scene
 		//! returns the axis aligned bounding box of this node
 		virtual const core::aabbox3d<f32>& getBoundingBox() const;
 
+		//! gets the text string
+		virtual const wchar_t *getText();
+
+		//! gets the text color
+		virtual const video::SColor getTextColor();
+
 		//! sets the text string
 		virtual void setText(const wchar_t* text);
 
@@ -80,6 +86,12 @@ namespace scene
 
 		//! returns the axis aligned bounding box of this node
 		virtual const core::aabbox3d<f32>& getBoundingBox() const;
+
+		//! gets the text string
+		virtual const wchar_t *getText();
+
+		//! gets the text color
+		virtual const video::SColor getTextColor();
 
 		//! sets the text string
 		virtual void setText(const wchar_t* text);

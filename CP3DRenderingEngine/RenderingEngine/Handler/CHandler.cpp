@@ -157,14 +157,14 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 
 		// VSM blur.
 		VSMBlurH = gpu->addHighLevelShaderMaterial(
-			sPP.ppShader(SCREEN_QUAD_V[shaderExt]).c_str(), "vertexMain", vertexProfile,
-			sPP.ppShader(VSM_BLUR_P[shaderExt]).c_str(), "pixelMain", pixelProfile, SQCB);
+			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ScreenQuad.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
+			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/VSMBlur.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile, SQCB);
 
 		sPP.addShaderDefine("VERTICAL_VSM_BLUR");
 
 		VSMBlurV = gpu->addHighLevelShaderMaterial(
-			sPP.ppShader(SCREEN_QUAD_V[shaderExt]).c_str(), "vertexMain", vertexProfile,
-			sPP.ppShader(VSM_BLUR_P[shaderExt]).c_str(), "pixelMain", pixelProfile, SQCB);
+			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ScreenQuad.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
+			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/VSMBlur.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile, SQCB);
 		
 		// Drop the screen quad callback.
 		SQCB->drop();

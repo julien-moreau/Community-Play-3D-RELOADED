@@ -30,6 +30,10 @@ namespace cp3d {
 		params.WithAlphaChannel = false;
 		params.DriverType = irr::video::EDT_DIRECT3D9;
 
+		#ifdef CP3DR_EDITOR_DIRECT3D11
+		params.DriverType = irr::video::EDT_DIRECT3D11;
+		#endif
+
 		#ifdef CP3DR_HANDLE_SRGB
 		params.HandleSRGB = true;
 		#endif

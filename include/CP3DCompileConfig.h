@@ -79,6 +79,11 @@ namespace cp3d {
 	//! single buffers
 	//#define CP3DR_DOUBLE_BUFFER
 
+	//! Runs the editor using the Direct3D 11 driver
+	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+	#define CP3DR_EDITOR_DIRECT3D11
+	#endif
+
 } /// End namespace cp3d
 
 #endif

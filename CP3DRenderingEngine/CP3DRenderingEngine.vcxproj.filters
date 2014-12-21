@@ -183,5 +183,8 @@
     <None Include="..\CP3DR\Shaders\InternalHandler\ShadowPass.vertex.fx">
       <Filter>Shaders\InternalHandler</Filter>
     </None>
+    <None Include="..\CP3DR\Shaders\InternalHandler\VSMBlur.fragment.fx">
+      <Filter>Shaders\InternalHandler</Filter>
+    </None>
   </ItemGroup>
 </Project>

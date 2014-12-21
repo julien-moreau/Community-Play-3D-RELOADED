@@ -47,6 +47,12 @@ public:
 	\param bottomColor: stores the color of the bottom vertices */
 	virtual void getColor(video::SColor & topColor, video::SColor & bottomColor) const = 0;
 
+	//! gets the text string
+	virtual const wchar_t *getText() = 0;
+
+	//! gets the text color
+	virtual const video::SColor getTextColor() = 0;
+
 	//! sets the text string
 	virtual void setText(const wchar_t* text) = 0;
 

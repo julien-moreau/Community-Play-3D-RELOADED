@@ -18,6 +18,11 @@ CMaterialCreator::CMaterialCreator(IVideoDriver *driver) : Driver(driver)
 {
 	Spp = new CShaderPreprocessor(driver);
 	clearDefines();
+
+	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+	if (Driver->getDriverType() == EDT_DIRECT3D11)
+		Spp->addShaderDefine("DIRECT3D_11", "1");
+	#endif
 }
 
 CMaterialCreator::~CMaterialCreator() {

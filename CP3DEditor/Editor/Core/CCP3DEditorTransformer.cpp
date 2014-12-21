@@ -169,8 +169,15 @@ void CCP3DEditorTransformer::setTransformerColor(ISceneNode *node, SColor color)
 	for (u32 i=0; i < mesh->getMeshBufferCount(); i++) {
 		IMeshBuffer *mb = mesh->getMeshBuffer(i);
 
+		#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+		S3DVertex *vertices = (S3DVertex *)mb->getVertexBuffer(0)->getVertices();
+		const u32 vertexCount = mb->getVertexBuffer(0)->getVertexCount();
+		#else
 		S3DVertex *vertices = (S3DVertex *)mb->getVertices();
-		for (u32 j=0; j < mb->getVertexCount(); j++) {
+		const u32 vertexCount = mb->getVertexCount();
+		#endif
+
+		for (u32 j=0; j < vertexCount; j++) {
 			vertices[j].Color = color;
 		}
 	}

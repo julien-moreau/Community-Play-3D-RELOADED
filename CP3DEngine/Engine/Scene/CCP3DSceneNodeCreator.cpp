@@ -116,7 +116,13 @@ IMesh *CCP3DSceneNodeCreator::getStaticMesh(stringc path, bool withTangents) {
 
 	/// Recalculate with tangents if needed
 	if (withTangents) {
+		#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+		//IMesh *meshT = Smgr->getMeshManipulator()->createMeshWithTangents(mesh, true, true, true, true);
+		IMesh *meshT = mesh;
+		#else
 		IMesh *meshT = Smgr->getMeshManipulator()->createMeshWithTangents(mesh, true, true, true, true);
+		#endif
+
 		mesh->drop();
 		mesh = meshT;
 	}

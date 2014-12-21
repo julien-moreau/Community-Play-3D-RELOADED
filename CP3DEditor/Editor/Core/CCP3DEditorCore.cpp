@@ -34,6 +34,7 @@ CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), 
 	device->getSceneManager()->getRootSceneNode()->setName("Smgr:RootSceneNode");
 
 	Driver = device->getVideoDriver();
+	ScreenSize = Driver->getScreenSize();
 
 	/// Configure engine
 	Engine = cp3d::createEngine(device);
@@ -102,6 +103,13 @@ void CCP3DEditorCore::setProjectName(irr::core::stringc name) {
 }
 
 void CCP3DEditorCore::OnPreUpdate() {
+	/// Screen resized
+	if (Driver->getScreenSize() != ScreenSize) {
+		ScreenSize = Driver->getScreenSize();
+		Rengine->getHandler()->setScreenRenderTargetResolution(ScreenSize);
+	}
+
+	/// Viewport
 	rect<s32> viewPort;
 
 	s32 positionY = 0, count = 0;
@@ -205,9 +213,9 @@ void CCP3DEditorCore::createTestScene() {
 	emptySceneNode->setDebugDataVisible(EDS_BBOX);
 	Engine->getSceneNodeCreator()->configureSceneNode(emptySceneNode);
 
-	Rengine->createNormalMappingMaterial();
-	planeNode->setMaterialType(Rengine->Materials[EMT_NORMAL_MAP_SOLID]);
-	cubeNode->setMaterialType(Rengine->Materials[EMT_NORMAL_MAP_SOLID]);
+	//Rengine->createNormalMappingMaterial();
+	//planeNode->setMaterialType(Rengine->Materials[EMT_SOLID]);
+	//cubeNode->setMaterialType(Rengine->Materials[EMT_SOLID]);
 
 	ISceneNode* skyboxNode = smgr->addSkyBoxSceneNode(
 		driver->getTexture("Textures/Skybox/glacier_up.png"),

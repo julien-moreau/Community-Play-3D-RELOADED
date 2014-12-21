@@ -71,6 +71,17 @@ const core::aabbox3d<f32>& CTextSceneNode::getBoundingBox() const
 	return Box;
 }
 
+//! gets the text string
+const wchar_t *CTextSceneNode::getText()
+{
+	return Text.c_str();
+}
+
+//! gets the text color
+const video::SColor CTextSceneNode::getTextColor(){
+	return Color;
+}
+
 //! sets the text string
 void CTextSceneNode::setText(const wchar_t* text)
 {
@@ -150,6 +161,16 @@ CBillboardTextSceneNode::~CBillboardTextSceneNode()
 
 }
 
+//! gets the text string
+const wchar_t *CBillboardTextSceneNode::getText()
+{
+	return Text.c_str();
+}
+
+//! gets the text color
+const video::SColor CBillboardTextSceneNode::getTextColor(){
+	return Color;
+}
 
 //! sets the text string
 void CBillboardTextSceneNode::setText(const wchar_t* text)

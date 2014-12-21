@@ -167,9 +167,13 @@ void CCloudSceneNode::render() {
 
 		driver->setMaterial(Material);
 
+		#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+
+		#else
 		driver->drawIndexedTriangleFan(InnerVertices, CLOUDSUBDIV+1, InnerIndices, CLOUDSUBDIV);
 		driver->drawVertexPrimitiveList(OuterVertices, 2*CLOUDSUBDIV, OuterIndices, 2*CLOUDSUBDIV, EVT_STANDARD, EPT_TRIANGLE_STRIP, EIT_16BIT);
-		
+		#endif
+
 		if (DebugDataVisible & EDS_MESH_WIRE_OVERLAY) {
 			SMaterial m;
 			m.Wireframe = true;
@@ -177,8 +181,12 @@ void CCloudSceneNode::render() {
 			m.AntiAliasing = 0;
 			driver->setMaterial(m);
 
+			#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+
+			#else
 			driver->drawIndexedTriangleFan(InnerVertices, CLOUDSUBDIV+1, InnerIndices, CLOUDSUBDIV);
 			driver->drawVertexPrimitiveList(OuterVertices, 2*CLOUDSUBDIV, OuterIndices, 2*CLOUDSUBDIV, EVT_STANDARD, EPT_TRIANGLE_STRIP, EIT_16BIT);
+			#endif
 		}
 	}
 }

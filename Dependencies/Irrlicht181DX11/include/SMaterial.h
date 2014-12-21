@@ -176,6 +176,19 @@ namespace video
 		EAAM_ALPHA_TO_COVERAGE=16
 	};
 
+	//! Names for anti aliasing mode
+	const c8* const AntiAliasingModeNames[] =
+	{
+		"Off",
+		"Simple",
+		"Quality",
+		"Line Smooth",
+		"Point Smooth",
+		"Full Basic",
+		"Alpha to Coverage",
+		0
+	};
+
 	//! These flags allow to define the interpretation of vertex color when lighting is enabled
 	/** Without lighting being enabled the vertex color is the only value defining the fragment color.
 	Once lighting is enabled, the four values for diffuse, ambient, emissive, and specular take over.
@@ -442,6 +455,11 @@ namespace video
 		//! Shall mipmaps be used if available
 		/** Sometimes, disabling mipmap usage can be useful. Default: true */
 		bool UseMipMaps:1;
+
+		//! Handles the material's name
+		#ifdef _IRR_COMPILE_WITH_MATERIAL_NAME_
+		core::stringc Name;
+		#endif
 
 		//! Gets the texture transformation matrix for level i
 		/** \param i The desired level. Must not be larger than MATERIAL_MAX_TEXTURES.

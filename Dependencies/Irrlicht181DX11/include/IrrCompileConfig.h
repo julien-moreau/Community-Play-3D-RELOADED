@@ -113,7 +113,12 @@
 
 
 //! Maximum number of texture an SMaterial can have, up to 8 are supported by Irrlicht.
-#define _IRR_MATERIAL_MAX_TEXTURES_ 8
+#define _IRR_MATERIAL_MAX_TEXTURES_ 6
+
+#define _IRR_COMPILE_WITH_MATERIAL_NAME_
+#ifdef NO_IRR_COMPILE_WITH_MATERIAL_NAME_
+#undef _IRR_COMPILE_WITH_MATERIAL_NAME_
+#endif
 
 //! Whether to support XML and XML-based formats (irrmesh, collada...)
 #define _IRR_COMPILE_WITH_XML_

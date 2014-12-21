@@ -30,6 +30,13 @@ namespace scene
 	class ISceneNodeAnimator : public io::IAttributeExchangingObject, public IEventReceiver
 	{
 	public:
+
+		//! Default constructor
+		ISceneNodeAnimator()
+		{
+			Name = "New Animator";
+		}
+
 		//! Animates a scene node.
 		/** \param node Node to animate.
 		\param timeMs Current time in milli seconds. */
@@ -68,6 +75,23 @@ namespace scene
 		{
 			return false;
 		}
+
+		//! Sets the animator's name
+		//! \param name: the new name
+		virtual void setName(const core::stringc name)
+		{
+			Name = name;
+		}
+
+		//! Returns the animator's name
+		virtual const c8* getName() const {
+			return Name.c_str();
+		}
+
+	protected:
+		
+		core::stringc Name;
+
 	};
 
 
