@@ -21,6 +21,12 @@ protected:
 	irr::video::S3DVertex OuterVertices[2*CLOUDSUBDIV];
 	irr::u16 OuterIndices[2*CLOUDSUBDIV+2];
 
+	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+	void resetD3D11Buffers();
+	irr::scene::CMeshBuffer<irr::video::S3DVertex> *InnerBuffer;
+	irr::scene::CMeshBuffer<irr::video::S3DVertex> *OuterBuffer;
+	#endif
+
 	/// Scale of the cloud
 	irr::f32 TextureScale;
 

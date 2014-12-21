@@ -71,15 +71,27 @@ float fBumpStrength;
 float shininess;
 int numLights;
 
+##ifdef DIRECT3D_11
+Texture2D baseMap	  : register(t0);
+Texture2D bumpMap	  : register(t1);
+Texture2D specularMap : register(t2);
+
+SamplerState baseMapST	   : register(s0);
+SamplerState bumpMapST	   : register(s1);
+SamplerState specularMapST : register(s2);
+
+##else
 sampler2D baseMap      : register(s0);
 sampler2D bumpMap      : register(s1);
 sampler2D specularMap  : register(s2);
+##endif
 
-struct PS_INPUT
-{   
-   float2 Texcoord            : TEXCOORD0;
-   float3 Normal			  : TEXCOORD1;
-   float4 ObjectPosition	  : TEXCOORD2;
+struct VS_OUTPUT
+{
+	float4 Position           : SV_Position;
+	float2 Texcoord           : TEXCOORD0;
+	float3 Normal			  : TEXCOORD1;
+	float4 ObjectPosition	  : TEXCOORD2;
 };
 
 float getLengthSQR (float3 vec) 
@@ -87,24 +99,28 @@ float getLengthSQR (float3 vec)
    return(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z); 
 }
 
-float4 pixelMain( in PS_INPUT IN ) : COLOR
+float4 pixelMain(in VS_OUTPUT IN) : COLOR0
 {
 	if (numLights == 0) {
+		##ifdef DIRECT3D_11
+		return baseMap.Sample(baseMapST, IN.Texcoord.xy);
+		##else
 		return tex2D( baseMap, IN.Texcoord );
+		##endif
 	}
 	else {
 		/// Added vertex
-		float4x4 LightTransform= ModelViewMatrix; 
+		float4x4 LightTransform= ModelViewMatrix;
 		LightTransform= mul(matWorldInverse, LightTransform);
 		float4 fvObjectPosition = IN.ObjectPosition;
 
-		float3 fvTangent   = -float3(abs(IN.Normal.y) + abs(IN.Normal.z), abs(IN.Normal.x), 0); 
-		float3 fvBinormal  = cross(fvTangent,IN.Normal);
-		float3 fvNormal    = mul(IN.Normal, ModelViewMatrix); 
-		fvTangent          = mul(cross(fvBinormal, IN.Normal), ModelViewMatrix); 
-		fvBinormal         = mul(fvBinormal, ModelViewMatrix); 
+		float3 fvTangent   = -float3(abs(IN.Normal.y) + abs(IN.Normal.z), abs(IN.Normal.x), 0.0); 
+		float3 fvBinormal  = cross(fvTangent, IN.Normal);
+		float3 fvNormal    = mul(float4(IN.Normal.xyz, 0.0), ModelViewMatrix).xyz;
+		fvTangent          = mul(float4(cross(fvBinormal.xyz, IN.Normal.xyz), 0.0), ModelViewMatrix).xyz;
+		fvBinormal         = mul(float4(fvBinormal.xyz, 0.0), ModelViewMatrix).xyz;
 
-		float3 fvViewDirection  =  - fvObjectPosition.xyz; 
+		float3 fvViewDirection  = -fvObjectPosition.xyz; 
 		float3 ViewDirection	= float3(0.0, 0.0, 0.0);
 		ViewDirection.x			= dot(fvTangent, fvViewDirection); 
 		ViewDirection.y			= dot(fvBinormal, fvViewDirection); 
@@ -113,21 +129,29 @@ float4 pixelMain( in PS_INPUT IN ) : COLOR
 		/// End added vertex
 
 		float4 color	 = float4(0.0, 0.0, 0.0, 0.0);
-		float3 fvNormal2 = tex2D(bumpMap, IN.Texcoord).yxz; 
+##ifdef DIRECT3D_11
+		float3 fvNormal2 = bumpMap.Sample(bumpMapST, IN.Texcoord.xy).yxz;
+##else
+		float3 fvNormal2 = tex2D(bumpMap, IN.Texcoord).yxz;
+##endif
    
 		fvNormal2.xy *= 2.0; 
 		fvNormal2.xy -= 1.0;
-		fvNormal2 = (float3(0.0, 0.0, 1.0) - fvNormal2) * fBumpStrength+fvNormal2; 
+		fvNormal2 = (float3(0.0, 0.0, 1.0) - fvNormal2) * fBumpStrength + fvNormal2; 
 		fvNormal2 = normalize(fvNormal2);
    
+##ifdef DIRECT3D_11
+		float4  fvBaseColor = baseMap.Sample(baseMapST, IN.Texcoord.xy);
+##else
 		float4  fvBaseColor      = tex2D( baseMap, IN.Texcoord );
+##endif
 		float4  fvTotalAmbient   = fvAmbient * fvBaseColor;
 		float4  fvTotalDiffuse   = float4(0.0, 0.0, 0.0, 0.0);
 		float4  fvTotalSpecular  = float4(0.0, 0.0, 0.0, 0.0);
 
 		for (int i=0; i < numLights; i++) {
 			/// Added vertex
-			float4 fvLightPos1 = mul(float4(fvLightPosition[i],1.0), LightTransform);
+			float4 fvLightPos1 = mul(float4(fvLightPosition[i].xyz, 1.0), LightTransform);
 			float3 fvLightDirection1 = (fvLightPos1.xyz - fvObjectPosition.xyz);
 
 			float3 LightDirection1;
@@ -148,7 +172,11 @@ float4 pixelMain( in PS_INPUT IN ) : COLOR
 			fvTotalSpecular			 += fNDotL1 * fvLightColor[i] * (pow(fRDotV1, fSpecularPower)) * LightDistMultiplier;
 		}
 
+##ifdef DIRECT3D_11
+		fvTotalSpecular *= fvTotalSpecular + specularMap.Sample(specularMapST, IN.Texcoord.xy) * shininess;
+##else
 		fvTotalSpecular *= fvTotalSpecular + tex2D(specularMap, IN.Texcoord) * shininess;
+##endif
 		color = (fvTotalAmbient + fvTotalDiffuse + (fvTotalSpecular*fSpecularStrength));
 
 		if(color.r > 1.0) { color.gb += color.r - 1.0; } 

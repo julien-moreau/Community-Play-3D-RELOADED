@@ -79,6 +79,11 @@ void CNormalMappingMaterial::OnSetMaterial(const SMaterial& material) {
 void CNormalMappingMaterial::OnSetConstants(irr::video::IMaterialRendererServices *services, irr::s32 userData) {
 	computeArrays();
 
+	bool d3dDriver = Driver->getDriverType() == EDT_DIRECT3D9;
+	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+	d3dDriver = d3dDriver || Driver->getDriverType() == EDT_DIRECT3D11;
+	#endif
+
 	/// Vertex
 	matrix4 matWorldInverse;
     matWorldInverse = Driver->getTransform(ETS_WORLD);
@@ -88,7 +93,7 @@ void CNormalMappingMaterial::OnSetConstants(irr::video::IMaterialRendererService
 	else
 		services->setPixelShaderConstant("matWorldInverse", matWorldInverse.pointer(), 16);
 
-	if (Driver->getDriverType() == EDT_DIRECT3D9) {
+	if (d3dDriver) {
 		matrix4 worldView;
 		worldView *= Driver->getTransform(ETS_VIEW);
 		worldView *= Driver->getTransform(ETS_WORLD);
@@ -130,7 +135,10 @@ void CNormalMappingMaterial::OnSetConstants(irr::video::IMaterialRendererService
 	f32 fvAmbiant[4] = { 1.f, 1.f, 1.f, 1.f };
     services->setPixelShaderConstant(("fvAmbient"), fvAmbiant, 4);
 
-	services->setPixelShaderConstant("fvLightColor[0]", LightColorArray.pointer(), LightColorArray.size() * 4);
+	if (d3dDriver)
+		services->setPixelShaderConstant("fvLightColor", LightColorArray.pointer(), LightColorArray.size() * 4);
+	else
+		services->setPixelShaderConstant("fvLightColor[0]", LightColorArray.pointer(), LightColorArray.size() * 4);
 
 	f32 fSpecularPower = 20.f;
     f32 fSpecularStrength = 1.9f;

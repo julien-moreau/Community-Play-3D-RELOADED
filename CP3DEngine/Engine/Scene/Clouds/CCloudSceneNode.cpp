@@ -11,8 +11,8 @@ using namespace video;
 namespace cp3d {
 namespace engine {
 
-CCloudSceneNode::CCloudSceneNode(ISceneNode* parent, ISceneManager* mgr, s32 id) : 
-	ISceneNode(parent, mgr, id)
+CCloudSceneNode::CCloudSceneNode(ISceneNode* parent, ISceneManager* mgr, s32 id)
+	: ISceneNode(parent, mgr, id)
 {
 	#ifdef _DEBUG
 	setDebugName("CCloudSceneNode");
@@ -55,6 +55,11 @@ CCloudSceneNode::CCloudSceneNode(ISceneNode* parent, ISceneManager* mgr, s32 id)
 	InnerColor = SColor(180,220,220,220);
 	OuterColor = SColor(0,220,220,220);
 
+	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+	InnerBuffer = new CMeshBuffer<S3DVertex>(mgr->getVideoDriver()->getVertexDescriptor(0), EIT_16BIT);
+	OuterBuffer = new CMeshBuffer<S3DVertex>(mgr->getVideoDriver()->getVertexDescriptor(0), EIT_16BIT);
+	#endif
+
 	createCloudLayer();
 }
 
@@ -70,7 +75,7 @@ void CCloudSceneNode::createCloudLayer() {
 		OuterVertices[i] = InnerVertices[i+1];
 		OuterVertices[i+CLOUDSUBDIV] = S3DVertex(edge.X, OuterHeight, edge.Y, 0.f, -1.f, 0.f, OuterColor, edge.X, edge.Y);
 	}
-		
+	
 	for (s32 i=0; i<CLOUDSUBDIV+1; i++) {
 		InnerIndices[i] = i;
 	}
@@ -82,7 +87,37 @@ void CCloudSceneNode::createCloudLayer() {
 	}
 	OuterIndices[CLOUDSUBDIV*2] = 0;
 	OuterIndices[CLOUDSUBDIV*2+1] = CLOUDSUBDIV;
+
+	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+	resetD3D11Buffers();
+	#endif
 }
+
+#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+void CCloudSceneNode::resetD3D11Buffers() {
+	// Inner
+	InnerBuffer->getVertexBuffer(0)->clear();
+	for (u32 i = 0; i < CLOUDSUBDIV + 1; i++)
+		InnerBuffer->getVertexBuffer(0)->addVertex(&InnerVertices[i]);
+
+	InnerBuffer->getIndexBuffer()->clear();
+	for (u32 i = 0; i < CLOUDSUBDIV + 2; i++)
+		InnerBuffer->getIndexBuffer()->addIndex(InnerIndices[i]);
+
+	// Outer
+	OuterBuffer->getVertexBuffer(0)->clear();
+	for (u32 i = 0; i < 2 * CLOUDSUBDIV; i++)
+		OuterBuffer->getVertexBuffer(0)->addVertex(&OuterVertices[i]);
+
+	OuterBuffer->getIndexBuffer()->clear();
+	for (u32 i = 0; i < 2 * CLOUDSUBDIV + 2; i++)
+		OuterBuffer->getIndexBuffer()->addIndex(OuterIndices[i]);
+
+	// Finish
+	InnerBuffer->setDirty();
+	OuterBuffer->setDirty();
+}
+#endif
 
 void CCloudSceneNode::setTranslation(const vector2d<f32>& translation) {
 	Translation = translation; 
@@ -113,6 +148,10 @@ void CCloudSceneNode::setCloudHeight(f32 centerHeight, f32 innerHeight, f32 oute
 		OuterVertices[i].Pos.Y = InnerHeight;
 		OuterVertices[i+CLOUDSUBDIV].Pos.Y = OuterHeight;
 	}
+
+	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+	resetD3D11Buffers();
+	#endif
 }
 
 void CCloudSceneNode::setCloudColor(const SColor& centerColor, const SColor& innerColor, const SColor& outerColor) {
@@ -127,6 +166,10 @@ void CCloudSceneNode::setCloudColor(const SColor& centerColor, const SColor& inn
 		OuterVertices[i].Color = InnerColor;
 		OuterVertices[i+CLOUDSUBDIV].Color = OuterColor;
 	}
+
+	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+	resetD3D11Buffers();
+	#endif
 }
 
 void CCloudSceneNode::OnRegisterSceneNode() {
@@ -153,7 +196,7 @@ void CCloudSceneNode::render() {
 	ICameraSceneNode* camera = SceneManager->getActiveCamera();
 
 	if (!camera || !driver)
-		return;	
+		return;
 
 	if (!camera->isOrthogonal()) {
 		matrix4 translate(AbsoluteTransformation);
@@ -168,7 +211,8 @@ void CCloudSceneNode::render() {
 		driver->setMaterial(Material);
 
 		#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
-
+		driver->drawIndexedTriangleFan(true, InnerBuffer->getVertexBuffer(0), true, InnerBuffer->getIndexBuffer(), CLOUDSUBDIV);
+		driver->drawVertexPrimitiveList(true, OuterBuffer->getVertexBuffer(0), true, OuterBuffer->getIndexBuffer(), 2 * CLOUDSUBDIV, EPT_TRIANGLE_STRIP);
 		#else
 		driver->drawIndexedTriangleFan(InnerVertices, CLOUDSUBDIV+1, InnerIndices, CLOUDSUBDIV);
 		driver->drawVertexPrimitiveList(OuterVertices, 2*CLOUDSUBDIV, OuterIndices, 2*CLOUDSUBDIV, EVT_STANDARD, EPT_TRIANGLE_STRIP, EIT_16BIT);
@@ -182,7 +226,8 @@ void CCloudSceneNode::render() {
 			driver->setMaterial(m);
 
 			#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
-
+			driver->drawIndexedTriangleFan(true, InnerBuffer->getVertexBuffer(0), true, InnerBuffer->getIndexBuffer(), CLOUDSUBDIV);
+			driver->drawVertexPrimitiveList(true, InnerBuffer->getVertexBuffer(0), true, OuterBuffer->getIndexBuffer(), 2 * CLOUDSUBDIV, EPT_TRIANGLE_STRIP);
 			#else
 			driver->drawIndexedTriangleFan(InnerVertices, CLOUDSUBDIV+1, InnerIndices, CLOUDSUBDIV);
 			driver->drawVertexPrimitiveList(OuterVertices, 2*CLOUDSUBDIV, OuterIndices, 2*CLOUDSUBDIV, EVT_STANDARD, EPT_TRIANGLE_STRIP, EIT_16BIT);

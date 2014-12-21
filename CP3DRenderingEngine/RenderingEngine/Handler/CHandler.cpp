@@ -201,6 +201,8 @@ CCP3DHandler::~CCP3DHandler() {
 }
 
 void CCP3DHandler::setScreenRenderTargetResolution(const irr::core::dimension2du& resolution) {
+	driver->setRenderTarget(0, true, true);
+
 	bool tempTexFlagMipMaps = driver->getTextureCreationFlag(ETCF_CREATE_MIP_MAPS);
 	bool tempTexFlag32 = driver->getTextureCreationFlag(ETCF_ALWAYS_32_BIT);
 

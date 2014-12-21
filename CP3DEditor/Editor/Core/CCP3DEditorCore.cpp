@@ -213,7 +213,7 @@ void CCP3DEditorCore::createTestScene() {
 	emptySceneNode->setDebugDataVisible(EDS_BBOX);
 	Engine->getSceneNodeCreator()->configureSceneNode(emptySceneNode);
 
-	//Rengine->createNormalMappingMaterial();
+	Rengine->createNormalMappingMaterial();
 	//planeNode->setMaterialType(Rengine->Materials[EMT_SOLID]);
 	//cubeNode->setMaterialType(Rengine->Materials[EMT_SOLID]);
 
