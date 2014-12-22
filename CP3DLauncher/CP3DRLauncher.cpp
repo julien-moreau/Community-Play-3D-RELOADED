@@ -2,6 +2,8 @@
 #include "stdafx.h"
 
 #define CP3DR_COMPILE_EDITOR
+#define CP3DR_COMPILE_ENGINE
+#define CP3DR_COMPILE_RENDERING_ENGINE
 #include <CP3DCompileConfig.h>
 #include <ICP3DEditor.h>
 

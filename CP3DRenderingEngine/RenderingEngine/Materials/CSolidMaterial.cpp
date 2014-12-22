@@ -39,7 +39,7 @@ void CSolidMaterial::OnSetMaterial(const irr::video::SMaterial& material) {
 void CSolidMaterial::OnSetConstants(irr::video::IMaterialRendererServices *services, irr::s32 userData) {
 
 	/// Vertex
-	if (Driver->getDriverType() == EDT_DIRECT3D9) {
+	if (Driver->getDriverType() != EDT_OPENGL) {
 		matrix4 mWorldViewProj;
 		mWorldViewProj *= Driver->getTransform(ETS_PROJECTION);
 		mWorldViewProj *= Driver->getTransform(ETS_VIEW);

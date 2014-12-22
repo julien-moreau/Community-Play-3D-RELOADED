@@ -106,7 +106,7 @@ void CCP3DEditorCore::OnPreUpdate() {
 	/// Screen resized
 	if (Driver->getScreenSize() != ScreenSize) {
 		ScreenSize = Driver->getScreenSize();
-		Rengine->getHandler()->setScreenRenderTargetResolution(ScreenSize);
+		//Rengine->getHandler()->setScreenRenderTargetResolution(ScreenSize);
 	}
 
 	/// Viewport
@@ -214,8 +214,8 @@ void CCP3DEditorCore::createTestScene() {
 	Engine->getSceneNodeCreator()->configureSceneNode(emptySceneNode);
 
 	Rengine->createNormalMappingMaterial();
-	//planeNode->setMaterialType(Rengine->Materials[EMT_SOLID]);
-	//cubeNode->setMaterialType(Rengine->Materials[EMT_SOLID]);
+	planeNode->setMaterialType(Rengine->Materials[EMT_SOLID]);
+	cubeNode->setMaterialType(Rengine->Materials[EMT_SOLID]);
 
 	ISceneNode* skyboxNode = smgr->addSkyBoxSceneNode(
 		driver->getTexture("Textures/Skybox/glacier_up.png"),

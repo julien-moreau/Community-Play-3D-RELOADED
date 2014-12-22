@@ -58,7 +58,7 @@ namespace cp3d {
 
 	//! Compiles the CP3D Engine with OpenMP support
 	//! Uncomment this line to enable OpenMP support
-	//#define CP3DR_COMPILE_WITH_OPENMP
+	#define CP3DR_COMPILE_WITH_OPENMP
 
 	//! If uncommented, enable proper sRGB and linear color handling
 	//! Uncomment this line to enable
@@ -70,7 +70,7 @@ namespace cp3d {
 
 	//! If uncommented, CP3D will used the multithreaded driver
 	//! So far only on DirectX
-	//#define CP3DR_DRIVER_MULTITHREADED
+	#define CP3DR_DRIVER_MULTITHREADED
 
 	//! This should be usually enabled, in order to avoid render
 	//! artifacts on the visible framebuffer. However, it might be
@@ -79,9 +79,18 @@ namespace cp3d {
 	//! single buffers
 	//#define CP3DR_DOUBLE_BUFFER
 
-	//! Runs the editor using the Direct3D 11 driver
+	//! Runs the editor using the experimental Direct3D 11 driver
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
 	#define CP3DR_EDITOR_DIRECT3D11
+	#endif
+
+	//! Compiles the CP3DR Engine with the Microsoft Kinect V2 support
+	//! Allow you to access the Microsoft Kinect V2 related tools to develop
+	//! your Microsoft Kinect V2 gameplays, or direct use in CP3DR Editor.
+	//! Comment the following line if you want to disable the Microsoft Kinect V2 supprot
+	#define CP3DR_KINECT_SUPPORT
+	#if defined(CP3DR_KINECT_SUPPORT) && defined(CP3DR_COMPILE_ENGINE) && !defined(CP3DR_COMPILE_EDITOR)
+	#pragma comment(lib, "Kinect20.lib")
 	#endif
 
 } /// End namespace cp3d

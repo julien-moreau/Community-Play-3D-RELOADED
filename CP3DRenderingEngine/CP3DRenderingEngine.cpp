@@ -37,7 +37,7 @@ CCP3DRenderingEngine::CCP3DRenderingEngine(IrrlichtDevice *device) : NormalMapMa
 		i++;
 	}
 
-	//SolidMaterialType = new CSolidMaterial(this);
+	SolidMaterialType = new CSolidMaterial(this);
 }
 
 CCP3DRenderingEngine::~CCP3DRenderingEngine() {
