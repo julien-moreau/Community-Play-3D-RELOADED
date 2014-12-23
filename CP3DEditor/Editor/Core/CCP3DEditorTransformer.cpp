@@ -116,6 +116,17 @@ CCP3DEditorTransformer::~CCP3DEditorTransformer() {
 	MassZ->remove();
 }
 
+bool CCP3DEditorTransformer::removeSceneNode(irr::scene::ISceneNode *node) {
+	for (u32 i = 0; i < NodesToTransform.size(); i++) {
+		if (NodesToTransform[i] == node) {
+			NodesToTransform.erase(i);
+			return true;
+		}
+	}
+
+	return false;
+}
+
 void CCP3DEditorTransformer::setViewPort(const irr::core::rect<s32> &viewPort) {
 	ViewPort = viewPort;
 }

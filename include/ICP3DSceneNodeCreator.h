@@ -2,6 +2,7 @@
 #define _H_ICP3D_SCENE_NODE_CREATOR_INCLUDED__
 
 #include <irrlicht.h>
+#include <ICP3DRenderingEngine.h>
 #include <functional>
 
 namespace cp3d {
@@ -33,6 +34,11 @@ public:
 	//! Configures scene node to default values
 	//! \param node: the node to configure
 	virtual void configureSceneNode(irr::scene::ISceneNode *node) = 0;
+
+	//! Removes a scene properly (shadows, post-processes, etc)
+	//! \param node: the node to remove
+	//! \param renderingEngine: the rendering engine instance that is computing the scene node
+	virtual void removeSceneNode(irr::scene::ISceneNode *node, rendering::ICP3DRenderingEngine *renderingEngine) = 0;
 
 	//!----------------------------------------------------------------
 	//! MESHES

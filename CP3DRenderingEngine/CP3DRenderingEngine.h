@@ -38,12 +38,14 @@ public:
 	irr::u32 getLightCount() {
 		return Lights.size();
 	}
-	ICP3DLightSceneNode *getLightSceneNode(const irr::u32 index) {
+	ICP3DLightSceneNode *getLightSceneNode(const irr::u32 &index) {
 		return Lights[index];
 	}
 	const irr::u32 getLightSceneNodeCount() const {
 		return Lights.size();
 	}
+	void removeLightSceneNode(ICP3DLightSceneNode *node);
+	void removeLightSceneNode(irr::scene::ILightSceneNode *node);
 	irr::s32 setLightSceneNodeComputeShadows(ICP3DLightSceneNode *node, const bool compute);
 	irr::s32 setLightSceneNodeComputeShadows(const irr::u32 index, const bool compute);
 

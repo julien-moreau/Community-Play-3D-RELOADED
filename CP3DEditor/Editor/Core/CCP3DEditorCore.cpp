@@ -206,15 +206,15 @@ void CCP3DEditorCore::createTestScene() {
 	IBillboardTextSceneNode *emptySceneNode = smgr->addBillboardTextSceneNode(Gui->getSkin()->getFont(), L"Light :)", 0, dimension2df(30.f, 30.f), vector3df(0.f), -1, SColor(255, 255, 0, 0));
 	emptySceneNode->setName("Text Node");
 	emptySceneNode->setMaterialFlag(EMF_LIGHTING, false);
-	emptySceneNode->setPosition(vector3df(0.f, 100.f, 100.f));
+	emptySceneNode->setPosition(vector3df(-100.f, 100.f, 0.f));
 	Handler->addShadowToNode(emptySceneNode, rendering::EFT_NONE, rendering::ESM_EXCLUDE);
 	light->setParent(emptySceneNode);
 	emptySceneNode->setDebugDataVisible(EDS_BBOX);
 	Engine->getSceneNodeCreator()->configureSceneNode(emptySceneNode);
 
 	Rengine->createNormalMappingMaterial();
-	planeNode->setMaterialType(Rengine->Materials[EMT_SOLID]);
-	cubeNode->setMaterialType(Rengine->Materials[EMT_SOLID]);
+	//planeNode->setMaterialType(Rengine->Materials[EMT_SOLID]);
+	//cubeNode->setMaterialType(Rengine->Materials[EMT_SOLID]);
 
 	ISceneNode* skyboxNode = smgr->addSkyBoxSceneNode(
 		driver->getTexture("Textures/Skybox/glacier_up.png"),

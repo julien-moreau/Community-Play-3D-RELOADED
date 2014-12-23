@@ -3,6 +3,8 @@
 #include "CCP3DSceneNodeCreator.h"
 
 #include <ICP3DRenderingEngine.h>
+#include <ICP3DHandler.h>
+#include <ICP3DCustomPass.h>
 
 #include "Clouds/CCloudSceneNode.h"
 
@@ -101,6 +103,21 @@ void CCP3DSceneNodeCreator::configureSceneNode(irr::scene::ISceneNode *node) {
 				node->getMaterial(i).TextureLayer[j].Texture = EmptyTexture;
 			}
 		}
+	}
+}
+
+void CCP3DSceneNodeCreator::removeSceneNode(irr::scene::ISceneNode *node, rendering::ICP3DRenderingEngine *renderingEngine) {
+	rendering::ICP3DHandler *handler = renderingEngine->getHandler();
+
+	if (node->getType() != ESNT_LIGHT) {
+		for (u32 i = 0; i < handler->getCustomPassCount(); i++)
+			handler->getCustomPass(i)->removeNodeFromPass(node);
+
+		handler->removeShadowFromNode(node);
+		node->remove();
+	}
+	else {
+		renderingEngine->removeLightSceneNode((ILightSceneNode *)node);
 	}
 }
 

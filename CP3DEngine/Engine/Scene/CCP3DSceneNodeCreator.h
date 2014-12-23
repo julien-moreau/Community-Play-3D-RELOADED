@@ -41,6 +41,9 @@ public:
 	/// Configures scene node to default values
 	void configureSceneNode(irr::scene::ISceneNode *node);
 
+	/// Removes a scene node properly
+	void removeSceneNode(irr::scene::ISceneNode *node, rendering::ICP3DRenderingEngine *renderingEngine);
+
 	//!----------------------------------------------------------------
 	//! MESHES
 	//!----------------------------------------------------------------

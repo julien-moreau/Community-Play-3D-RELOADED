@@ -80,9 +80,10 @@ namespace cp3d {
 	//#define CP3DR_DOUBLE_BUFFER
 
 	//! Runs the editor using the experimental Direct3D 11 driver
-	//#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
-	//#define CP3DR_EDITOR_DIRECT3D11
-	//#endif
+	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+	//! uncommend this line to disable Direct3D 11 driver for the editor
+	#define CP3DR_EDITOR_DIRECT3D11
+	#endif
 
 	//! Compiles the CP3DR Engine with the Microsoft Kinect V2 support
 	//! Allow you to access the Microsoft Kinect V2 related tools to develop

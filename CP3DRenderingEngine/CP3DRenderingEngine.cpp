@@ -86,6 +86,27 @@ ICP3DLightSceneNode *CCP3DRenderingEngine::createLightSceneNode(const bool compu
 	return light;
 }
 
+void CCP3DRenderingEngine::removeLightSceneNode(ICP3DLightSceneNode *node) {
+	const u32 index = Lights.binary_search(node);
+	if (index == -1)
+		return;
+
+	if (node->ShadowLight)
+		((CCP3DHandler *)Handler)->removeShadowLight(node->ShadowLightIndex);
+	
+	delete node;
+	Lights.erase(index);
+}
+
+void CCP3DRenderingEngine::removeLightSceneNode(ILightSceneNode *node) {
+	for (u32 i = 0; i < Lights.size(); i++) {
+		if (Lights[i]->Node == node) {
+			removeLightSceneNode(Lights[i]);
+			return;
+		}
+	}
+}
+
 irr::s32 CCP3DRenderingEngine::setLightSceneNodeComputeShadows(const irr::u32 index, const bool compute) {
 	if (index < 0 || index >= Lights.size())
 		return -1;

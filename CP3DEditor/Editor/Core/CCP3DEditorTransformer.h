@@ -28,6 +28,8 @@ public:
 
 	void setViewPort(const irr::core::rect<irr::s32> &viewPort);
 
+	bool removeSceneNode(irr::scene::ISceneNode *node);
+
 private:
 	/// Methods
 	bool findAndSetMousePositionInPlane();

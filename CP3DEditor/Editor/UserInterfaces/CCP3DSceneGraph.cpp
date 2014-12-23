@@ -2,8 +2,11 @@
 #include "stdafx.h"
 #include "../Core/CCP3DInterfaceController.h"
 #include "../Core/CCP3DEditorCore.h"
+#include "../Core/CCP3DEditorTransformer.h"
 
 #include <ICP3DEditionTool.h>
+#include <ICP3DEngine.h>
+#include <ICP3DSceneNodeCreator.h>
 
 #include "CCP3DSceneGraph.h"
 
@@ -15,7 +18,8 @@ using namespace gui;
 
 namespace cp3d {
 
-CCP3DSceneGraph::CCP3DSceneGraph(CCP3DEditorCore *editorCore) : EditorCore(editorCore), WindowWidth(400), SelectedSceneNode(0)
+CCP3DSceneGraph::CCP3DSceneGraph(CCP3DEditorCore *editorCore) : EditorCore(editorCore), WindowWidth(400), SelectedSceneNode(0),
+		ContextMenu(0)
 {
 	/// Configure
 	editorCore->getEngine()->getEventReceiver()->addEventReceiver(this);
@@ -91,11 +95,48 @@ bool CCP3DSceneGraph::OnEvent(const SEvent &event) {
 
 			}
 		}
+		else if (event.MouseInput.Event == EMIE_RMOUSE_PRESSED_DOWN) {
+			IGUIElement *focus = Gui->getFocus();
+			const vector2di cpos(event.MouseInput.X, event.MouseInput.Y);
+
+			if (Graph->getSelected() != 0 && focus == 0 && Graph->isPointInside(cpos)) {
+				ContextMenu = Gui->addContextMenu(rect<s32>(cpos.X, cpos.Y, cpos.X + 100, cpos.Y + 100), 0, -1);
+				ContextMenu->addItem(L"Remove...", EGCM_REMOVE, true, false, false, false);
+
+				return false;
+			}
+		}
 	}
 
 	else if (event.EventType == EET_GUI_EVENT) {
 
-		if (event.GUIEvent.EventType == EGET_TREEVIEW_NODE_SELECT) {
+		if (event.GUIEvent.EventType == EGET_MENU_ITEM_SELECTED) {
+			if (event.GUIEvent.Caller == ContextMenu) {
+				IGUITreeViewNode *node = Graph->getSelected();
+				if (!node)
+					return true;
+
+				ISceneNode *sceneNode = (ISceneNode*)node->getData();
+				sceneNode = dynamic_cast<ISceneNode *>(sceneNode);
+				if (!SceneNode)
+					return true;
+
+				engine::ICP3DSceneNodeCreator *snCreator = EditorCore->getEngine()->getSceneNodeCreator();
+
+				// Remove
+				if (ContextMenu->getItemCommandId(ContextMenu->getSelectedItem()) == EGCM_REMOVE) {
+					if (sceneNode->getChildren().size() == 0)
+						snCreator->removeSceneNode(sceneNode, EditorCore->getRenderingEngine());
+					EditorCore->getEditorTransformer()->removeSceneNode(sceneNode);
+					node->getParent()->deleteChild(node);
+					SelectedSceneNode = 0;
+				}
+
+				ContextMenu = 0;
+			}
+		}
+
+		else if (event.GUIEvent.EventType == EGET_TREEVIEW_NODE_SELECT) {
 			if (event.GUIEvent.Caller == Graph) {
 				IGUITreeViewNode *node = Graph->getSelected();
 				if (!node)

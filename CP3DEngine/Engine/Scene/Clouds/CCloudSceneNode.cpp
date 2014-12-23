@@ -29,6 +29,11 @@ CCloudSceneNode::CCloudSceneNode(ISceneNode* parent, ISceneManager* mgr, s32 id)
         Material.ZBuffer = ECFN_NEVER;
 	Material.ZWriteEnable = false;
 
+	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+	//if (mgr->getVideoDriver()->getDriverType() == EDT_DIRECT3D11)
+	//	Material.ZBuffer = ECFN_ALWAYS;
+	#endif
+
 	Material.TextureLayer[0].TextureWrapU = ETC_REPEAT;
 	Material.TextureLayer[0].TextureWrapV = ETC_REPEAT;
 
@@ -37,7 +42,7 @@ CCloudSceneNode::CCloudSceneNode(ISceneNode* parent, ISceneManager* mgr, s32 id)
 		EBF_SRC_ALPHA, 
 		EBF_ONE_MINUS_SRC_ALPHA,
 		EMFN_MODULATE_1X, 
-		EAS_TEXTURE | EAS_VERTEX_COLOR); 
+		EAS_TEXTURE | EAS_VERTEX_COLOR);
 
 	LastUpdate = 0;
 
@@ -226,8 +231,8 @@ void CCloudSceneNode::render() {
 			driver->setMaterial(m);
 
 			#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
-			driver->drawIndexedTriangleFan(true, InnerBuffer->getVertexBuffer(0), true, InnerBuffer->getIndexBuffer(), CLOUDSUBDIV);
-			driver->drawVertexPrimitiveList(true, InnerBuffer->getVertexBuffer(0), true, OuterBuffer->getIndexBuffer(), 2 * CLOUDSUBDIV, EPT_TRIANGLE_STRIP);
+			driver->drawIndexedTriangleFan(false, InnerBuffer->getVertexBuffer(0), false, InnerBuffer->getIndexBuffer(), CLOUDSUBDIV);
+			driver->drawVertexPrimitiveList(false, InnerBuffer->getVertexBuffer(0), false, OuterBuffer->getIndexBuffer(), 2 * CLOUDSUBDIV, EPT_TRIANGLE_STRIP);
 			#else
 			driver->drawIndexedTriangleFan(InnerVertices, CLOUDSUBDIV+1, InnerIndices, CLOUDSUBDIV);
 			driver->drawVertexPrimitiveList(OuterVertices, 2*CLOUDSUBDIV, OuterIndices, 2*CLOUDSUBDIV, EVT_STANDARD, EPT_TRIANGLE_STRIP, EIT_16BIT);

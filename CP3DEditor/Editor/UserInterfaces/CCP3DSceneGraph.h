@@ -49,6 +49,8 @@ private:
 	irr::gui::IGUIWindow *Window;
 	irr::gui::IGUITreeView *Graph;
 
+	irr::gui::IGUIContextMenu *ContextMenu;
+
 	/// Datas
 	irr::gui::IGUITreeViewNode *RootNode;
 	irr::gui::IGUITreeViewNode *SceneNode;
@@ -61,6 +63,11 @@ private:
 	irr::s32 getIconFromType(irr::scene::ESCENE_NODE_TYPE type);
 	void fillGraphRecursively(irr::scene::ISceneNode *start, irr::gui::IGUITreeViewNode *treeNode);
 	irr::u32 getLightSceneNodeIndex(irr::scene::ILightSceneNode *node);
+
+	// Enums
+	enum E_GRAPH_CTX_MENU {
+		EGCM_REMOVE = 0
+	};
 
 };
 

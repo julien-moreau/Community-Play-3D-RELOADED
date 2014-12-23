@@ -255,7 +255,7 @@ core::stringc CShaderPreprocessor::ppShader(core::stringc shaderProgram) {
 		}
 	}
 
-	shaderProgram += '\0';
+	shaderProgram += "\n\0";
 	return shaderProgram;
 }
 
