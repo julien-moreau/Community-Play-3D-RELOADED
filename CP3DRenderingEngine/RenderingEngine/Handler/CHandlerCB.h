@@ -44,7 +44,7 @@ public:
 		IVideoDriver* driver = services->getVideoDriver();
 
 		#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
-		if (driver->getDriverType() == EDT_DIRECT3D9 || driver->getDriverType() == EDT_DIRECT3D11) {
+		if (driver->getDriverType() == EDT_DIRECT3D11) {
 			core::matrix4 worldTransposed = driver->getTransform(video::ETS_WORLD);
 			worldTransposed = worldTransposed.getTransposed();
 			services->setVertexShaderConstant("mWorldTrans", worldTransposed.pointer(), 16);

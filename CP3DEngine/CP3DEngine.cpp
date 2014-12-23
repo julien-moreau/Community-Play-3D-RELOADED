@@ -70,8 +70,13 @@ void CCP3DEngine::runEngine() {
 
 			Handler->update();
 
-			for (u32 i=0; i < CustomSceneManagers.size(); i++)
+			for (u32 i = 0; i < CustomSceneManagers.size(); i++) {
+				#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+				if (Driver->getDriverType() == EDT_DIRECT3D11)
+					Driver->clearZBuffer();
+				#endif
 				CustomSceneManagers[i]->drawAll();
+			}
 
 			Driver->setViewPort(rect<s32>(0, 0, Driver->getScreenSize().Width, Driver->getScreenSize().Height));
 			if (DrawGUI)
