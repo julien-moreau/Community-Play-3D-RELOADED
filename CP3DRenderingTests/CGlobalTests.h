@@ -153,7 +153,7 @@ void GlobalTest(irr::IrrlichtDevice *device) {
 	planeNode->setMaterialTexture(2, driver->getTexture("Textures/specular.tga"));
 	planeNode->setMaterialFlag(EMF_LIGHTING, false);
 	planeNode->getMaterial(0).Shininess = 0.f;
-	handler->addShadowToNode(planeNode, cp3d::rendering::EFT_16PCF, cp3d::rendering::ESM_RECEIVE);
+	handler->addShadowToNode(planeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_RECEIVE);
 
 	IMeshSceneNode *cubeNode = smgr->addCubeSceneNode(50.f, 0, -1, vector3df(0.f, 25.f, 0.f), vector3df(0.f, 45.f, 0.f));
 	//cubeNode->setMesh(smgr->getMeshManipulator()->createMeshWithTangents(cubeNode->getMesh(), true, true, false, true));
@@ -163,7 +163,7 @@ void GlobalTest(irr::IrrlichtDevice *device) {
 	cubeNode->setMaterialFlag(EMF_NORMALIZE_NORMALS, false);
 	cubeNode->setMaterialFlag(EMF_LIGHTING, false);
 	cubeNode->getMaterial(0).Shininess = 0.f;
-	handler->addShadowToNode(cubeNode, cp3d::rendering::EFT_16PCF, cp3d::rendering::ESM_BOTH);
+	handler->addShadowToNode(cubeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_BOTH);
 
 	//cp3d::rendering::SShadowLight light1(1024, vector3df(0.f, 100.f, 100.f), vector3df(0.f), SColor(255, 255, 255, 255), 1.f, 400.f, 90.f * f32(irr::core::DEGTORAD64), false);
 	//light1.setMustAutoRecalculate(false);

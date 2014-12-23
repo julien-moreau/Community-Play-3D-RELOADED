@@ -106,7 +106,6 @@ void CCP3DEditorCore::OnPreUpdate() {
 	/// Screen resized
 	if (Driver->getScreenSize() != ScreenSize) {
 		ScreenSize = Driver->getScreenSize();
-		//Rengine->getHandler()->setScreenRenderTargetResolution(ScreenSize);
 	}
 
 	/// Viewport

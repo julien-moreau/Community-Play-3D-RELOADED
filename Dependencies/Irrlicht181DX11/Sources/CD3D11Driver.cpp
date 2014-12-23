@@ -2119,7 +2119,10 @@ void CD3D11Driver::OnResize(const core::dimension2d<u32>& size)
 	present.BufferDesc.Height = size.Height;
 	ScreenSize = size;
 
-	reset();
+	CurrentDepthBuffer = NULL;
+	CurrentBackBuffer = NULL;
+
+	resetScreenSize();
 }
 
 //! sets the needed renderstates
@@ -3278,6 +3281,72 @@ ID3D11DepthStencilView* CD3D11Driver::createDepthStencilView(core::dimension2d<u
 	return dsView;
 }
 
+void CD3D11Driver::resetScreenSize() {
+	// unbind render targets
+	ID3D11RenderTargetView* views[] = { NULL };
+	Context->OMSetRenderTargets(1, views, NULL);
+
+	if (DefaultDepthBuffer)
+		DefaultDepthBuffer->Release();
+
+	if (DefaultBackBuffer)
+		DefaultBackBuffer->Release();
+
+	// If fullscreen, do it
+	if (Params.Fullscreen)
+	{
+		SwapChain->SetFullscreenState(TRUE, Output);
+	}
+
+	HRESULT hr = S_OK;
+
+	// resize targets. Shows error when working with Parallel NSight
+#ifdef _DEBUG
+	hr = SwapChain->ResizeBuffers(1, ScreenSize.Width, ScreenSize.Height, D3DColorFormat, DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH);
+	if (FAILED(hr))
+	{
+		logFormatError(hr, "Could not resize back buffer");
+
+		return;
+	}
+#endif
+
+	// Get default render target
+	ID3D11Texture2D* backBuffer = NULL;
+	hr = SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backBuffer));
+	if (FAILED(hr))
+	{
+		logFormatError(hr, "Could not get back buffer");
+
+		return;
+	}
+
+	hr = Device->CreateRenderTargetView(backBuffer, NULL, &DefaultBackBuffer);
+	if (FAILED(hr))
+	{
+		logFormatError(hr, "Could not create render target view");
+
+		return;
+	}
+	backBuffer->Release();
+
+	// create depth buffer
+	DefaultDepthBuffer = createDepthStencilView(ScreenSize);
+
+	// Set render targets
+	Context->OMSetRenderTargets(1, &DefaultBackBuffer, DefaultDepthBuffer);
+
+	ResetRenderStates = true;
+
+	disableTextures();
+
+	removeAllHardwareBuffers();
+	removeAllOcclusionQueries();
+
+	setFog(FogColor, FogType, FogStart, FogEnd, FogDensity, PixelFog, RangeFog);
+	setAmbientLight(AmbientLight);
+}
+
 void CD3D11Driver::reset()
 {
 	u32 i;
@@ -3311,69 +3380,7 @@ void CD3D11Driver::reset()
 		}
 	}
 
-	// unbind render targets
-	ID3D11RenderTargetView* views[] = { NULL };
-	Context->OMSetRenderTargets(1, views, NULL);
-
-	if(DefaultDepthBuffer)
-		DefaultDepthBuffer->Release();
-
-	if(DefaultBackBuffer)
-		DefaultBackBuffer->Release();
-
-	// If fullscreen, do it
-	if(Params.Fullscreen)
-	{
-		SwapChain->SetFullscreenState( TRUE, Output );
-	}
-
-	HRESULT hr = S_OK;
-
-	// resize targets. Shows error when working with Parallel NSight
-#ifdef _DEBUG
-	hr = SwapChain->ResizeBuffers( 1, ScreenSize.Width, ScreenSize.Height, D3DColorFormat, DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH );
-	if(FAILED(hr))
-	{
-		logFormatError(hr, "Could not resize back buffer");
-
-		return;
-	}
-#endif
-
-	// Get default render target
-	ID3D11Texture2D* backBuffer = NULL;
-	hr = SwapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), reinterpret_cast<void**>( &backBuffer ) );
-	if(FAILED(hr))
-	{
-		logFormatError(hr, "Could not get back buffer");
-
-		return;
-	}
-
-	hr = Device->CreateRenderTargetView( backBuffer, NULL, &DefaultBackBuffer );
-	if(FAILED(hr))
-	{
-		logFormatError(hr, "Could not create render target view");
-
-		return;
-	}
-	backBuffer->Release();
-
-	// create depth buffer
-	DefaultDepthBuffer = createDepthStencilView(ScreenSize);
-
-	// Set render targets
-	Context->OMSetRenderTargets(1, &DefaultBackBuffer, DefaultDepthBuffer);
-
-	ResetRenderStates = true;
-
-	disableTextures();
-
-	removeAllHardwareBuffers();
-	removeAllOcclusionQueries();
-
-	setFog(FogColor, FogType, FogStart, FogEnd, FogDensity, PixelFog, RangeFog);
-	setAmbientLight(AmbientLight);
+	resetScreenSize();
 }
 
 // returns the current size of the screen or rendertarget

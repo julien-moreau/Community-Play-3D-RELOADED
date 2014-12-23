@@ -108,7 +108,7 @@ CD3D11Texture::~CD3D11Texture()
 	if(SRView)
 		SRView->Release();
 
-	if(Texture)
+	if(Texture && !RTView)
 		Texture->Release();
 
 	if(TextureBuffer)

@@ -547,6 +547,7 @@ namespace video
 
 		//! handle screen resize
 		void reset();
+		void resetScreenSize();
 
 		bool disableTextures( u32 fromStage = 0);
 
