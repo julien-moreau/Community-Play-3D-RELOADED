@@ -1,9 +1,9 @@
 
-##ifdef OPENGL_DRIVER
+#ifdef OPENGL_DRIVER
 
 
 
-##else
+#else
 
 float4x4 WorldViewProj;
 float4x4 WorldView;
@@ -42,4 +42,4 @@ VertexShaderOutput vertexMain(VertexShaderInput input) {
 	return (output);
 }
 
-##endif
+#endif

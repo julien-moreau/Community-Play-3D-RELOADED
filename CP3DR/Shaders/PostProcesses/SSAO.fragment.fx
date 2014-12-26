@@ -3,9 +3,9 @@
 #define MAX_DEPTH_DECLINE 0.2
 #define DEPTH_ALIASING_EPISILON 0.02
 #define RAND_TEXTURE_TILES 3.0
-#define SSAO_OUTPUT_MULTIPLIER 10000.5
+#define SSAO_OUTPUT_MULTIPLIER 1.5
 
-##ifdef OPENGL_DRIVER
+#ifdef OPENGL_DRIVER
 
 uniform sampler2D DepthMapSampler;
 uniform sampler2D UserMapSampler;
@@ -71,7 +71,7 @@ void main()
 	gl_FragColor = vec4(1.0 - totalOcclusion * SSAO_OUTPUT_MULTIPLIER);
 }
 
-##else
+#else
 
 sampler2D DepthMapSampler : register(s2);
 sampler2D UserMapSampler : register(s3);
@@ -140,4 +140,4 @@ float4 pixelMain
 	return 1.0 - totalOcclusion * SSAO_OUTPUT_MULTIPLIER;
 }
 
-##endif
+#endif

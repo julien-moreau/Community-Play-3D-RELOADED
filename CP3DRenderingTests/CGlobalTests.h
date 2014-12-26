@@ -190,7 +190,7 @@ void GlobalTest(irr::IrrlichtDevice *device) {
 	light->setPosition(vector3df(0.f, 100.f, 100.f));
 	light->setLightColor(SColorf(1.f, 1.f, 1.f, 1.f));
 	light->getLightData().SpecularColor = SColorf(1.f, 0.5f, 0.f, 1.f);
-	light->getShadowLight()->setUseRoundSpotLight(true);
+	light->getShadowLight()->setUseRoundSpotLight(false);
 
 	ISceneNodeAnimator *anim = smgr->createFlyCircleAnimator(vector3df(0.f, 100.f, 0.f), 100.f);
 	ILightSceneNode *l = *light;

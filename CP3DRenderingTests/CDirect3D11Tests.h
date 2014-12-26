@@ -7,6 +7,25 @@
 namespace cp3d {
 namespace test {
 
+class CPureDepthSSAO : public rendering::IPostProcessingRenderCallback {
+
+public:
+
+	CPureDepthSSAO(irr::IrrlichtDevice *device, rendering::ICP3DHandler *handler) {
+		RandomTexture = handler->generateRandomVectorTexture(irr::core::dimension2du(512, 512), "SSAORandomTexture");
+		DepthRTT = device->getVideoDriver()->getTexture("DepthRTT");
+	}
+
+	void OnPreRender(rendering::ICP3DHandler *handler) {
+		handler->setPostProcessingTextureAtIndex(2, DepthRTT);
+		handler->setPostProcessingTextureAtIndex(3, RandomTexture);
+	}
+
+private:
+	irr::video::ITexture *RandomTexture, *DepthRTT;
+
+};
+
 void Direct3D11Test(irr::IrrlichtDevice *device) {
 	using namespace irr;
 	using namespace video;
@@ -23,19 +42,47 @@ void Direct3D11Test(irr::IrrlichtDevice *device) {
 
 	/// Create a test scene
 	ICameraSceneNode *camera = smgr->addCameraSceneNodeFPS(0, 200.f, 0.09f);
-	camera->setPosition(vector3df(100.f, 100.f, 0.f));
+	camera->setPosition(vector3df(30.f, 30.f, 0.f));
 	device->getCursorControl()->setVisible(false);
 
-	IAnimatedMesh *planeMesh = smgr->addHillPlaneMesh("plane_mesh", dimension2d<f32>(100.f, 100.f), dimension2d<u32>(50, 50),
-		0, 0.f, dimension2d<f32>(0.f, 0.f), dimension2d<f32>(50.f, 50.f));
+	ISceneNode* skyboxNode = smgr->addSkyBoxSceneNode(
+		driver->getTexture("Textures/Skybox/glacier_up.png"),
+		driver->getTexture("Textures/Skybox/glacier_dn.png"),
+		driver->getTexture("Textures/Skybox/glacier_lf.png"),
+		driver->getTexture("Textures/Skybox/glacier_rt.png"),
+		driver->getTexture("Textures/Skybox/glacier_ft.png"),
+		driver->getTexture("Textures/Skybox/glacier_bk.png"));
 
-	IMeshSceneNode *planeNode = smgr->addMeshSceneNode(planeMesh);
-	planeNode->setMaterialTexture(0, driver->getTexture("Textures/diffuse.tga"));
-	planeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
-	planeNode->setMaterialTexture(2, driver->getTexture("Textures/specular.tga"));
-	planeNode->setMaterialFlag(EMF_LIGHTING, false);
-	planeNode->getMaterial(0).Shininess = 0.f;
-	handler->addShadowToNode(planeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_EXCLUDE);
+	handler->getDepthPassManager()->addPass("DepthRTT");
+
+	rengine->createNormalMappingMaterial();
+	for (s32 i = 0; i < 6; ++i)
+	{
+		for (s32 j = 0; j < 6; ++j)
+		{
+			for (s32 k = 0; k < 6; ++k)
+			{
+				ISceneNode* cube = smgr->addCubeSceneNode(4.0f);
+				cube->setPosition(vector3df(i * 4.0f + 2.0f, j * 5.0f + 1.0f, k * 6.0f + 3.0f));
+				cube->setRotation(vector3df((f32)(rand() % 360), (f32)(rand() % 360), (f32)(rand() % 360)));
+				cube->getMaterial(0).setTexture(0, driver->getTexture("Textures/diffuse.tga"));
+				cube->getMaterial(0).setTexture(1, driver->getTexture("Textures/normal.tga"));
+				cube->getMaterial(0).setFlag(EMF_LIGHTING, false);
+				cube->getMaterial(0).MaterialType = rengine->Materials[EMT_NORMAL_MAP_SOLID];
+
+				handler->getDepthPassManager()->addNodeToPass(cube);
+			}
+		}
+	}
+
+	rendering::ICP3DLightSceneNode *light = rengine->createLightSceneNode(true, false);
+	light->setPosition(vector3df(100.f, 100.f, 0.f));
+	light->setLightColor(SColorf(1.f, 1.f, 1.f, 1.f));
+
+	s32 ssaoMat = handler->addPostProcessingEffectFromFile("Tests/ssao.fragment.fx", new CPureDepthSSAO(device, handler));
+	handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/BlurHP.fragment.fx");
+	handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/BlurVP.fragment.fx");
+	handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/SSAOCombine.fragment.fx");
 
 	while (device->run()) {
 		if (!device->isWindowActive())
@@ -43,6 +90,7 @@ void Direct3D11Test(irr::IrrlichtDevice *device) {
 
 		driver->beginScene(true, true, SColor(0x0));
 		handler->update();
+		//driver->draw2DImage(driver->getTexture("DepthRTT"), vector2di(0, 0));
 		driver->endScene();
 	}
 }

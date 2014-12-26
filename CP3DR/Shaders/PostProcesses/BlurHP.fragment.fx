@@ -1,4 +1,4 @@
-##ifdef OPENGL_DRIVER
+#ifdef OPENGL_DRIVER
 
 uniform sampler2D ColorMapSampler;
 
@@ -24,11 +24,16 @@ void main()
 	gl_FragColor = BlurCol;
 }
 
-##else
+#else
 
+#ifdef DIRECT3D_11
+Texture2D ColorMapSampler : register(t0);
+SamplerState ColorMapSamplerST : register(s0);
+#else
 sampler2D ColorMapSampler : register(s0);
+#endif
 
-float4 pixelMain ( float4 Texcoords : TEXCOORD0 ) : COLOR0
+float4 pixelMain(VS_OUTPUT In) : COLOR0
 {
 	const float2 offsetArray[4] = 
 	{
@@ -40,11 +45,16 @@ float4 pixelMain ( float4 Texcoords : TEXCOORD0 ) : COLOR0
 
 	float4 finalVal = float4(0.0, 0.0, 0.0, 0.0);
 
-	for(int i = 0;i < 4;++i)
-		finalVal += tex2D(ColorMapSampler, clamp(Texcoords.xy + offsetArray[i] * 2.25, float2(0.0, 0.0), float2(1.0, 1.0)));
+	for (int i = 0; i < 4; ++i) {
+		#ifdef DIRECT3D_11
+		finalVal += ColorMapSampler.Sample(ColorMapSamplerST, clamp(In.TexCoords.xy + offsetArray[i] * 2.25, float2(0.0, 0.0), float2(1.0, 1.0)));
+		#else
+		finalVal += tex2D(ColorMapSampler, clamp(In.TexCoords.xy + offsetArray[i] * 2.25, float2(0.0, 0.0), float2(1.0, 1.0)));
+		#endif
+	}
 
 	finalVal /= 4.0f;
 	return finalVal;
 }
 
-##endif
+#endif

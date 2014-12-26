@@ -80,7 +80,8 @@ ICP3DLightSceneNode *CCP3DRenderingEngine::createLightSceneNode(const bool compu
 	ICP3DLightSceneNode *light = new ICP3DLightSceneNode(lightSceneNode, computeNormalMapping, shadowLightIndex);
 
 	light->ShadowLight = (shadowLightIndex == -1) ? 0 : Chandler->getShadowLightPtr(shadowLightIndex);
-	light->ShadowLight->LightScenenode = lightSceneNode;
+	if (light->ShadowLight)
+		light->ShadowLight->LightScenenode = lightSceneNode;
 
 	Lights.push_back(light);
 	return light;

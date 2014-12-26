@@ -1,7 +1,10 @@
-#ifndef __H_HANDLER_SQ_INCLUDED__
-#define __H_HANDLER_SQ_INCLUDED__
+#ifndef __H_CP3D_SCREEN_QUAD_INCLUDED__
+#define __H_CP3D_SCREEN_QUAD_INCLUDED__
 
 #include <irrlicht.h>
+
+namespace cp3d {
+namespace rendering {
 
 class CScreenQuad {
 
@@ -13,9 +16,9 @@ public:
 		Material.ZWriteEnable = false;
 
 		Vertices[0] = irr::video::S3DVertex(-1.0f, -1.0f, 0.0f, 0, 0, 1, irr::video::SColor(0x0), 0.0f, 1.0f);
-        Vertices[1] = irr::video::S3DVertex(-1.0f, 1.0f, 0.0f, 0, 0, 1, irr::video::SColor(0x0), 0.0f, 0.0f);
-        Vertices[2] = irr::video::S3DVertex( 1.0f, 1.0f, 0.0f, 0, 0, 1, irr::video::SColor(0x0), 1.0f, 0.0f);
-        Vertices[3] = irr::video::S3DVertex( 1.0f, -1.0f, 0.0f, 0, 0, 1, irr::video::SColor(0x0), 1.0f, 1.0f);
+		Vertices[1] = irr::video::S3DVertex(-1.0f, 1.0f, 0.0f, 0, 0, 1, irr::video::SColor(0x0), 0.0f, 0.0f);
+		Vertices[2] = irr::video::S3DVertex(1.0f, 1.0f, 0.0f, 0, 0, 1, irr::video::SColor(0x0), 1.0f, 0.0f);
+		Vertices[3] = irr::video::S3DVertex(1.0f, -1.0f, 0.0f, 0, 0, 1, irr::video::SColor(0x0), 1.0f, 1.0f);
 	}
 
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
@@ -54,7 +57,7 @@ public:
 
 	virtual irr::video::SMaterial& getMaterial() {
 		return Material;
-	}   
+	}
 
 	irr::video::ITexture* rt[2];
 
@@ -70,5 +73,8 @@ private:
 	#endif
 
 };
+
+} /// End namespace rendering
+} /// End namespace cp3d
 
 #endif

@@ -13,17 +13,24 @@ void main(void) {
 
 float4x4 mWorldViewProj;
 
-struct VS_OUTPUT 
+struct VS_OUTPUT
 {
-	float4 Position : POSITION0;
-	float4 TexCoord : TEXCOORD0;
+	float4 Position: SV_Position;
+	float4 ClipPos: TEXCOORD0;
+	float2 Texcoords: TEXCOORD1;
+	float4 VColor: TEXCOORD2;
 };
 
-VS_OUTPUT vertexMain(float3 Position : POSITION0)
+VS_OUTPUT vertexMain(float4 Position : POSITION, float2 Texcoords : TEXCOORD0, float4 vColor : COLOR0)
 {
-	VS_OUTPUT  OUT;
-	OUT.Position = mul(float4(Position.x, Position.y, Position.z, 1.0), mWorldViewProj);
-	OUT.TexCoord = OUT.Position;
+	VS_OUTPUT OUT = (VS_OUTPUT)0;
+
+	float4 hpos = mul(Position, mWorldViewProj);
+	OUT.Position = hpos;
+	OUT.ClipPos = hpos;
+	OUT.Texcoords = Texcoords;
+	OUT.VColor = vColor;
+
 	return (OUT);
 }
 

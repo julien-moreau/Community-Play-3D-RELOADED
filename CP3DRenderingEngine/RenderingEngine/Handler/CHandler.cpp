@@ -30,9 +30,9 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 	bool tempTexFlagMipMaps = driver->getTextureCreationFlag(ETCF_CREATE_MIP_MAPS);
 	bool tempTexFlag32 = driver->getTextureCreationFlag(ETCF_ALWAYS_32_BIT);
 
-	ScreenRTT = driver->addRenderTargetTexture(ScreenRTTSize);
-	ScreenQuad.rt[0] = driver->addRenderTargetTexture(ScreenRTTSize);
-	ScreenQuad.rt[1] = driver->addRenderTargetTexture(ScreenRTTSize);
+	ScreenRTT = driver->addRenderTargetTexture(ScreenRTTSize, "ScreenRTT");
+	ScreenQuad.rt[0] = driver->addRenderTargetTexture(ScreenRTTSize, "ColorMapSampler");
+	ScreenQuad.rt[1] = driver->addRenderTargetTexture(ScreenRTTSize, "ScreenMapSampler");
 
 	driver->setTextureCreationFlag(ETCF_CREATE_MIP_MAPS, tempTexFlagMipMaps);
 	driver->setTextureCreationFlag(ETCF_ALWAYS_32_BIT, tempTexFlag32);
@@ -593,6 +593,12 @@ CCP3DHandler::SPostProcessingPair CCP3DHandler::obtainScreenQuadMaterial(const i
 		sPP.addShaderDefine("OPENGL_DRIVER", "1");
 	else
 		sPP.addShaderDefine("DIRECT3D_DRIVER", "1");
+
+	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+	sPP.addShaderDefine("DIRECT3D_11", "1");
+	#endif
+
+	sPP.addShaderDefine("POST_PROCESS", "1");
 	
 	video::E_VERTEX_SHADER_TYPE VertexLevel = driver->queryFeature(video::EVDF_VERTEX_SHADER_3_0) ? EVST_VS_3_0 : EVST_VS_2_0;
 	video::E_PIXEL_SHADER_TYPE PixelLevel = driver->queryFeature(video::EVDF_PIXEL_SHADER_3_0) ? EPST_PS_3_0 : EPST_PS_2_0;
@@ -603,14 +609,15 @@ CCP3DHandler::SPostProcessingPair CCP3DHandler::obtainScreenQuadMaterial(const i
 
 	stringc shaderString;
 	if (fromFile)
-		shaderString = sPP.ppShaderFF(data.c_str());
+		//shaderString = sPP.ppShaderFF(data.c_str());
+		shaderString = sPP.ppShaderDF(sPP.getFileContent(data.c_str()).c_str());
 	else
-		shaderString = sPP.ppShader(data.c_str());
+		shaderString = sPP.ppShaderDF(data.c_str());
 
 	ScreenQuadCB* SQCB = new ScreenQuadCB(this, true);
 
 	s32 PostMat = gpu->addHighLevelShaderMaterial(
-		sPP.ppShader(SCREEN_QUAD_V[shaderExt]).c_str(), "vertexMain", VertexLevel,
+		sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ScreenQuad.vertex.fx").c_str()).c_str(), "vertexMain", VertexLevel,
 		shaderString.c_str(), "pixelMain", PixelLevel,
 		SQCB, baseMaterial);
 	
@@ -632,6 +639,10 @@ void CCP3DHandler::setPostProcessingEffectConstant(const irr::s32 materialType, 
 s32 CCP3DHandler::addPostProcessingEffectFromString(const irr::core::stringc &shader, IPostProcessingRenderCallback *callback) {
 	SPostProcessingPair pPair = obtainScreenQuadMaterial(shader, EMT_SOLID, false);
 	pPair.renderCallback = callback;
+
+	if (callback)
+		callback->MaterialType = pPair.materialType;
+
 	PostProcessingRoutines.push_back(pPair);
 
 	return pPair.materialType;
@@ -640,6 +651,10 @@ s32 CCP3DHandler::addPostProcessingEffectFromString(const irr::core::stringc &sh
 s32 CCP3DHandler::addPostProcessingEffectFromFile(const irr::core::stringc& filename, IPostProcessingRenderCallback* callback) {
 	SPostProcessingPair pPair = obtainScreenQuadMaterial(filename);
 	pPair.renderCallback = callback;
+
+	if (callback)
+		callback->MaterialType = pPair.materialType;
+
 	PostProcessingRoutines.push_back(pPair);
 
 	return pPair.materialType;

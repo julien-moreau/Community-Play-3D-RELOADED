@@ -41,12 +41,12 @@ irr::s32 CMaterialCreator::createMaterialFromStrings(const stringc &vertexShader
 	IGPUProgrammingServices *gpu = Driver->getGPUProgrammingServices();
 
 	#if defined(_DEBUG)
-	stringc vs = Spp->ppShader(vertexShader).c_str();
-	stringc ps = Spp->ppShader(pixelShader).c_str();
+	stringc vs = Spp->ppShaderDF(vertexShader).c_str();
+	stringc ps = Spp->ppShaderDF(pixelShader).c_str();
 	#endif
 
-	return gpu->addHighLevelShaderMaterial(Spp->ppShader(vertexShader).c_str(), "vertexMain", EVST_VS_3_0,
-										   Spp->ppShader(pixelShader).c_str(), "pixelMain", EPST_PS_3_0,
+	return gpu->addHighLevelShaderMaterial(Spp->ppShaderDF(vertexShader).c_str(), "vertexMain", EVST_VS_3_0,
+										   Spp->ppShaderDF(pixelShader).c_str(), "pixelMain", EPST_PS_3_0,
 										   callback, baseMaterial);
 }
 

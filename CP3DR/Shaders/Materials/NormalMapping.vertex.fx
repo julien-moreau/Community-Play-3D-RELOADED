@@ -1,5 +1,5 @@
 
-##ifdef OPENGL_DRIVER
+#ifdef OPENGL_DRIVER
 
 uniform int   numLights;
 uniform vec3  fvLightPosition[__CP3D__MAX_LIGHTS__];
@@ -19,7 +19,7 @@ float getLengthSQR (vec3 vec)
 void main( void )
 {
     
-    mat4 LightTransform = gl_ModelViewMatrix;
+	mat4 LightTransform = gls_ModelViewMatrix;
     LightTransform = LightTransform*matWorldInverse;
     
     gl_Position = ftransform();
@@ -50,7 +50,7 @@ void main( void )
     
 }
 
-##else
+#else
 
 float4x4 ModelViewProjectionMatrix;
 
@@ -82,4 +82,4 @@ VS_OUTPUT vertexMain( in VS_INPUT IN )
 }
 
 
-##endif
+#endif

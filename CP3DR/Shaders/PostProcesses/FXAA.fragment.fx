@@ -1,4 +1,4 @@
-##ifdef OPENGL_DRIVER
+#ifdef OPENGL_DRIVER
 
 uniform sampler2D ColorMapSampler;
 
@@ -2100,7 +2100,7 @@ void main()
 		fxaaConsole360ConstDir);
 }
 
-##else
+#else
 
 uniform sampler2D ColorMapSampler : register(s0);
 
@@ -4195,4 +4195,4 @@ float4 pixelMain(float2 texCoord : TEXCOORD0) : COLOR
 		fxaaConsole360ConstDir);
 }
 
-##endif
+#endif

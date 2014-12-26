@@ -27,6 +27,8 @@ private:
 	irr::core::array<irr::video::IRenderTarget> RenderTargets;
 	irr::core::array<irr::f32> FarLinks;
 
+	bool FarLinksChanged;
+
 	/// Shader pre-processor Vertex & Pixel
 	CShaderPreprocessor *SppV, *SppP;
 	irr::core::stringc VertexShader, PixelShader;

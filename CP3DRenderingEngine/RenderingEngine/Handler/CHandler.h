@@ -93,7 +93,8 @@ public:
 	irr::s32 addPostProcessingEffectFromFile(const irr::core::stringc &filename, IPostProcessingRenderCallback *callback = 0);
 	irr::s32 addPostProcessingEffectFromString(const irr::core::stringc &shader, IPostProcessingRenderCallback *callback = 0);
 	void setPostProcessingEffectConstant(const irr::s32 materialType, const irr::core::stringc& name, const irr::f32* data, const irr::u32 count);
-	const CScreenQuad& getScreenQuad() { return ScreenQuad; }
+	CScreenQuad& getScreenQuad() { return ScreenQuad; }
+	CScreenQuad *getScreenQuadPtr() { return &ScreenQuad; }
 	void setPostProcessingUserTexture(irr::video::ITexture* userTexture) {
 		ScreenQuad.getMaterial().setTexture(3, userTexture);
 	}

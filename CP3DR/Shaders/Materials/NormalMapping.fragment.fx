@@ -1,5 +1,5 @@
 
-##ifdef OPENGL_DRIVER
+#ifdef OPENGL_DRIVER
 
 uniform int  numLights;
 uniform vec4 fvAmbient;
@@ -57,7 +57,7 @@ void main( void )
 	}
 }
 
-##else
+#else
 
 float4x4 matWorldInverse; 
 float4x4 ModelViewMatrix;
@@ -71,7 +71,7 @@ float fBumpStrength;
 float shininess;
 int numLights;
 
-##ifdef DIRECT3D_11
+#ifdef DIRECT3D_11
 Texture2D baseMap	  : register(t0);
 Texture2D bumpMap	  : register(t1);
 Texture2D specularMap : register(t2);
@@ -80,11 +80,11 @@ SamplerState baseMapST	   : register(s0);
 SamplerState bumpMapST	   : register(s1);
 SamplerState specularMapST : register(s2);
 
-##else
+#else
 sampler2D baseMap      : register(s0);
 sampler2D bumpMap      : register(s1);
 sampler2D specularMap  : register(s2);
-##endif
+#endif
 
 struct VS_OUTPUT
 {
@@ -102,11 +102,11 @@ float getLengthSQR (float3 vec)
 float4 pixelMain(in VS_OUTPUT IN) : COLOR0
 {
 	if (numLights == 0) {
-		##ifdef DIRECT3D_11
+		#ifdef DIRECT3D_11
 		return baseMap.Sample(baseMapST, IN.Texcoord.xy);
-		##else
+		#else
 		return tex2D( baseMap, IN.Texcoord );
-		##endif
+		#endif
 	}
 	else {
 		/// Added vertex
@@ -129,22 +129,22 @@ float4 pixelMain(in VS_OUTPUT IN) : COLOR0
 		/// End added vertex
 
 		float4 color	 = float4(0.0, 0.0, 0.0, 0.0);
-##ifdef DIRECT3D_11
+#ifdef DIRECT3D_11
 		float3 fvNormal2 = bumpMap.Sample(bumpMapST, IN.Texcoord.xy).yxz;
-##else
+#else
 		float3 fvNormal2 = tex2D(bumpMap, IN.Texcoord).yxz;
-##endif
+#endif
    
 		fvNormal2.xy *= 2.0; 
 		fvNormal2.xy -= 1.0;
 		fvNormal2 = (float3(0.0, 0.0, 1.0) - fvNormal2) * fBumpStrength + fvNormal2; 
 		fvNormal2 = normalize(fvNormal2);
    
-##ifdef DIRECT3D_11
+#ifdef DIRECT3D_11
 		float4  fvBaseColor = baseMap.Sample(baseMapST, IN.Texcoord.xy);
-##else
+#else
 		float4  fvBaseColor      = tex2D( baseMap, IN.Texcoord );
-##endif
+#endif
 		float4  fvTotalAmbient   = fvAmbient * fvBaseColor;
 		float4  fvTotalDiffuse   = float4(0.0, 0.0, 0.0, 0.0);
 		float4  fvTotalSpecular  = float4(0.0, 0.0, 0.0, 0.0);
@@ -172,11 +172,11 @@ float4 pixelMain(in VS_OUTPUT IN) : COLOR0
 			fvTotalSpecular			 += fNDotL1 * fvLightColor[i] * (pow(fRDotV1, fSpecularPower)) * LightDistMultiplier;
 		}
 
-##ifdef DIRECT3D_11
+#ifdef DIRECT3D_11
 		fvTotalSpecular *= fvTotalSpecular + specularMap.Sample(specularMapST, IN.Texcoord.xy) * shininess;
-##else
+#else
 		fvTotalSpecular *= fvTotalSpecular + tex2D(specularMap, IN.Texcoord) * shininess;
-##endif
+#endif
 		color = (fvTotalAmbient + fvTotalDiffuse + (fvTotalSpecular*fSpecularStrength));
 
 		if(color.r > 1.0) { color.gb += color.r - 1.0; } 
@@ -187,4 +187,4 @@ float4 pixelMain(in VS_OUTPUT IN) : COLOR0
 	}
 }
 
-##endif
+#endif

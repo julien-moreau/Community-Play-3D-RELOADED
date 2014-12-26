@@ -1,27 +1,27 @@
 
-##ifdef OPENGL_DRIVER
+#ifdef OPENGL_DRIVER
 
 
 
-##else
+#else
 
 /// Light Scattering pass
 bool LSRenderNormal;
-##ifdef DIRECT3D_11
+#ifdef DIRECT3D_11
 Texture2D BaseSampler : register(t0);
 SamplerState BaseSamplerST : register(s0);
-##else
+#else
 sampler2D BaseSampler : register(s0);
-##endif
+#endif
 
 /// Normal pass
 float FarDistance;
-##ifdef DIRECT3D_11
+#ifdef DIRECT3D_11
 Texture2D NormalSampler : register(t1);
 SamplerState NormalSamplerST : register(s1);
-##else
+#else
 sampler2D NormalSampler : register(s1);
-##endif
+#endif
 
 struct VertexShaderOutput {
 	float4 Position : SV_Position;
@@ -43,21 +43,21 @@ PixelOutput pixelMain(VertexShaderOutput input) {
 
 	/// Light Scattering pass
 	if (LSRenderNormal) {
-		##ifdef DIRECT3D_11
+		#ifdef DIRECT3D_11
 		output.LSTarget = BaseSampler.Sample(BaseSamplerST, input.TexCoord.xy);
-		##else
+		#else
 		output.LSTarget = tex2D(BaseSampler, input.TexCoord.xy);
-		##endif
+		#endif
 	}
 	else
 		output.LSTarget = float4(0.0, 0.0, 0.0, 0.0);
 
 	/// Normal pass
-	##ifdef DIRECT3D_11
+	#ifdef DIRECT3D_11
 	float4 texNormal = (NormalSampler.Sample(NormalSamplerST, input.TexCoord.xy) - 0.5) * 2.0;
-	##else
+	#else
 	float4 texNormal = (tex2D(NormalSampler, input.TexCoord) - 0.5) * 2.0;
-	##endif
+	#endif
 	float3x3 normalRotation = float3x3(input.Tangent, input.BiNormal, input.Normal);
 	output.NormalTarget.rgb = normalize( mul(texNormal.xyz, normalRotation) );
 	output.NormalTarget.a = length(input.ViewPos) / FarDistance;
@@ -65,4 +65,4 @@ PixelOutput pixelMain(VertexShaderOutput input) {
 	return (output);
 };
 
-##endif
+#endif

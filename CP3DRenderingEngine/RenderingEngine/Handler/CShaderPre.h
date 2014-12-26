@@ -13,6 +13,7 @@ public:
 
 	irr::core::stringc ppShader(irr::core::stringc shaderProgram);
 	irr::core::stringc ppShaderFF(irr::core::stringc shaderProgram);
+	irr::core::stringc ppShaderDF(irr::core::stringc shaderProgram);
 
 	void addShaderDefine(const irr::core::stringc name, const irr::core::stringc value = "");
 	void removeShaderDefine(const irr::core::stringc name);

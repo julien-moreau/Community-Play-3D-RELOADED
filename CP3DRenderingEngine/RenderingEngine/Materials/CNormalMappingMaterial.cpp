@@ -142,7 +142,7 @@ void CNormalMappingMaterial::OnSetConstants(irr::video::IMaterialRendererService
 
 	f32 fSpecularPower = 20.f;
     f32 fSpecularStrength = 1.9f;
-    f32 fBumpStrength = 3.f;
+    f32 fBumpStrength = 5.f;
     services->setPixelShaderConstant(("fSpecularPower"), &fSpecularPower, 1);
     services->setPixelShaderConstant(("fSpecularStrength"), &fSpecularStrength, 1);
     services->setPixelShaderConstant(("fBumpStrength"), &fBumpStrength, 1);

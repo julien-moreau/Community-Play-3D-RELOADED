@@ -3,6 +3,7 @@
 
 #include <irrlicht.h>
 #include "SShadowLight.h"
+#include "CScreenQuad.h"
 
 namespace cp3d {
 namespace rendering {
@@ -41,12 +42,14 @@ namespace rendering {
 		0
 	};
 
+	class CCP3DHandler;
 	class ICP3DHandler;
 	class ICP3DCustomPass;
 	class ICP3DCustomDepthPass;
 
 	//! Custom post-processing render callback
 	class IPostProcessingRenderCallback {
+		friend class CCP3DHandler;
 	public:
 		//! on pre-render callback
 		//! \param effect: the handler rendering the post-process
@@ -55,6 +58,9 @@ namespace rendering {
 		//! on post-render callback
 		//! \param effect: the handler rendering the post-process
 		virtual void OnPostRender(ICP3DHandler* handler) { }
+
+	protected:
+		irr::s32 MaterialType;
 	};
 
 	class ICP3DHandler {
@@ -131,6 +137,12 @@ namespace rendering {
 		//! \param index: the index of the texture layer (0 to MATERIAL_MAX_TEXTURES)
 		//! \param texture: the texture to set
 		virtual void setPostProcessingTextureAtIndex(irr::u32 index, irr::video::ITexture *texture) = 0;
+
+		//! Returns the screen quad used for rendering (especially post-processes)
+		virtual CScreenQuad& getScreenQuad() = 0;
+
+		//! Returns the screen quad's pointer
+		virtual CScreenQuad *getScreenQuadPtr() = 0;
 
 		//! Returns the custom depth pass manager
 		//! Allows you to add custom depth passes using multiple render targets
