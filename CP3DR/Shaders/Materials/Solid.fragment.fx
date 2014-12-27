@@ -38,7 +38,8 @@ struct VS_OUTPUT
 	float4 TexCoord : TEXCOORD0;
 };
 
-float4 pixelMain(VS_OUTPUT input) : COLOR0 {
+float4 pixelMain(VS_OUTPUT input) : COLOR0
+{
 	#ifdef DIRECT3D_11
 	float4 diffuseColor = diffuseSampler.Sample(diffuseSamplerST, input.TexCoord.xy);
 	#else

@@ -59,14 +59,14 @@ void main( void )
 
 #else
 
-float4x4 matWorldInverse; 
+float4x4 matWorldInverse;
 float4x4 ModelViewMatrix;
 float3 fvLightPosition[__CP3D__MAX_LIGHTS__];
-float fLightStrength[__CP3D__MAX_LIGHTS__]; 
+float fLightStrength[__CP3D__MAX_LIGHTS__];
 float4 fvAmbient;
 float4 fvLightColor[__CP3D__MAX_LIGHTS__];
-float fSpecularPower; 
-float fSpecularStrength; 
+float fSpecularPower;
+float fSpecularStrength;
 float fBumpStrength;
 float shininess;
 int numLights;
@@ -79,7 +79,6 @@ Texture2D specularMap : register(t2);
 SamplerState baseMapST	   : register(s0);
 SamplerState bumpMapST	   : register(s1);
 SamplerState specularMapST : register(s2);
-
 #else
 sampler2D baseMap      : register(s0);
 sampler2D bumpMap      : register(s1);

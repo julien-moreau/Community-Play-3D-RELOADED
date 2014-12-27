@@ -55,7 +55,7 @@ void Direct3D11Test(irr::IrrlichtDevice *device) {
 
 	handler->getDepthPassManager()->addPass("DepthRTT");
 
-	//rengine->createNormalMappingMaterial();
+	rengine->createNormalMappingMaterial();
 	for (s32 i = 0; i < 6; ++i)
 	{
 		for (s32 j = 0; j < 6; ++j)
@@ -68,7 +68,8 @@ void Direct3D11Test(irr::IrrlichtDevice *device) {
 				cube->getMaterial(0).setTexture(0, driver->getTexture("Textures/diffuse.tga"));
 				cube->getMaterial(0).setTexture(1, driver->getTexture("Textures/normal.tga"));
 				cube->getMaterial(0).setFlag(EMF_LIGHTING, false);
-				//cube->getMaterial(0).MaterialType = rengine->Materials[EMT_NORMAL_MAP_SOLID];
+				cube->getMaterial(0).MaterialType = rengine->Materials[EMT_NORMAL_MAP_SOLID];
+				//cube->getMaterial(0).MaterialType = rengine->Materials[EMT_SOLID];
 
 				handler->getDepthPassManager()->addNodeToPass(cube);
 				handler->getGeneralPassManager()->addNodeToPass(cube);
