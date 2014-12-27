@@ -14,7 +14,8 @@ namespace rendering {
 		//! \param driver: video driver (OpenGL or Direct3D9)
 		//! \param name: the name of the custom pass
 		ICP3DCustomDepthPass(irr::video::IVideoDriver *driver, const irr::core::stringc name)
-			: ICP3DCustomPass(driver, name) { }
+			: ICP3DCustomPass(driver, name)
+		{ }
 
 		//! add a pass to the depth pass manager
 		//! \param name: the name of the render target to add

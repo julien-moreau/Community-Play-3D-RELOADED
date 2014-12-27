@@ -23,7 +23,8 @@ SamplerState NormalSamplerST : register(s1);
 sampler2D NormalSampler : register(s1);
 #endif
 
-struct VertexShaderOutput {
+struct VertexShaderOutput
+{
 	float4 Position : SV_Position;
 	float4 TexCoord : TEXCOORD0;
 
@@ -33,7 +34,8 @@ struct VertexShaderOutput {
 	float3 BiNormal : TEXCOORD4;
 };
 
-struct PixelOutput {
+struct PixelOutput
+{
 	float4 NormalTarget	 : COLOR0;
 	float4 LSTarget		 : COLOR1;
 };

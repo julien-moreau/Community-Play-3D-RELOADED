@@ -55,7 +55,7 @@ void Direct3D11Test(irr::IrrlichtDevice *device) {
 
 	handler->getDepthPassManager()->addPass("DepthRTT");
 
-	rengine->createNormalMappingMaterial();
+	//rengine->createNormalMappingMaterial();
 	for (s32 i = 0; i < 6; ++i)
 	{
 		for (s32 j = 0; j < 6; ++j)
@@ -68,9 +68,10 @@ void Direct3D11Test(irr::IrrlichtDevice *device) {
 				cube->getMaterial(0).setTexture(0, driver->getTexture("Textures/diffuse.tga"));
 				cube->getMaterial(0).setTexture(1, driver->getTexture("Textures/normal.tga"));
 				cube->getMaterial(0).setFlag(EMF_LIGHTING, false);
-				cube->getMaterial(0).MaterialType = rengine->Materials[EMT_NORMAL_MAP_SOLID];
+				//cube->getMaterial(0).MaterialType = rengine->Materials[EMT_NORMAL_MAP_SOLID];
 
 				handler->getDepthPassManager()->addNodeToPass(cube);
+				handler->getGeneralPassManager()->addNodeToPass(cube);
 			}
 		}
 	}
@@ -79,7 +80,7 @@ void Direct3D11Test(irr::IrrlichtDevice *device) {
 	light->setPosition(vector3df(100.f, 100.f, 0.f));
 	light->setLightColor(SColorf(1.f, 1.f, 1.f, 1.f));
 
-	s32 ssaoMat = handler->addPostProcessingEffectFromFile("Tests/ssao.fragment.fx", new CPureDepthSSAO(device, handler));
+	handler->addPostProcessingEffectFromFile("Tests/ssao.fragment.fx", new CPureDepthSSAO(device, handler));
 	handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/BlurHP.fragment.fx");
 	handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/BlurVP.fragment.fx");
 	handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/SSAOCombine.fragment.fx");

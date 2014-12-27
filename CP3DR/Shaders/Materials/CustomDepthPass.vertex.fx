@@ -11,7 +11,10 @@ void main(void) {
 
 #else
 
-float4x4 mWorldViewProj;
+cbuffer cbParams : register(c0)
+{
+	float4x4 mWorldViewProj;
+};
 
 struct VS_OUTPUT
 {

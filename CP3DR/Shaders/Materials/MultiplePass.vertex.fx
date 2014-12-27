@@ -5,8 +5,11 @@
 
 #else
 
-float4x4 WorldViewProj;
-float4x4 WorldView;
+cbuffer cbParams : register(c0)
+{
+	float4x4 WorldViewProj;
+	float4x4 WorldView;
+};
 
 struct VertexShaderInput {
 	float4 Position : POSITION0;

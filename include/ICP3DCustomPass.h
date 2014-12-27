@@ -30,11 +30,13 @@ public:
 
 	//! Pre-render callback
 	//! \param node: the node going to be rendered
-	virtual void onPreRender(irr::scene::ISceneNode *node) { }
+	virtual void onPreRender(irr::scene::ISceneNode *node)
+	{ }
 
 	//! Post-render callback
 	//! \param node: the node going to be rendered
-	virtual void onPostRender(irr::scene::ISceneNode *node) { }
+	virtual void onPostRender(irr::scene::ISceneNode *node)
+	{ }
 
 	//! Returns the custom pass material type
 	virtual const irr::s32 getMaterialType() const {

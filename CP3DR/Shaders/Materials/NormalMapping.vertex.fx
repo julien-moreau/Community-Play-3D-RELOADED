@@ -52,7 +52,10 @@ void main( void )
 
 #else
 
-float4x4 ModelViewProjectionMatrix;
+cbuffer cbParams : register(c0)
+{
+	float4x4 ModelViewProjectionMatrix;
+}
 
 struct VS_OUTPUT
 {

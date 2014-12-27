@@ -65,14 +65,6 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 		DepthMC = new DepthShaderCB(this);
 		ShadowMC = new ShadowShaderCB(this);
 		
-		CustomDepthPassMgr = new CCustomDepthPass(driver, "CustomDepthPassManager");
-		CustomDepthPassMgr->setEnabled(true);
-		addCustomPass(CustomDepthPassMgr);
-
-		CustomGeneralPass = new CCustomGeneralPass(driver, "CustomGeneralPass");
-		CustomGeneralPass->setEnabled(true);
-		addCustomPass(CustomGeneralPass);
-		
 		Depth = gpu->addHighLevelShaderMaterial(
 			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/Depth.vertex.fx").c_str()).c_str(), "vertexMain", video::EVST_VS_2_0,
 			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/Depth.fragment.fx").c_str()).c_str(), "pixelMain", video::EPST_PS_2_0,
@@ -168,6 +160,15 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 		
 		// Drop the screen quad callback.
 		SQCB->drop();
+
+		// Create default passes
+		CustomDepthPassMgr = new CCustomDepthPass(driver, "CustomDepthPassManager");
+		CustomDepthPassMgr->setEnabled(true);
+		addCustomPass(CustomDepthPassMgr);
+
+		CustomGeneralPass = new CCustomGeneralPass(driver, "CustomGeneralPass");
+		CustomGeneralPass->setEnabled(true);
+		addCustomPass(CustomGeneralPass);
 	}
 	else {
 		Depth = EMT_SOLID;
