@@ -18,11 +18,6 @@ CMaterialCreator::CMaterialCreator(IVideoDriver *driver) : Driver(driver)
 {
 	Spp = new CShaderPreprocessor(driver);
 	clearDefines();
-
-	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
-	if (Driver->getDriverType() == EDT_DIRECT3D11)
-		Spp->addShaderDefine("DIRECT3D_11", "1");
-	#endif
 }
 
 CMaterialCreator::~CMaterialCreator() {
@@ -63,7 +58,13 @@ void CMaterialCreator::clearDefines() {
 	if (Driver->getDriverType() == EDT_OPENGL)
 		Spp->addShaderDefine("OPENGL_DRIVER", "1");
 	else
-		Spp->addShaderDefine("DIRECT3D_DRIVER", "1");
+	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+	if (Driver->getDriverType() == EDT_DIRECT3D11)
+		Spp->addShaderDefine("DIRECT3D_11", "1");
+	else
+	#endif
+		if (Driver->getDriverType() == EDT_DIRECT3D9)
+		Spp->addShaderDefine("DIRECT3D_9", "1");
 }
 
 } /// End namespace rendering

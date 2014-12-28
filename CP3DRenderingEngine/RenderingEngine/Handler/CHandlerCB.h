@@ -83,6 +83,29 @@ public:
 
 };
 
+class CCustomPostProcessCB : public rendering::IPostProcessingRenderCallback {
+
+public:
+
+	CCustomPostProcessCB(std::function<void(ICP3DHandler *handler)> onPreRender,
+						 std::function<void(ICP3DHandler *handler)> onPostRender)
+	{
+		OnPreRenderLambda = onPreRender;
+		OnPostRenderLambda = onPostRender;
+	}
+
+	void OnPreRender(ICP3DHandler *handler) {
+		OnPreRenderLambda(handler);
+	}
+	void OnPostRender(ICP3DHandler *handler) {
+		OnPostRenderLambda(handler);
+	}
+
+private:
+
+	std::function<void(ICP3DHandler *handler)> OnPreRenderLambda, OnPostRenderLambda;
+
+};
 
 class ScreenQuadCB : public irr::video::IShaderConstantSetCallBack {
 

@@ -86,13 +86,31 @@ void Direct3D11Test(irr::IrrlichtDevice *device) {
 	handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/BlurVP.fragment.fx");
 	handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/SSAOCombine.fragment.fx");
 
+	stringc pixelProgram =
+		"sampler2D ColorMapSampler :register(s0);\n"
+		"float power;"
+		"float4 pixelMain(float2 coords : TEXCOORD0) : COLOR0 {\n"
+		"	return tex2D(ColorMapSampler, coords) * power;"
+		"}";
+	s32 custom = handler->addPostProcessingEffectFromString(pixelProgram);
+	f32 power = 0.f;
+	handler->setPostProcessingRenderCallback(custom,
+		[&](rendering::ICP3DHandler *handler) -> void {
+			power = core::abs_( cos((f32)device->getTimer()->getTime() / 1000) );
+			handler->setPostProcessingEffectConstant(custom, "power", &power, 1);
+		},
+		[&](rendering::ICP3DHandler *handler) -> void {
+
+		}
+	);
+
 	while (device->run()) {
 		if (!device->isWindowActive())
 			continue;
 
 		driver->beginScene(true, true, SColor(0x0));
 		handler->update();
-		//driver->draw2DImage(driver->getTexture("DepthRTT"), vector2di(0, 0));
+		//driver->draw2DImage(driver->getTexture("CP3DNormalPass"), vector2di(0, 0));
 		driver->endScene();
 	}
 }

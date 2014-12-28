@@ -2,6 +2,12 @@
 #error "These utils functions are not intended for OpenGL Drivers"
 #endif
 
+#ifdef DIRECT3D_11
+typedef Texture2D CP3DTexture;
+#else
+typedef sampler2D CP3DTexture;
+#endif
+
 //-----------------------------------------------------------------
 // Texture2D & sampler2D
 //-----------------------------------------------------------------

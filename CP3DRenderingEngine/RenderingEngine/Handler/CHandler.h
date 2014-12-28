@@ -68,8 +68,8 @@ public:
 	
 	/// Post processes
 	void addPostProcessingEffect(irr::s32 MaterialType, IPostProcessingRenderCallback* callback = 0);
-	void setPostProcessingRenderCallback(irr::s32 MaterialType, IPostProcessingRenderCallback* callback = 0) {
-		SPostProcessingPair tempPair(MaterialType, 0);
+	void setPostProcessingRenderCallback(irr::s32 materialType, IPostProcessingRenderCallback* callback) {
+		SPostProcessingPair tempPair(materialType, 0);
 		irr::s32 i = PostProcessingRoutines.binary_search(tempPair);
 
 		if(i != -1) {
@@ -79,6 +79,9 @@ public:
 			PostProcessingRoutines[i].renderCallback = callback;
 		}
 	}
+	void setPostProcessingRenderCallback(irr::s32 materialType,
+		std::function<void(ICP3DHandler *handler)> OnPreRender = [&](ICP3DHandler *handler) {},
+		std::function<void(ICP3DHandler *handler)> OnPostRender = [&](ICP3DHandler *handler) {});
 	void removePostProcessingEffect(irr::s32 MaterialType) {
 		SPostProcessingPair tempPair(MaterialType, 0);
 		irr::s32 i = PostProcessingRoutines.binary_search(tempPair);

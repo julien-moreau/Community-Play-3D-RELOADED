@@ -228,6 +228,19 @@ void CCP3DHandler::setScreenRenderTargetResolution(const irr::core::dimension2du
 	ScreenRTTSize = resolution;
 }
 
+void CCP3DHandler::setPostProcessingRenderCallback(irr::s32 materialType,
+	std::function<void(ICP3DHandler *handler)> OnPreRender,
+	std::function<void(ICP3DHandler *handler)> OnPostRender)
+{
+	SPostProcessingPair tempPair(materialType, 0);
+	irr::s32 i = PostProcessingRoutines.binary_search(tempPair);
+
+	if (i == -1)
+		return;
+
+	CCustomPostProcessCB *cb = new CCustomPostProcessCB(OnPreRender, OnPostRender);
+	setPostProcessingRenderCallback(materialType, cb);
+}
 
 void CCP3DHandler::addPostProcessingEffect(irr::s32 MaterialType, IPostProcessingRenderCallback* callback) {
 	SPostProcessingPair pPair(MaterialType, 0);

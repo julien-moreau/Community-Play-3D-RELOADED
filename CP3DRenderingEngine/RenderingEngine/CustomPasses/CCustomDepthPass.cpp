@@ -16,9 +16,9 @@ CCustomDepthPass::CCustomDepthPass(IVideoDriver *driver, stringc name)
 {
 	/// Configure shaders pre-processors
 	SppV = new CShaderPreprocessor(driver);
-	VertexShader = (Driver->getDriverType() == EDT_OPENGL ? stringc("#define OPENGL_DRIVER\n") : "") + SppV->ppShaderFF("Shaders/Materials/CustomDepthPass.vertex.fx");
+	VertexShader = SppV->ppShaderFF("Shaders/Materials/CustomDepthPass.vertex.fx");
 	SppP = new CShaderPreprocessor(driver);
-	PixelShader = (Driver->getDriverType() == EDT_OPENGL ? stringc("#define OPENGL_DRIVER\n") : "") + SppP->ppShaderFF("Shaders/Materials/CustomDepthPass.fragment.fx");
+	PixelShader = SppP->ppShaderFF("Shaders/Materials/CustomDepthPass.fragment.fx");
 }
 
 CCustomDepthPass::~CCustomDepthPass() {
@@ -71,8 +71,8 @@ void CCustomDepthPass::addPass(irr::core::stringc name) {
 	SppP->addShaderDefine("__CP3D__PIXEL_MAIN__", shaderCode);
 
 	#ifdef _DEBUG
-	stringc vp = SppV->ppShader(VertexShader);
-	stringc pp = SppP->ppShader(PixelShader);
+	stringc vp = SppV->ppShaderDF(VertexShader);
+	stringc pp = SppP->ppShaderDF(PixelShader);
 	#endif
 
 	/// Create material
