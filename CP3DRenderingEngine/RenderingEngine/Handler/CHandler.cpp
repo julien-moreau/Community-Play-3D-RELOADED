@@ -527,8 +527,8 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 			ScreenQuad.getMaterial().setTexture(0, i == 0 ? ScreenRTT : ScreenQuad.rt[int(!Alter)]);
 
 			if (i >= PostProcessingRoutinesSize - 1) {
-				driver->setViewPort(ViewPort);
 				driver->setRenderTarget(outputTarget, true, true, ClearColour);
+				driver->setViewPort(ViewPort);
 			}
 			else
 				driver->setRenderTarget(ScreenQuad.rt[int(Alter)], true, true, ClearColour);

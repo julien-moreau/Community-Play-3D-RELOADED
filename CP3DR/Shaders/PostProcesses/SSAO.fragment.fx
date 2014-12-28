@@ -1,143 +1,75 @@
-#define SAMPLE_COUNT 8
-#define SSAO_REACH 1.0
-#define MAX_DEPTH_DECLINE 0.2
-#define DEPTH_ALIASING_EPISILON 0.02
-#define RAND_TEXTURE_TILES 3.0
-#define SSAO_OUTPUT_MULTIPLIER 1.5
-
-#ifdef OPENGL_DRIVER
-
-uniform sampler2D DepthMapSampler;
-uniform sampler2D UserMapSampler;
-
-uniform mat4 mViewProj;
-
-float getDepthAt(vec2 coords)
-{
-	vec4 texDepth = texture2D(DepthMapSampler, coords);
-	float extractedDepth = texDepth.r;
-	return extractedDepth;
-}
-
-vec3 offsets[SAMPLE_COUNT];
-
-void main()
-{
-	float currentDepth = getDepthAt(gl_TexCoord[0].xy);
-	vec3 lVec = gl_TexCoord[2].xyz - gl_TexCoord[1].xyz;
-	vec3 lDir = normalize(lVec);
-	float lLength = length(lVec);
-	vec3 currentWPos = gl_TexCoord[1].xyz + currentDepth * lDir * lLength;
-	
-	offsets[0] = vec3( 0.3524245,  0.2452452,  0.7425442);
-	offsets[1] = vec3(-0.5242424, -0.4125105, -0.7867286);
-	offsets[2] = vec3(-0.7857242,  0.2453452,  0.7242454);
-	offsets[3] = vec3(-0.1524532, -0.9456342, -0.1452245);
-	offsets[4] = vec3(-0.2535434,  0.4535424,  0.5444254);
-	offsets[5] = vec3( 0.3135244, -0.4330132, -0.5422425);
-	offsets[6] = vec3( 0.7897852, -0.2524242,  0.4584555);
-	offsets[7] = vec3( 0.9792424,  0.0122242, -0.5422161);
-	
-	float totalOcclusion = 0.0;
-	vec4 randCol = texture2D(UserMapSampler, gl_TexCoord[0].xy * RAND_TEXTURE_TILES);
-
-	for(int i = 0;i < SAMPLE_COUNT;++i)
-	{
-		// Reflect the random offset using the random user texture.
-		
-		vec3 randVec = reflect(normalize(offsets[i]), randCol.xyz * 2.0 - vec3(1.0, 1.0, 1.0)) * SSAO_REACH;
-		vec4 newWorldPos = vec4(currentWPos + randVec, 1.0);
-		
-		// Calculate our sample depth.
-		float sampleDepth = length(newWorldPos.xyz - gl_TexCoord[1].xyz);
-	
-		// Project the position to the screen.
-		newWorldPos = mViewProj * newWorldPos;
-		newWorldPos.xy = vec2(newWorldPos.x, newWorldPos.y) / newWorldPos.w * 0.5 + vec2(0.5, 0.5);
-
-		sampleDepth = sampleDepth / lLength - DEPTH_ALIASING_EPISILON;
-
-		// Read from the projected position.
-		float newDepth = getDepthAt(clamp(newWorldPos.xy, vec2(0.001, 0.001), vec2(0.999, 0.999)));
-
-		// Compare the two depth samples.
-		float depthCalc = newDepth < sampleDepth ? 1.0 : 0.0;
-		depthCalc *= clamp(1.0 - (sampleDepth - newDepth) / MAX_DEPTH_DECLINE, 0.0, 1.0);
-		totalOcclusion += depthCalc;
-	}
-	
-	totalOcclusion /= float(SAMPLE_COUNT);
-	
-	gl_FragColor = vec4(1.0 - totalOcclusion * SSAO_OUTPUT_MULTIPLIER);
-}
-
+#ifdef DIRECT3D_11
+Texture2D DepthTextureSampler  : register(t2);
+Texture2D RandomTextureSampler : register(t3);
 #else
+sampler2D DepthTextureSampler : register(s2);
+sampler2D RandomTextureSampler : register(s3);
+#endif
 
-sampler2D DepthMapSampler : register(s2);
-sampler2D UserMapSampler : register(s3);
+SamplerState DepthTextureSamplerST  : register(s2);
+SamplerState RandomTextureSamplerST : register(s3);
 
-float4x4 mViewProj;
+float3 normal_from_depth(float depth, float2 texcoords) {
 
-float getDepthAt(float2 coords)
-{
-	float4 texDepth = tex2D(DepthMapSampler, coords);
-	float extractedDepth = texDepth.r;
-	return extractedDepth;
+	const float2 offset1 = float2(0.0, 0.001);
+	const float2 offset2 = float2(0.001, 0.0);
+
+	float depth1 = CP3DTex2D(DepthTextureSampler, texcoords + offset1, DepthTextureSamplerST).r;
+	float depth2 = CP3DTex2D(DepthTextureSampler, texcoords + offset2, DepthTextureSamplerST).r;
+
+	float3 p1 = float3(offset1, depth1 - depth);
+	float3 p2 = float3(offset2, depth2 - depth);
+
+	float3 normal = cross(p1, p2);
+	normal.z = -normal.z;
+
+	return normalize(normal);
 }
 
-float4 pixelMain
-(
-	float2 TexCoords : TEXCOORD0,
-	float3 LStart : TEXCOORD1,
-	float3 LEnd : TEXCOORD2
-) : COLOR0
+float4 pixelMain(VS_OUTPUT In) : COLOR0
 {
-	float currentDepth = getDepthAt(TexCoords);
-	float3 lVec = LEnd - LStart;
-	float3 lDir = normalize(lVec);
-	float lLength = length(lVec);
-	float3 currentWPos = LStart + currentDepth * lDir * lLength;
-	
-	const float3 offsets[SAMPLE_COUNT] =
-	{
-		float3( 0.3524245,  0.2452452,  0.7425442),
-		float3(-0.5242424, -0.4125105, -0.7867286),
-		float3(-0.7857242,  0.2453452,  0.7242454),
-		float3(-0.1524532, -0.9456342, -0.1452245),
-		float3(-0.2535434,  0.4535424,  0.5444254),
-		float3( 0.3135244, -0.4330132, -0.5422425),
-		float3( 0.7897852, -0.2524242,  0.4584555),
-		float3( 0.9792424,  0.0122242, -0.5422161)
+	const float total_strength = 1.2;
+	const float base = 0.2;
+
+	const float area = 0.075;
+	const float falloff = 0.000001;
+
+	const float radius = 0.002;
+
+	const int samples = 16;
+	float3 sample_sphere[samples] = {
+		float3(0.5381, 0.1856, -0.4319), float3(0.1379, 0.2486, 0.4430),
+		float3(0.3371, 0.5679, -0.0057), float3(-0.6999, -0.0451, -0.0019),
+		float3(0.0689, -0.1598, -0.8547), float3(0.0560, 0.0069, -0.1843),
+		float3(-0.0146, 0.1402, 0.0762), float3(0.0100, -0.1924, -0.0344),
+		float3(-0.3577, -0.5301, -0.4358), float3(-0.3169, 0.1063, 0.0158),
+		float3(0.0103, -0.5869, 0.0046), float3(-0.0897, -0.4940, 0.3287),
+		float3(0.7119, -0.0154, -0.0918), float3(-0.0533, 0.0596, -0.5411),
+		float3(0.0352, -0.0631, 0.5460), float3(-0.4776, 0.2847, -0.0271)
 	};
 	
-	float totalOcclusion = 0.0;
-	float4 randCol = tex2D(UserMapSampler, TexCoords * RAND_TEXTURE_TILES);
+	float3 random = normalize(CP3DTex2D(RandomTextureSampler, In.TexCoords.xy * 4.0, RandomTextureSamplerST).rgb);
 
-	for(int i = 0;i < SAMPLE_COUNT;++i)
-	{
-		// Reflect the random offset using the random user texture.
-		float3 randVec = reflect(normalize(offsets[i]), randCol.xyz * 2.0 - float3(1.0, 1.0, 1.0)) * SSAO_REACH;
-		float4 newWorldPos = float4(currentWPos + randVec, 1.0);
-		
-		// Calculate our sample depth.
-		float sampleDepth = (length(newWorldPos.xyz - LStart) / lLength) - DEPTH_ALIASING_EPISILON;
-	
-		// Project the position to the screen.
-		newWorldPos = mul(newWorldPos, mViewProj);
-		newWorldPos.xy = float2(newWorldPos.x, -newWorldPos.y) / newWorldPos.w * 0.5 + float2(0.5, 0.5);
+	float depth = CP3DTex2D(DepthTextureSampler, In.TexCoords.xy, DepthTextureSamplerST).r;
 
-		// Read from the projected position.
-		float newDepth = getDepthAt(clamp(newWorldPos.xy, float2(0.001, 0.001), float2(0.999, 0.999)));
+	float3 position = float3(In.TexCoords.xy, depth);
+	float3 normal = normal_from_depth(depth, In.TexCoords.xy);
 
-		// Compare the two depth samples.
-		float depthCalc = newDepth < sampleDepth ? 1.0 : 0.0;
-		depthCalc *= clamp(1.0 - (sampleDepth - newDepth) / MAX_DEPTH_DECLINE, 0.0, 1.0);
-		totalOcclusion += depthCalc;
+	float radius_depth = radius / depth;
+	float occlusion = 0.0;
+	for (int i = 0; i < samples; i++) {
+
+		float3 ray = radius_depth * reflect(sample_sphere[i], random);
+		float3 hemi_ray = position + sign(dot(ray, normal)) * ray;
+
+		float occ_depth = CP3DTex2D(DepthTextureSampler, saturate(hemi_ray.xy), DepthTextureSamplerST).r;
+		float difference = depth - occ_depth;
+
+		occlusion += step(falloff, difference) * (1.0 - smoothstep(falloff, area, difference));
 	}
-	
-	totalOcclusion /= SAMPLE_COUNT;
-	
-	return 1.0 - totalOcclusion * SSAO_OUTPUT_MULTIPLIER;
-}
 
-#endif
+	float ao = 1.0 - total_strength * occlusion * (1.0 / samples);
+	float4 Output = saturate(ao + base);
+
+	return Output;
+}

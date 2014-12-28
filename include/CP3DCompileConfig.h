@@ -70,7 +70,7 @@ namespace cp3d {
 
 	//! If uncommented, CP3D will used the multithreaded driver
 	//! So far only on DirectX
-	#define CP3DR_DRIVER_MULTITHREADED
+	//#define CP3DR_DRIVER_MULTITHREADED
 
 	//! This should be usually enabled, in order to avoid render
 	//! artifacts on the visible framebuffer. However, it might be
