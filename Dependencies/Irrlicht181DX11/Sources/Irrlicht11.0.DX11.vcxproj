@@ -67,7 +67,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>IrrlichtDirect3D11</ProjectName>
+    <ProjectName>Irrlicht_dx11</ProjectName>
     <ProjectGuid>{ADFC5B97-4AD0-4BB4-A57D-BAF0DEF8134B}</ProjectGuid>
     <RootNamespace>Irrlicht</RootNamespace>
   </PropertyGroup>

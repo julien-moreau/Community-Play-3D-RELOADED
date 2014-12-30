@@ -186,10 +186,8 @@
     <None Include="..\CP3DR\Shaders\PostProcesses\SSAOCombine.fragment.fx">
       <Filter>Shaders\PostProcesses</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="..\CP3DR\Shaders\PostProcesses\SSAO.fragment.fx">
+    <None Include="..\CP3DR\Shaders\PostProcesses\SSAO.fragment.fx">
       <Filter>Shaders\PostProcesses</Filter>
-    </FxCompile>
+    </None>
   </ItemGroup>
 </Project>

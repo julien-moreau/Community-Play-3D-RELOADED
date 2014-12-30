@@ -66,7 +66,7 @@
     <LinkIncremental>true</LinkIncremental>
     <IntDir>Intermediate\$(Configuration)-$(PlatformTarget)\</IntDir>
     <OutDir>Output\</OutDir>
-    <TargetName>$(ProjectName)_d</TargetName>
+    <TargetName>$(ProjectName)_d_dx11</TargetName>
     <IgnoreImportLibrary>false</IgnoreImportLibrary>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -108,7 +108,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>IrrlichtDirect3D11_d.lib;CP3DRenderingEngine_d.lib;CP3DEngine_d.lib;CP3DCollaborativeEngine_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Irrlicht_dx11_d.lib;CP3DRenderingEngine_d_dx11.lib;CP3DEngine_d_dx11.lib;CP3DCollaborativeEngine_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\Irrlicht181DX11\Output\;$(SolutionDir)CP3DRenderingEngine\Output\;$(SolutionDir)CP3DEngine\Output\;$(SolutionDir)Dependencies\OhmSDK\libs\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>$(OutDir)$(TargetName).lib</ImportLibrary>
     </Link>

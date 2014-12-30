@@ -1,3 +1,89 @@
+#ifdef OPENGL_DRIVER
+
+#ifdef GL_ES
+precision highp float;
+#endif
+
+varying vec2 vUV;
+
+uniform sampler2D textureSampler;
+uniform sampler2D RandomMapSampler;
+
+uniform float totalStrength;
+uniform float fallOff;
+uniform float radius;
+uniform float area;
+
+vec3 normalFromDepth(float depth, vec2 coords) {
+	const vec2 offset1 = vec2(0.0, 0.001);
+	const vec2 offset2 = vec2(0.001, 0.0);
+
+	float depth1 = texture2D(textureSampler, coords + offset1).r;
+	float depth2 = texture2D(textureSampler, coords + offset2).r;
+
+	vec3 p1 = vec3(offset1, depth1 - depth);
+	vec3 p2 = vec3(offset2, depth2 - depth);
+
+	vec3 normal = cross(p1, p2);
+	normal.z = -normal.z;
+
+	return normalize(normal);
+}
+
+void main()
+{
+	const float base = 0.2;
+
+	const int samples = 16;
+	vec3 sampleSphere[samples];
+	sampleSphere[0] = vec3(0.5381, 0.1856, -0.4319);
+	sampleSphere[1] = vec3(0.1379, 0.2486, 0.4430);
+	sampleSphere[2] = vec3(0.3371, 0.5679, -0.0057);
+	sampleSphere[3] = vec3(-0.6999, -0.0451, -0.0019);
+	sampleSphere[4] = vec3(0.0689, -0.1598, -0.8547);
+	sampleSphere[5] = vec3(0.0560, 0.0069, -0.1843);
+	sampleSphere[6] = vec3(-0.0146, 0.1402, 0.0762);
+	sampleSphere[7] = vec3(0.0100, -0.1924, -0.0344);
+	sampleSphere[8] = vec3(-0.3577, -0.5301, -0.4358);
+	sampleSphere[9] = vec3(-0.3169, 0.1063, 0.0158);
+	sampleSphere[10] = vec3(0.0103, -0.5869, 0.0046);
+	sampleSphere[11] = vec3(-0.0897, -0.4940, 0.3287);
+	sampleSphere[12] = vec3(0.7119, -0.0154, -0.0918);
+	sampleSphere[13] = vec3(-0.0533, 0.0596, -0.5411);
+	sampleSphere[14] = vec3(0.0352, -0.0631, 0.5460);
+	sampleSphere[15] = vec3(-0.4776, 0.2847, -0.0271);
+
+	vec3 random = normalize(texture2D(RandomMapSampler, vUV * 4.0).rgb);
+	float depth = texture2D(textureSampler, vUV).r;
+
+	vec3 position = vec3(vUV, depth);
+	vec3 normal = normalFromDepth(depth, vUV);
+
+	float radiusDepth = radius / depth;
+	float occlusion = 0.0;
+
+	for (int i = 0; i < samples; i++) {
+		vec3 ray = radiusDepth * reflect(sampleSphere[i], random);
+		vec3 hemiRay = position + sign(dot(ray, normal)) * ray;
+
+		float occlusionDepth = texture2D(textureSampler, clamp(hemiRay.xy, 0.0, 1.0)).r;
+		float difference = depth - occlusionDepth;
+
+		occlusion += step(fallOff, difference) * (1.0 - smoothstep(fallOff, area, difference));
+	}
+
+	float ao = 1.0 - totalStrength * occlusion * (1.0 / float(samples));
+
+	float result = clamp(ao + base, 0.0, 1.0);
+	gl_FragColor.r = result;
+	gl_FragColor.g = result;
+	gl_FragColor.b = result;
+	gl_FragColor.a = 1.0;
+}
+
+
+#else
+
 #define POST_PROCESS
 #include "../InternalHandler/Utils.hlsl.fx"
 
@@ -71,3 +157,5 @@ float4 pixelMain(VS_OUTPUT In) : COLOR0
 
 	return Output;
 }
+
+#endif

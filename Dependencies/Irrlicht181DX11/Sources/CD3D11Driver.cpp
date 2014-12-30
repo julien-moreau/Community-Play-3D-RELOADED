@@ -255,7 +255,6 @@ bool CD3D11Driver::initDriver(HWND hwnd, bool pureSoftware)
 
 #ifdef _DEBUG
 		deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
-		deviceFlags |= D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 #endif
 
 		if(!Params.DriverMultithreaded)
