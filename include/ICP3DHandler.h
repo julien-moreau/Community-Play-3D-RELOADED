@@ -127,6 +127,12 @@ public:
 	//! \param callback: the callback derived from cp3d::rendering::IPostProcessingRenderCallback
 	virtual irr::s32 addPostProcessingEffectFromString(const irr::core::stringc &shader, IPostProcessingRenderCallback *callback = 0) = 0;
 
+	//! Adds a custom post-process created using IGPUProgramingServices*
+	//! Allow you to debug your shader in the awesome tool name Microsoft Visual Studio =D
+	//! \param MaterialType: the material index given by IGPUProgramingServices*
+	//! \param callbacl: the material's callback
+	virtual void addPostProcessingEffect(irr::s32 MaterialType, IPostProcessingRenderCallback* callback = 0) = 0;
+
 	//! Sets a post processing effect constant (OnSetConstant)
 	//! \param materialType: the material to configure
 	//! \param name: the name of the constant

@@ -13,26 +13,19 @@ void main()
 
 #else
 
-#ifdef DIRECT3D_11
-Texture2D ColorMapSampler : register(t0);
-Texture2D ScreenMapSampler : register(t1);
+#define POST_PROCESS
+#include "../InternalHandler/Utils.hlsl.fx"
+
+CP3DTexture ColorMapSampler : registerTexture(t0);
+CP3DTexture ScreenMapSampler : registerTexture(t1);
 
 SamplerState ColorMapSamplerST : register(s0);
 SamplerState ScreenMapSamplerST : register(s1);
-#else
-sampler2D ColorMapSampler : register(s0);
-sampler2D ScreenMapSampler : register(s1);
-#endif
 
 float4 pixelMain(VS_OUTPUT In) : COLOR0
 {
-	#ifdef DIRECT3D_11
-	float4 screenCol = ScreenMapSampler.Sample(ScreenMapSamplerST, In.TexCoords.xy);
-	float4 SSAOCol = ColorMapSampler.Sample(ColorMapSamplerST, In.TexCoords.xy);
-	#else
-	float4 screenCol = tex2D(ScreenMapSampler, In.TexCoords.xy);
-	float4 SSAOCol = tex2D(ColorMapSampler, In.TexCoords.xy);
-	#endif
+	float4 screenCol = CP3DTex2D(ScreenMapSampler, In.TexCoords.xy, ScreenMapSamplerST);
+	float4 SSAOCol = CP3DTex2D(ColorMapSampler, In.TexCoords.xy, ColorMapSamplerST);
 
 	return(screenCol * SSAOCol);
 }

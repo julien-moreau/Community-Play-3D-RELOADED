@@ -1,10 +1,8 @@
-#ifdef DIRECT3D_11
-Texture2D DepthTextureSampler  : register(t2);
-Texture2D RandomTextureSampler : register(t3);
-#else
-sampler2D DepthTextureSampler : register(s2);
-sampler2D RandomTextureSampler : register(s3);
-#endif
+#define POST_PROCESS
+#include "../InternalHandler/Utils.hlsl.fx"
+
+CP3DTexture DepthTextureSampler : registerTexture(t2);
+CP3DTexture RandomTextureSampler : registerTexture(t3);
 
 SamplerState DepthTextureSamplerST  : register(s2);
 SamplerState RandomTextureSamplerST : register(s3);

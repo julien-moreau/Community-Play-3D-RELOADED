@@ -26,12 +26,11 @@ void main()
 
 #else
 
-#ifdef DIRECT3D_11
-Texture2D ColorMapSampler : register(t0);
+#define POST_PROCESS
+#include "../InternalHandler/Utils.hlsl.fx"
+
+CP3DTexture ColorMapSampler : registerTexture(t0);
 SamplerState ColorMapSamplerST : register(s0);
-#else
-sampler2D ColorMapSampler : register(s0);
-#endif
 
 float4 pixelMain ( VS_OUTPUT In ) : COLOR0
 {
@@ -46,11 +45,7 @@ float4 pixelMain ( VS_OUTPUT In ) : COLOR0
 	float4 finalVal = float4(0.0, 0.0, 0.0, 0.0);
 
 	for (int i = 0; i < 4; ++i) {
-		#ifdef DIRECT3D_11
-		finalVal += ColorMapSampler.Sample(ColorMapSamplerST, clamp(In.TexCoords.xy + offsetArray[i] * 2.25, float2(0.0, 0.01), float2(1.0, 1.0)));
-		#else
-		finalVal += tex2D(ColorMapSampler, clamp(In.TexCoords.xy + offsetArray[i] * 2.25, float2(0.0, 0.01), float2(1.0, 1.0)));
-		#endif
+		finalVal += CP3DTex2D(ColorMapSampler, clamp(In.TexCoords.xy + offsetArray[i] * 2.25, float2(0.0, 0.01), float2(1.0, 1.0)), ColorMapSamplerST);
 	}
 
 	finalVal /= 4.0f;

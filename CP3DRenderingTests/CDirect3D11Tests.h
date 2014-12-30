@@ -44,6 +44,7 @@ void Direct3D11Test(irr::IrrlichtDevice *device) {
 	ICameraSceneNode *camera = smgr->addCameraSceneNodeFPS(0, 200.f, 0.09f);
 	camera->setPosition(vector3df(30.f, 30.f, 0.f));
 	device->getCursorControl()->setVisible(false);
+	camera->setFOV(90.f * core::DEGTORAD);
 
 	ISceneNode* skyboxNode = smgr->addSkyBoxSceneNode(
 		driver->getTexture("Textures/Skybox/glacier_up.png"),
@@ -87,11 +88,14 @@ void Direct3D11Test(irr::IrrlichtDevice *device) {
 	handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/SSAOCombine.fragment.fx");
 
 	stringc pixelProgram =
-		"sampler2D ColorMapSampler :register(s0);\n"
-		"float power;"
-		"float4 pixelMain(float2 coords : TEXCOORD0) : COLOR0 {\n"
-		"	return tex2D(ColorMapSampler, coords) * power;"
-		"}";
+		"CP3DTexture ColorMapSampler	: registerTexture(t0);\n"
+		"SamplerState ColorMapSamplerST : register(s0);\n"
+		"float power;\n"
+		"\n"
+		"float4 pixelMain(VS_OUTPUT In) : COLOR0 {\n"
+		"	float4 color = CP3DTex2D(ColorMapSampler, In.TexCoords.xy, ColorMapSamplerST);\n"
+		"	return color * power;\n"
+		"}\n";
 	s32 custom = handler->addPostProcessingEffectFromString(pixelProgram);
 	f32 power = 0.f;
 	handler->setPostProcessingRenderCallback(custom,

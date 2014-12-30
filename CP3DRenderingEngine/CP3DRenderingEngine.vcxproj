@@ -96,7 +96,7 @@
       <MapExports>false</MapExports>
       <OptimizeReferences>
       </OptimizeReferences>
-      <AssemblyDebug />
+      <AssemblyDebug>true</AssemblyDebug>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)CP3DR\$(TargetName)$(TargetExt)" /y
@@ -252,10 +252,33 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\CP3DR\Shaders\PostProcesses\BlurHP.fragment.fx" />
-    <None Include="..\CP3DR\Shaders\PostProcesses\BlurVP.fragment.fx" />
-    <None Include="..\CP3DR\Shaders\PostProcesses\SSAO.fragment.fx" />
-    <None Include="..\CP3DR\Shaders\PostProcesses\SSAOCombine.fragment.fx" />
+    <None Include="..\CP3DR\Shaders\PostProcesses\BlurHP.fragment.fx">
+      <FileType>Document</FileType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">pixelMain</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">Pixel</ShaderType>
+    </None>
+    <None Include="..\CP3DR\Shaders\PostProcesses\BlurVP.fragment.fx">
+      <FileType>Document</FileType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">pixelMain</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">Pixel</ShaderType>
+    </None>
+    <None Include="..\CP3DR\Shaders\PostProcesses\SSAO.fragment.fx">
+      <FileType>Document</FileType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">pixelMain</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">3.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</DeploymentContent>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">DIRECT3D_9</PreprocessorDefinitions>
+    </None>
+    <None Include="..\CP3DR\Shaders\PostProcesses\SSAOCombine.fragment.fx">
+      <FileType>Document</FileType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">pixelMain</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">3.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</DeploymentContent>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\CP3DR\Shaders\Materials\MultiplePass.fragment.fx">

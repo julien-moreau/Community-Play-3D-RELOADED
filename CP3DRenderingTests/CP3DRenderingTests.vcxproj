@@ -75,7 +75,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)Dependencies\Irrlicht181\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -84,10 +84,14 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\Irrlicht181\Output\;$(SolutionDir)CP3DRenderingEngine\Output\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Irrlicht_d.lib;CP3DRenderingEngine_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AssemblyDebug>true</AssemblyDebug>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)CP3DR\$(TargetName)$(TargetExt)" /y</Command>
     </PostBuildEvent>
+    <FxCompile>
+      <ShaderModel>3.0</ShaderModel>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">
     <ClCompile>
@@ -138,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CDirect3D11Tests.h" />
+    <ClInclude Include="CDirect3D9Debug.h" />
     <ClInclude Include="CGlobalTests.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />

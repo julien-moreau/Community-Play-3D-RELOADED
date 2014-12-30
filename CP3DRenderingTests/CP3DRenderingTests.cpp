@@ -7,6 +7,7 @@
 
 #include "CGlobalTests.h"
 #include "CDirect3D11Tests.h"
+#include "CDirect3D9Debug.h"
 
 /// Irrlicht namespaces
 using namespace irr;
@@ -45,7 +46,14 @@ int main(int argc, char* argv[]) {
 	driverType = EDT_DIRECT3D11;
 	#endif
 
-	IrrlichtDevice *device = createDevice(driverType, dimension2du(1280, 800), 32, false, false, false, 0);
+	//IrrlichtDevice *device = createDevice(driverType, dimension2du(1280, 800), 32, false, false, false, 0);
+	SIrrlichtCreationParameters params;
+	params.DriverType = driverType;
+	params.WindowSize = dimension2du(1280, 800);
+	params.Bits = 32;
+	params.Fullscreen = false;
+	params.DriverMultithreaded = true;
+	IrrlichtDevice *device = createDeviceEx(params);
 	device->getLogger()->setLogLevel(ELL_INFORMATION);
 
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
@@ -61,7 +69,8 @@ int main(int argc, char* argv[]) {
 	device->setEventReceiver(new CEventReceiver(device));
 
 	//cp3d::test::GlobalTest(device);
-	cp3d::test::Direct3D11Test(device);
+	//cp3d::test::Direct3D11Test(device);
+	cp3d::test::Direct3D9Debug(device);
 
 	return EXIT_SUCCESS;
 }

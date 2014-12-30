@@ -4,6 +4,7 @@
     <LocalDebuggerCommand>$(SolutionDir)CP3DR\$(TargetName)</LocalDebuggerCommand>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerWorkingDirectory>$(SolutionDir)CP3DR\</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerDebuggerType>Auto</LocalDebuggerDebuggerType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">
     <LocalDebuggerCommand>$(SolutionDir)CP3DR\$(TargetName)</LocalDebuggerCommand>

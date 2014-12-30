@@ -2,11 +2,33 @@
 #error "These utils functions are not intended for OpenGL Drivers"
 #endif
 
+#undef OPENGL_DRIVER
+
+/*
+Redefines the Texture2D and sampler2D to ensure a
+compatibility between D3D9 & D3D11
+
+Usage :
+
+CP3DTexture myTexture : registerTexture(t0);
+// - if D3D9, then t0 is replaced by s0
+// - if D3D11, then nothing replaced
+
+*/
 #ifdef DIRECT3D_11
 typedef Texture2D CP3DTexture;
 #else
 typedef sampler2D CP3DTexture;
+#define t0 s0
+#define t1 s1
+#define t2 s2
+#define t3 s3
+#define t4 s4
+#define t5 s5
+#define t6 s6
+#define t7 s7
 #endif
+#define registerTexture(reg) register(reg)
 
 //-----------------------------------------------------------------
 // Texture2D & sampler2D
@@ -15,30 +37,25 @@ typedef sampler2D CP3DTexture;
 /*
 Common usage :
 
-#ifdef DIRECT3D_11
-Texture2D tex : register(t0);
-#else
-sampler2D tex : register(s0);
-#endif
 
+CP3DTexture tex : registerTexture(t0);
 SamplerState st : register(s0); // Ignored if D3D9 driver.
 
 float4 pixelMain(...) : COLOR0
 {
 	// If D3D9 driver, st will be ignored, but will work with D3D11 driver :)
 	// It ensures a full compatibility between D3D9 and D3D11 drivers
-	return CP3DTex2D(tex, coord.xy, st);
+	return CP3DTex2D(tex, coords.xy, st);
 }
 */
 
 // Related to D3D9 driver
-inline float4 CP3DTex2D(sampler2D s, float2 t, SamplerState st) {
-	return tex2D(s, t);
-}
-
-// Related to D3D11 driver
-inline float4 CP3DTex2D(Texture2D s, float2 t, SamplerState st) {
+inline float4 CP3DTex2D(CP3DTexture s, float2 t, SamplerState st) {
+	#ifdef DIRECT3D_11
 	return s.Sample(st, t);
+	#else
+	return tex2D(s, t);
+	#endif
 }
 
 //-----------------------------------------------------------------

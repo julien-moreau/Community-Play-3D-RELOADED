@@ -129,12 +129,6 @@
     <None Include="..\CP3DR\Shaders\PostProcesses\BlurVP.fragment.fx">
       <Filter>Shaders\PostProcesses</Filter>
     </None>
-    <None Include="..\CP3DR\Shaders\PostProcesses\SSAO.fragment.fx">
-      <Filter>Shaders\PostProcesses</Filter>
-    </None>
-    <None Include="..\CP3DR\Shaders\PostProcesses\SSAOCombine.fragment.fx">
-      <Filter>Shaders\PostProcesses</Filter>
-    </None>
     <None Include="..\CP3DR\Shaders\PostProcesses\FXAA.fragment.fx">
       <Filter>Shaders\PostProcesses</Filter>
     </None>
@@ -189,5 +183,13 @@
     <None Include="..\CP3DR\Shaders\InternalHandler\Utils.hlsl.fx">
       <Filter>Shaders\InternalHandler</Filter>
     </None>
+    <None Include="..\CP3DR\Shaders\PostProcesses\SSAOCombine.fragment.fx">
+      <Filter>Shaders\PostProcesses</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\CP3DR\Shaders\PostProcesses\SSAO.fragment.fx">
+      <Filter>Shaders\PostProcesses</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

@@ -325,6 +325,7 @@ to provide the user with the proper DLL. That's why it's disabled by default. */
 //! Define _IRR_USE_NVIDIA_PERFHUD_ to opt-in to using the nVidia PerHUD tool
 /** Enable, by opting-in, to use the nVidia PerfHUD performance analysis driver
 tool <http://developer.nvidia.com/object/nvperfhud_home.html>. */
+//#define _IRR_USE_NVIDIA_PERFHUD_
 #undef _IRR_USE_NVIDIA_PERFHUD_
 
 //! Define one of the three setting for Burning's Video Software Rasterizer

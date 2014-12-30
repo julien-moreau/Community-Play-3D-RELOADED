@@ -663,7 +663,7 @@ s32 CCP3DHandler::addPostProcessingEffectFromString(const irr::core::stringc &sh
 }
 
 s32 CCP3DHandler::addPostProcessingEffectFromFile(const irr::core::stringc& filename, IPostProcessingRenderCallback* callback) {
-	SPostProcessingPair pPair = obtainScreenQuadMaterial(filename);
+	SPostProcessingPair pPair = obtainScreenQuadMaterial(filename, EMT_SOLID, true);
 	pPair.renderCallback = callback;
 
 	if (callback)

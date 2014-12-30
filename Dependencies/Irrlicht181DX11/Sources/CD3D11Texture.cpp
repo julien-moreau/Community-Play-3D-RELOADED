@@ -157,7 +157,7 @@ void* CD3D11Texture::lock(E_TEXTURE_LOCK_MODE mode, u32 mipmapLevel)
 
 void* CD3D11Texture::lock(bool readOnly, u32 mipmapLevel, u32 arraySlice)
 {
-	if(!Texture || !createTextureBuffer())
+	if (!Texture || !createTextureBuffer())
 		return 0;
 
 	HRESULT hr = S_OK;
@@ -179,12 +179,20 @@ void* CD3D11Texture::lock(bool readOnly, u32 mipmapLevel, u32 arraySlice)
 		Context->CopyResource( TextureBuffer, Texture );
 	}
 
+#ifdef _DEBUG
+	const char c_szName[] = "<unnamed>";
+	Texture->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof(c_szName) - 1, c_szName);
+#endif
+
 	// Map texture buffer
 	D3D11_MAPPED_SUBRESOURCE mappedData;
-	hr = Context->Map( TextureBuffer,
-								D3D11CalcSubresource(MipLevelLocked,		// mip level to lock
-													 ArraySliceLocked,		// array slice (only 1 slice for now)
-													 NumberOfMipLevels), 	// number of mip levels
+	mappedData.pData = 0;
+
+	UINT subResource = D3D11CalcSubresource(MipLevelLocked,		// mip level to lock
+											ArraySliceLocked,	// array slice (only 1 slice for now)
+											NumberOfMipLevels); // number of mip levels
+
+	hr = Context->Map(TextureBuffer, subResource,
 								LastMapDirection, 							// direction to map
 								0,
 								&mappedData );								// mapped result

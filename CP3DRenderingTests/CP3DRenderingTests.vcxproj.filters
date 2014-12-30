@@ -29,6 +29,9 @@
     <ClInclude Include="CGlobalTests.h">
       <Filter>Sources</Filter>
     </ClInclude>
+    <ClInclude Include="CDirect3D9Debug.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

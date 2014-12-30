@@ -19,6 +19,10 @@
 #include "CD3D11ParallaxMapRenderer.h"
 #include "CD3D11VertexDescriptor.h"
 
+#ifdef _DEBUG
+#pragma comment(lib,"VsGraphicsHelper.lib")
+#endif
+
 inline void unpack_texureBlendFunc ( irr::video::E_BLEND_FACTOR &srcFact, irr::video::E_BLEND_FACTOR &dstFact,
 			irr::video::E_MODULATE_FUNC &modulo, irr::u32& alphaSource, const irr::f32 param )
 {
@@ -250,7 +254,8 @@ bool CD3D11Driver::initDriver(HWND hwnd, bool pureSoftware)
 		UINT deviceFlags = 0;
 
 #ifdef _DEBUG
-		//deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+		deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+		deviceFlags |= D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 #endif
 
 		if(!Params.DriverMultithreaded)
