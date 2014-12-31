@@ -253,8 +253,8 @@ void CCP3DHandler::addPostProcessingEffect(irr::s32 MaterialType, IPostProcessin
 }
 
 
-void CCP3DHandler::addShadowToNode(irr::scene::ISceneNode *node, E_FILTER_TYPE filterType, E_SHADOW_MODE shadowMode) {
-	SShadowNode snode = {node, shadowMode, filterType};
+void CCP3DHandler::addShadowToNode(irr::scene::ISceneNode *node, E_FILTER_TYPE filterType, E_SHADOW_MODE shadowMode, s32 depthMaterial) {
+	SShadowNode snode = { node, shadowMode, filterType, depthMaterial };
 	ShadowNodeArray.push_back(snode);
 }
 
@@ -364,8 +364,11 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 
 					for(u32 m = 0;m < CurrentMaterialCount;++m) {
 						BufferMaterialList.push_back(ShadowNodeArray[i].node->getMaterial(m).MaterialType);
-						ShadowNodeArray[i].node->getMaterial(m).MaterialType = (E_MATERIAL_TYPE)
-							(BufferMaterialList[m] == video::EMT_TRANSPARENT_ALPHA_CHANNEL_REF ? DepthT : Depth);
+
+						if (ShadowNodeArray[i].depthMaterial >= 0)
+							ShadowNodeArray[i].node->getMaterial(m).MaterialType = (E_MATERIAL_TYPE)ShadowNodeArray[i].depthMaterial;
+						else
+							ShadowNodeArray[i].node->getMaterial(m).MaterialType = (E_MATERIAL_TYPE)(BufferMaterialList[m] == EMT_TRANSPARENT_ALPHA_CHANNEL_REF ? DepthT : Depth);
 					}
 
 					ShadowNodeArray[i].node->OnAnimate(device->getTimer()->getTime());
@@ -537,9 +540,6 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 
 		for(u32 i = 0; i < PostProcessingRoutinesSize; i++) {
 			if (!PostProcessingRoutines[i].activated) {
-				driver->setViewPort(ViewPort);
-				driver->setRenderTarget(outputTarget, true, true, ClearColour);
-				ScreenQuad.render(driver);
 				continue;
 			}
 

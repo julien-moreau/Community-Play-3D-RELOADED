@@ -20,11 +20,11 @@ void main(void) {
 
 #include "Shaders/InternalHandler/Utils.hlsl.fx"
 
-CP3DTexture diffuseSampler : register(t0);
+CP3DTexture diffuseSampler : registerTexture(t0);
 SamplerState diffuseSamplerST : register(s0);
 
 #ifdef _CP3D_SOLID_2_LAYER_
-CP3DTexture blendSampler : register(t1);
+CP3DTexture blendSampler : registerTexture(t1);
 SamplerState blendSamplerST : register(s1);
 #endif
 

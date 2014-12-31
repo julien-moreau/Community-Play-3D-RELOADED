@@ -56,15 +56,17 @@ void CMaterialCreator::removeDefine(const irr::core::stringc define) {
 void CMaterialCreator::clearDefines() {
 	Spp->clearDefines();
 	if (Driver->getDriverType() == EDT_OPENGL)
-		Spp->addShaderDefine("OPENGL_DRIVER", "1");
+		Spp->addShaderDefine("OPENGL_DRIVER");
 	else
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
 	if (Driver->getDriverType() == EDT_DIRECT3D11)
-		Spp->addShaderDefine("DIRECT3D_11", "1");
+		Spp->addShaderDefine("DIRECT3D_11");
 	else
 	#endif
-		if (Driver->getDriverType() == EDT_DIRECT3D9)
-		Spp->addShaderDefine("DIRECT3D_9", "1");
+	if (Driver->getDriverType() == EDT_DIRECT3D9)
+		Spp->addShaderDefine("DIRECT3D_9");
+
+	Spp->addShaderDefine("CP3D_MATERIAL");
 }
 
 } /// End namespace rendering

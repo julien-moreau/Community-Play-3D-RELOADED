@@ -428,6 +428,14 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">false</ExcludedFromBuild>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CP3DR\Shaders\Materials\depthExample.fragment.fx">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\CP3DR\Shaders\Materials\depthExample.vertex.fx">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

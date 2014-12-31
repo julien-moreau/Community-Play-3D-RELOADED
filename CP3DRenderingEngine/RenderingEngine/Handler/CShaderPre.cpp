@@ -269,6 +269,13 @@ core::stringc CShaderPreprocessor::ppShaderDF(irr::core::stringc shaderProgram) 
 		finalShaderProgram += "\n";
 	}
 
+	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+	if (driver->getDriverType() == video::EDT_DIRECT3D11) {
+		finalShaderProgram += getFileContent("Shaders/InternalHandler/Utils.hlsl.fx").c_str();
+		finalShaderProgram += "\n";
+	}
+	#endif
+
 	finalShaderProgram += shaderProgram;
 	return finalShaderProgram;
 }

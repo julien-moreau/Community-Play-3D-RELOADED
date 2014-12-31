@@ -92,7 +92,8 @@ public:
 	//! \param node: the to compute in lighting calculations
 	//! \param filterType: the shadow map filter type
 	//! \param shadowMode: the shadow mode for this node. Cast, Receive, Both or Exclude
-	virtual void addShadowToNode(irr::scene::ISceneNode* node, E_FILTER_TYPE filterType = EFT_NONE, E_SHADOW_MODE shadowMode = ESM_BOTH) = 0;
+	virtual void addShadowToNode(irr::scene::ISceneNode* node, E_FILTER_TYPE filterType = EFT_NONE,
+								 E_SHADOW_MODE shadowMode = ESM_BOTH, irr::s32 depthMaterial = -1) = 0;
 
 	//! Returns if the node is shadowed or not
 	//! \param node: the node to test

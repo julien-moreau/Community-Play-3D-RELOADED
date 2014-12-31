@@ -124,6 +124,31 @@ private:
 	irr::f32 BufferWidth, BufferHeight;
 };
 
+class CCustomDepthCallback : public irr::video::IShaderConstantSetCallBack {
+
+public:
+
+	CCustomDepthCallback(irr::IrrlichtDevice *device)
+	{
+		timer = device->getTimer();
+	}
+
+	void OnSetConstants(irr::video::IMaterialRendererServices* services, irr::s32 userData) {
+		irr::video::IVideoDriver *driver = services->getVideoDriver();
+		irr::core::matrix4 m = driver->getTransform(irr::video::ETS_PROJECTION);
+		m *= driver->getTransform(irr::video::ETS_VIEW);
+		m *= driver->getTransform(irr::video::ETS_WORLD);
+
+		services->setVertexShaderConstant("mWorldViewProj", m.pointer(), 16);
+		irr::f32 time = (irr::f32)(timer->getTime()) / 1000.f;
+		services->setVertexShaderConstant("time", &time, 1);
+	}
+
+private:
+	irr::ITimer *timer;
+
+};
+
 void GlobalTest(irr::IrrlichtDevice *device) {
 	using namespace irr;
 	using namespace video;
@@ -141,6 +166,15 @@ void GlobalTest(irr::IrrlichtDevice *device) {
 	ICameraSceneNode *camera = smgr->addCameraSceneNodeFPS(0, 200.f, 0.09f);
 	camera->setPosition(vector3df(100.f, 100.f, 0.f));
 	device->getCursorControl()->setVisible(false);
+
+	/// Create a custo material (for custom depth test)
+	CCustomDepthCallback *customDepthCallback = new CCustomDepthCallback(device);
+	rendering::ICP3DMaterialCreator *matCreator = cpre->createMaterialCreator();
+	irr::s32 mat1 = matCreator->createMaterialFromFiles("Shaders/Materials/depthExample.vertex.fx", "Shaders/Materials/depthExample.fragment.fx",
+														EMT_SOLID, customDepthCallback);
+	matCreator->addDefine("CP3D_COMPUTE_DEPTH_MATERIAL", "");
+	irr::s32 mat2 = matCreator->createMaterialFromFiles("Shaders/Materials/depthExample.vertex.fx", "Shaders/Materials/depthExample.fragment.fx",
+														EMT_SOLID, customDepthCallback);
 
 	/// Create a test scene
 	IAnimatedMesh *planeMesh = smgr->addHillPlaneMesh("plane_mesh", dimension2d<f32>(100.f, 100.f), dimension2d<u32>(50, 50),
@@ -163,7 +197,7 @@ void GlobalTest(irr::IrrlichtDevice *device) {
 	cubeNode->setMaterialFlag(EMF_NORMALIZE_NORMALS, false);
 	cubeNode->setMaterialFlag(EMF_LIGHTING, false);
 	cubeNode->getMaterial(0).Shininess = 0.f;
-	handler->addShadowToNode(cubeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_BOTH);
+	handler->addShadowToNode(cubeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_BOTH, mat2);
 
 	//cp3d::rendering::SShadowLight light1(1024, vector3df(0.f, 100.f, 100.f), vector3df(0.f), SColor(255, 255, 255, 255), 1.f, 400.f, 90.f * f32(irr::core::DEGTORAD64), false);
 	//light1.setMustAutoRecalculate(false);
@@ -183,7 +217,7 @@ void GlobalTest(irr::IrrlichtDevice *device) {
 
 	/// Create the normal mapping material
 	cpre->createNormalMappingMaterial();
-	cubeNode->setMaterialType(cpre->Materials[EMT_SOLID]);
+	cubeNode->setMaterialType((E_MATERIAL_TYPE)mat1);
 	planeNode->setMaterialType(cpre->Materials[EMT_SOLID]);
 
 	cp3d::rendering::ICP3DLightSceneNode *light = cpre->createLightSceneNode(true, true);
@@ -191,10 +225,11 @@ void GlobalTest(irr::IrrlichtDevice *device) {
 	light->setLightColor(SColorf(1.f, 1.f, 1.f, 1.f));
 	light->getLightData().SpecularColor = SColorf(1.f, 0.5f, 0.f, 1.f);
 	light->getShadowLight()->setUseRoundSpotLight(false);
+	light->getShadowLight()->setFarValue(600.f);
 
 	ISceneNodeAnimator *anim = smgr->createFlyCircleAnimator(vector3df(0.f, 100.f, 0.f), 100.f);
 	ILightSceneNode *l = *light;
-	l->addAnimator(anim);
+	//l->addAnimator(anim);
 	anim->drop();
 
 	/// Finish

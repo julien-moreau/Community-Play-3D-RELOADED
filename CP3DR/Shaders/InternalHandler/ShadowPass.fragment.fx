@@ -96,7 +96,7 @@ void main()
 
 #include "Shaders/InternalHandler/Utils.hlsl.fx"
 
-CP3DTexture ShadowMapSampler : register(t0);
+CP3DTexture ShadowMapSampler : registerTexture(t0);
 SamplerState ShadowMapSamplerST : register(s0);
 
 float4 LightColour;

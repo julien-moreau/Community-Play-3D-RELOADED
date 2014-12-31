@@ -73,9 +73,9 @@ float fBumpStrength;
 float shininess;
 int numLights;
 
-CP3DTexture baseMap		: register(t0);
-CP3DTexture bumpMap		: register(t1);
-CP3DTexture specularMap : register(t2);
+CP3DTexture baseMap		: registerTexture(t0);
+CP3DTexture bumpMap		: registerTexture(t1);
+CP3DTexture specularMap : registerTexture(t2);
 
 SamplerState baseMapST	   : register(s0);
 SamplerState bumpMapST	   : register(s1);

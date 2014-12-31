@@ -1,5 +1,5 @@
-#ifndef _FX_UTILS_HLSL_FX_INCLUDED_
-#define _FX_UTILS_HLSL_FX_INCLUDED_
+#ifndef __FX_UTILS_HLSL_FX_INCLUDED_
+#define __FX_UTILS_HLSL_FX_INCLUDED_
 
 #ifdef OPENGL_DRIVER
 #error "These utils functions are not intended for OpenGL Drivers"
@@ -7,6 +7,9 @@
 
 #undef OPENGL_DRIVER
 
+//-----------------------------------------------------------------
+// Compatibilyty D3D9 & D3D11
+//-----------------------------------------------------------------
 /*
 Redefines the Texture2D and sampler2D to ensure a
 compatibility between D3D9 & D3D11
@@ -70,7 +73,7 @@ Defines the output values of the screen quad's vertex program.
 Common usage in your post-process pixel shader program
 (access the output values using the following example) :
 
-...
+[...]
 
 float4 pixelMain(VS_OUTPUT In) : COLOR0
 {
@@ -100,4 +103,90 @@ struct VS_OUTPUT
 };
 #endif
 
+/*
+If CP3D_MATERIAL and CP3D_COMPUTE_DEPTH_MATERIAL are defined,
+you're able to compute your own depth material passing the final 3D positions
+to the vertex program, and depth parameters to the pixel program.
+Simply use the cp3d::rendering::ICP3DMaterialCreator and add the
+CP3D_COMPUTE_DEPTH_MATERIAL define.
+
+See depthExample.xxx.fx in "Shaders/Materials/" for examples.
+*/
+#if defined(CP3D_MATERIAL) && defined(CP3D_COMPUTE_DEPTH_MATERIAL)
+/*
+Let you compute the depth vertex function
+*/
+inline float4 computeDepthVertex(float4 p, float maxDistance) {
+	float4 clipPos = p;
+	clipPos.x = maxDistance;
+
+	return clipPos;
+}
+
+/*
+Let you compute the depth pixel function
+*/
+#ifdef DEPTH_PIXEL_ALPHA_ENABLED
+inline float4 computeDepthPixel(float4 p, CP3DTexture t, float2 tc, SamplerState st) {
+#else
+inline float4 computeDepthPixel(float4 p) {
 #endif
+	float depth = p.z / p.x;
+	float alpha = 0.0;
+
+	#ifdef DEPTH_PIXEL_ALPHA_ENABLED
+	alpha = CP3DTex2D(t, tc.xy, st).a;
+	#endif
+
+	return float4(depth, depth * depth, 0.0, 0.0);
+}
+#endif
+
+/*
+If CP3D_MATERIAL and CP3D_COMPUTE_SHADOWS_MATERIAL are defined,
+you're able to compute your own shadows material passing the final 3D positions
+to the vertex program, and depth parameters to the pixel program.
+Simply use the cp3d::rendering::ICP3DMaterialCreator and add the
+CP3D_COMPUTE_SHADOWS_MATERIAL define.
+*/
+#if defined(CP3D_MATERIAL) && defined(CP3D_COMPUTE_SHADOWS_MATERIAL)
+/*
+Let you create the shadows vertex function
+*/
+struct VS_INPUT_SHADOWS_MATERIAL
+{
+	float3 Normal : NORMAL;
+};
+
+struct VS_OUTPUT_SHADOWS_MATERIAL
+{
+	float4 ShadowMapSamplingPos : TEXCOORD0;
+	float4 MVar        			: TEXCOORD1;
+};
+
+VS_OUTPUT_SHADOWS_MATERIAL computeShadowsVertex(float4 p, VS_INPUT_SHADOWS_MATERIAL In) {
+	VS_OUTPUT_SHADOWS_MATERIAL OUT = (VS_OUTPUT_SHADOWS_MATERIAL)0;
+
+	float4 SMPos = mul(float4(p.xyz, 1.0), mWorldViewProj2);
+	SMPos.xy = float2(SMPos.x, -SMPos.y) / 2.0;
+	OUT.ShadowMapSamplingPos = SMPos;
+
+	#ifdef DIRECT3D_11
+	float4 worldpos = mul(float4(In.Position.x, In.Position.y, In.Position.z, 1.0), mWorldTrans);
+	float3 LightDir = normalize(LightPos - worldpos.xyz);
+	#else
+	float3 LightDir = normalize(LightPos - In.Position);
+	#endif
+
+	OUT.MVar = float4(SMPos.z, dot(In.Normal, LightDir), 1.0 / MAPRES, MaxD);
+
+	return (OUT);
+}
+
+/*
+Let you create the shadows pixel function
+*/
+
+#endif
+
+#endif /// End __FX_UTILS_HLSL_FX_INCLUDED_

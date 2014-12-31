@@ -52,7 +52,7 @@ float MAPRES;
 
 struct VS_OUTPUT
 {
-	float4 Position				: POSITION;
+	float4 Position				: SV_Position;
 	float4 ShadowMapSamplingPos : TEXCOORD0; 
 	float4 MVar        			: TEXCOORD1;
 };

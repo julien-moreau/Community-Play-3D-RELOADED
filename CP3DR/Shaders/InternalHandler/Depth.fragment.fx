@@ -23,7 +23,7 @@ void main()
 #include "Shaders/InternalHandler/Utils.hlsl.fx"
 
 #ifdef ALPHA_ENABLED
-CP3DTexture ColorMapSampler : register(t0);
+CP3DTexture ColorMapSampler : registerTexture(t0);
 SamplerState ColorMapSamplerST : register(s0);
 #endif
 

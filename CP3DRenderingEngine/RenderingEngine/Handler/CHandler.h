@@ -52,7 +52,8 @@ public:
 		SShadowNode tmpShadowNode = {node, ESM_EXCLUDE, EFT_NONE};
 		ShadowNodeArray.push_back(tmpShadowNode);
 	}
-	void addShadowToNode(irr::scene::ISceneNode* node, E_FILTER_TYPE filterType = EFT_NONE, E_SHADOW_MODE shadowMode = ESM_BOTH);
+	void addShadowToNode(irr::scene::ISceneNode* node, E_FILTER_TYPE filterType = EFT_NONE,
+						 E_SHADOW_MODE shadowMode = ESM_BOTH, irr::s32 depthMaterial = -1);
 	bool isNodeShadowed(irr::scene::ISceneNode *node);
 
 	E_SHADOW_MODE getShadowModeForNode(irr::scene::ISceneNode *node);
@@ -152,9 +153,10 @@ private:
 		}
 
 		irr::scene::ISceneNode* node;
-
 		E_SHADOW_MODE shadowMode;
 		E_FILTER_TYPE filterType;
+
+		irr::s32 depthMaterial;
 	};
 
 	struct SPostProcessingPair {

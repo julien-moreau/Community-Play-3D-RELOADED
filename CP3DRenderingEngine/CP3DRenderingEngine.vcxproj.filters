@@ -195,5 +195,11 @@
     <None Include="..\CP3DR\Shaders\InternalHandler\Utils.hlsl.fx">
       <Filter>Shaders\InternalHandler</Filter>
     </None>
+    <None Include="..\CP3DR\Shaders\Materials\depthExample.fragment.fx">
+      <Filter>Shaders\Materials</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\Materials\depthExample.vertex.fx">
+      <Filter>Shaders\Materials</Filter>
+    </None>
   </ItemGroup>
 </Project>
