@@ -1,3 +1,6 @@
+#ifndef _FX_UTILS_HLSL_FX_INCLUDED_
+#define _FX_UTILS_HLSL_FX_INCLUDED_
+
 #ifdef OPENGL_DRIVER
 #error "These utils functions are not intended for OpenGL Drivers"
 #endif
@@ -95,4 +98,6 @@ struct VS_OUTPUT
 	*/
 	float2 ScreenSize	: TEXCOORD3;
 };
+#endif
+
 #endif

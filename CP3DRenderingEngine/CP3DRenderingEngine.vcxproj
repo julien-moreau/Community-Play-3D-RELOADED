@@ -314,46 +314,118 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <None Include="..\CP3DR\Shaders\InternalHandler\LightModulate.fragment.fx">
       <FileType>Document</FileType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">false</ExcludedFromBuild>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">$(SolutionDir)CP3DR\</AdditionalIncludeDirectories>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">3.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">pixelMain</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">Pixel</ShaderType>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">DIRECT3D_9</PreprocessorDefinitions>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</DeploymentContent>
     </None>
     <None Include="..\CP3DR\Shaders\InternalHandler\ScreenQuad.vertex.fx">
       <FileType>Document</FileType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">false</ExcludedFromBuild>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">$(SolutionDir)CP3DR\</AdditionalIncludeDirectories>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">3.0</ShaderModel>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">DIRECT3D_9</PreprocessorDefinitions>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</DeploymentContent>
     </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\CP3DR\Shaders\InternalHandler\Simple.fragment.fx">
       <FileType>Document</FileType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">false</ExcludedFromBuild>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">$(SolutionDir)CP3DR\</AdditionalIncludeDirectories>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">3.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">pixelMain</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">Pixel</ShaderType>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">DIRECT3D_9</PreprocessorDefinitions>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</DeploymentContent>
     </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\CP3DR\Shaders\InternalHandler\Depth.fragment.fx">
       <FileType>Document</FileType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">false</ExcludedFromBuild>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">$(SolutionDir)CP3DR\</AdditionalIncludeDirectories>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">3.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">Pixel</ShaderType>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">DIRECT3D_9</PreprocessorDefinitions>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</DeploymentContent>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">pixelMain</EntryPointName>
     </None>
     <None Include="..\CP3DR\Shaders\InternalHandler\Depth.vertex.fx">
       <FileType>Document</FileType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">false</ExcludedFromBuild>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">$(SolutionDir)CP3DR\</AdditionalIncludeDirectories>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">3.0</ShaderModel>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">DIRECT3D_9</PreprocessorDefinitions>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</DeploymentContent>
     </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\CP3DR\Shaders\InternalHandler\ShadowPass.fragment.fx">
       <FileType>Document</FileType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">false</ExcludedFromBuild>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">$(SolutionDir)CP3DR\</AdditionalIncludeDirectories>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">3.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">pixelMain</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">Pixel</ShaderType>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">DIRECT3D_9</PreprocessorDefinitions>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</DeploymentContent>
     </None>
     <None Include="..\CP3DR\Shaders\InternalHandler\ShadowPass.vertex.fx">
       <FileType>Document</FileType>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">false</ExcludedFromBuild>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">$(SolutionDir)CP3DR\</AdditionalIncludeDirectories>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">3.0</ShaderModel>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">DIRECT3D_9</PreprocessorDefinitions>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</DeploymentContent>
     </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\CP3DR\Shaders\InternalHandler\VSMBlur.fragment.fx">
       <FileType>Document</FileType>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">$(SolutionDir)CP3DR\</AdditionalIncludeDirectories>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">3.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">pixelMain</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">Pixel</ShaderType>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">DIRECT3D_9</PreprocessorDefinitions>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">false</ExcludedFromBuild>
     </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\CP3DR\Shaders\InternalHandler\Utils.hlsl.fx">
       <FileType>Document</FileType>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">$(SolutionDir)CP3DR\</AdditionalIncludeDirectories>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">3.0</ShaderModel>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">DIRECT3D_9</PreprocessorDefinitions>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">false</ExcludedFromBuild>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CP3DR\Shaders\InternalHandler\WhiteWashP.fragment.fx">
+      <FileType>Document</FileType>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">$(SolutionDir)CP3DR\</AdditionalIncludeDirectories>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">3.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">pixelMain</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">Pixel</ShaderType>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">DIRECT3D_9</PreprocessorDefinitions>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">false</ExcludedFromBuild>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CP3DR\Shaders\InternalHandler\WhiteWashPADD.fragment.fx">
+      <FileType>Document</FileType>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">$(SolutionDir)CP3DR\</AdditionalIncludeDirectories>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">3.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">pixelMain</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">Pixel</ShaderType>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">DIRECT3D_9</PreprocessorDefinitions>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">false</ExcludedFromBuild>
     </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -150,19 +150,34 @@
     <None Include="..\CP3DR\Shaders\Materials\Solid.vertex.fx">
       <Filter>Shaders\Materials</Filter>
     </None>
-    <None Include="..\CP3DR\Shaders\InternalHandler\ScreenQuad.vertex.fx">
-      <Filter>Shaders\InternalHandler</Filter>
-    </None>
-    <None Include="..\CP3DR\Shaders\InternalHandler\LightModulate.fragment.fx">
-      <Filter>Shaders\InternalHandler</Filter>
-    </None>
     <None Include="..\CP3DR\Shaders\Materials\MultiplePass.vertex.fx">
       <Filter>Shaders\Materials</Filter>
     </None>
     <None Include="..\CP3DR\Shaders\Materials\MultiplePass.fragment.fx">
       <Filter>Shaders\Materials</Filter>
     </None>
+    <None Include="..\CP3DR\Shaders\PostProcesses\SSAOCombine.fragment.fx">
+      <Filter>Shaders\PostProcesses</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\PostProcesses\SSAO.fragment.fx">
+      <Filter>Shaders\PostProcesses</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\InternalHandler\WhiteWashPADD.fragment.fx">
+      <Filter>Shaders\InternalHandler</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\InternalHandler\WhiteWashP.fragment.fx">
+      <Filter>Shaders\InternalHandler</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\InternalHandler\VSMBlur.fragment.fx">
+      <Filter>Shaders\InternalHandler</Filter>
+    </None>
     <None Include="..\CP3DR\Shaders\InternalHandler\Simple.fragment.fx">
+      <Filter>Shaders\InternalHandler</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\InternalHandler\ShadowPass.fragment.fx">
+      <Filter>Shaders\InternalHandler</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\InternalHandler\LightModulate.fragment.fx">
       <Filter>Shaders\InternalHandler</Filter>
     </None>
     <None Include="..\CP3DR\Shaders\InternalHandler\Depth.fragment.fx">
@@ -171,23 +186,14 @@
     <None Include="..\CP3DR\Shaders\InternalHandler\Depth.vertex.fx">
       <Filter>Shaders\InternalHandler</Filter>
     </None>
-    <None Include="..\CP3DR\Shaders\InternalHandler\ShadowPass.fragment.fx">
+    <None Include="..\CP3DR\Shaders\InternalHandler\ScreenQuad.vertex.fx">
       <Filter>Shaders\InternalHandler</Filter>
     </None>
     <None Include="..\CP3DR\Shaders\InternalHandler\ShadowPass.vertex.fx">
       <Filter>Shaders\InternalHandler</Filter>
     </None>
-    <None Include="..\CP3DR\Shaders\InternalHandler\VSMBlur.fragment.fx">
-      <Filter>Shaders\InternalHandler</Filter>
-    </None>
     <None Include="..\CP3DR\Shaders\InternalHandler\Utils.hlsl.fx">
       <Filter>Shaders\InternalHandler</Filter>
-    </None>
-    <None Include="..\CP3DR\Shaders\PostProcesses\SSAOCombine.fragment.fx">
-      <Filter>Shaders\PostProcesses</Filter>
-    </None>
-    <None Include="..\CP3DR\Shaders\PostProcesses\SSAO.fragment.fx">
-      <Filter>Shaders\PostProcesses</Filter>
     </None>
   </ItemGroup>
 </Project>

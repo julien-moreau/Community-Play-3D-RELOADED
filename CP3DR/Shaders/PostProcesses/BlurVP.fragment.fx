@@ -27,7 +27,7 @@ void main()
 #else
 
 #define POST_PROCESS
-#include "../InternalHandler/Utils.hlsl.fx"
+#include "Shaders/InternalHandler/Utils.hlsl.fx"
 
 CP3DTexture ColorMapSampler : registerTexture(t0);
 SamplerState ColorMapSamplerST : register(s0);

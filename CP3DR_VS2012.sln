@@ -42,7 +42,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CP3DRenderingTests", "CP3DR
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CP3DCollaborativeEngine", "Dependencies\OhmSDK\src\samples\ohm\flip\babystep3\babystep.vcxproj", "{1A0975C0-4456-11E2-A25F-0800200C9A66}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IrrlichtDirect3D11", "Dependencies\Irrlicht181DX11\Sources\Irrlicht11.0.DX11.vcxproj", "{ADFC5B97-4AD0-4BB4-A57D-BAF0DEF8134B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Irrlicht_dx11", "Dependencies\Irrlicht181DX11\Sources\Irrlicht11.0.DX11.vcxproj", "{ADFC5B97-4AD0-4BB4-A57D-BAF0DEF8134B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -311,7 +311,6 @@ Global
 		{ADFC5B97-4AD0-4BB4-A57D-BAF0DEF8134B}.Debug D3D11|x64.Build.0 = Debug D3D11|x64
 		{ADFC5B97-4AD0-4BB4-A57D-BAF0DEF8134B}.Debug|ARM.ActiveCfg = Debug|Win32
 		{ADFC5B97-4AD0-4BB4-A57D-BAF0DEF8134B}.Debug|Win32.ActiveCfg = Debug|Win32
-		{ADFC5B97-4AD0-4BB4-A57D-BAF0DEF8134B}.Debug|Win32.Build.0 = Debug|Win32
 		{ADFC5B97-4AD0-4BB4-A57D-BAF0DEF8134B}.Debug|x64.ActiveCfg = Debug|x64
 		{ADFC5B97-4AD0-4BB4-A57D-BAF0DEF8134B}.Debug|x64.Build.0 = Debug|x64
 		{ADFC5B97-4AD0-4BB4-A57D-BAF0DEF8134B}.Release - Fast FPU|ARM.ActiveCfg = Release - Fast FPU|Win32

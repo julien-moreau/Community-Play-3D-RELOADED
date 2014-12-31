@@ -1,9 +1,20 @@
-##ifdef DIRECT3D_11
-	Texture2D ColorMapSampler  : register(t0);
-	SamplerState ColorMapSamplerST : register(s0);
-##else
-	sampler2D ColorMapSampler : register(s0);
-##endif
+
+#ifdef OPENGL_DRIVER
+
+uniform sampler2D ColorMapSampler; 
+
+void main() 
+{		
+	vec4 finalCol = texture2D(ColorMapSampler, gl_TexCoord[0].xy);
+	gl_FragColor = finalCol;
+}
+
+#else
+
+#include "Shaders/InternalHandler/Utils.hlsl.fx"
+
+CP3DTexture ColorMapSampler  : register(t0);
+SamplerState ColorMapSamplerST : register(s0);
 
 struct VS_OUTPUT
 {
@@ -16,11 +27,9 @@ struct VS_OUTPUT
 
 float4 pixelMain(VS_OUTPUT In) : COLOR0
 {
-##ifdef DIRECT3D_11
-	float4 finalCol = ColorMapSampler.Sample(ColorMapSamplerST, In.TexCoords);
-##else
-	float4 finalCol = tex2D(ColorMapSampler, In.TexCoords);
-##endif
+	float4 finalCol = CP3DTex2D(ColorMapSampler, In.TexCoords, ColorMapSamplerST);
 
 	return finalCol;
 }
+
+#endif

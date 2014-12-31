@@ -18,18 +18,14 @@ void main(void) {
 
 #else
 
-#ifdef DIRECT3D_11
-	Texture2D diffuseSampler : register(t0);
-	SamplerState diffuseSamplerST : register(s0);
-	#ifdef _CP3D_SOLID_2_LAYER_
-	Texture2D blendSampler : register(t1);
-	SamplerState blendSamplerST : register(s1);
-	#endif
-#else
-	sampler2D diffuseSampler : register(s0);
-	#ifdef _CP3D_SOLID_2_LAYER_
-	sampler2D blendSampler : register(s1);
-	#endif
+#include "Shaders/InternalHandler/Utils.hlsl.fx"
+
+CP3DTexture diffuseSampler : register(t0);
+SamplerState diffuseSamplerST : register(s0);
+
+#ifdef _CP3D_SOLID_2_LAYER_
+CP3DTexture blendSampler : register(t1);
+SamplerState blendSamplerST : register(s1);
 #endif
 
 struct VS_OUTPUT
@@ -40,18 +36,10 @@ struct VS_OUTPUT
 
 float4 pixelMain(VS_OUTPUT input) : COLOR0
 {
-	#ifdef DIRECT3D_11
-	float4 diffuseColor = diffuseSampler.Sample(diffuseSamplerST, input.TexCoord.xy);
-	#else
-	float4 diffuseColor = tex2D(diffuseSampler, input.TexCoord.xy);
-	#endif
+	float4 diffuseColor = CP3DTex2D(diffuseSampler, input.TexCoord.xy, diffuseSamplerST);
 
 	#ifdef _CP3D_SOLID_2_LAYER_
-		#ifdef DIRECT3D_11
-		return diffuseColor * blendSampler.Sample(blendSamplerST, input.TexCoord.xy);
-		#else
-		return diffuseColor * tex2D(blendSampler, input.TexCoord.xy);
-		#endif
+	return diffuseColor * CP3DTex2D(blendSampler, input.TexCoord.xy, blendSamplerST);
 	#else
 	return diffuseColor;
 	#endif

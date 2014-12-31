@@ -401,7 +401,8 @@ const char* WHITE_WASH_P[ESE_COUNT] = {"uniform sampler2D ColorMapSampler;\n"
 "	float alpha = tex2D(ColorMapSampler, Texcoords).a;\n"
 ""
 "	return float4(1.0, 1.0, 1.0, alpha);\n"
-"}\n"};
+"}\n"
+};
 
 
 const char* WHITE_WASH_P_ADD[ESE_COUNT] = {"uniform sampler2D ColorMapSampler;\n"
@@ -430,7 +431,8 @@ const char* WHITE_WASH_P_ADD[ESE_COUNT] = {"uniform sampler2D ColorMapSampler;\n
 "	diffuseTex *= VColor;\n"
 ""
 "	return float4(1.0, 1.0, 1.0, luminance(diffuseTex.rgb));\n"
-"}\n"};
+"}\n"
+};
 
 const char* SCREEN_QUAD_V[ESE_COUNT] = {"uniform float screenX, screenY; \n"
 "uniform vec3 LineStarts0, LineStarts1, LineStarts2, LineStarts3; \n"

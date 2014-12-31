@@ -1,3 +1,28 @@
+#ifdef OPENGL_DRIVER
+
+uniform float screenX, screenY;
+uniform vec3 LineStarts0, LineStarts1, LineStarts2, LineStarts3;
+uniform vec3 LineEnds0, LineEnds1, LineEnds2, LineEnds3;
+
+void main() 
+{
+	gl_Position = vec4(gl_Vertex.x, gl_Vertex.y, 0.0, 1.0); 
+	vec2 tCoords; 
+	tCoords.x = 0.5 * (1.0 + gl_Vertex.x); 
+	tCoords.y = 0.5 * (1.0 + gl_Vertex.y); 
+	gl_TexCoord[0].xy = tCoords.xy; 
+	tCoords.y = 1.0 - tCoords.y; 
+	vec3 tLStart = mix(LineStarts0, LineStarts1, tCoords.x); 
+	vec3 bLStart = mix(LineStarts2, LineStarts3, tCoords.x); 
+	gl_TexCoord[1].xyz = mix(tLStart, bLStart, tCoords.y); 
+	vec3 tLEnd = mix(LineEnds0, LineEnds1, tCoords.x); 
+	vec3 bLEnd = mix(LineEnds2, LineEnds3, tCoords.x); 
+	gl_TexCoord[2].xyz = mix(tLEnd, bLEnd, tCoords.y); 
+	gl_TexCoord[3].xy = vec2(screenX, screenY); 
+}
+
+#else
+
 float screenX, screenY; 
 float3 LineStarts0, LineStarts1, LineStarts2, LineStarts3; 
 float3 LineEnds0, LineEnds1, LineEnds2, LineEnds3; 
@@ -30,3 +55,5 @@ VS_OUTPUT vertexMain(float3 Position : POSITION, float4 TexCoords : TEXTURE0)
 
 	return (OUT);
 }
+
+#endif

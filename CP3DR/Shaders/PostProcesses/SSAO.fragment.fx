@@ -85,7 +85,7 @@ void main()
 #else
 
 #define POST_PROCESS
-#include "../InternalHandler/Utils.hlsl.fx"
+#include "Shaders/InternalHandler/Utils.hlsl.fx"
 
 CP3DTexture DepthTextureSampler : registerTexture(t2);
 CP3DTexture RandomTextureSampler : registerTexture(t3);

@@ -40,13 +40,13 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 	CShaderPreprocessor sPP(driver);
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
 	if (driver->getDriverType() == EDT_DIRECT3D11)
-		sPP.addShaderDefine("DIRECT3D_11", "1");
+		sPP.addShaderDefine("DIRECT3D_11");
 	else
 	#endif
 	if (driver->getDriverType() == EDT_DIRECT3D9)
-		sPP.addShaderDefine("DIRECT3D_9", "1");
+		sPP.addShaderDefine("DIRECT3D_9");
 	else
-		sPP.addShaderDefine("OPENGL", "1");
+		sPP.addShaderDefine("OPENGL_DRIVER");
 
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
 	E_SHADER_EXTENSION shaderExt = (driver->getDriverType() == EDT_DIRECT3D9 || driver->getDriverType() == EDT_DIRECT3D11) ? ESE_HLSL : ESE_GLSL;
@@ -66,35 +66,36 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 		ShadowMC = new ShadowShaderCB(this);
 		
 		Depth = gpu->addHighLevelShaderMaterial(
-			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/Depth.vertex.fx").c_str()).c_str(), "vertexMain", video::EVST_VS_2_0,
-			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/Depth.fragment.fx").c_str()).c_str(), "pixelMain", video::EPST_PS_2_0,
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Depth.vertex.fx").c_str()).c_str(), "vertexMain", video::EVST_VS_2_0,
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Depth.fragment.fx").c_str()).c_str(), "pixelMain", video::EPST_PS_2_0,
 			DepthMC, video::EMT_SOLID);
 
-		sPP.addShaderDefine("ALPHA_ENABLED", "1");
+		sPP.addShaderDefine("ALPHA_ENABLED");
+
 		DepthT = gpu->addHighLevelShaderMaterial(
-			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/Depth.vertex.fx").c_str()).c_str(), "vertexMain", video::EVST_VS_2_0,
-			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/Depth.fragment.fx").c_str()).c_str(), "pixelMain", video::EPST_PS_2_0,
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Depth.vertex.fx").c_str()).c_str(), "vertexMain", video::EVST_VS_2_0,
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Depth.fragment.fx").c_str()).c_str(), "pixelMain", video::EPST_PS_2_0,
 			DepthMC, video::EMT_TRANSPARENT_ALPHA_CHANNEL_REF);
 		sPP.removeShaderDefine("ALPHA_ENABLED");
 
 		WhiteWash = gpu->addHighLevelShaderMaterial(
-			sPP.ppShader(SHADOW_PASS_1V[shaderExt]).c_str(), "vertexMain", video::EVST_VS_2_0,
-			sPP.ppShader(WHITE_WASH_P[shaderExt]).c_str(), "pixelMain", video::EPST_PS_2_0,
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Depth.vertex.fx").c_str()).c_str(), "vertexMain", video::EVST_VS_2_0,
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/WhiteWashP.fragment.fx").c_str()).c_str(), "pixelMain", video::EPST_PS_2_0,
 			DepthMC, video::EMT_SOLID);
 
 		WhiteWashTRef = gpu->addHighLevelShaderMaterial(
-			sPP.ppShader(SHADOW_PASS_1V[shaderExt]).c_str(), "vertexMain", video::EVST_VS_2_0,
-			sPP.ppShader(WHITE_WASH_P[shaderExt]).c_str(), "pixelMain", video::EPST_PS_2_0,
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Depth.vertex.fx").c_str()).c_str(), "vertexMain", video::EVST_VS_2_0,
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/WhiteWashP.fragment.fx").c_str()).c_str(), "pixelMain", video::EPST_PS_2_0,
 			DepthMC, video::EMT_TRANSPARENT_ALPHA_CHANNEL_REF);
 
 		WhiteWashTAdd = gpu->addHighLevelShaderMaterial(
-			sPP.ppShader(SHADOW_PASS_1V[shaderExt]).c_str(), "vertexMain", video::EVST_VS_2_0,
-			sPP.ppShader(WHITE_WASH_P_ADD[shaderExt]).c_str(), "pixelMain", video::EPST_PS_2_0,
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Depth.vertex.fx").c_str()).c_str(), "vertexMain", video::EVST_VS_2_0,
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/WhiteWashPADD.fragment.fx").c_str()).c_str(), "pixelMain", video::EPST_PS_2_0,
 			DepthMC, video::EMT_TRANSPARENT_ADD_COLOR);
 
 		WhiteWashTAlpha = gpu->addHighLevelShaderMaterial(
-			sPP.ppShader(SHADOW_PASS_1V[shaderExt]).c_str(), "vertexMain", video::EVST_VS_2_0,
-			sPP.ppShader(WHITE_WASH_P[shaderExt]).c_str(), "pixelMain", video::EPST_PS_2_0,
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Depth.vertex.fx").c_str()).c_str(), "vertexMain", video::EVST_VS_2_0,
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/WhiteWashP.fragment.fx").c_str()).c_str(), "pixelMain", video::EPST_PS_2_0,
 			DepthMC, video::EMT_TRANSPARENT_ALPHA_CHANNEL);
 
 		if(useVSMShadows)
@@ -111,19 +112,21 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 		for(u32 i = 0;i < EFT_COUNT;i++) {
 			sPP.addShaderDefine("SAMPLE_AMOUNT", core::stringc(sampleCounts[i]));
 
+			#ifdef _DEBUG
 			stringc v = sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.vertex.fx").c_str()).c_str();
 			stringc p = sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.fragment.fx").c_str()).c_str();
+			#endif
 
 			Shadow[i] = gpu->addHighLevelShaderMaterial(
-				sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
-				sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile,
+				sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
+				sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile,
 				ShadowMC, video::EMT_SOLID);
 			
 			if (useRoundSpotLights) {
 				sPP.addShaderDefine("ROUND_SPOTLIGHTS");
 				ShadowRoundedSpot[i] = gpu->addHighLevelShaderMaterial(
-					sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
-					sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile,
+					sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
+					sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile,
 					ShadowMC, video::EMT_SOLID);
 				sPP.removeShaderDefine("ROUND_SPOTLIGHTS");
 			}
@@ -138,25 +141,25 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 
 		// Light modulate.
 		LightModulate = gpu->addHighLevelShaderMaterial(
-			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ScreenQuad.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
-			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/LightModulate.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile, SQCB);
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ScreenQuad.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/LightModulate.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile, SQCB);
 
 		// Simple present.
 		Simple = gpu->addHighLevelShaderMaterial(
-			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ScreenQuad.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
-			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/Simple.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile, SQCB,
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ScreenQuad.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Simple.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile, SQCB,
 			video::EMT_TRANSPARENT_ADD_COLOR);
 
 		// VSM blur.
 		VSMBlurH = gpu->addHighLevelShaderMaterial(
-			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ScreenQuad.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
-			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/VSMBlur.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile, SQCB);
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ScreenQuad.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/VSMBlur.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile, SQCB);
 
 		sPP.addShaderDefine("VERTICAL_VSM_BLUR");
 
 		VSMBlurV = gpu->addHighLevelShaderMaterial(
-			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ScreenQuad.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
-			sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/VSMBlur.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile, SQCB);
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ScreenQuad.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/VSMBlur.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile, SQCB);
 		
 		// Drop the screen quad callback.
 		SQCB->drop();
