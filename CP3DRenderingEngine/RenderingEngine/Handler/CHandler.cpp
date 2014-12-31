@@ -27,6 +27,8 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows)
 	ScreenQuad.initializeD3D11(driver);
 	#endif
 
+	WorkingPath = device->getFileSystem()->getWorkingDirectory() + "/";
+
 	bool tempTexFlagMipMaps = driver->getTextureCreationFlag(ETCF_CREATE_MIP_MAPS);
 	bool tempTexFlag32 = driver->getTextureCreationFlag(ETCF_ALWAYS_32_BIT);
 
@@ -235,8 +237,7 @@ void CCP3DHandler::setPostProcessingRenderCallback(irr::s32 materialType,
 	std::function<void(ICP3DHandler *handler)> OnPreRender,
 	std::function<void(ICP3DHandler *handler)> OnPostRender)
 {
-	SPostProcessingPair tempPair(materialType, 0);
-	irr::s32 i = PostProcessingRoutines.binary_search(tempPair);
+	irr::s32 i = getPostProcessID(materialType);
 
 	if (i == -1)
 		return;
@@ -534,17 +535,22 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 	if(PostProcessingRoutinesSize) {
 		bool Alter = false;
 
-		for(u32 i = 0;i < PostProcessingRoutinesSize;++i) {
+		for(u32 i = 0; i < PostProcessingRoutinesSize; i++) {
+			if (!PostProcessingRoutines[i].activated) {
+				driver->setViewPort(ViewPort);
+				driver->setRenderTarget(outputTarget, true, true, ClearColour);
+				ScreenQuad.render(driver);
+				continue;
+			}
+
 			ScreenQuad.getMaterial().setTexture(1, ScreenRTT);
-
 			ScreenQuad.getMaterial().MaterialType = (E_MATERIAL_TYPE)PostProcessingRoutines[i].materialType;
-
 			Alter = !Alter;
 			ScreenQuad.getMaterial().setTexture(0, i == 0 ? ScreenRTT : ScreenQuad.rt[int(!Alter)]);
 
 			if (i >= PostProcessingRoutinesSize - 1) {
-				driver->setRenderTarget(outputTarget, true, true, ClearColour);
 				driver->setViewPort(ViewPort);
+				driver->setRenderTarget(outputTarget, true, true, ClearColour);
 			}
 			else
 				driver->setRenderTarget(ScreenQuad.rt[int(Alter)], true, true, ClearColour);
@@ -607,15 +613,14 @@ CCP3DHandler::SPostProcessingPair CCP3DHandler::obtainScreenQuadMaterial(const i
 	sPP.addShaderDefine("SCREENX", core::stringc(ScreenRTTSize.Width));
 	sPP.addShaderDefine("SCREENY", core::stringc(ScreenRTTSize.Height));
 	if (driver->getDriverType() == EDT_OPENGL)
-		sPP.addShaderDefine("OPENGL_DRIVER", "1");
+		sPP.addShaderDefine("OPENGL_DRIVER");
 	else
-		sPP.addShaderDefine("DIRECT3D_DRIVER", "1");
+		sPP.addShaderDefine("DIRECT3D_9");
 
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
-	sPP.addShaderDefine("DIRECT3D_11", "1");
+	if (driver->getDriverType() == EDT_DIRECT3D11)
+		sPP.addShaderDefine("DIRECT3D_11", "1");
 	#endif
-
-	sPP.addShaderDefine("POST_PROCESS", "1");
 	
 	video::E_VERTEX_SHADER_TYPE VertexLevel = driver->queryFeature(video::EVDF_VERTEX_SHADER_3_0) ? EVST_VS_3_0 : EVST_VS_2_0;
 	video::E_PIXEL_SHADER_TYPE PixelLevel = driver->queryFeature(video::EVDF_PIXEL_SHADER_3_0) ? EPST_PS_3_0 : EPST_PS_2_0;
@@ -632,25 +637,58 @@ CCP3DHandler::SPostProcessingPair CCP3DHandler::obtainScreenQuadMaterial(const i
 		shaderString = sPP.ppShaderDF(data.c_str());
 
 	ScreenQuadCB* SQCB = new ScreenQuadCB(this, true);
+	const stringc path = WorkingPath + "Shaders/InternalHandler/ScreenQuad.vertex.fx";
+
+	// To ensure includes, set the directory to origin
+	const stringc currentDirectory = device->getFileSystem()->getWorkingDirectory();
+	device->getFileSystem()->changeWorkingDirectoryTo(WorkingPath);
 
 	s32 PostMat = gpu->addHighLevelShaderMaterial(
-		sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ScreenQuad.vertex.fx").c_str()).c_str(), "vertexMain", VertexLevel,
+		sPP.ppShaderDF(sPP.getFileContent(path.c_str()).c_str()).c_str(), "vertexMain", VertexLevel,
 		shaderString.c_str(), "pixelMain", PixelLevel,
 		SQCB, baseMaterial);
 	
 	SPostProcessingPair pPair(PostMat, SQCB);
-
 	SQCB->drop();
+
+	// Reset directory
+	device->getFileSystem()->changeWorkingDirectoryTo(currentDirectory);
 
 	return pPair;
 }
 
 void CCP3DHandler::setPostProcessingEffectConstant(const irr::s32 materialType, const irr::core::stringc& name, const f32* data, const irr::u32 count) {
-	SPostProcessingPair tempPair(materialType, 0);
-	s32 matIndex = PostProcessingRoutines.binary_search(tempPair);
+	s32 matIndex = getPostProcessID(materialType);
 	
 	if(matIndex != -1)
 		PostProcessingRoutines[matIndex].callback->uniformDescriptors[name] = ScreenQuadCB::SUniformDescriptor(data, count);
+}
+
+const bool CCP3DHandler::getPostProcessID(irr::s32 id) {
+	s32 matIndex = -1;
+	if (id >= 0 && id < PostProcessingRoutines.size())
+		matIndex = id;
+
+	if (matIndex == -1) {
+		SPostProcessingPair tempPair(id, 0);
+		s32 matIndex = PostProcessingRoutines.binary_search(tempPair);
+	}
+
+	return matIndex;
+}
+void CCP3DHandler::setPostProcessActivated(s32 id, bool activated) {
+	s32 matIndex = getPostProcessID(id);
+
+	if (matIndex != -1)
+		PostProcessingRoutines[matIndex].activated = activated;
+}
+bool CCP3DHandler::isPostProcessActivated(irr::s32 id) {
+	s32 matIndex = getPostProcessID(id);
+
+	if (matIndex != -1)
+		return PostProcessingRoutines[matIndex].activated;
+
+	return false;
 }
 
 s32 CCP3DHandler::addPostProcessingEffectFromString(const irr::core::stringc &shader, IPostProcessingRenderCallback *callback) {

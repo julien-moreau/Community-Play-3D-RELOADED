@@ -269,11 +269,6 @@ core::stringc CShaderPreprocessor::ppShaderDF(irr::core::stringc shaderProgram) 
 		finalShaderProgram += "\n";
 	}
 
-	if (driver->getDriverType() != video::EDT_OPENGL) {
-		finalShaderProgram += getFileContent("Shaders/InternalHandler/Utils.hlsl.fx").c_str();
-		finalShaderProgram += "\n";
-	}
-
 	finalShaderProgram += shaderProgram;
 	return finalShaderProgram;
 }

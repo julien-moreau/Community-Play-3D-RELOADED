@@ -34,6 +34,7 @@ public:
 	void runEditor();
 
 	ui::ICP3DFileSelector *createFileOpenDialog(irr::core::stringw name, irr::gui::IGUIElement *parent, ui::ICP3DFileSelector::E_FILESELECTOR_TYPE type);
+	irr::gui::IGUIWindow *createMessageBox(irr::core::stringw title, irr::core::stringw text, irr::s32 flags, bool modal = true, irr::video::ITexture *texture = 0);
 
 	/// ICP3DUpdate
 	void OnPreUpdate();

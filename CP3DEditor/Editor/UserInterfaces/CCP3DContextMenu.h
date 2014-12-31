@@ -59,8 +59,29 @@ private:
 	irr::gui::IGUIContextMenu *SceneContextMenuLight;
 	/// --------------------------------------------------
 
-	irr::gui::IGUIFileOpenDialog *AddStaticMeshOpenDialog;
+	/// Methods
+	void checkViewContextMenu(irr::s32 id);
 
+	/// --------------------------------------------------
+	/// ENUMS
+	/// View
+	enum EVIEW_CONTEXT_MENU {
+		EVCM_DRAW_POST_PROCESSES = 0,
+		EVCM_DRAW_SHADOWS,
+		EVCM_FPS_COUNTER,
+		EVCM_SCENE_GRAPH,
+		EVCM_EDITION_TOOL,
+
+		EVCM_TEXTURES_MANAGER,
+		EVCM_MATERIALS_MANAGER,
+		EVCM_POST_PROCESSES_MANAGER,
+		EVCM_ANIMATORS_MANAGER,
+		EVCM_SCENARIOS_MANAGER
+	};
+
+	/// --------------------------------------------------
+
+	irr::gui::IGUIFileOpenDialog *AddStaticMeshOpenDialog;
 };
 
 } /// End namespace cp3d

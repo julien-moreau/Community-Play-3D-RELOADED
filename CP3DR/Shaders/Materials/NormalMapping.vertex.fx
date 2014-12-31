@@ -19,7 +19,7 @@ float getLengthSQR (vec3 vec)
 void main( void )
 {
     
-	mat4 LightTransform = gls_ModelViewMatrix;
+	mat4 LightTransform = gl_ModelViewMatrix;
     LightTransform = LightTransform*matWorldInverse;
     
     gl_Position = ftransform();

@@ -11,6 +11,8 @@
 #include "EditionTools/CCP3DEditionToolBillboardSceneNode.h"
 #include "EditionTools/CCP3DEditionToolTextSceneNode.h"
 
+#include "EditionTools/CCP3DEditionToolPostProcess.h"
+
 #include "CCP3DEditionTool.h"
 
 using namespace irr;
@@ -112,6 +114,14 @@ void CCP3DEditionTool::clearTabs() {
 	NewZone = true;
 }
 
+void CCP3DEditionTool::clear() {
+	SEvent ev;
+	ev.EventType = EET_USER_EVENT;
+	ev.UserEvent.UserData1 = EIE_NODE_SELECTED;
+	ev.UserEvent.UserData2 = 0x0;
+	OnEvent(ev);
+}
+
 void CCP3DEditionTool::OnResize() {
 	/// Select the new y position of the window
 	s32 positionY = 0, count = 0;
@@ -196,6 +206,7 @@ void CCP3DEditionTool::createDefaultControllers() {
 	CCP3DEditionToolSceneManager *EditionToolSceneManager = new CCP3DEditionToolSceneManager(EditorCore);
 	CCP3DEditionToolBillboardSceneNode *EditionToolBillboardSceneNode = new CCP3DEditionToolBillboardSceneNode(EditorCore);
 	CCP3DEditionToolTextSceneNode *EditionToolTextSceneNode = new CCP3DEditionToolTextSceneNode(EditorCore);
+	CCP3DEditionToolPostProcess *EditionToolPostProcess = new CCP3DEditionToolPostProcess(EditorCore);
 
 	//! No cameras for the moment ! =D
 	addController(ESNT_MESH, EditionToolSceneNode);
@@ -220,6 +231,8 @@ void CCP3DEditionTool::createDefaultControllers() {
 	addController(ESNT_BILLBOARD, EditionToolBillboardSceneNode);
 	addController(ESNT_TEXT, EditionToolTextSceneNode);
 	addController(ESNT_TEXT, EditionToolBillboardSceneNode);
+
+	addController((ESCENE_NODE_TYPE)ESNT2_POST_PROCESS, EditionToolPostProcess);
 }
 
 bool CCP3DEditionTool::addController(ESCENE_NODE_TYPE type, ICP3DEditionToolController *controller) {
@@ -235,6 +248,12 @@ bool CCP3DEditionTool::addController(ESCENE_NODE_TYPE type, ICP3DEditionToolCont
 	it->getValue().push_back(controller);
 
 	return true;
+}
+
+const EditionToolControllerNode::Node *CCP3DEditionTool::getControllersForType(ESCENE_NODE_TYPE type) {
+	EditionToolControllerNode::Node *it = EditionTools.find(type);
+
+	return it;
 }
 
 void CCP3DEditionTool::addSeparator(irr::gui::IGUITab *tab) {
@@ -311,7 +330,8 @@ bool CCP3DEditionTool::OnEvent(const SEvent &event) {
 
 		/// update all edition tools with slected scene node
 		else if (event.UserEvent.UserData1 == EIE_NODE_SELECTED
-			|| event.UserEvent.UserData1 == EIE_SCENE_MANAGER_SELECTED)
+			|| event.UserEvent.UserData1 == EIE_SCENE_MANAGER_SELECTED
+			|| event.UserEvent.UserData1 == EIE_POST_PROCESS_PIPELINE_SELECTED)
 		{
 			
 			ISceneNode *node = (ISceneNode *)event.UserEvent.UserData2;
@@ -321,7 +341,7 @@ bool CCP3DEditionTool::OnEvent(const SEvent &event) {
 				clearTabs();
 
 				EditionToolControllerNode::Node *it = EditionTools.find(LastSceneNodeType);
-				for (u32 i=0; i < it->getValue().size(); i++)
+				for (u32 i=0; it && i < it->getValue().size(); i++)
 					it->getValue()[i]->setSceneNode(0);
 
 				LastSceneNodeType = ESNT_UNKNOWN;

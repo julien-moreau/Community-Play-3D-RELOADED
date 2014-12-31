@@ -15,7 +15,7 @@ using namespace gui;
 
 namespace cp3d {
 
-CCP3DEditionToolTextSceneNode::CCP3DEditionToolTextSceneNode(CCP3DEditorCore *editorCore) : EditorCore(editorCore), LightSceneNode(0)
+CCP3DEditionToolTextSceneNode::CCP3DEditionToolTextSceneNode(CCP3DEditorCore *editorCore) : EditorCore(editorCore)
 {
 	/// Configure
 	EditionTool = editorCore->getEditionTool();
@@ -24,8 +24,6 @@ CCP3DEditionToolTextSceneNode::CCP3DEditionToolTextSceneNode(CCP3DEditorCore *ed
 	Gui = editorCore->getRenderingEngine()->getGUIEnvironment();
 
 	Rengine = editorCore->getRenderingEngine();
-
-	AnimatorsController = new CCP3DSceneNodeAnimators(editorCore);
 
 	editorCore->getEngine()->getEventReceiver()->addEventReceiver(this);
 }

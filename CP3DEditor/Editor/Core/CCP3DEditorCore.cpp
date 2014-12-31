@@ -73,6 +73,8 @@ CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), 
 
 	/// Finish
 	WorkingDirectory = ProjectDirectory = device->getFileSystem()->getWorkingDirectory() + "/";
+	Device->getFileSystem()->addFileArchive("GUI/", false, true, io::EFAT_FOLDER);
+	Device->getFileSystem()->addFileArchive(WorkingDirectory, false, true, io::EFAT_FOLDER);
 	setProjectName(ProjectName);
 
 	/// Tests
@@ -152,6 +154,10 @@ ui::ICP3DFileSelector *CCP3DEditorCore::createFileOpenDialog(irr::core::stringw 
 	return selector;
 }
 
+IGUIWindow *CCP3DEditorCore::createMessageBox(stringw title, stringw text, s32 flags, bool modal, ITexture *texture) {
+	return Gui->addMessageBox(title.c_str(), text.c_str(), modal, flags, 0, -1, texture);
+}
+
 } /// End namespace cp3d
 
 /*
@@ -179,7 +185,7 @@ void CCP3DEditorCore::createTestScene() {
 													  0, 0.f, dimension2d<f32>(0.f, 0.f), dimension2d<f32>(50.f, 50.f));
 	IAnimatedMeshSceneNode *planeNode = smgr->addAnimatedMeshSceneNode(planeMesh);
 	planeNode->setName("Plane");
-	planeNode->setMaterialTexture(0, driver->getTexture("Textures/diffuse.tga"));
+	planeNode->setMaterialTexture(0, driver->getTexture("Textures/empty.jpg"));
 	planeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
 	planeNode->setMaterialFlag(EMF_LIGHTING, false);
 	Handler->addShadowToNode(planeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_RECEIVE);
@@ -187,7 +193,7 @@ void CCP3DEditorCore::createTestScene() {
 
 	IMeshSceneNode *cubeNode = smgr->addCubeSceneNode(50.f, 0, -1, vector3df(0.f, 25.f, 0.f), vector3df(0.f, 45.f, 0.f));
 	cubeNode->setName("Cube");
-	cubeNode->setMaterialTexture(0, driver->getTexture("Textures/specular.tga"));
+	cubeNode->setMaterialTexture(0, driver->getTexture("Textures/empty.jpg"));
 	cubeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
 	cubeNode->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
 	smgr->getMeshManipulator()->recalculateNormals(cubeNode->getMesh(), true, false);
@@ -213,8 +219,8 @@ void CCP3DEditorCore::createTestScene() {
 	Engine->getSceneNodeCreator()->configureSceneNode(emptySceneNode);
 
 	Rengine->createNormalMappingMaterial();
-	//planeNode->setMaterialType(Rengine->Materials[EMT_SOLID]);
-	//cubeNode->setMaterialType(Rengine->Materials[EMT_SOLID]);
+	planeNode->setMaterialType(Rengine->Materials[EMT_SOLID]);
+	cubeNode->setMaterialType(Rengine->Materials[EMT_SOLID]);
 
 	ISceneNode* skyboxNode = smgr->addSkyBoxSceneNode(
 		driver->getTexture("Textures/Skybox/glacier_up.png"),
@@ -230,6 +236,7 @@ void CCP3DEditorCore::createTestScene() {
 	skyboxNode->getMaterial(3).Name = "Right";
 	skyboxNode->getMaterial(4).Name = "Front";
 	skyboxNode->getMaterial(5).Name = "Back";
+	skyboxNode->setMaterialType((E_MATERIAL_TYPE)Rengine->Materials[EMT_SOLID]);
 	Engine->getSceneNodeCreator()->configureSceneNode(skyboxNode);
 
 	IBillboardSceneNode * bill = smgr->addBillboardSceneNode(0, dimension2df(2.f, 2.f), vector3df(0.f, 100.f, 0.f));

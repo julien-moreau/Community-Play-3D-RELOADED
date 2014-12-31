@@ -21,9 +21,18 @@ enum E_INTERFACE_EVENT {
 
 	EIE_SCENE_MANAGER_SELECTED,
 
+	EIE_POST_PROCESS_PIPELINE_SELECTED,
+	EIE_POST_PROCESS_SELECTED,
+
+	EIE_FEATURE_SELECTED, //! Used to abstract other xxx_SELECTED
 	EIE_COUNT,
 
 	EIE_FORCE_32BIT = 0x7fffffff
+};
+
+//! Custom Scene node types (extension)
+enum E_SCENE_NODE_TYPE_2 {
+	ESNT2_POST_PROCESS = MAKE_IRR_ID('p', 'p', 'r', 'o')
 };
 
 //! Custom GUI elements types for CP3D
@@ -142,6 +151,10 @@ public:
 	//! Applies the parameters to the scene node
 	virtual void apply() = 0;
 
+	//! Used if you want to clear something like pointers
+	virtual void clear()
+	{ }
+
 	//! Sets the scene node to edit
 	//! Called before ICP3DEditionToolController::createInterface()
 	virtual void setSceneNode(irr::scene::ISceneNode *node) {
@@ -158,6 +171,8 @@ protected:
 	irr::scene::ISceneNode *SceneNode;
 
 };
+//! Used to simplify syntax when getting controllers for a given type
+typedef irr::core::map<irr::scene::ESCENE_NODE_TYPE, irr::core::array<ICP3DEditionToolController *>> EditionToolControllerNode;
 
 //! Main CP3D Edition Tool interface
 class ICP3DEditionTool {
@@ -169,6 +184,9 @@ public:
 
 	//! Clears the tabs
 	virtual void clearTabs() = 0;
+
+	//! Clears everything if last scene node type was set
+	virtual void clear() = 0;
 
 	//! Sets a new zone by adding a text between zones
 	//! \param tab: the tab containing the created zone
@@ -198,7 +216,7 @@ public:
 	//! \param tab: the tab containing the created zone
 	//! \param type: the field's type (irr::gui::EGUIET_COMBO_BOX, etc.)
 	//! \param callback: callback called after creating the field ([](SCP3DInterfaceData data) { })
-	SCP3DInterfaceData addField(irr::gui::IGUITab *tab, irr::gui::EGUI_ELEMENT_TYPE type, ICP3DEditionToolCallback callback = ICP3D_EDITION_TOOL_DEFAULT_CB);
+	virtual SCP3DInterfaceData addField(irr::gui::IGUITab *tab, irr::gui::EGUI_ELEMENT_TYPE type, ICP3DEditionToolCallback callback = ICP3D_EDITION_TOOL_DEFAULT_CB) = 0;
 
 	//! Adds a new controller to the edition tool and returns
 	//! Returns false if the controller already exists
@@ -208,6 +226,9 @@ public:
 	The CP3D edition tool can handle multiple controllers per type
 	*/
 	virtual bool addController(irr::scene::ESCENE_NODE_TYPE type, ICP3DEditionToolController *controller) = 0;
+
+	//! Returns the list of 
+	virtual const EditionToolControllerNode::Node *getControllersForType(irr::scene::ESCENE_NODE_TYPE type) = 0;
 
 };
 

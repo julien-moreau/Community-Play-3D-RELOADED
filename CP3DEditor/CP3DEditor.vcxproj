@@ -156,6 +156,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClInclude Include="Editor\UserInterfaces\CCP3DToolsToolbar.h" />
     <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolBillboardSceneNode.h" />
     <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolLightSceneNode.h" />
+    <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolPostProcess.h" />
     <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolSceneManager.h" />
     <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolSceneNode.h" />
     <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolTextSceneNode.h" />
@@ -180,6 +181,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClCompile Include="Editor\UserInterfaces\CCP3DToolsToolbar.cpp" />
     <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolBillboardSceneNode.cpp" />
     <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolLightSceneNode.cpp" />
+    <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolPostProcess.cpp" />
     <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolSceneManager.cpp" />
     <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolSceneNode.cpp" />
     <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolTextSceneNode.cpp" />

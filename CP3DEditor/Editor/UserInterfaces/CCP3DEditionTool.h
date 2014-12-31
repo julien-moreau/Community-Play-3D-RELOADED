@@ -14,8 +14,6 @@ class CCP3DEditorCore;
 		class CGUIPanel;
 	}
 
-typedef irr::core::map<irr::scene::ESCENE_NODE_TYPE, irr::core::array<ICP3DEditionToolController *>> EditionToolControllerNode;
-
 /*
 Class creating the main edition tool (left side of the window).
 This class must let users (and us =D) able to create easily gui elements
@@ -43,6 +41,7 @@ public:
 	irr::gui::IGUITab *addTab(const irr::core::stringc name);
 	
 	void clearTabs();
+	void clear();
 
 	void addSeparator(irr::gui::IGUITab *tab);
 
@@ -53,6 +52,7 @@ public:
 	/// Utils
 	void createDefaultControllers();
 	bool addController(irr::scene::ESCENE_NODE_TYPE type, ICP3DEditionToolController *controller);
+	const EditionToolControllerNode::Node *getControllersForType(irr::scene::ESCENE_NODE_TYPE type);
 
 private:
 	/// Irrlicht

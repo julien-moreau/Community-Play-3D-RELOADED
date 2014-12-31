@@ -1,5 +1,5 @@
-#ifndef __H_C_CP3D_EDITION_TOOL_TEXT_INCLUDED__
-#define __H_C_CP3D_EDITION_TOOL_TEXT_INCLUDED__
+#ifndef __H_C_CP3D_EDITION_POST_PROCESS_INCLUDED__
+#define __H_C_CP3D_EDITION_POST_PROCESS_INCLUDED__
 
 #include <irrlicht.h>
 #include <ICP3DEditionTool.h>
@@ -12,15 +12,14 @@ class CCP3DEditionTool;
 class CCP3DEditorCore;
 
 /*
-Class that will manage the editon for ESNT_MESH type scene
-nodes.
+Class that will manage the post-processes nodes.
 */
-class CCP3DEditionToolTextSceneNode : public irr::IEventReceiver, public ICP3DEditionToolController {
+class CCP3DEditionToolPostProcess : public irr::IEventReceiver, public ICP3DEditionToolController {
 public:
 
 	/// Constructor & Destructor
-	CCP3DEditionToolTextSceneNode(CCP3DEditorCore *editorCore);
-	~CCP3DEditionToolTextSceneNode();
+	CCP3DEditionToolPostProcess(CCP3DEditorCore *editorCore);
+	~CCP3DEditionToolPostProcess();
 
 	/// IEventReceiver
 	bool OnEvent(const irr::SEvent &event);
@@ -29,6 +28,7 @@ public:
 	void createInterface();
 	void configure();
 	void apply();
+	void clear();
 
 private:
 	/// Methods
@@ -45,13 +45,15 @@ private:
 	rendering::ICP3DRenderingEngine *Rengine;
 
 	/// GUI
-	irr::gui::IGUITab *TextTab;
+	irr::gui::IGUITab *PostProcessTab;
 
-	/// Shadow light
-	SCP3DInterfaceData TextColor;
-	SCP3DInterfaceData Text;
+	/// Post-Processes list
+	SCP3DInterfaceData PostProcessesList;
+	
+	SCP3DInterfaceData PostProcessActivated;
 
-
+	/// Extra GUI Elements
+	ui::ICP3DFileSelector *OpenPostProcessDialog;
 
 };
 

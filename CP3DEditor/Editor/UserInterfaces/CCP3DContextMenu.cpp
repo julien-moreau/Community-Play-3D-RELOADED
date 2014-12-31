@@ -3,6 +3,7 @@
 #include "../Core/CCP3DEditorCore.h"
 #include "CCP3DContextMenu.h"
 
+#include "CCP3DEditionTool.h"
 #include <ICP3DEditionTool.h>
 
 using namespace irr;
@@ -71,17 +72,17 @@ CCP3DContextMenu::CCP3DContextMenu(CCP3DEditorCore *editorCore) : EditorCore(edi
 
 	/// --------------------------------------------------
 	/// Fill "view"
-	ViewContextMenu->addItem(L"Draw post-processes (TO DO)", -1, true, false, true, true);
-	ViewContextMenu->addItem(L"Draw shadows (TO DO)", -1, true, false, true, true);
-	ViewContextMenu->addItem(L"FPS counter (TO DO)", -1, true, false, true, true);
-	ViewContextMenu->addItem(L"Scene graph", -1, true, false, true, true);
-	ViewContextMenu->addItem(L"Edition tool", -1, true, false, true, true);
+	ViewContextMenu->addItem(L"Draw post-processes (TO DO)", EVCM_DRAW_POST_PROCESSES, true, false, true, true);
+	ViewContextMenu->addItem(L"Draw shadows (TO DO)", EVCM_DRAW_SHADOWS, true, false, true, true);
+	ViewContextMenu->addItem(L"FPS counter (TO DO)", EVCM_FPS_COUNTER, true, false, true, true);
+	ViewContextMenu->addItem(L"Scene graph", EVCM_SCENE_GRAPH, true, false, true, true);
+	ViewContextMenu->addItem(L"Edition tool", EVCM_EDITION_TOOL, true, false, true, true);
 	ViewContextMenu->addSeparator();
-	ViewContextMenu->addItem(L"Textures manager... (TO DO)", -1);
-	ViewContextMenu->addItem(L"Materials manager... (TO DO)", -1);
-	ViewContextMenu->addItem(L"Post-processes manager... (TO DO)", -1);
-	ViewContextMenu->addItem(L"Animators manager... (TO DO)", -1);
-	ViewContextMenu->addItem(L"Scenarios manager... (TO DO)", -1);
+	ViewContextMenu->addItem(L"Textures manager... (TO DO)", EVCM_TEXTURES_MANAGER);
+	ViewContextMenu->addItem(L"Materials manager... (TO DO)", EVCM_MATERIALS_MANAGER);
+	ViewContextMenu->addItem(L"Post-processes manager... (TO DO)", EVCM_POST_PROCESSES_MANAGER);
+	ViewContextMenu->addItem(L"Animators manager... (TO DO)", EVCM_ANIMATORS_MANAGER);
+	ViewContextMenu->addItem(L"Scenarios manager... (TO DO)", EVCM_SCENARIOS_MANAGER);
 	/// --------------------------------------------------
 
 	/// --------------------------------------------------
@@ -131,6 +132,11 @@ bool CCP3DContextMenu::OnEvent(const SEvent &event) {
 
 				return true;
 			}
+			/// View context menu
+			else if (event.GUIEvent.Caller == ViewContextMenu) {
+				checkViewContextMenu(ViewContextMenu->getItemCommandId(ViewContextMenu->getSelectedItem()));
+				return true;
+			}
 
 		}
 
@@ -152,6 +158,31 @@ bool CCP3DContextMenu::OnEvent(const SEvent &event) {
 	}
 
 	return false;
+}
+
+void CCP3DContextMenu::checkViewContextMenu(irr::s32 id) {
+
+	/// Lambda that creates controllers (createInterface + configure)
+	auto configure = [=](const EditionToolControllerNode::Node *node) -> void {
+		EditorCore->getEditionTool()->clear();
+
+		for (u32 i = 0; i < node->getValue().size(); i++) {
+			node->getValue()[i]->createInterface();
+			node->getValue()[i]->configure();
+		}
+	};
+
+	CCP3DEditionTool *editionTool = EditorCore->getEditionTool();
+
+	switch (id) {
+
+	case EVCM_POST_PROCESSES_MANAGER:
+		configure(editionTool->getControllersForType((ESCENE_NODE_TYPE)ESNT2_POST_PROCESS));
+		break;
+
+	default:
+		break;
+	}
 }
 
 } /// End namespace cp3d

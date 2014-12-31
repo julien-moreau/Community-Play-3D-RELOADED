@@ -69,8 +69,7 @@ public:
 	/// Post processes
 	void addPostProcessingEffect(irr::s32 MaterialType, IPostProcessingRenderCallback* callback = 0);
 	void setPostProcessingRenderCallback(irr::s32 materialType, IPostProcessingRenderCallback* callback) {
-		SPostProcessingPair tempPair(materialType, 0);
-		irr::s32 i = PostProcessingRoutines.binary_search(tempPair);
+		irr::s32 i = getPostProcessID(materialType);
 
 		if(i != -1) {
 			if(PostProcessingRoutines[i].renderCallback)
@@ -82,16 +81,17 @@ public:
 	void setPostProcessingRenderCallback(irr::s32 materialType,
 		std::function<void(ICP3DHandler *handler)> OnPreRender = [&](ICP3DHandler *handler) {},
 		std::function<void(ICP3DHandler *handler)> OnPostRender = [&](ICP3DHandler *handler) {});
-	void removePostProcessingEffect(irr::s32 MaterialType) {
-		SPostProcessingPair tempPair(MaterialType, 0);
-		irr::s32 i = PostProcessingRoutines.binary_search(tempPair);
+	bool removePostProcessingEffect(irr::s32 materialType) {
+		irr::s32 i = getPostProcessID(materialType);
 
 		if(i != -1) {
 			if(PostProcessingRoutines[i].renderCallback)
 				delete PostProcessingRoutines[i].renderCallback;
 
 			PostProcessingRoutines.erase(i);
+			return true;
 		}
+		return false;
 	}
 	irr::s32 addPostProcessingEffectFromFile(const irr::core::stringc &filename, IPostProcessingRenderCallback *callback = 0);
 	irr::s32 addPostProcessingEffectFromString(const irr::core::stringc &shader, IPostProcessingRenderCallback *callback = 0);
@@ -104,6 +104,9 @@ public:
 	void setPostProcessingTextureAtIndex(irr::u32 index, irr::video::ITexture *texture) {
 		ScreenQuad.getMaterial().setTexture(index, texture);
 	}
+	const bool getPostProcessID(irr::s32 id);
+	void setPostProcessActivated(irr::s32 id, bool activated);
+	bool isPostProcessActivated(irr::s32 id);
 
 	/// Utils
 	void setAmbientColor(irr::video::SColor ambientColour) { AmbientColour = ambientColour; }
@@ -155,9 +158,9 @@ private:
 	};
 
 	struct SPostProcessingPair {
-		SPostProcessingPair(const irr::s32 materialTypeIn, ScreenQuadCB* callbackIn,
-			IPostProcessingRenderCallback* renderCallbackIn = 0)
-			: materialType(materialTypeIn), callback(callbackIn), renderCallback(renderCallbackIn) {}
+		SPostProcessingPair(const irr::s32 materialTypeIn, ScreenQuadCB* callbackIn, IPostProcessingRenderCallback* renderCallbackIn = 0)
+			: materialType(materialTypeIn), callback(callbackIn), renderCallback(renderCallbackIn), activated(true)
+		{ }
 
 		bool operator < (const SPostProcessingPair& other) const {
 			return materialType < other.materialType;
@@ -166,6 +169,7 @@ private:
 		ScreenQuadCB* callback;
 		IPostProcessingRenderCallback* renderCallback;
 		irr::s32 materialType;
+		bool activated;
 	};
 
 	SPostProcessingPair obtainScreenQuadMaterial(const irr::core::stringc& data, 
@@ -176,6 +180,7 @@ private:
 	irr::video::IVideoDriver* driver;
 	irr::scene::ISceneManager* smgr;
 	irr::core::dimension2du mapRes;
+	irr::core::stringc WorkingPath; // To ensure shaders will load correctly
 
 	/// Default custom passes
 	CCustomGeneralPass *CustomGeneralPass;

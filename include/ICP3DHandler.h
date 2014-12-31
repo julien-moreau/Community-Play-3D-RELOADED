@@ -121,17 +121,19 @@ public:
 	//! \param filename: the file containing the shader's code
 	//! \param callback: the callback derived from cp3d::rendering::IPostProcessingRenderCallback
 	virtual irr::s32 addPostProcessingEffectFromFile(const irr::core::stringc &filename, IPostProcessingRenderCallback *callback = 0) = 0;
-
 	//! Adds a post-process from a string
 	//! \param shader: the string containing the shader's code
 	//! \param callback: the callback derived from cp3d::rendering::IPostProcessingRenderCallback
 	virtual irr::s32 addPostProcessingEffectFromString(const irr::core::stringc &shader, IPostProcessingRenderCallback *callback = 0) = 0;
-
 	//! Adds a custom post-process created using IGPUProgramingServices*
-	//! Allow you to debug your shader in the awesome tool name Microsoft Visual Studio =D
+	//! Allow you to debug your shader in the awesome tool named Microsoft Visual Studio =D
 	//! \param MaterialType: the material index given by IGPUProgramingServices*
 	//! \param callbacl: the material's callback
 	virtual void addPostProcessingEffect(irr::s32 MaterialType, IPostProcessingRenderCallback* callback = 0) = 0;
+	//! Removes a post-processing effect from the pipeline
+	//! \param materialType: the material type index to remove
+	//! \return: returns true if removed, false if not found
+	virtual bool removePostProcessingEffect(irr::s32 materialType) = 0;
 
 	//! Sets a post processing effect constant (OnSetConstant)
 	//! \param materialType: the material to configure
@@ -164,9 +166,19 @@ public:
 
 	//! Returns the screen quad used for rendering (especially post-processes)
 	virtual CScreenQuad& getScreenQuad() = 0;
-
 	//! Returns the screen quad's pointer
 	virtual CScreenQuad *getScreenQuadPtr() = 0;
+
+	//! Returns the post-process id
+	//! \param id: can be the post-process material id in MaterialRenderers, or the direct ID [0, x];
+	virtual const bool getPostProcessID(irr::s32 id) = 0;
+	//! Sets if the the given post-process is activated or not
+	//! \param id: the material type id to activate or deactivate
+	//! \param activated: activate or deactivate the post-process
+	virtual void setPostProcessActivated(irr::s32 id, bool activated) = 0;
+	//! Returns if the post-process is activated
+	//! \param id: the material type id to check
+	virtual bool isPostProcessActivated(irr::s32 id) = 0;
 
 	//! Returns the custom depth pass manager
 	//! Allows you to add custom depth passes using multiple render targets
