@@ -53,6 +53,7 @@ public:
 	void createDefaultControllers();
 	bool addController(irr::scene::ESCENE_NODE_TYPE type, ICP3DEditionToolController *controller);
 	const EditionToolControllerNode::Node *getControllersForType(irr::scene::ESCENE_NODE_TYPE type);
+	void applyForControllerType(irr::scene::ESCENE_NODE_TYPE type, void *data);
 
 private:
 	/// Irrlicht

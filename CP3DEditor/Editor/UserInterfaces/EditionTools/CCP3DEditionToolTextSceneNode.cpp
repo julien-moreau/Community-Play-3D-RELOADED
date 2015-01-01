@@ -29,7 +29,7 @@ CCP3DEditionToolTextSceneNode::CCP3DEditionToolTextSceneNode(CCP3DEditorCore *ed
 }
 
 CCP3DEditionToolTextSceneNode::~CCP3DEditionToolTextSceneNode() {
-
+	EditorCore->getEngine()->getEventReceiver()->removeEventReceiver(this);
 }
 
 void CCP3DEditionToolTextSceneNode::createInterface() {

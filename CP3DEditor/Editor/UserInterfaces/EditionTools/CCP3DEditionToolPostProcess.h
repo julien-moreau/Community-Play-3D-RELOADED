@@ -32,6 +32,7 @@ public:
 
 private:
 	/// Methods
+	bool enableUI();
 
 	/// Irrlicht
 	irr::video::IVideoDriver *Driver;
@@ -43,6 +44,7 @@ private:
 	CCP3DEditionTool *EditionTool;
 
 	rendering::ICP3DRenderingEngine *Rengine;
+	rendering::ICP3DHandler *Handler;
 
 	/// GUI
 	irr::gui::IGUITab *PostProcessTab;

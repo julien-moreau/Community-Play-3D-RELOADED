@@ -172,9 +172,8 @@ void GlobalTest(irr::IrrlichtDevice *device) {
 	rendering::ICP3DMaterialCreator *matCreator = cpre->createMaterialCreator();
 	irr::s32 mat1 = matCreator->createMaterialFromFiles("Shaders/Materials/depthExample.vertex.fx", "Shaders/Materials/depthExample.fragment.fx",
 														EMT_SOLID, customDepthCallback);
-	matCreator->addDefine("CP3D_COMPUTE_DEPTH_MATERIAL", "");
-	irr::s32 mat2 = matCreator->createMaterialFromFiles("Shaders/Materials/depthExample.vertex.fx", "Shaders/Materials/depthExample.fragment.fx",
-														EMT_SOLID, customDepthCallback);
+	irr::s32 mat2 = matCreator->createCustomDepthMaterialFromFiles("Shaders/Materials/depthExample.vertex.fx", "Shaders/Materials/depthExample.fragment.fx",
+																   EMT_SOLID, customDepthCallback);
 
 	/// Create a test scene
 	IAnimatedMesh *planeMesh = smgr->addHillPlaneMesh("plane_mesh", dimension2d<f32>(100.f, 100.f), dimension2d<u32>(50, 50),

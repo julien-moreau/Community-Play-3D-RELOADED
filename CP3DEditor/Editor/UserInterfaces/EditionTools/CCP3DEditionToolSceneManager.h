@@ -42,7 +42,6 @@ private:
 	/// CP3D
 	CCP3DEditorCore *EditorCore;
 	CCP3DEditionTool *EditionTool;
-	CCP3DSceneNodeAnimators *AnimatorsController;
 
 	rendering::ICP3DRenderingEngine *Rengine;
 

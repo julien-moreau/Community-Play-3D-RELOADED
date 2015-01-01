@@ -162,22 +162,12 @@ bool CCP3DContextMenu::OnEvent(const SEvent &event) {
 
 void CCP3DContextMenu::checkViewContextMenu(irr::s32 id) {
 
-	/// Lambda that creates controllers (createInterface + configure)
-	auto configure = [=](const EditionToolControllerNode::Node *node) -> void {
-		EditorCore->getEditionTool()->clear();
-
-		for (u32 i = 0; i < node->getValue().size(); i++) {
-			node->getValue()[i]->createInterface();
-			node->getValue()[i]->configure();
-		}
-	};
-
 	CCP3DEditionTool *editionTool = EditorCore->getEditionTool();
 
 	switch (id) {
 
 	case EVCM_POST_PROCESSES_MANAGER:
-		configure(editionTool->getControllersForType((ESCENE_NODE_TYPE)ESNT2_POST_PROCESS));
+		editionTool->applyForControllerType((ESCENE_NODE_TYPE)ESNT2_POST_PROCESS, 0);
 		break;
 
 	default:

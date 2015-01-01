@@ -24,14 +24,15 @@ CMaterialCreator::~CMaterialCreator() {
 	delete Spp;
 }
 
-irr::s32 CMaterialCreator::createMaterialFromFiles(const stringc &vertexFilename, const stringc &pixelFilename, E_MATERIAL_TYPE baseMaterial,
-												   IShaderConstantSetCallBack *callback)
+s32 CMaterialCreator::createMaterialFromFiles(const stringc &vertexFilename, const stringc &pixelFilename, E_MATERIAL_TYPE baseMaterial,
+											  IShaderConstantSetCallBack *callback)
 {
-	return createMaterialFromStrings(Spp->getFileContent(vertexFilename.c_str()).c_str(), Spp->getFileContent(pixelFilename.c_str()).c_str(), baseMaterial, callback);
+	return createMaterialFromStrings(Spp->getFileContent(vertexFilename.c_str()).c_str(), Spp->getFileContent(pixelFilename.c_str()).c_str(),
+														 baseMaterial, callback);
 }
 
-irr::s32 CMaterialCreator::createMaterialFromStrings(const stringc &vertexShader, const stringc &pixelShader, E_MATERIAL_TYPE baseMaterial,
-													 IShaderConstantSetCallBack *callback)
+s32 CMaterialCreator::createMaterialFromStrings(const stringc &vertexShader, const stringc &pixelShader, E_MATERIAL_TYPE baseMaterial,
+												IShaderConstantSetCallBack *callback)
 {
 	IGPUProgrammingServices *gpu = Driver->getGPUProgrammingServices();
 
@@ -43,6 +44,21 @@ irr::s32 CMaterialCreator::createMaterialFromStrings(const stringc &vertexShader
 	return gpu->addHighLevelShaderMaterial(Spp->ppShaderDF(vertexShader).c_str(), "vertexMain", EVST_VS_3_0,
 										   Spp->ppShaderDF(pixelShader).c_str(), "pixelMain", EPST_PS_3_0,
 										   callback, baseMaterial);
+}
+
+s32 CMaterialCreator::createCustomDepthMaterialFromFiles(const stringc &vertexFilename, const stringc &pixelFilename,
+														 E_MATERIAL_TYPE baseMaterial, IShaderConstantSetCallBack *callback)
+{
+	return createCustomDepthMaterialFromStrings(Spp->getFileContent(vertexFilename.c_str()).c_str(), Spp->getFileContent(pixelFilename.c_str()).c_str(),
+												baseMaterial, callback);
+}
+s32 CMaterialCreator::createCustomDepthMaterialFromStrings(const stringc &vertexShader, const stringc &pixelShader,
+														   E_MATERIAL_TYPE baseMaterial, IShaderConstantSetCallBack *callback)
+{
+	Spp->addShaderDefine("CP3D_COMPUTE_DEPTH_MATERIAL");
+	s32 mat = createMaterialFromStrings(vertexShader, pixelShader, baseMaterial, callback);
+	Spp->removeShaderDefine("CP3D_COMPUTE_DEPTH_MATERIAL");
+	return mat;
 }
 
 void CMaterialCreator::addDefine(const stringc define, const stringc value) {

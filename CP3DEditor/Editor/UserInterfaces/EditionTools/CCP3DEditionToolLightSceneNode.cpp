@@ -25,13 +25,11 @@ CCP3DEditionToolLightSceneNode::CCP3DEditionToolLightSceneNode(CCP3DEditorCore *
 
 	Rengine = editorCore->getRenderingEngine();
 
-	AnimatorsController = new CCP3DSceneNodeAnimators(editorCore);
-
 	editorCore->getEngine()->getEventReceiver()->addEventReceiver(this);
 }
 
 CCP3DEditionToolLightSceneNode::~CCP3DEditionToolLightSceneNode() {
-
+	EditorCore->getEngine()->getEventReceiver()->removeEventReceiver(this);
 }
 
 void CCP3DEditionToolLightSceneNode::createInterface() {

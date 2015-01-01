@@ -147,23 +147,21 @@ public:
 	//! \param MaterialType: the material type indice for the post-process program
 	//! \param callback: the callback to set
 	virtual void setPostProcessingRenderCallback(irr::s32 materialType, IPostProcessingRenderCallback* callback) = 0;
-
 	//! Sets the post-processing render callback for the given Materialtype using lambas
 	//! \param MaterialType: the material type indice for the post-process program
 	//! \param OnPreRender: OnPreRender lamba function to set
 	//! \param OnPostRender: OnPostRender lambda function to set
-	virtual void setPostProcessingRenderCallback(irr::s32 materialType,
+	virtual void setPostProcessingRenderCallback(const irr::s32 &materialType,
 		std::function<void(ICP3DHandler *handler)> OnPreRender = [&](ICP3DHandler *handler) { },
 		std::function<void(ICP3DHandler *handler)> OnPostRender = [&](ICP3DHandler *handler) { }) = 0;
 
 	//! Adds a custom UserMapSampler texture
 	//! \param userTexture: the texture to set at UserMapSampler
 	virtual void setPostProcessingUserTexture(irr::video::ITexture* userTexture) = 0;
-
 	//! Sets a custom texture at index "index"
 	//! \param index: the index of the texture layer (0 to MATERIAL_MAX_TEXTURES)
 	//! \param texture: the texture to set
-	virtual void setPostProcessingTextureAtIndex(irr::u32 index, irr::video::ITexture *texture) = 0;
+	virtual void setPostProcessingTextureAtIndex(const irr::u32 &index, irr::video::ITexture *texture) = 0;
 
 	//! Returns the screen quad used for rendering (especially post-processes)
 	virtual CScreenQuad& getScreenQuad() = 0;
@@ -172,14 +170,24 @@ public:
 
 	//! Returns the post-process id
 	//! \param id: can be the post-process material id in MaterialRenderers, or the direct ID [0, x];
-	virtual const bool getPostProcessID(irr::s32 id) = 0;
+	virtual const irr::u32 getPostProcessID(const irr::s32 &id) = 0;
+
 	//! Sets if the the given post-process is activated or not
 	//! \param id: the material type id to activate or deactivate
 	//! \param activated: activate or deactivate the post-process
-	virtual void setPostProcessActivated(irr::s32 id, bool activated) = 0;
+	virtual void setPostProcessActivated(const irr::s32 &id, const bool activated) = 0;
 	//! Returns if the post-process is activated
 	//! \param id: the material type id to check
-	virtual bool isPostProcessActivated(irr::s32 id) = 0;
+	//! \return: true if post-process is activated, false if deactivated
+	virtual bool isPostProcessActivated(const irr::s32 &id) = 0;
+
+	//! Returns the amount of post-processes
+	//! \return: the amount of post-processes
+	virtual const irr::u32 getPostProcessingRoutineSize() const = 0;
+
+	//! Returns the post-processing name
+	//! \return: the post-process name for the given material type (material type can be the direct ID [0, x])
+	virtual const irr::core::stringc getPostProcessingRoutineName(const irr::s32 &materialType) = 0;
 
 	//! Returns the custom depth pass manager
 	//! Allows you to add custom depth passes using multiple render targets

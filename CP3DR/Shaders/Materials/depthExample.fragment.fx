@@ -1,13 +1,14 @@
-#define CP3D_MATERIAL // Tell it is a material
+
 #include "Shaders/InternalHandler/Utils.hlsl.fx" // Include utils for hlsl
 
 struct VS_OUTPUT
 {
 	float4 Position : SV_Position;
-	float4 TexCoord : TEXCOORD0;
 
 	#ifdef CP3D_COMPUTE_DEPTH_MATERIAL
-	float4 ClipPos  : TEXCOORD1;
+	float4 ClipPos  : TEXCOORD0;
+	#else
+	float4 TexCoord : TEXCOORD0;
 	#endif
 };
 

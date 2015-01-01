@@ -79,7 +79,7 @@ public:
 			PostProcessingRoutines[i].renderCallback = callback;
 		}
 	}
-	void setPostProcessingRenderCallback(irr::s32 materialType,
+	void setPostProcessingRenderCallback(const irr::s32 &materialType,
 		std::function<void(ICP3DHandler *handler)> OnPreRender = [&](ICP3DHandler *handler) {},
 		std::function<void(ICP3DHandler *handler)> OnPostRender = [&](ICP3DHandler *handler) {});
 	bool removePostProcessingEffect(irr::s32 materialType) {
@@ -97,17 +97,25 @@ public:
 	irr::s32 addPostProcessingEffectFromFile(const irr::core::stringc &filename, IPostProcessingRenderCallback *callback = 0);
 	irr::s32 addPostProcessingEffectFromString(const irr::core::stringc &shader, IPostProcessingRenderCallback *callback = 0);
 	void setPostProcessingEffectConstant(const irr::s32 materialType, const irr::core::stringc& name, const irr::f32* data, const irr::u32 count);
-	CScreenQuad& getScreenQuad() { return ScreenQuad; }
-	CScreenQuad *getScreenQuadPtr() { return &ScreenQuad; }
+	CScreenQuad& getScreenQuad() {
+		return ScreenQuad;
+	}
+	CScreenQuad *getScreenQuadPtr() {
+		return &ScreenQuad;
+	}
 	void setPostProcessingUserTexture(irr::video::ITexture* userTexture) {
 		ScreenQuad.getMaterial().setTexture(3, userTexture);
 	}
-	void setPostProcessingTextureAtIndex(irr::u32 index, irr::video::ITexture *texture) {
+	void setPostProcessingTextureAtIndex(const irr::u32 &index, irr::video::ITexture *texture) {
 		ScreenQuad.getMaterial().setTexture(index, texture);
 	}
-	const bool getPostProcessID(irr::s32 id);
-	void setPostProcessActivated(irr::s32 id, bool activated);
-	bool isPostProcessActivated(irr::s32 id);
+	const irr::u32 getPostProcessID(const irr::s32 &id);
+	void setPostProcessActivated(const irr::s32 &id, const bool activated);
+	bool isPostProcessActivated(const irr::s32 &id);
+	const irr::u32 getPostProcessingRoutineSize() const {
+		return PostProcessingRoutines.size();
+	}
+	const irr::core::stringc getPostProcessingRoutineName(const irr::s32 &materialType);
 
 	/// Utils
 	void setAmbientColor(irr::video::SColor ambientColour) { AmbientColour = ambientColour; }
@@ -157,6 +165,7 @@ private:
 		E_FILTER_TYPE filterType;
 
 		irr::s32 depthMaterial;
+		irr::s32 shadowsMaterial;
 	};
 
 	struct SPostProcessingPair {
@@ -172,6 +181,7 @@ private:
 		IPostProcessingRenderCallback* renderCallback;
 		irr::s32 materialType;
 		bool activated;
+		irr::core::stringc path;
 	};
 
 	SPostProcessingPair obtainScreenQuadMaterial(const irr::core::stringc& data, 

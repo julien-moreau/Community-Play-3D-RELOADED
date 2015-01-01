@@ -227,7 +227,8 @@ public:
 	*/
 	virtual bool addController(irr::scene::ESCENE_NODE_TYPE type, ICP3DEditionToolController *controller) = 0;
 
-	//! Returns the list of 
+	//! Returns the list of Edition Tools for the given type
+	//! \param type: the edition tool type
 	virtual const EditionToolControllerNode::Node *getControllersForType(irr::scene::ESCENE_NODE_TYPE type) = 0;
 
 };

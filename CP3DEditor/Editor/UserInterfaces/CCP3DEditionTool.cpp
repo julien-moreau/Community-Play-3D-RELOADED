@@ -256,6 +256,48 @@ const EditionToolControllerNode::Node *CCP3DEditionTool::getControllersForType(E
 	return it;
 }
 
+void CCP3DEditionTool::applyForControllerType(irr::scene::ESCENE_NODE_TYPE type, void *data) {
+	EditionToolControllerNode::Node *it = EditionTools.find(type);
+
+	/// Get the current value of active tab (scrollbar and name)
+	IGUITab *lastActiveTab = TabCtrl->getTab(TabCtrl->getActiveTab());
+	stringw lastActiveTabText = lastActiveTab != 0 ? lastActiveTab->getText() : L"";
+	const s32 scrollBarSize = lastActiveTab != 0 ? Panels[lastActiveTab->getNumber()]->getScrollBar()->getPos() : 0;
+
+	if (type != LastSceneNodeType)
+		clearTabs();
+
+	if (!it)
+		return;
+
+	for (u32 i = 0; i < it->getValue().size(); i++) {
+		it->getValue()[i]->setSceneNode((ISceneNode *)data);
+		if (type != LastSceneNodeType)
+			it->getValue()[i]->createInterface();
+		it->getValue()[i]->configure();
+	}
+
+	LastSceneNodeType = type;
+	if (TabCtrl->getTabCount() >= LastSelectedTab)
+		TabCtrl->setActiveTab(LastSelectedTab);
+
+	/// If the new active tab has the same name then we recalculate to scroll bar :)
+	IGUITab *newActiveTab = TabCtrl->getTab(TabCtrl->getActiveTab());
+	if (newActiveTab && lastActiveTab) {
+		stringw newActiveTabText = newActiveTab->getText();
+
+		if (newActiveTabText == lastActiveTabText) {
+			Panels[newActiveTab->getNumber()]->getScrollBar()->setPos(scrollBarSize);
+			SEvent ev;
+			ev.EventType = EET_GUI_EVENT;
+			ev.GUIEvent.EventType = EGET_SCROLL_BAR_CHANGED;
+			ev.GUIEvent.Caller = Panels[newActiveTab->getNumber()]->getScrollBar();
+			ev.GUIEvent.Element = 0;
+			Panels[newActiveTab->getNumber()]->OnEvent(ev);
+		}
+	}
+}
+
 void CCP3DEditionTool::addSeparator(irr::gui::IGUITab *tab) {
 	ui::CGUIPanel *panel = Panels[tab->getNumber()];
 
@@ -353,45 +395,7 @@ bool CCP3DEditionTool::OnEvent(const SEvent &event) {
 				else
 					type = ESNT_SCENE_MANAGER;
 
-				EditionToolControllerNode::Node *it = EditionTools.find(type);
-
-				/// Get the current value of active tab (scrollbar and name)
-				IGUITab *lastActiveTab = TabCtrl->getTab(TabCtrl->getActiveTab());
-				stringw lastActiveTabText = lastActiveTab != 0 ? lastActiveTab->getText() : L"";
-				const s32 scrollBarSize = lastActiveTab != 0 ? Panels[lastActiveTab->getNumber()]->getScrollBar()->getPos() : 0;
-
-				if (type != LastSceneNodeType)
-					clearTabs();
-
-				if (!it)
-					return false;
-
-				for (u32 i=0; i < it->getValue().size(); i++) {
-					it->getValue()[i]->setSceneNode(node);
-					if (type != LastSceneNodeType)
-						it->getValue()[i]->createInterface();
-					it->getValue()[i]->configure();
-				}
-
-				LastSceneNodeType = type;
-				if (TabCtrl->getTabCount() >= LastSelectedTab)
-					TabCtrl->setActiveTab(LastSelectedTab);
-
-				/// If the new active tab has the same name then we recalculate to scroll bar :)
-				IGUITab *newActiveTab = TabCtrl->getTab(TabCtrl->getActiveTab());
-				if (newActiveTab && lastActiveTab) {
-					stringw newActiveTabText = newActiveTab->getText();
-
-					if (newActiveTabText == lastActiveTabText) {
-						Panels[newActiveTab->getNumber()]->getScrollBar()->setPos(scrollBarSize);
-						SEvent ev;
-						ev.EventType = EET_GUI_EVENT;
-						ev.GUIEvent.EventType = EGET_SCROLL_BAR_CHANGED;
-						ev.GUIEvent.Caller = Panels[newActiveTab->getNumber()]->getScrollBar();
-						ev.GUIEvent.Element = 0;
-						Panels[newActiveTab->getNumber()]->OnEvent(ev);
-					}
-				}
+				applyForControllerType(type, node);
 
 				return false;
 			}

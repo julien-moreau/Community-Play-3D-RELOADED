@@ -25,13 +25,11 @@ CCP3DEditionToolSceneManager::CCP3DEditionToolSceneManager(CCP3DEditorCore *edit
 
 	Rengine = editorCore->getRenderingEngine();
 
-	AnimatorsController = new CCP3DSceneNodeAnimators(editorCore);
-
 	editorCore->getEngine()->getEventReceiver()->addEventReceiver(this);
 }
 
 CCP3DEditionToolSceneManager::~CCP3DEditionToolSceneManager() {
-
+	EditorCore->getEngine()->getEventReceiver()->removeEventReceiver(this);
 }
 
 void CCP3DEditionToolSceneManager::createInterface() {

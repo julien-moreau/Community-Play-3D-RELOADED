@@ -19,10 +19,16 @@ public:
 	irr::s32 createMaterialFromFiles(const irr::core::stringc &vertexFilename, const irr::core::stringc &pixelFilename,
 									 irr::video::E_MATERIAL_TYPE baseMaterial = irr::video::EMT_SOLID,
 									 irr::video::IShaderConstantSetCallBack *callback = 0);
-
 	irr::s32 createMaterialFromStrings(const irr::core::stringc &vertexShader, const irr::core::stringc &pixelShader,
 									   irr::video::E_MATERIAL_TYPE baseMaterial = irr::video::EMT_SOLID,
 									   irr::video::IShaderConstantSetCallBack *callback = 0);
+
+	irr::s32 createCustomDepthMaterialFromFiles(const irr::core::stringc &vertexFilename, const irr::core::stringc &pixelFilename,
+												irr::video::E_MATERIAL_TYPE baseMaterial = irr::video::EMT_SOLID,
+												irr::video::IShaderConstantSetCallBack *callback = 0);
+	irr::s32 createCustomDepthMaterialFromStrings(const irr::core::stringc &vertexShader, const irr::core::stringc &pixelShader,
+												  irr::video::E_MATERIAL_TYPE baseMaterial = irr::video::EMT_SOLID,
+												  irr::video::IShaderConstantSetCallBack *callback = 0);
 
 	void addDefine(const irr::core::stringc define, const irr::core::stringc value);
 	void removeDefine(const irr::core::stringc define);

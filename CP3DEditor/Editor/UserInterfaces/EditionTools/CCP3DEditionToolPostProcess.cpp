@@ -25,12 +25,13 @@ OpenPostProcessDialog(0)
 	Gui = editorCore->getRenderingEngine()->getGUIEnvironment();
 
 	Rengine = editorCore->getRenderingEngine();
+	Handler = Rengine->getHandler();
 
 	editorCore->getEngine()->getEventReceiver()->addEventReceiver(this);
 }
 
 CCP3DEditionToolPostProcess::~CCP3DEditionToolPostProcess() {
-
+	EditorCore->getEngine()->getEventReceiver()->removeEventReceiver(this);
 }
 
 void CCP3DEditionToolPostProcess::createInterface() {
@@ -46,20 +47,48 @@ void CCP3DEditionToolPostProcess::createInterface() {
 }
 
 void CCP3DEditionToolPostProcess::configure() {
-	PostProcessActivated.CheckBox->setEnabled(false);
+	IGUIListBox *list = PostProcessesList.ListData.List;
+
+	// Enable or disable UI
+	bool enable = enableUI();
+
+	// Apply
+	if (enable) {
+		PostProcessActivated.CheckBox->setChecked(Handler->isPostProcessActivated(list->getSelected()));
+	}
+
+	const u32 size = Handler->getPostProcessingRoutineSize();
+	for (u32 i = 0; i < size; i++) {
+		list->addItem(stringw(Handler->getPostProcessingRoutineName(i)).c_str());
+	}
 }
 
 void CCP3DEditionToolPostProcess::apply() {
+	IGUIListBox *list = PostProcessesList.ListData.List;
+	bool enable = enableUI();
 
+	if (enable) {
+		Handler->setPostProcessActivated(list->getSelected(), PostProcessActivated.CheckBox->isChecked());
+	}
 }
 
 void CCP3DEditionToolPostProcess::clear() {
 
 }
 
+bool CCP3DEditionToolPostProcess::enableUI() {
+	IGUIListBox *list = PostProcessesList.ListData.List;
+
+	bool enable = list->getSelected() != -1;
+	PostProcessActivated.CheckBox->setEnabled(enable);
+
+	return enable;
+}
+
 bool CCP3DEditionToolPostProcess::OnEvent(const SEvent &event) {
 
 	if (event.EventType == EET_GUI_EVENT) {
+
 		if (event.GUIEvent.EventType == EGET_BUTTON_CLICKED) {
 
 			/// Post-Process list
@@ -74,30 +103,19 @@ bool CCP3DEditionToolPostProcess::OnEvent(const SEvent &event) {
 
 				handler->removePostProcessingEffect(list->getSelected());
 				list->removeItem(list->getSelected());
+				return true;
 			}
 
 		}
 
+		// Perform UI configuration before applying
 		else if (event.GUIEvent.EventType == EGET_LISTBOX_CHANGED) {
 			if (event.GUIEvent.Caller == PostProcessesList.ListData.List) {
-				IGUIListBox *list = PostProcessesList.ListData.List;
-				if (list->getSelected() != -1) {
-					rendering::ICP3DHandler *handler = Rengine->getHandler();
-
-					PostProcessActivated.CheckBox->setEnabled(true);
-					PostProcessActivated.CheckBox->setChecked(handler->isPostProcessActivated(list->getSelected()));
+				bool enable = enableUI();
+				if (enable) {
+					IGUIListBox *list = PostProcessesList.ListData.List;
+					PostProcessActivated.CheckBox->setChecked(Handler->isPostProcessActivated(list->getSelected()));
 				}
-				else {
-					PostProcessActivated.CheckBox->setEnabled(false);
-				}
-			}
-		}
-
-		else if (event.GUIEvent.EventType == EGET_CHECKBOX_CHANGED) {
-			if (event.GUIEvent.Caller == PostProcessActivated.CheckBox) {
-				IGUIListBox *list = PostProcessesList.ListData.List;
-				rendering::ICP3DHandler *handler = Rengine->getHandler();
-				handler->setPostProcessActivated(list->getSelected(), PostProcessActivated.CheckBox->isChecked());
 			}
 		}
 

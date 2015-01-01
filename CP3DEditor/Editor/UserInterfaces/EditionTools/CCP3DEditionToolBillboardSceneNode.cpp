@@ -25,13 +25,11 @@ CCP3DEditionToolBillboardSceneNode::CCP3DEditionToolBillboardSceneNode(CCP3DEdit
 
 	Rengine = editorCore->getRenderingEngine();
 
-	AnimatorsController = new CCP3DSceneNodeAnimators(editorCore);
-
 	editorCore->getEngine()->getEventReceiver()->addEventReceiver(this);
 }
 
 CCP3DEditionToolBillboardSceneNode::~CCP3DEditionToolBillboardSceneNode() {
-
+	EditorCore->getEngine()->getEventReceiver()->removeEventReceiver(this);
 }
 
 void CCP3DEditionToolBillboardSceneNode::createInterface() {

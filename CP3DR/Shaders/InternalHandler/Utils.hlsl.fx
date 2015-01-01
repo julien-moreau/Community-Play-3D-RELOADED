@@ -1,5 +1,5 @@
-#ifndef __FX_UTILS_HLSL_FX_INCLUDED_
-#define __FX_UTILS_HLSL_FX_INCLUDED_
+#ifndef __FX_UTILS_HLSL_FX_INCLUDED__
+#define __FX_UTILS_HLSL_FX_INCLUDED__
 
 #ifdef OPENGL_DRIVER
 #error "These utils functions are not intended for OpenGL Drivers"
@@ -103,6 +103,10 @@ struct VS_OUTPUT
 };
 #endif
 
+//-----------------------------------------------------------------
+// Custom Materials (Depth & Shadows)
+//-----------------------------------------------------------------
+
 /*
 If CP3D_MATERIAL and CP3D_COMPUTE_DEPTH_MATERIAL are defined,
 you're able to compute your own depth material passing the final 3D positions
@@ -145,7 +149,7 @@ inline float4 computeDepthPixel(float4 p) {
 /*
 If CP3D_MATERIAL and CP3D_COMPUTE_SHADOWS_MATERIAL are defined,
 you're able to compute your own shadows material passing the final 3D positions
-to the vertex program, and depth parameters to the pixel program.
+to the vertex program
 Simply use the cp3d::rendering::ICP3DMaterialCreator and add the
 CP3D_COMPUTE_SHADOWS_MATERIAL define.
 */
@@ -153,6 +157,14 @@ CP3D_COMPUTE_SHADOWS_MATERIAL define.
 /*
 Let you create the shadows vertex function
 */
+#ifdef DIRECT3D_11
+float4x4 mWorldTrans;
+#endif
+float4x4 mWorldViewProj2;
+float3 LightPos;
+float MaxD;
+float MAPRES;
+
 struct VS_INPUT_SHADOWS_MATERIAL
 {
 	float3 Normal : NORMAL;
@@ -164,7 +176,8 @@ struct VS_OUTPUT_SHADOWS_MATERIAL
 	float4 MVar        			: TEXCOORD1;
 };
 
-VS_OUTPUT_SHADOWS_MATERIAL computeShadowsVertex(float4 p, VS_INPUT_SHADOWS_MATERIAL In) {
+VS_OUTPUT_SHADOWS_MATERIAL computeShadowsVertex(float4 p) {
+	VS_INPUT_SHADOWS_MATERIAL In;
 	VS_OUTPUT_SHADOWS_MATERIAL OUT = (VS_OUTPUT_SHADOWS_MATERIAL)0;
 
 	float4 SMPos = mul(float4(p.xyz, 1.0), mWorldViewProj2);
@@ -172,7 +185,7 @@ VS_OUTPUT_SHADOWS_MATERIAL computeShadowsVertex(float4 p, VS_INPUT_SHADOWS_MATER
 	OUT.ShadowMapSamplingPos = SMPos;
 
 	#ifdef DIRECT3D_11
-	float4 worldpos = mul(float4(In.Position.x, In.Position.y, In.Position.z, 1.0), mWorldTrans);
+	float4 worldpos = mul(float4(p.xyz, 1.0), mWorldTrans);
 	float3 LightDir = normalize(LightPos - worldpos.xyz);
 	#else
 	float3 LightDir = normalize(LightPos - In.Position);
@@ -182,10 +195,6 @@ VS_OUTPUT_SHADOWS_MATERIAL computeShadowsVertex(float4 p, VS_INPUT_SHADOWS_MATER
 
 	return (OUT);
 }
-
-/*
-Let you create the shadows pixel function
-*/
 
 #endif
 
