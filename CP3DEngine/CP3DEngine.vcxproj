@@ -153,6 +153,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClInclude Include="..\include\ICP3DEditionTool.h" />
     <ClInclude Include="..\include\ICP3DFileSelector.h" />
     <ClInclude Include="..\include\ICP3DGeometryCreator.h" />
+    <ClInclude Include="..\include\ICP3DHandlerCallbacks.h" />
     <ClInclude Include="..\include\ICP3DInterface.h" />
     <ClInclude Include="..\include\ICP3DCustomDepthPass.h" />
     <ClInclude Include="..\include\ICP3DCustomPass.h" />

@@ -4,6 +4,8 @@
 #define CP3DR_COMPILE_RENDERING_ENGINE // tell the compiler that we use the rendering engine
 #include <CP3DRenderingEngine.h>
 
+#define SHADOW_MAP_RESOL 1024
+
 namespace cp3d {
 namespace test {
 
@@ -124,24 +126,27 @@ private:
 	irr::f32 BufferWidth, BufferHeight;
 };
 
-class CCustomDepthCallback : public irr::video::IShaderConstantSetCallBack {
+class CCustomDepthCallback : public rendering::ICP3DHandlerCustomCallback
+{
 
 public:
 
-	CCustomDepthCallback(irr::IrrlichtDevice *device)
+	CCustomDepthCallback(irr::IrrlichtDevice *device) : rendering::ICP3DHandlerCustomCallback(true, true)
 	{
 		timer = device->getTimer();
 	}
 
-	void OnSetConstants(irr::video::IMaterialRendererServices* services, irr::s32 userData) {
+	virtual void OnSetConstants(irr::video::IMaterialRendererServices* services, irr::s32 userData) {
 		irr::video::IVideoDriver *driver = services->getVideoDriver();
 		irr::core::matrix4 m = driver->getTransform(irr::video::ETS_PROJECTION);
 		m *= driver->getTransform(irr::video::ETS_VIEW);
 		m *= driver->getTransform(irr::video::ETS_WORLD);
 
 		services->setVertexShaderConstant("mWorldViewProj", m.pointer(), 16);
-		irr::f32 time = (irr::f32)(timer->getTime()) / 1000.f;
+		irr::f32 time = (irr::f32)(timer->getTime()) / 600.f;
 		services->setVertexShaderConstant("time", &time, 1);
+
+		ICP3DHandlerCustomCallback::OnSetConstants(services, userData);
 	}
 
 private:
@@ -154,9 +159,11 @@ void GlobalTest(irr::IrrlichtDevice *device) {
 	using namespace video;
 	using namespace scene;
 	using namespace core;
+	using namespace gui;
 
 	IVideoDriver *driver = device->getVideoDriver();
 	ISceneManager *smgr = device->getSceneManager();
+	IGUIEnvironment *gui = device->getGUIEnvironment();
 
 	/// Create rendering engine
 	cp3d::rendering::ICP3DRenderingEngine *cpre = cp3d::createRenderingEngine(device);
@@ -170,33 +177,34 @@ void GlobalTest(irr::IrrlichtDevice *device) {
 	/// Create a custo material (for custom depth test)
 	CCustomDepthCallback *customDepthCallback = new CCustomDepthCallback(device);
 	rendering::ICP3DMaterialCreator *matCreator = cpre->createMaterialCreator();
+
 	irr::s32 mat1 = matCreator->createMaterialFromFiles("Shaders/Materials/depthExample.vertex.fx", "Shaders/Materials/depthExample.fragment.fx",
 														EMT_SOLID, customDepthCallback);
+
 	irr::s32 mat2 = matCreator->createCustomDepthMaterialFromFiles("Shaders/Materials/depthExample.vertex.fx", "Shaders/Materials/depthExample.fragment.fx",
 																   EMT_SOLID, customDepthCallback);
 
-	/// Create a test scene
-	IAnimatedMesh *planeMesh = smgr->addHillPlaneMesh("plane_mesh", dimension2d<f32>(100.f, 100.f), dimension2d<u32>(50, 50),
-		0, 0.f, dimension2d<f32>(0.f, 0.f), dimension2d<f32>(50.f, 50.f));
+	irr::s32 mat3 = matCreator->createCustomShadowsMaterialFromFile("Shaders/Materials/depthExample.vertex.fx", EMT_SOLID, customDepthCallback);
 
+	/// Create a test scene
+	IAnimatedMesh *planeMesh = smgr->addHillPlaneMesh("plane_mesh", dimension2d<f32>(100.f, 100.f), dimension2d<u32>(100, 100),
+		0, 0.f, dimension2d<f32>(0.f, 0.f), dimension2d<f32>(50.f, 50.f));
 	IMeshSceneNode *planeNode = smgr->addMeshSceneNode(planeMesh);
-	//planeNode->setMesh(smgr->getMeshManipulator()->createMeshWithTangents(planeNode->getMesh(), true, true, false, true));
+	//ISceneNode *planeNode = smgr->addWaterSurfaceSceneNode(planeMesh, 20.f, 200.f, 0.05f);
 	planeNode->setMaterialTexture(0, driver->getTexture("Textures/diffuse.tga"));
 	planeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
 	planeNode->setMaterialTexture(2, driver->getTexture("Textures/specular.tga"));
 	planeNode->setMaterialFlag(EMF_LIGHTING, false);
 	planeNode->getMaterial(0).Shininess = 0.f;
-	handler->addShadowToNode(planeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_RECEIVE);
+	handler->addShadowToNode(planeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_BOTH, mat2, mat3, customDepthCallback);
 
-	IMeshSceneNode *cubeNode = smgr->addCubeSceneNode(50.f, 0, -1, vector3df(0.f, 25.f, 0.f), vector3df(0.f, 45.f, 0.f));
-	//cubeNode->setMesh(smgr->getMeshManipulator()->createMeshWithTangents(cubeNode->getMesh(), true, true, false, true));
+	IMeshSceneNode *cubeNode = smgr->addCubeSceneNode(50.f, 0, -1, vector3df(0.f, 50.f, 0.f), vector3df(0.f, 45.f, 0.f));
 	cubeNode->setMaterialTexture(0, driver->getTexture("Textures/specular.tga"));
 	cubeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
 	cubeNode->setMaterialTexture(2, driver->getTexture("Textures/specular.tga"));
-	cubeNode->setMaterialFlag(EMF_NORMALIZE_NORMALS, false);
 	cubeNode->setMaterialFlag(EMF_LIGHTING, false);
 	cubeNode->getMaterial(0).Shininess = 0.f;
-	handler->addShadowToNode(cubeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_BOTH, mat2);
+	handler->addShadowToNode(cubeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_BOTH);
 
 	//cp3d::rendering::SShadowLight light1(1024, vector3df(0.f, 100.f, 100.f), vector3df(0.f), SColor(255, 255, 255, 255), 1.f, 400.f, 90.f * f32(irr::core::DEGTORAD64), false);
 	//light1.setMustAutoRecalculate(false);
@@ -216,8 +224,8 @@ void GlobalTest(irr::IrrlichtDevice *device) {
 
 	/// Create the normal mapping material
 	cpre->createNormalMappingMaterial();
-	cubeNode->setMaterialType((E_MATERIAL_TYPE)mat1);
-	planeNode->setMaterialType(cpre->Materials[EMT_SOLID]);
+	cubeNode->setMaterialType(cpre->Materials[EMT_SOLID]);
+	planeNode->setMaterialType((E_MATERIAL_TYPE)mat1);
 
 	cp3d::rendering::ICP3DLightSceneNode *light = cpre->createLightSceneNode(true, true);
 	light->setPosition(vector3df(0.f, 100.f, 100.f));
@@ -225,6 +233,7 @@ void GlobalTest(irr::IrrlichtDevice *device) {
 	light->getLightData().SpecularColor = SColorf(1.f, 0.5f, 0.f, 1.f);
 	light->getShadowLight()->setUseRoundSpotLight(false);
 	light->getShadowLight()->setFarValue(600.f);
+	light->getShadowLight()->setShadowMapResolution(SHADOW_MAP_RESOL);
 
 	ISceneNodeAnimator *anim = smgr->createFlyCircleAnimator(vector3df(0.f, 100.f, 0.f), 100.f);
 	ILightSceneNode *l = *light;
@@ -234,6 +243,9 @@ void GlobalTest(irr::IrrlichtDevice *device) {
 	/// Finish
 	handler->setAmbientColor(SColor(255, 32, 32, 32));
 
+	IGUIImage *img = gui->addImage(rect<s32>(driver->getScreenSize().Width - 512, 0, driver->getScreenSize().Width, 512));
+	img->setScaleImage(true);
+
 	/// Update the application
 	while (device->run()) {
 		if (!device->isWindowActive())
@@ -241,6 +253,11 @@ void GlobalTest(irr::IrrlichtDevice *device) {
 
 		driver->beginScene(true, true, SColor(0x0));
 		handler->update();
+
+		ITexture *sm = handler->getShadowMapTexture(SHADOW_MAP_RESOL, false);
+		img->setImage(sm);
+
+		gui->drawAll();
 		driver->endScene();
 	}
 }

@@ -11,9 +11,12 @@ using namespace core;
 namespace cp3d {
 namespace rendering {
 
-class DepthShaderCB : public video::IShaderConstantSetCallBack {
+class DepthShaderCB : public ICP3DHandlerCustomCallback
+{
+
 public:
-	DepthShaderCB(CCP3DHandler* effectIn) : effect(effectIn) { };
+	DepthShaderCB(CCP3DHandler* effectIn) : ICP3DHandlerCustomCallback(true, false)
+	{ };
 
 	virtual void OnSetConstants(video::IMaterialRendererServices* services, s32 userData) {
 		IVideoDriver* driver = services->getVideoDriver();
@@ -23,63 +26,36 @@ public:
 		worldViewProj *= driver->getTransform(video::ETS_WORLD);
 
 		services->setVertexShaderConstant("mWorldViewProj", worldViewProj.pointer(), 16);
-		
-		services->setVertexShaderConstant("MaxD", &FarLink, 1);
+
+		ICP3DHandlerCustomCallback::OnSetConstants(services, userData);
 	}
 
-	CCP3DHandler* effect;
-	f32 FarLink;
+private:
+
 	core::matrix4 worldViewProj;
 };
 
-class ShadowShaderCB : public video::IShaderConstantSetCallBack {
+class ShadowShaderCB : public ICP3DHandlerCustomCallback
+{
 
 public:
 
-	ShadowShaderCB(CCP3DHandler* effectIn) : effect(effectIn) { };
+	ShadowShaderCB(CCP3DHandler* effectIn) : ICP3DHandlerCustomCallback(false, true)
+	{ }
 
-	virtual void OnSetMaterial(const SMaterial& material) { }
+	virtual void OnSetMaterial(const SMaterial& material)
+	{ }
 
 	virtual void OnSetConstants(video::IMaterialRendererServices* services, s32 userData) {
 		IVideoDriver* driver = services->getVideoDriver();
-
-		#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
-		if (driver->getDriverType() == EDT_DIRECT3D11) {
-			core::matrix4 worldTransposed = driver->getTransform(video::ETS_WORLD);
-			worldTransposed = worldTransposed.getTransposed();
-			services->setVertexShaderConstant("mWorldTrans", worldTransposed.pointer(), 16);
-		}
-		#endif
 
 		matrix4 worldViewProj = driver->getTransform(video::ETS_PROJECTION);			
 		worldViewProj *= driver->getTransform(video::ETS_VIEW);
 		worldViewProj *= driver->getTransform(video::ETS_WORLD);
 		services->setVertexShaderConstant("mWorldViewProj", worldViewProj.pointer(), 16);
 
-		worldViewProj = ProjLink;
-		worldViewProj *= ViewLink;
-		worldViewProj *= driver->getTransform(video::ETS_WORLD);
-		services->setVertexShaderConstant("mWorldViewProj2", worldViewProj.pointer(), 16);
-
-		driver->getTransform(video::ETS_WORLD).getInverse(invWorld);
-		vector3df lightPosOS = LightLink;
-		invWorld.transformVect(lightPosOS); 
-		services->setVertexShaderConstant("LightPos", reinterpret_cast<f32*>(&lightPosOS.X), 3);
-		
-		services->setVertexShaderConstant("MaxD", reinterpret_cast<f32*>(&FarLink), 1);
-		services->setVertexShaderConstant("MAPRES", &MapRes, 1);
-
-		services->setPixelShaderConstant("LightColour", reinterpret_cast<f32*>(&LightColour.r), 4);
+		ICP3DHandlerCustomCallback::OnSetConstants(services, userData);
 	}
-
-	CCP3DHandler* effect;
-	core::matrix4 invWorld;
-
-	video::SColorf LightColour;
-	core::matrix4 ProjLink;
-	core::matrix4 ViewLink;
-	core::vector3df LightLink;
-	f32 FarLink, MapRes;
 
 };
 
@@ -112,10 +88,8 @@ class ScreenQuadCB : public irr::video::IShaderConstantSetCallBack {
 public:
 
 	ScreenQuadCB(CCP3DHandler* effectIn, bool defaultV = true) 
-		: effect(effectIn), defaultVertexShader(defaultV) {};
-
-	CCP3DHandler* effect;
-	bool defaultVertexShader;
+		: effect(effectIn), defaultVertexShader(defaultV)
+	{ }
 
 	virtual void OnSetConstants(irr::video::IMaterialRendererServices* services, irr::s32 userData) {
 		if(services->getVideoDriver()->getDriverType() == irr::video::EDT_OPENGL) {
@@ -190,6 +164,8 @@ public:
 		irr::u32 paramCount;
 	};
 
+	CCP3DHandler* effect;
+	bool defaultVertexShader;
 	irr::core::map<irr::core::stringc, SUniformDescriptor> uniformDescriptors;
 };
 

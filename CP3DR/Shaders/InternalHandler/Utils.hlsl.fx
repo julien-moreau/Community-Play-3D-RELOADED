@@ -21,6 +21,7 @@ CP3DTexture myTexture : registerTexture(t0);
 // - if D3D11, then nothing replaced
 
 */
+
 #ifdef DIRECT3D_11
 typedef Texture2D CP3DTexture;
 #else
@@ -120,9 +121,11 @@ See depthExample.xxx.fx in "Shaders/Materials/" for examples.
 /*
 Let you compute the depth vertex function
 */
-inline float4 computeDepthVertex(float4 p, float maxDistance) {
+float MaxD;
+
+inline float4 computeDepthVertex(float4 p) {
 	float4 clipPos = p;
-	clipPos.x = maxDistance;
+	clipPos.x = MaxD;
 
 	return clipPos;
 }
@@ -165,22 +168,16 @@ float3 LightPos;
 float MaxD;
 float MAPRES;
 
-struct VS_INPUT_SHADOWS_MATERIAL
-{
-	float3 Normal : NORMAL;
-};
-
 struct VS_OUTPUT_SHADOWS_MATERIAL
 {
 	float4 ShadowMapSamplingPos : TEXCOORD0;
 	float4 MVar        			: TEXCOORD1;
 };
 
-VS_OUTPUT_SHADOWS_MATERIAL computeShadowsVertex(float4 p) {
-	VS_INPUT_SHADOWS_MATERIAL In;
+inline VS_OUTPUT_SHADOWS_MATERIAL computeShadowsVertex(float4 p, float3 p2, float3 n) {
 	VS_OUTPUT_SHADOWS_MATERIAL OUT = (VS_OUTPUT_SHADOWS_MATERIAL)0;
 
-	float4 SMPos = mul(float4(p.xyz, 1.0), mWorldViewProj2);
+	float4 SMPos = mul(float4(p2.xyz, 1.0), mWorldViewProj2);
 	SMPos.xy = float2(SMPos.x, -SMPos.y) / 2.0;
 	OUT.ShadowMapSamplingPos = SMPos;
 
@@ -188,10 +185,10 @@ VS_OUTPUT_SHADOWS_MATERIAL computeShadowsVertex(float4 p) {
 	float4 worldpos = mul(float4(p.xyz, 1.0), mWorldTrans);
 	float3 LightDir = normalize(LightPos - worldpos.xyz);
 	#else
-	float3 LightDir = normalize(LightPos - In.Position);
+	float3 LightDir = normalize(LightPos - p2);
 	#endif
 
-	OUT.MVar = float4(SMPos.z, dot(In.Normal, LightDir), 1.0 / MAPRES, MaxD);
+	OUT.MVar = float4(SMPos.z, dot(n, LightDir), 1.0 / MAPRES, MaxD);
 
 	return (OUT);
 }

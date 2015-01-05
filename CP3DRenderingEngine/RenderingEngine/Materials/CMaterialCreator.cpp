@@ -61,6 +61,24 @@ s32 CMaterialCreator::createCustomDepthMaterialFromStrings(const stringc &vertex
 	return mat;
 }
 
+s32 CMaterialCreator::createCustomShadowsMaterialFromFile(const stringc &vertexFilename, E_MATERIAL_TYPE baseMaterial,
+														  IShaderConstantSetCallBack *callback)
+{
+	return createCustomShadowsMaterialFromString(Spp->getFileContent(vertexFilename.c_str()).c_str(), baseMaterial, callback);
+}
+s32 CMaterialCreator::createCustomShadowsMaterialFromString(const stringc &vertexShader, E_MATERIAL_TYPE baseMaterial,
+															IShaderConstantSetCallBack *callback)
+{
+	// To fix
+	Spp->addShaderDefine("SAMPLE_AMOUNT", "1");
+	Spp->addShaderDefine("VSM");
+
+	Spp->addShaderDefine("CP3D_COMPUTE_SHADOWS_MATERIAL");
+	s32 mat = createMaterialFromStrings(vertexShader, Spp->getFileContent("Shaders/InternalHandler/ShadowPass.fragment.fx").c_str(), baseMaterial, callback);
+	Spp->removeShaderDefine("CP3D_COMPUTE_SHADOWS_MATERIAL");
+	return mat;
+}
+
 void CMaterialCreator::addDefine(const stringc define, const stringc value) {
 	Spp->addShaderDefine(define, value);
 }

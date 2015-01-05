@@ -6,6 +6,7 @@
 #include <irrlicht.h>
 #include "SShadowLight.h"
 #include "CScreenQuad.h"
+#include "ICP3DHandlerCallbacks.h"
 
 namespace cp3d {
 namespace rendering {
@@ -16,6 +17,8 @@ enum E_SHADOW_MODE {
 	ESM_CAST,
 	ESM_BOTH,
 	ESM_EXCLUDE,
+	ESM_NO_SHADOW,
+
 	ESM_COUNT
 };
 const irr::c8* const ShadowModeNames[] = {
@@ -92,12 +95,23 @@ public:
 	//! \param node: the to compute in lighting calculations
 	//! \param filterType: the shadow map filter type
 	//! \param shadowMode: the shadow mode for this node. Cast, Receive, Both or Exclude
-	virtual void addShadowToNode(irr::scene::ISceneNode* node, E_FILTER_TYPE filterType = EFT_NONE,
-								 E_SHADOW_MODE shadowMode = ESM_BOTH, irr::s32 depthMaterial = -1) = 0;
+	//! \param depthMaterial: the custom depth material. -1 for default depth material
+	//! \param shadowsMaterial: the custom shadows material. -1 for default shadows material
+	//! \param customCallback: the custom callback for custom depth & shadows materials
+	virtual void addShadowToNode(irr::scene::ISceneNode* node, E_FILTER_TYPE filterType = EFT_NONE, E_SHADOW_MODE shadowMode = ESM_BOTH, 
+								 irr::s32 depthMaterial = -1, irr::s32 shadowsMaterial = -1,
+								 ICP3DHandlerCustomCallback *customCallback = 0) = 0;
 
 	//! Returns if the node is shadowed or not
 	//! \param node: the node to test
 	virtual bool isNodeShadowed(irr::scene::ISceneNode *node) = 0;
+
+	//! Sets if the handler renders shadows
+	//! \param render: true if the handler should render shadows. False if not
+	virtual void setRenderShadows(const bool render) = 0;
+
+	//! Returns if the handler is rendering shadows
+	virtual const bool isRenderingShadows() = 0;
 
 	//! Sets the ambiant color of the scene
 	//! \param ambiantColour: the ambiant color of the scene

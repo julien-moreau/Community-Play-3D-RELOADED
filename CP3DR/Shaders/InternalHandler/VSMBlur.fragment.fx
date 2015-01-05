@@ -66,7 +66,7 @@ float4 pixelMain (VS_OUTPUT In) : COLOR0
 	float4 finalVal = float4(0.0, 0.0, 0.0, 0.0);
 
 		for (int i = 0; i < 5; ++i)
-			finalVal += CP3DTex2D(ColorMapSampler, clamp(In.TexCoords.xy + offsetArray[i], float2(0.001, 0.001), float2(0.999, 0.999)), ColorMapSamplerST);
+			finalVal += CP3DTex2D(ColorMapSampler, clamp(In.TexCoords.xy + offsetArray[i] * 2.25, float2(0.001, 0.001), float2(0.999, 0.999)), ColorMapSamplerST);
 
 	return finalVal / 5.0;
 }

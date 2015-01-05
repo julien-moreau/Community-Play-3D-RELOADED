@@ -17,7 +17,6 @@ public:
 	virtual irr::s32 createMaterialFromFiles(const irr::core::stringc &vertexFilename, const irr::core::stringc &pixelFilename,
 											 irr::video::E_MATERIAL_TYPE baseMaterial = irr::video::EMT_SOLID,
 											 irr::video::IShaderConstantSetCallBack *callback = 0) = 0;
-
 	//! Creates a material from strings (vertex & pixel)
 	//! \param vertexShader: the string containing the vertex shader code
 	//! \param pixelShader: the string containing the pixel shader code
@@ -35,7 +34,6 @@ public:
 	virtual irr::s32 createCustomDepthMaterialFromFiles(const irr::core::stringc &vertexFilename, const irr::core::stringc &pixelFilename,
 														irr::video::E_MATERIAL_TYPE baseMaterial = irr::video::EMT_SOLID,
 														irr::video::IShaderConstantSetCallBack *callback = 0) = 0;
-
 	//! Creates a custom depth material from strings (vertex & pixel)
 	//! \param vertexShader: the string containing the vertex shader code
 	//! \param pixelShader: the string containing the pixel shader code
@@ -46,13 +44,20 @@ public:
 														  irr::video::IShaderConstantSetCallBack *callback = 0) = 0;
 
 	//! Creates a custom shadows material from file (vertex)
-	//! \param vertexShader: the string containing the vertex shader code
-	//! \param pixelShader: the string containing the pixel shader code
+	//! \param vertexFilename: the string containing the vertex filename
 	//! \param baseMaterial: the base material of the created material
 	//! \param callback: the material's callback
-	/*
-	virtual irr::s32 createCustomShadowsMaterial(const irr::core::stringc &vertexFilename, irr::video::IShaderConstantSetCallBack *callback = 0) = 0;
-	/*
+	virtual irr::s32 createCustomShadowsMaterialFromFile(const irr::core::stringc &vertexFilename,
+														 irr::video::E_MATERIAL_TYPE baseMaterial = irr::video::EMT_SOLID,
+														 irr::video::IShaderConstantSetCallBack *callback = 0) = 0;
+														 
+	//! Creates a custom shadows material from string (vertex)
+	//! \param vertexShader: the string containing the vertex shader code
+	//! \param baseMaterial: the base material of the created material
+	//! \param callback: the material's callback
+	virtual irr::s32 createCustomShadowsMaterialFromString(const irr::core::stringc &vertexShader,
+															irr::video::E_MATERIAL_TYPE baseMaterial = irr::video::EMT_SOLID,
+															irr::video::IShaderConstantSetCallBack *callback = 0) = 0;
 
 	//! Adds a define for the conditional compilation
 	//! Example:
