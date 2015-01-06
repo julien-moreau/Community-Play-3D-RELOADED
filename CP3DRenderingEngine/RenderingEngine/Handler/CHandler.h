@@ -74,34 +74,16 @@ public:
 	
 	/// Post processes
 	void addPostProcessingEffect(irr::s32 MaterialType, IPostProcessingRenderCallback* callback = 0);
-	void setPostProcessingRenderCallback(irr::s32 materialType, IPostProcessingRenderCallback* callback) {
-		irr::s32 i = getPostProcessID(materialType);
-
-		if(i != -1) {
-			if(PostProcessingRoutines[i].renderCallback)
-				delete PostProcessingRoutines[i].renderCallback;
-
-			PostProcessingRoutines[i].renderCallback = callback;
-		}
-	}
+	void setPostProcessingRenderCallback(irr::s32 materialType, IPostProcessingRenderCallback* callback);
 	void setPostProcessingRenderCallback(const irr::s32 &materialType,
 		std::function<void(ICP3DHandler *handler)> OnPreRender = [&](ICP3DHandler *handler) {},
 		std::function<void(ICP3DHandler *handler)> OnPostRender = [&](ICP3DHandler *handler) {});
-	bool removePostProcessingEffect(irr::s32 materialType) {
-		irr::s32 i = getPostProcessID(materialType);
-
-		if(i != -1) {
-			if(PostProcessingRoutines[i].renderCallback)
-				delete PostProcessingRoutines[i].renderCallback;
-
-			PostProcessingRoutines.erase(i);
-			return true;
-		}
-		return false;
-	}
+	bool removePostProcessingEffect(irr::s32 materialType, const bool deleteCallback = true);
+	irr::s32 replacePostProcessAtIndex(irr::s32 index, const irr::core::stringc &filename, IPostProcessingRenderCallback *callback = 0);
 	irr::s32 addPostProcessingEffectFromFile(const irr::core::stringc &filename, IPostProcessingRenderCallback *callback = 0);
 	irr::s32 addPostProcessingEffectFromString(const irr::core::stringc &shader, IPostProcessingRenderCallback *callback = 0);
 	void setPostProcessingEffectConstant(const irr::s32 materialType, const irr::core::stringc& name, const irr::f32* data, const irr::u32 count);
+
 	CScreenQuad& getScreenQuad() {
 		return ScreenQuad;
 	}
@@ -121,6 +103,7 @@ public:
 		return PostProcessingRoutines.size();
 	}
 	const irr::core::stringc getPostProcessingRoutineName(const irr::s32 &materialType);
+	IPostProcessingRenderCallback *getPostProcessingCallback(irr::s32 materialType);
 
 	/// Utils
 	void setAmbientColor(irr::video::SColor ambientColour) { AmbientColour = ambientColour; }

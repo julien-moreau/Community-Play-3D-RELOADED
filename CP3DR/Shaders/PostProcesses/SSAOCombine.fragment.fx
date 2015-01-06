@@ -25,7 +25,7 @@ SamplerState ScreenMapSamplerST : register(s1);
 float4 pixelMain(VS_OUTPUT In) : COLOR0
 {
 	float4 screenCol = CP3DTex2D(ScreenMapSampler, In.TexCoords.xy, ScreenMapSamplerST);
-	float4 SSAOCol = CP3DTex2D(ColorMapSampler, In.TexCoords.xy, ColorMapSamplerST);
+	float4 SSAOCol = CP3DTex2D(ColorMapSampler, In.TexCoords.xy, ColorMapSamplerST) * 4.0;
 
 	return(screenCol * SSAOCol);
 }

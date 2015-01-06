@@ -2,6 +2,7 @@
 #define __H_C_CP3D_EDITION_POST_PROCESS_INCLUDED__
 
 #include <irrlicht.h>
+#include <ICP3DCustomUpdate.h>
 #include <ICP3DEditionTool.h>
 #include <ICP3DRenderingEngine.h>
 #include <ICP3DHandler.h>
@@ -14,7 +15,10 @@ class CCP3DEditorCore;
 /*
 Class that will manage the post-processes nodes.
 */
-class CCP3DEditionToolPostProcess : public irr::IEventReceiver, public ICP3DEditionToolController {
+class CCP3DEditionToolPostProcess : public irr::IEventReceiver,
+									public ICP3DEditionToolController,
+									public engine::ICP3DUpdate
+{
 public:
 
 	/// Constructor & Destructor
@@ -23,6 +27,9 @@ public:
 
 	/// IEventReceiver
 	bool OnEvent(const irr::SEvent &event);
+
+	/// ICP3DUpdate
+	void OnPreUpdate();
 
 	/// ICP3DEditionToolController
 	void createInterface();
@@ -33,6 +40,7 @@ public:
 private:
 	/// Methods
 	bool enableUI();
+	time_t getChangedTime(irr::core::stringc filename);
 
 	/// Irrlicht
 	irr::video::IVideoDriver *Driver;
@@ -52,10 +60,13 @@ private:
 	/// Post-Processes list
 	SCP3DInterfaceData PostProcessesList;
 	
-	SCP3DInterfaceData PostProcessActivated;
+	SCP3DInterfaceData PostProcessAutomaticReload;
 
 	/// Extra GUI Elements
 	ui::ICP3DFileSelector *OpenPostProcessDialog;
+
+	/// Extra values
+	irr::core::map<irr::s32, time_t> Changes;
 
 };
 

@@ -7,6 +7,7 @@
 #include "SShadowLight.h"
 #include "CScreenQuad.h"
 #include "ICP3DHandlerCallbacks.h"
+#include "ICP3DHandlerPostProcesses.h"
 
 namespace cp3d {
 namespace rendering {
@@ -47,31 +48,11 @@ const irr::c8* const FilterTypeNames[] = {
 	0
 };
 
-class CCP3DHandler;
-class ICP3DHandler;
 class ICP3DCustomPass;
 class ICP3DCustomDepthPass;
 
-//! Custom post-processing render callback
-class IPostProcessingRenderCallback {
-	friend class CCP3DHandler;
-public:
-	//! on pre-render callback
-	//! \param effect: the handler rendering the post-process
-	virtual void OnPreRender(ICP3DHandler* handler)
-	{ }
-
-	//! on post-render callback
-	//! \param effect: the handler rendering the post-process
-	virtual void OnPostRender(ICP3DHandler* handler)
-	{ }
-
-protected:
-	irr::s32 MaterialType;
-};
-
 //! ICP3DHandler class interface
-class ICP3DHandler {
+class ICP3DHandler : public ICP3DHandlerPostProcesses {
 
 public:
 
@@ -131,51 +112,6 @@ public:
 	//! Returns a custom pass
 	//! \param index: the index of the custom pass
 	virtual ICP3DCustomPass *getCustomPass(const irr::u32 index) = 0;
-
-	//! Adds a post-process from a file
-	//! \param filename: the file containing the shader's code
-	//! \param callback: the callback derived from cp3d::rendering::IPostProcessingRenderCallback
-	virtual irr::s32 addPostProcessingEffectFromFile(const irr::core::stringc &filename, IPostProcessingRenderCallback *callback = 0) = 0;
-	//! Adds a post-process from a string
-	//! \param shader: the string containing the shader's code
-	//! \param callback: the callback derived from cp3d::rendering::IPostProcessingRenderCallback
-	virtual irr::s32 addPostProcessingEffectFromString(const irr::core::stringc &shader, IPostProcessingRenderCallback *callback = 0) = 0;
-	//! Adds a custom post-process created using IGPUProgramingServices*
-	//! Allow you to debug your shader in the awesome tool named Microsoft Visual Studio =D
-	//! \param MaterialType: the material index given by IGPUProgramingServices*
-	//! \param callbacl: the material's callback
-	virtual void addPostProcessingEffect(irr::s32 MaterialType, IPostProcessingRenderCallback* callback = 0) = 0;
-	//! Removes a post-processing effect from the pipeline
-	//! \param materialType: the material type index to remove
-	//! \return: returns true if removed, false if not found
-	virtual bool removePostProcessingEffect(irr::s32 materialType) = 0;
-
-	//! Sets a post processing effect constant (OnSetConstant)
-	//! \param materialType: the material to configure
-	//! \param name: the name of the constant
-	//! \param data: the constant's data
-	//! \param count: the amount of floats in *data
-	virtual void setPostProcessingEffectConstant(const irr::s32 materialType, const irr::core::stringc& name, const irr::f32* data, const irr::u32 count) = 0;
-
-	//! Sets the post-processing render callback for the given Materialtype
-	//! \param MaterialType: the material type indice for the post-process program
-	//! \param callback: the callback to set
-	virtual void setPostProcessingRenderCallback(irr::s32 materialType, IPostProcessingRenderCallback* callback) = 0;
-	//! Sets the post-processing render callback for the given Materialtype using lambas
-	//! \param MaterialType: the material type indice for the post-process program
-	//! \param OnPreRender: OnPreRender lamba function to set
-	//! \param OnPostRender: OnPostRender lambda function to set
-	virtual void setPostProcessingRenderCallback(const irr::s32 &materialType,
-		std::function<void(ICP3DHandler *handler)> OnPreRender = [&](ICP3DHandler *handler) { },
-		std::function<void(ICP3DHandler *handler)> OnPostRender = [&](ICP3DHandler *handler) { }) = 0;
-
-	//! Adds a custom UserMapSampler texture
-	//! \param userTexture: the texture to set at UserMapSampler
-	virtual void setPostProcessingUserTexture(irr::video::ITexture* userTexture) = 0;
-	//! Sets a custom texture at index "index"
-	//! \param index: the index of the texture layer (0 to MATERIAL_MAX_TEXTURES)
-	//! \param texture: the texture to set
-	virtual void setPostProcessingTextureAtIndex(const irr::u32 &index, irr::video::ITexture *texture) = 0;
 
 	//! Returns the screen quad used for rendering (especially post-processes)
 	virtual CScreenQuad& getScreenQuad() = 0;

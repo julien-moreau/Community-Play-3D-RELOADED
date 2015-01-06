@@ -54,8 +54,8 @@ CCP3DEngine::~CCP3DEngine() {
 
 void CCP3DEngine::runEngine() {
 	while (Device->run()) {
-		if (!Device->isWindowActive())
-			continue;
+		//if (!Device->isWindowActive())
+		//	continue;
 
 		#ifdef CP3DR_COMPILE_WITH_OPENMP
 		#pragma omp parallel sections

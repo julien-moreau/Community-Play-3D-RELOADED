@@ -152,6 +152,9 @@
     <ClInclude Include="..\include\ICP3DHandlerCallbacks.h">
       <Filter>include\rendering</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\ICP3DHandlerPostProcesses.h">
+      <Filter>include\rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DEngine.cpp">

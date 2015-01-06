@@ -1,5 +1,5 @@
 
-#ifdef OPENGL_DRIVER
+##ifdef OPENGL_DRIVER
 
 uniform float MaxD[__CP3D__PASSES_COUNT__];
 
@@ -7,7 +7,7 @@ void main(void) {
 	__CP3D__PIXEL_MAIN__
 }
 
-#else
+##else
 
 float MaxD[__CP3D__PASSES_COUNT__];
 
@@ -31,4 +31,4 @@ PS_OUTPUT pixelMain(VS_OUTPUT In) {
 	return (OUT);
 }
 
-#endif
+##endif

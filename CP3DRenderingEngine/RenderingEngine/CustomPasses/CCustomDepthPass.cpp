@@ -16,8 +16,14 @@ CCustomDepthPass::CCustomDepthPass(IVideoDriver *driver, stringc name)
 {
 	/// Configure shaders pre-processors
 	SppV = new CShaderPreprocessor(driver);
-	VertexShader = SppV->ppShaderFF("Shaders/Materials/CustomDepthPass.vertex.fx");
 	SppP = new CShaderPreprocessor(driver);
+
+	if (driver->getDriverType() == EDT_OPENGL) {
+		SppV->addShaderDefine("OPENGL_DRIVER", "1");
+		SppP->addShaderDefine("OPENGL_DRIVER", "1");
+	}
+
+	VertexShader = SppV->ppShaderFF("Shaders/Materials/CustomDepthPass.vertex.fx");
 	PixelShader = SppP->ppShaderFF("Shaders/Materials/CustomDepthPass.fragment.fx");
 }
 
@@ -71,8 +77,8 @@ void CCustomDepthPass::addPass(irr::core::stringc name) {
 	SppP->addShaderDefine("__CP3D__PIXEL_MAIN__", shaderCode);
 
 	#ifdef _DEBUG
-	stringc vp = SppV->ppShaderDF(VertexShader);
-	stringc pp = SppP->ppShaderDF(PixelShader);
+	stringc vp = SppV->ppShader(VertexShader);
+	stringc pp = SppP->ppShader(PixelShader);
 	#endif
 
 	/// Create material
@@ -104,8 +110,12 @@ void CCustomDepthPass::OnSetConstants(IMaterialRendererServices* services, s32 u
 	worldViewProj *= driver->getTransform(video::ETS_WORLD);
 	services->setVertexShaderConstant("mWorldViewProj", worldViewProj.pointer(), 16);
 	
-	if (FarLinksChanged)
-		services->setPixelShaderConstant("MaxD", FarLinks.pointer(), FarLinks.size());
+	if (FarLinksChanged) {
+		if (driver->getDriverType() == EDT_OPENGL)
+			services->setPixelShaderConstant("MaxD[0]", FarLinks.pointer(), FarLinks.size());
+		else
+			services->setPixelShaderConstant("MaxD", FarLinks.pointer(), FarLinks.size());
+	}
 }
 
 } /// End namespace rendering

@@ -98,6 +98,14 @@ irr::gui::IGUITab *CCP3DEditionTool::addTab(const irr::core::stringc name) {
 }
 
 void CCP3DEditionTool::clearTabs() {
+	/// Clear all edition tools
+	EditionToolControllerNode::Node *it = EditionTools.find(LastSceneNodeType);
+	if (it) {
+		for (u32 i = 0; i < it->getValue().size(); i++) {
+			it->getValue()[i]->clear();
+		}
+	}
+
 	/// Panels
 	Panels.clear();
 

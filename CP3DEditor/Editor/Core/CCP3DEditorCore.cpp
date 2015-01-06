@@ -177,6 +177,31 @@ bool CCP3DEditorCore::OnEvent(const SEvent &event) {
 	return false;
 }
 
+#include <ICP3DHandlerPostProcesses.h>
+class CSSAOCallback : public rendering::IPostProcessingRenderCallback
+{
+
+public:
+
+	CSSAOCallback(rendering::ICP3DRenderingEngine *renderingEngine) {
+		IVideoDriver *driver = renderingEngine->getVideoDriver();
+		renderingEngine->getHandler()->getDepthPassManager()->addPass("DepthRTT");
+
+		DepthRTT = driver->getTexture("DepthRTT");
+		RandomTex = renderingEngine->getHandler()->generateRandomVectorTexture(dimension2du(512, 512), "random");
+	}
+
+	void OnPreRender(rendering::ICP3DHandler* handler) {
+		handler->setPostProcessingTextureAtIndex(2, DepthRTT);
+		handler->setPostProcessingTextureAtIndex(3, RandomTex);
+	}
+
+private:
+
+	ITexture *DepthRTT, *RandomTex;
+
+};
+
 void CCP3DEditorCore::createTestScene() {
 	ISceneManager *smgr = Device->getSceneManager();
 	IVideoDriver *driver = Device->getVideoDriver();
@@ -258,6 +283,13 @@ void CCP3DEditorCore::createTestScene() {
 
 	Handler->setAmbientColor(SColor(255, 32, 32, 32));
 
+	CSSAOCallback *c = new CSSAOCallback(Rengine);
+	Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/SSAO.fragment.fx", c);
+	Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/BlurHP.fragment.fx");
+	Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/BlurHP.fragment.fx");
+
+	Handler->getDepthPassManager()->addNodeToPass(planeNode);
+	Handler->getDepthPassManager()->addNodeToPass(cubeNode);
 }
 
 } /// End namespace cp3d

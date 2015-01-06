@@ -20,13 +20,34 @@ void CCP3DHandler::setPostProcessingRenderCallback(const irr::s32 &materialType,
 	std::function<void(ICP3DHandler *handler)> OnPreRender,
 	std::function<void(ICP3DHandler *handler)> OnPostRender)
 {
-	irr::s32 i = getPostProcessID(materialType);
+	s32 i = getPostProcessID(materialType);
 
 	if (i == -1)
 		return;
 
 	CCustomPostProcessCB *cb = new CCustomPostProcessCB(OnPreRender, OnPostRender);
 	setPostProcessingRenderCallback(materialType, cb);
+}
+
+void CCP3DHandler::setPostProcessingRenderCallback(s32 materialType, IPostProcessingRenderCallback* callback) {
+	s32 i = getPostProcessID(materialType);
+
+	if (i != -1) {
+		if (PostProcessingRoutines[i].renderCallback)
+			delete PostProcessingRoutines[i].renderCallback;
+
+		PostProcessingRoutines[i].renderCallback = callback;
+	}
+}
+
+IPostProcessingRenderCallback *CCP3DHandler::getPostProcessingCallback(irr::s32 materialType) {
+	s32 i = getPostProcessID(materialType);
+
+	if (i != -1) {
+		return PostProcessingRoutines[i].renderCallback;
+	}
+
+	return 0;
 }
 
 void CCP3DHandler::addPostProcessingEffect(irr::s32 MaterialType, IPostProcessingRenderCallback* callback) {
@@ -60,7 +81,8 @@ CCP3DHandler::SPostProcessingPair CCP3DHandler::obtainScreenQuadMaterial(const i
 	stringc shaderString;
 	if (fromFile)
 		//shaderString = sPP.ppShaderFF(data.c_str());
-		shaderString = sPP.ppShaderDF(sPP.getFileContent(data.c_str()).c_str());
+		//shaderString = sPP.ppShaderDF(sPP.getFileContent(data.c_str()).c_str());
+		shaderString = sPP.getFileContent(data.c_str()).c_str();
 	else
 		shaderString = sPP.ppShaderDF(data.c_str());
 
@@ -73,7 +95,7 @@ CCP3DHandler::SPostProcessingPair CCP3DHandler::obtainScreenQuadMaterial(const i
 
 	s32 PostMat = gpu->addHighLevelShaderMaterial(
 		sPP.ppShaderDF(sPP.getFileContent(path.c_str()).c_str()).c_str(), "vertexMain", VertexLevel,
-		shaderString.c_str(), "pixelMain", PixelLevel,
+		sPP.ppShaderDF(shaderString.c_str()).c_str(), "pixelMain", PixelLevel,
 		SQCB, baseMaterial);
 	
 	SPostProcessingPair pPair(PostMat, SQCB);
@@ -151,6 +173,43 @@ s32 CCP3DHandler::addPostProcessingEffectFromFile(const irr::core::stringc& file
 	PostProcessingRoutines.push_back(pPair);
 
 	return pPair.materialType;
+}
+
+s32 CCP3DHandler::replacePostProcessAtIndex(s32 index, const stringc &filename, IPostProcessingRenderCallback *callback) {
+	if (index < 0 || index >= PostProcessingRoutines.size())
+		return -1;
+
+	IMaterialRenderer *mat = driver->getMaterialRenderer(PostProcessingRoutines[index].materialType);
+	if (mat)
+		driver->getMaterialRenderer(PostProcessingRoutines[index].materialType)->drop();
+
+	IPostProcessingRenderCallback *c = PostProcessingRoutines[index].renderCallback;
+	if (c && c != callback)
+		delete c;
+
+	SPostProcessingPair pPair = obtainScreenQuadMaterial(filename, EMT_SOLID, true);
+	pPair.renderCallback = callback;
+	pPair.path = filename;
+
+	if (callback)
+		callback->MaterialType = pPair.materialType;
+
+	PostProcessingRoutines[index] = pPair;
+
+	return pPair.materialType;
+}
+
+bool CCP3DHandler::removePostProcessingEffect(s32 materialType, const bool deleteCallback) {
+	s32 i = getPostProcessID(materialType);
+
+	if (i != -1) {
+		if (PostProcessingRoutines[i].renderCallback && deleteCallback)
+			delete PostProcessingRoutines[i].renderCallback;
+
+		PostProcessingRoutines.erase(i);
+		return true;
+	}
+	return false;
 }
 
 } /// End namespace rendering

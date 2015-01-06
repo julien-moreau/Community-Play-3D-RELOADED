@@ -4,22 +4,15 @@
 precision highp float;
 #endif
 
-varying vec2 vUV;
-
-uniform sampler2D textureSampler;
-uniform sampler2D RandomMapSampler;
-
-uniform float totalStrength;
-uniform float fallOff;
-uniform float radius;
-uniform float area;
+uniform sampler2D DepthMapSampler;
+uniform sampler2D UserMapSampler;
 
 vec3 normalFromDepth(float depth, vec2 coords) {
 	const vec2 offset1 = vec2(0.0, 0.001);
 	const vec2 offset2 = vec2(0.001, 0.0);
 
-	float depth1 = texture2D(textureSampler, coords + offset1).r;
-	float depth2 = texture2D(textureSampler, coords + offset2).r;
+	float depth1 = texture2D(DepthMapSampler, coords + offset1).r;
+	float depth2 = texture2D(DepthMapSampler, coords + offset2).r;
 
 	vec3 p1 = vec3(offset1, depth1 - depth);
 	vec3 p2 = vec3(offset2, depth2 - depth);
@@ -32,7 +25,13 @@ vec3 normalFromDepth(float depth, vec2 coords) {
 
 void main()
 {
+	const float totalStrength = 1.0;
 	const float base = 0.2;
+
+	const float area = 0.0075;
+	const float fallOff = 0.000001;
+
+	const float radius = 0.0002;
 
 	const int samples = 16;
 	vec3 sampleSphere[samples];
@@ -53,11 +52,11 @@ void main()
 	sampleSphere[14] = vec3(0.0352, -0.0631, 0.5460);
 	sampleSphere[15] = vec3(-0.4776, 0.2847, -0.0271);
 
-	vec3 random = normalize(texture2D(RandomMapSampler, vUV * 4.0).rgb);
-	float depth = texture2D(textureSampler, vUV).r;
+	vec3 random = normalize(texture2D(UserMapSampler, gl_TexCoord[0].xy * 4.0).rgb);
+	float depth = texture2D(DepthMapSampler, gl_TexCoord[0].xy).r;
 
-	vec3 position = vec3(vUV, depth);
-	vec3 normal = normalFromDepth(depth, vUV);
+	vec3 position = vec3(gl_TexCoord[0].xy, depth);
+	vec3 normal = normalFromDepth(depth, gl_TexCoord[0].xy);
 
 	float radiusDepth = radius / depth;
 	float occlusion = 0.0;
@@ -66,7 +65,7 @@ void main()
 		vec3 ray = radiusDepth * reflect(sampleSphere[i], random);
 		vec3 hemiRay = position + sign(dot(ray, normal)) * ray;
 
-		float occlusionDepth = texture2D(textureSampler, clamp(hemiRay.xy, 0.0, 1.0)).r;
+		float occlusionDepth = texture2D(DepthMapSampler, clamp(hemiRay.xy, 0.0, 1.0)).r;
 		float difference = depth - occlusionDepth;
 
 		occlusion += step(fallOff, difference) * (1.0 - smoothstep(fallOff, area, difference));
@@ -112,13 +111,13 @@ float3 normal_from_depth(float depth, float2 texcoords) {
 
 float4 pixelMain(VS_OUTPUT In) : COLOR0
 {
-	const float total_strength = 1.2;
+	const float total_strength = 3.0;
 	const float base = 0.2;
 
 	const float area = 0.075;
 	const float falloff = 0.000001;
 
-	const float radius = 0.002;
+	const float radius = 0.02;
 
 	const int samples = 16;
 	float3 sample_sphere[samples] = {

@@ -1,5 +1,5 @@
 
-#ifdef OPENGL_DRIVER
+##ifdef OPENGL_DRIVER
 
 uniform mat4 mWorldViewProj;
 
@@ -9,7 +9,7 @@ void main(void) {
 	gl_TexCoord[0] = tPos;
 }
 
-#else
+##else
 
 cbuffer cbParams : register(c0)
 {
@@ -37,4 +37,4 @@ VS_OUTPUT vertexMain(float4 Position : POSITION, float2 Texcoords : TEXCOORD0, f
 	return (OUT);
 }
 
-#endif
+##endif

@@ -4,8 +4,11 @@
 #include "../CCP3DCustomView.h"
 #include "../CCP3DEditionTool.h"
 #include "SceneNodeEditionTools/CCP3DSceneNodeAnimators.h"
-
 #include "CCP3DEditionToolPostProcess.h"
+
+#include <time.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 using namespace irr;
 using namespace scene;
@@ -32,6 +35,7 @@ OpenPostProcessDialog(0)
 
 CCP3DEditionToolPostProcess::~CCP3DEditionToolPostProcess() {
 	EditorCore->getEngine()->getEventReceiver()->removeEventReceiver(this);
+	EditorCore->getEngine()->getCustomUpdater()->removeCustomUpdate(this);
 }
 
 void CCP3DEditionToolPostProcess::createInterface() {
@@ -43,46 +47,70 @@ void CCP3DEditionToolPostProcess::createInterface() {
 	PostProcessesList = EditionTool->addField(PostProcessTab, EGUIET_LIST_BOX, DefaultEditionToolCallback("Post-Processes pipeline"));
 
 	EditionTool->setNewZone(PostProcessTab, "Options");
-	PostProcessActivated = EditionTool->addField(PostProcessTab, EGUIET_CHECK_BOX, DefaultEditionToolCallback("Activated"));
+	PostProcessAutomaticReload = EditionTool->addField(PostProcessTab, EGUIET_CHECK_BOX, DefaultEditionToolCallback("Automatic Reload"));
 }
 
 void CCP3DEditionToolPostProcess::configure() {
-	IGUIListBox *list = PostProcessesList.ListData.List;
+	EditorCore->getEngine()->getCustomUpdater()->addCustomUpdate(this);
 
+	IGUIListBox *list = PostProcessesList.ListData.List;
 	// Enable or disable UI
 	bool enable = enableUI();
 
 	// Apply
-	if (enable) {
-		PostProcessActivated.CheckBox->setChecked(Handler->isPostProcessActivated(list->getSelected()));
-	}
 
 	const u32 size = Handler->getPostProcessingRoutineSize();
 	for (u32 i = 0; i < size; i++) {
 		list->addItem(stringw(Handler->getPostProcessingRoutineName(i)).c_str());
+		Changes[i] = getChangedTime(Handler->getPostProcessingRoutineName(i));
 	}
 }
 
 void CCP3DEditionToolPostProcess::apply() {
 	IGUIListBox *list = PostProcessesList.ListData.List;
 	bool enable = enableUI();
-
-	if (enable) {
-		Handler->setPostProcessActivated(list->getSelected(), PostProcessActivated.CheckBox->isChecked());
-	}
 }
 
 void CCP3DEditionToolPostProcess::clear() {
-
+	EditorCore->getEngine()->getCustomUpdater()->removeCustomUpdate(this);
+	Changes.clear();
 }
 
 bool CCP3DEditionToolPostProcess::enableUI() {
 	IGUIListBox *list = PostProcessesList.ListData.List;
 
 	bool enable = list->getSelected() != -1;
-	PostProcessActivated.CheckBox->setEnabled(enable);
 
 	return enable;
+}
+
+void CCP3DEditionToolPostProcess::OnPreUpdate() {
+	io::IFileSystem *fs = EditorCore->getDevice()->getFileSystem();
+
+	for (u32 i = 0; i < Handler->getPostProcessingRoutineSize(); i++) {
+		stringc path = Handler->getPostProcessingRoutineName(Handler->getPostProcessID(i));
+		if (path == "")
+			continue;
+
+		time_t time;
+		if (fs->existFile(path.c_str()))
+			time = getChangedTime(path);
+		else
+			fs->existFile(EditorCore->getWorkingDirectory() + path.c_str());
+
+		if (time < 0 || time == Changes[i])
+			continue;
+
+		rendering::IPostProcessingRenderCallback *callback = Handler->getPostProcessingCallback(i);
+		s32 pp;
+		if (fs->existFile(path.c_str()))
+			pp = Handler->replacePostProcessAtIndex(i, path, callback);
+		else
+			pp = Handler->replacePostProcessAtIndex(i, EditorCore->getWorkingDirectory() + path, callback);
+
+		if (pp)
+			Changes[i] = time;
+	}
 }
 
 bool CCP3DEditionToolPostProcess::OnEvent(const SEvent &event) {
@@ -114,7 +142,7 @@ bool CCP3DEditionToolPostProcess::OnEvent(const SEvent &event) {
 				bool enable = enableUI();
 				if (enable) {
 					IGUIListBox *list = PostProcessesList.ListData.List;
-					PostProcessActivated.CheckBox->setChecked(Handler->isPostProcessActivated(list->getSelected()));
+					//PostProcessActivated.CheckBox->setChecked(Handler->isPostProcessActivated(list->getSelected()));
 				}
 			}
 		}
@@ -128,6 +156,7 @@ bool CCP3DEditionToolPostProcess::OnEvent(const SEvent &event) {
 					EditorCore->createMessageBox("", "", EMBF_OK, true, Driver->getTexture("error.png"));
 				else {
 					PostProcessesList.ListData.List->addItem(stringw(path).remove(EditorCore->getWorkingDirectory()).c_str());
+					Changes[Handler->getPostProcessingRoutineSize() - 1] = getChangedTime(path);
 				}
 
 				return true;
@@ -137,6 +166,14 @@ bool CCP3DEditionToolPostProcess::OnEvent(const SEvent &event) {
 	}
 
 	return false;
+}
+
+time_t CCP3DEditionToolPostProcess::getChangedTime(stringc filename) {
+	struct stat buf;
+	int result = stat(stringc(EditorCore->getWorkingDirectory() + filename).c_str(), &buf);
+	if (result >= 0)
+		return buf.st_mtime;
+	return 0;
 }
 
 } /// End namespace cp3d
