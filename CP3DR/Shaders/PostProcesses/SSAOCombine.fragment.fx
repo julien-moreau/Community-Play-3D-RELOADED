@@ -18,14 +18,17 @@ void main()
 
 CP3DTexture ColorMapSampler : registerTexture(t0);
 CP3DTexture ScreenMapSampler : registerTexture(t1);
+CP3DTexture DepthMapSampler : registerTexture(t2);
 
 SamplerState ColorMapSamplerST : register(s0);
 SamplerState ScreenMapSamplerST : register(s1);
+SamplerState DepthMapSamplerST : register(s2);
 
 float4 pixelMain(VS_OUTPUT In) : COLOR0
 {
 	float4 screenCol = CP3DTex2D(ScreenMapSampler, In.TexCoords.xy, ScreenMapSamplerST);
-	float4 SSAOCol = CP3DTex2D(ColorMapSampler, In.TexCoords.xy, ColorMapSamplerST) * 4.0;
+	float4 depthCol = CP3DTex2D(DepthMapSampler, In.TexCoords.xy, DepthMapSamplerST);
+	float4 SSAOCol = CP3DTex2D(ColorMapSampler, In.TexCoords.xy, ColorMapSamplerST) * ((depthCol.r == 1.0) ? 1.0 : 5.0);
 
 	return(screenCol * SSAOCol);
 }

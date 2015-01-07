@@ -16,6 +16,7 @@ using namespace core;
 namespace cp3d {
 namespace rendering {
 
+// Sets custom callback using lambdas
 void CCP3DHandler::setPostProcessingRenderCallback(const irr::s32 &materialType,
 	std::function<void(ICP3DHandler *handler)> OnPreRender,
 	std::function<void(ICP3DHandler *handler)> OnPostRender)
@@ -29,6 +30,7 @@ void CCP3DHandler::setPostProcessingRenderCallback(const irr::s32 &materialType,
 	setPostProcessingRenderCallback(materialType, cb);
 }
 
+// Sets custom callback
 void CCP3DHandler::setPostProcessingRenderCallback(s32 materialType, IPostProcessingRenderCallback* callback) {
 	s32 i = getPostProcessID(materialType);
 
@@ -40,7 +42,8 @@ void CCP3DHandler::setPostProcessingRenderCallback(s32 materialType, IPostProces
 	}
 }
 
-IPostProcessingRenderCallback *CCP3DHandler::getPostProcessingCallback(irr::s32 materialType) {
+// Returns the custom callback
+IPostProcessingRenderCallback *CCP3DHandler::getPostProcessingCallback(s32 materialType) {
 	s32 i = getPostProcessID(materialType);
 
 	if (i != -1) {
@@ -56,7 +59,7 @@ void CCP3DHandler::addPostProcessingEffect(irr::s32 MaterialType, IPostProcessin
 	PostProcessingRoutines.push_back(pPair);
 }
 
-CCP3DHandler::SPostProcessingPair CCP3DHandler::obtainScreenQuadMaterial(const irr::core::stringc& data,  irr::video::E_MATERIAL_TYPE baseMaterial, bool fromFile) {
+CCP3DHandler::SPostProcessingPair CCP3DHandler::obtainScreenQuadMaterial(const stringc& data,  E_MATERIAL_TYPE baseMaterial, bool fromFile) {
 	CShaderPreprocessor sPP(driver);
 
 	sPP.addShaderDefine("SCREENX", core::stringc(ScreenRTTSize.Width));
@@ -71,27 +74,27 @@ CCP3DHandler::SPostProcessingPair CCP3DHandler::obtainScreenQuadMaterial(const i
 		sPP.addShaderDefine("DIRECT3D_11", "1");
 	#endif
 	
-	video::E_VERTEX_SHADER_TYPE VertexLevel = driver->queryFeature(video::EVDF_VERTEX_SHADER_3_0) ? EVST_VS_3_0 : EVST_VS_2_0;
-	video::E_PIXEL_SHADER_TYPE PixelLevel = driver->queryFeature(video::EVDF_PIXEL_SHADER_3_0) ? EPST_PS_3_0 : EPST_PS_2_0;
-
+	E_VERTEX_SHADER_TYPE VertexLevel = driver->queryFeature(video::EVDF_VERTEX_SHADER_3_0) ? EVST_VS_3_0 : EVST_VS_2_0;
+	E_PIXEL_SHADER_TYPE PixelLevel = driver->queryFeature(video::EVDF_PIXEL_SHADER_3_0) ? EPST_PS_3_0 : EPST_PS_2_0;
 	E_SHADER_EXTENSION shaderExt = (driver->getDriverType() == EDT_DIRECT3D9) ? ESE_HLSL : ESE_GLSL;
+	IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
 
-	video::IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
+	// To ensure includes, set the directory to origin
+	const stringc currentDirectory = device->getFileSystem()->getWorkingDirectory();
+	device->getFileSystem()->changeWorkingDirectoryTo(WorkingPath);
 
+	// Load file
 	stringc shaderString;
-	if (fromFile)
-		//shaderString = sPP.ppShaderFF(data.c_str());
-		//shaderString = sPP.ppShaderDF(sPP.getFileContent(data.c_str()).c_str());
+	if (fromFile) {
 		shaderString = sPP.getFileContent(data.c_str()).c_str();
+		if (shaderString == "")
+			shaderString = sPP.getFileContent(stringc(WorkingPath + data).c_str()).c_str();
+	}
 	else
 		shaderString = sPP.ppShaderDF(data.c_str());
 
 	ScreenQuadCB* SQCB = new ScreenQuadCB(this, true);
 	const stringc path = WorkingPath + "Shaders/InternalHandler/ScreenQuad.vertex.fx";
-
-	// To ensure includes, set the directory to origin
-	const stringc currentDirectory = device->getFileSystem()->getWorkingDirectory();
-	device->getFileSystem()->changeWorkingDirectoryTo(WorkingPath);
 
 	s32 PostMat = gpu->addHighLevelShaderMaterial(
 		sPP.ppShaderDF(sPP.getFileContent(path.c_str()).c_str()).c_str(), "vertexMain", VertexLevel,

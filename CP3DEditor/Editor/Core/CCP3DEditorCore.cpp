@@ -186,9 +186,10 @@ public:
 	CSSAOCallback(rendering::ICP3DRenderingEngine *renderingEngine) {
 		IVideoDriver *driver = renderingEngine->getVideoDriver();
 		renderingEngine->getHandler()->getDepthPassManager()->addPass("DepthRTT");
+		renderingEngine->getHandler()->getDepthPassManager()->setDepth("DepthRTT", 1000.f);
 
 		DepthRTT = driver->getTexture("DepthRTT");
-		RandomTex = renderingEngine->getHandler()->generateRandomVectorTexture(dimension2du(512, 512), "random");
+		RandomTex = renderingEngine->getHandler()->generateRandomVectorTexture(driver->getScreenSize(), "SSAORandomTex");
 	}
 
 	void OnPreRender(rendering::ICP3DHandler* handler) {
@@ -287,6 +288,7 @@ void CCP3DEditorCore::createTestScene() {
 	Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/SSAO.fragment.fx", c);
 	Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/BlurHP.fragment.fx");
 	Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/BlurHP.fragment.fx");
+	Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/SSAOCombine.fragment.fx");
 
 	Handler->getDepthPassManager()->addNodeToPass(planeNode);
 	Handler->getDepthPassManager()->addNodeToPass(cubeNode);

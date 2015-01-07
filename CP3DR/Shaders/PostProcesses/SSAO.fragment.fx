@@ -80,7 +80,6 @@ void main()
 	gl_FragColor.a = 1.0;
 }
 
-
 #else
 
 #define POST_PROCESS
@@ -111,16 +110,16 @@ float3 normal_from_depth(float depth, float2 texcoords) {
 
 float4 pixelMain(VS_OUTPUT In) : COLOR0
 {
-	const float total_strength = 3.0;
+	const float total_strength = 2.0;
 	const float base = 0.2;
 
-	const float area = 0.075;
+	const float area = 0.0075;
 	const float falloff = 0.000001;
 
-	const float radius = 0.02;
+	const float radius = 0.002;
 
 	const int samples = 16;
-	float3 sample_sphere[samples] = {
+	float3 sample_sphere[16] = {
 		float3(0.5381, 0.1856, -0.4319), float3(0.1379, 0.2486, 0.4430),
 		float3(0.3371, 0.5679, -0.0057), float3(-0.6999, -0.0451, -0.0019),
 		float3(0.0689, -0.1598, -0.8547), float3(0.0560, 0.0069, -0.1843),

@@ -170,7 +170,7 @@ bool CCP3DEditionToolPostProcess::OnEvent(const SEvent &event) {
 
 time_t CCP3DEditionToolPostProcess::getChangedTime(stringc filename) {
 	struct stat buf;
-	int result = stat(stringc(EditorCore->getWorkingDirectory() + filename).c_str(), &buf);
+	int result = stat(filename.c_str(), &buf);
 	if (result >= 0)
 		return buf.st_mtime;
 	return 0;
