@@ -30,7 +30,6 @@ bool CCP3DMonitorPlugin::addMonitor(stringc path) {
 		return false;
 
 	typedef ICP3DMonitor* (*createMonitor)(rendering::ICP3DRenderingEngine *rengine);
-	createMonitor *cm = 0;
 
 	ICP3DMonitor *monitor = invokeCreateMonitor(hdll, "createMonitor");
 	if (monitor) {

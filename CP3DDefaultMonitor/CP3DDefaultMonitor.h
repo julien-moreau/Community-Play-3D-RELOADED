@@ -1,13 +1,25 @@
-// CP3DDefaultMonitor.h
-
 #pragma once
 
-using namespace System;
+#include <ICP3DRenderingEngine.h>
+#include <ICP3DHandler.h>
 
-namespace CP3DDefaultMonitor {
+namespace cp3d {
+namespace engine {
 
-	public ref class Class1
-	{
-		// TODO: ajoutez ici vos méthodes pour cette classe.
-	};
-}
+class CCP3DDefaultMonitor : public ICP3DMonitor {
+
+public:
+	//! ctor & dtor
+	CCP3DDefaultMonitor(rendering::ICP3DRenderingEngine *rengine);
+	~CCP3DDefaultMonitor();
+
+	void render();
+
+private:
+	// Datas
+	rendering::ICP3DHandler *Handler;
+
+};
+
+} /// End namespace engine
+} /// End namespace cp3d
