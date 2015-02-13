@@ -2,11 +2,13 @@
 
 uniform sampler2D ColorMapSampler;
 uniform sampler2D ScreenMapSampler;
+uniform sampler2D DepthMapSampler;
 
 void main() 
 {		
 	vec4 screenCol = texture2D(ScreenMapSampler, gl_TexCoord[0].xy);
-	vec4 SSAOCol = texture2D(ColorMapSampler, gl_TexCoord[0].xy);
+	vec4 depthCol = texture2D(DepthMapSampler, gl_TexCoord[0].xy);
+	vec4 SSAOCol = texture2D(ColorMapSampler, gl_TexCoord[0].xy) * ((depthCol.r == 1.0) ? 1.0 : 5.0);
 
 	gl_FragColor = (screenCol * SSAOCol);
 }

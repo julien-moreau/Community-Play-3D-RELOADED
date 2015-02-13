@@ -283,12 +283,14 @@ void CCP3DEditorCore::createTestScene() {
 	Engine->getSceneNodeCreator()->createCloudNode(vector2df(0.006f, 0.003f), driver->getTexture("Textures/Clouds/cloud03.png"), 0.035f, 0.f, -0.15f, 0.4f, callback);
 
 	Handler->setAmbientColor(SColor(255, 32, 32, 32));
-
+	
+	/*
 	CSSAOCallback *c = new CSSAOCallback(Rengine);
 	Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/SSAO.fragment.fx", c);
 	Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/BlurHP.fragment.fx");
 	Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/BlurHP.fragment.fx");
 	Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/SSAOCombine.fragment.fx");
+	*/
 
 	Handler->getDepthPassManager()->addNodeToPass(planeNode);
 	Handler->getDepthPassManager()->addNodeToPass(cubeNode);

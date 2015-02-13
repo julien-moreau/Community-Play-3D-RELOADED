@@ -6,8 +6,11 @@
 #include <CP3DRenderingEngine.h>
 #include <CP3DEngine.h>
 
+#include "Engine/Core/Plugins/CCP3DMonitorPlugin.h"
+
 #include "Engine/Core/CCP3DEventReceiver.h"
 #include "Engine/Core/CCP3DCustomUpdater.h"
+
 #include "Engine/Scene/CCP3DSceneNodeCreator.h"
 #include "Engine/Scene/CCP3DGeometryCreator.h"
 
@@ -58,6 +61,7 @@ private:
 	CCP3DGeometryCreator *GeometryCreator;
 
 	/// Rendering
+	CCP3DMonitorPlugin *MonitorPlugin;
 	rendering::ICP3DRenderingEngine *Rengine;
 	rendering::ICP3DHandler *Handler;
 

@@ -9,14 +9,16 @@ namespace irr {
 }
 
 #define CP3DR_LIB_EXPORTS
-#ifndef _IRR_LINUX_PLATFORM_
+#if defined(_IRR_WINDOWS_API_)
     #ifdef CP3DR_LIB_EXPORTS
         #define CP3DR_LIB_API __declspec(dllexport)
     #else
         #define CP3DR_LIB_API __declspec(dllimport)
     #endif
+#elif defined(_IRR_OSX_PLATFORM_)
+	#define CP3DR_LIB_API __attribute__((visibility("default")))
 #else
-    #define CP3DR_LIB_API
+	#define CP3DR_LIB_API
 #endif
 
 namespace cp3d {

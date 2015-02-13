@@ -78,12 +78,14 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>CP3DR_COMPILE_ENGINE;WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\Irrlicht181\include;$(SolutionDir)include\;$(SolutionDir)CP3DEngine;%(AdditionalIncludeDirectories);$(KINECTSDK20_DIR)\inc</AdditionalIncludeDirectories>
       <OpenMPSupport>true</OpenMPSupport>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <SDLCheck>false</SDLCheck>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -99,12 +101,15 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
+      <Optimization>MaxSpeed</Optimization>
       <PreprocessorDefinitions>CP3DR_COMPILE_ENGINE;WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\Irrlicht181DX11\include;$(SolutionDir)include\;$(SolutionDir)CP3DEngine;%(AdditionalIncludeDirectories);$(KINECTSDK20_DIR)\inc</AdditionalIncludeDirectories>
       <OpenMPSupport>true</OpenMPSupport>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <SDLCheck>false</SDLCheck>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -124,6 +129,9 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
       <PrecompiledHeader>Use</PrecompiledHeader>
       <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\Irrlicht181\include;$(SolutionDir)include\;%(AdditionalIncludeDirectories);$(KINECTSDK20_DIR)\inc</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <SDLCheck>false</SDLCheck>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -165,6 +173,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClInclude Include="..\include\ICP3DHandler.h" />
     <ClInclude Include="..\include\ICP3DLightSceneNode.h" />
     <ClInclude Include="..\include\ICP3DMaterialCreator.h" />
+    <ClInclude Include="..\include\ICP3DMonitor.h" />
     <ClInclude Include="..\include\ICP3DRenderingEngine.h" />
     <ClInclude Include="..\include\ICP3DSceneNodeCreator.h" />
     <ClInclude Include="..\include\ICP3DTransformer.h" />
@@ -173,6 +182,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClInclude Include="Engine\Core\CCP3DCustomUpdater.h" />
     <ClInclude Include="Engine\Core\CCP3DEngineCore.h" />
     <ClInclude Include="Engine\Core\CCP3DEventReceiver.h" />
+    <ClInclude Include="Engine\Core\Plugins\CCP3DMonitorPlugin.h" />
     <ClInclude Include="Engine\Scene\CCP3DGeometryCreator.h" />
     <ClInclude Include="Engine\Scene\CCP3DSceneNodeCreator.h" />
     <ClInclude Include="Engine\Scene\Clouds\CCloudSceneNode.h" />
@@ -186,6 +196,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClCompile Include="Engine\Core\CCP3DCustomUpdater.cpp" />
     <ClCompile Include="Engine\Core\CCP3DEngineCore.cpp" />
     <ClCompile Include="Engine\Core\CCP3DEventReceiver.cpp" />
+    <ClCompile Include="Engine\Core\Plugins\CCP3DMonitorPlugin.cpp" />
     <ClCompile Include="Engine\Scene\CCP3DGeometryCreator.cpp" />
     <ClCompile Include="Engine\Scene\CCP3DSceneNodeCreator.cpp" />
     <ClCompile Include="Engine\Scene\Clouds\CCloudSceneNode.cpp" />

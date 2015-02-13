@@ -42,6 +42,9 @@
     <Filter Include="Engine\Scene\MeshSceneNodeInstances">
       <UniqueIdentifier>{585db4e8-c199-423f-ab07-97d9ead79111}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Core\Plugins">
+      <UniqueIdentifier>{af77522b-61b7-4a5e-a385-afae397bd337}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\CP3DCompileConfig.h">
@@ -155,6 +158,12 @@
     <ClInclude Include="..\include\ICP3DHandlerPostProcesses.h">
       <Filter>include\rendering</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\ICP3DMonitor.h">
+      <Filter>include\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\Plugins\CCP3DMonitorPlugin.h">
+      <Filter>Engine\Core\Plugins</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DEngine.cpp">
@@ -186,6 +195,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Scene\MeshSceneNodeInstances\CMeshSceneNodeInstances.cpp">
       <Filter>Engine\Scene\MeshSceneNodeInstances</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\Plugins\CCP3DMonitorPlugin.cpp">
+      <Filter>Engine\Core\Plugins</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

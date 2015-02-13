@@ -92,7 +92,7 @@ void CCP3DEditionToolPostProcess::OnPreUpdate() {
 		if (path == "")
 			continue;
 
-		time_t time;
+		time_t time = 0;
 		if (fs->existFile(path.c_str()))
 			time = getChangedTime(path);
 		else

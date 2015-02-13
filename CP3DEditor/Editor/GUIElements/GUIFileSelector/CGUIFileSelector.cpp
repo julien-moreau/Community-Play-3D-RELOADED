@@ -176,7 +176,7 @@ CGUIFileSelector::~CGUIFileSelector()
 		FileNameText->drop();
 
 	if (PathNameText)
-		FileNameText->drop();
+		PathNameText->drop();
 
 	if (FileSystem)
 		FileSystem->drop();

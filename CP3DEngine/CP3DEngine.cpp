@@ -30,6 +30,7 @@ CCP3DEngine::CCP3DEngine(irr::IrrlichtDevice *device) : Device(device)
 	/// Configure rendering
 	Rengine = createRenderingEngine(device);
 	Handler = Rengine->getHandler();
+	MonitorPlugin = new CCP3DMonitorPlugin(Rengine);
 	
 	Driver = Rengine->getVideoDriver();
 
@@ -57,39 +58,31 @@ void CCP3DEngine::runEngine() {
 		//if (!Device->isWindowActive())
 		//	continue;
 
-		#ifdef CP3DR_COMPILE_WITH_OPENMP
-		#pragma omp parallel sections
-		{
-		#pragma omp section
-		{
-		#endif
+		Driver->beginScene(true, true, SColor(0x0));
 
-			Driver->beginScene(true, true, SColor(0x0));
+		Updater->OnPreUpdate();
 
-			Updater->OnPreUpdate();
-
+		if (MonitorPlugin->getMonitorCount() == 0)
 			Handler->update();
+		else
+			MonitorPlugin->render();
 
-			for (u32 i = 0; i < CustomSceneManagers.size(); i++) {
-				#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
-				if (Driver->getDriverType() == EDT_DIRECT3D11)
-					Driver->clearZBuffer();
-				#endif
-				CustomSceneManagers[i]->drawAll();
-			}
-
-			Driver->setViewPort(rect<s32>(0, 0, Driver->getScreenSize().Width, Driver->getScreenSize().Height));
-			if (DrawGUI)
-				Gui->drawAll();
-
-			Updater->OnPostUpdate();
-
-			Device->getVideoDriver()->endScene();
-
-		#ifdef CP3DR_COMPILE_WITH_OPENMP
+		for (u32 i = 0; i < CustomSceneManagers.size(); i++) {
+			#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+			if (Driver->getDriverType() == EDT_DIRECT3D11)
+				Driver->clearZBuffer();
+			#endif
+			CustomSceneManagers[i]->drawAll();
 		}
-		}
-		#endif
+
+		Driver->setViewPort(rect<s32>(0, 0, Driver->getScreenSize().Width, Driver->getScreenSize().Height));
+		if (DrawGUI)
+			Gui->drawAll();
+
+		Updater->OnPostUpdate();
+
+		Device->getVideoDriver()->endScene();
+
 	}
 }
 

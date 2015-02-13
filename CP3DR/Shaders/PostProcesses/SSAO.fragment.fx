@@ -157,3 +157,5 @@ float4 pixelMain(VS_OUTPUT In) : COLOR0
 }
 
 #endif
+
+//http://www.babylonjs-playground.com/#Y7RCM#1
