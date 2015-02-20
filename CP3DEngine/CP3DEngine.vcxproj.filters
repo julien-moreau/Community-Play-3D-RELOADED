@@ -164,6 +164,9 @@
     <ClInclude Include="Engine\Core\Plugins\CCP3DMonitorPlugin.h">
       <Filter>Engine\Core\Plugins</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Core\Plugins\CCP3DPluginManager.h">
+      <Filter>Engine\Core\Plugins</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DEngine.cpp">
@@ -197,6 +200,9 @@
       <Filter>Engine\Scene\MeshSceneNodeInstances</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Core\Plugins\CCP3DMonitorPlugin.cpp">
+      <Filter>Engine\Core\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\Plugins\CCP3DPluginManager.cpp">
       <Filter>Engine\Core\Plugins</Filter>
     </ClCompile>
   </ItemGroup>

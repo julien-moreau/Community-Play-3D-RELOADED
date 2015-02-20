@@ -77,7 +77,7 @@ void CCP3DEngine::runEngine() {
 			CustomSceneManagers[i]->drawAll();
 		}
 
-		Driver->setViewPort(rect<s32>(0, 0, Driver->getScreenSize().Width, Driver->getScreenSize().Height));
+		//Driver->setViewPort(rect<s32>(0, 0, Driver->getScreenSize().Width, Driver->getScreenSize().Height));
 		if (DrawGUI)
 			Gui->drawAll();
 

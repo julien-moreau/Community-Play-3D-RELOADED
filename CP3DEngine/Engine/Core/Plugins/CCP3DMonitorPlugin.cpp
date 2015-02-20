@@ -29,8 +29,6 @@ bool CCP3DMonitorPlugin::addMonitor(stringc path) {
 	if (!hdll)
 		return false;
 
-	typedef ICP3DMonitor* (*createMonitor)(rendering::ICP3DRenderingEngine *rengine);
-
 	ICP3DMonitor *monitor = invokeCreateMonitor(hdll, "createMonitor");
 	if (monitor) {
 		Monitors.push_back({ hdll, monitor });
@@ -54,15 +52,15 @@ bool CCP3DMonitorPlugin::removeMonitor(stringc name) {
 }
 
 ICP3DMonitor *CCP3DMonitorPlugin::invokeCreateMonitor(MonitorLibraryType lib, stringc name) {
-	typedef ICP3DMonitor* (*createMonitor)(rendering::ICP3DRenderingEngine *rengine);
-	createMonitor cm = 0;
+	typedef ICP3DMonitor* (*createMonitorFunc)(rendering::ICP3DRenderingEngine *rengine);
+	createMonitorFunc cm;
 	
 	#if defined(_IRR_WINDOWS_API_)
-	cm = reinterpret_cast<createMonitor>(GetProcAddress(lib, name.c_str()));
+	cm = reinterpret_cast<createMonitorFunc>(GetProcAddress(lib, name.c_str()));
 	#endif
 
 	if (cm) {
-		ICP3DMonitor *monitor = (ICP3DMonitor *)createMonitor(Rengine);
+		ICP3DMonitor *monitor = static_cast<ICP3DMonitor *>(cm(Rengine));
 		return monitor;
 	}
 	

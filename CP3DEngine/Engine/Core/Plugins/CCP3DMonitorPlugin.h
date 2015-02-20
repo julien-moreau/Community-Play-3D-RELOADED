@@ -1,6 +1,7 @@
 #ifndef __H_C_CP3D_MONITOR_PLUGIN_INCLUDED__
 #define __H_C_CP3D_MONITOR_PLUGIN_INCLUDED__
 
+#include "CCP3DPluginManager.h"
 #include <ICP3DMonitor.h>
 
 #if defined(_IRR_WINDOWS_API_)

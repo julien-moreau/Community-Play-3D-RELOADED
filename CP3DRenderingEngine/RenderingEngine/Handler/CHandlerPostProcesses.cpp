@@ -119,7 +119,7 @@ void CCP3DHandler::setPostProcessingEffectConstant(const irr::s32 materialType, 
 
 const u32 CCP3DHandler::getPostProcessID(const irr::s32 &id) {
 	s32 matIndex = -1;
-	if (id >= 0 && id < PostProcessingRoutines.size())
+	if (id >= 0 && id < (s32)PostProcessingRoutines.size())
 		matIndex = id;
 
 	if (matIndex == -1) {
@@ -179,7 +179,7 @@ s32 CCP3DHandler::addPostProcessingEffectFromFile(const irr::core::stringc& file
 }
 
 s32 CCP3DHandler::replacePostProcessAtIndex(s32 index, const stringc &filename, IPostProcessingRenderCallback *callback) {
-	if (index < 0 || index >= PostProcessingRoutines.size())
+	if (index < 0 || index >= (s32)PostProcessingRoutines.size())
 		return -1;
 
 	IMaterialRenderer *mat = driver->getMaterialRenderer(PostProcessingRoutines[index].materialType);

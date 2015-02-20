@@ -13,9 +13,7 @@ public:
 
 	//! Constructor
 	ICP3DMonitor(rendering::ICP3DRenderingEngine *rengine) : Rengine(rengine), Enabled(true), Name("New Monitor")
-	{
-
-	}
+	{ }
 
 	//! Returns if the monitor is enabled
 	bool isEnabled() {

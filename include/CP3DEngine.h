@@ -7,4 +7,11 @@
 #include "ICP3DSceneNodeCreator.h"
 #include "ICP3DGeometryCreator.h"
 
+// Default monitor
+#if defined(_DEBUG)
+#define DEFAULT_MONITOR_PATH "CP3DDefaultMonitor_d.dll"
+#else
+#define DEFAULT_MONITOR_PATH "CP3DDefaultMonitor.dll"
+#endif
+
 #endif

@@ -2,6 +2,9 @@
 
 #include "CP3DDefaultMonitor.h"
 
+using namespace irr;
+using namespace core;
+
 namespace cp3d {
 namespace engine {
 
@@ -13,7 +16,7 @@ CCP3DDefaultMonitor::CCP3DDefaultMonitor(rendering::ICP3DRenderingEngine *rengin
 	: ICP3DMonitor(rengine)
 {
 	Handler = rengine->getHandler();
-	Name = "Default Monitor";
+	Name = stringc("Default Monitor");
 }
 
 CCP3DDefaultMonitor::~CCP3DDefaultMonitor() {

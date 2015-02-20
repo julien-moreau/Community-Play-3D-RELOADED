@@ -84,7 +84,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\Irrlicht181\include\;$(SolutionDir)include\;$(SolutionDir)CP3DEditor\;$(SolutionDir)Dependencies\OhmSDK\src\lib\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OpenMPSupport>true</OpenMPSupport>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <SDLCheck>false</SDLCheck>
+      <SDLCheck>true</SDLCheck>
       <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
@@ -127,7 +127,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
       <PrecompiledHeader>Use</PrecompiledHeader>
       <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\Irrlicht181\include\;$(SolutionDir)include\;$(SolutionDir)CP3DEditor\;$(SolutionDir)Dependencies\OhmSDK\src\lib\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <SDLCheck>false</SDLCheck>
+      <SDLCheck>true</SDLCheck>
       <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
