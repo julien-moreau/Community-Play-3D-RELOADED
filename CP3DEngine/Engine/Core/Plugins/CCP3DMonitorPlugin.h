@@ -1,19 +1,14 @@
 #ifndef __H_C_CP3D_MONITOR_PLUGIN_INCLUDED__
 #define __H_C_CP3D_MONITOR_PLUGIN_INCLUDED__
 
-#include "CCP3DPluginManager.h"
+#include <ICP3DPluginManager.h>
 #include <ICP3DMonitor.h>
-
-#if defined(_IRR_WINDOWS_API_)
-#include <Windows.h>
-typedef HINSTANCE MonitorLibraryType;
-#endif
 
 namespace cp3d {
 namespace engine {
 
 struct SCP3DMonitorPlugin {
-	MonitorLibraryType Hdll;
+	PluginLibraryType Hdll;
 	ICP3DMonitor *Monitor;
 };
 
@@ -34,11 +29,6 @@ public:
 	}
 
 private:
-	// Methods
-	int freeLibrary(MonitorLibraryType lib);
-	MonitorLibraryType loadLibrary(irr::core::stringw path);
-	ICP3DMonitor *invokeCreateMonitor(MonitorLibraryType lib, irr::core::stringc name);
-
 	// Rendering
 	rendering::ICP3DRenderingEngine *Rengine;
 

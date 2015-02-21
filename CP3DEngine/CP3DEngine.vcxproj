@@ -175,6 +175,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClInclude Include="..\include\ICP3DLightSceneNode.h" />
     <ClInclude Include="..\include\ICP3DMaterialCreator.h" />
     <ClInclude Include="..\include\ICP3DMonitor.h" />
+    <ClInclude Include="..\include\ICP3DPluginManager.h" />
     <ClInclude Include="..\include\ICP3DRenderingEngine.h" />
     <ClInclude Include="..\include\ICP3DSceneNodeCreator.h" />
     <ClInclude Include="..\include\ICP3DTransformer.h" />

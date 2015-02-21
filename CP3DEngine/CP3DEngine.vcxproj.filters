@@ -167,6 +167,9 @@
     <ClInclude Include="Engine\Core\Plugins\CCP3DPluginManager.h">
       <Filter>Engine\Core\Plugins</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\ICP3DPluginManager.h">
+      <Filter>include\engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DEngine.cpp">
