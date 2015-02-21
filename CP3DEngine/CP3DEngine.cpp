@@ -1,9 +1,4 @@
-// Il s'agit du fichier DLL principal.
-
-#include "stdafx.h"
-
-#define CP3DR_COMPILE_RENDERING_ENGINE
-#include <CP3DCompileConfig.h>
+#include "Stdafx.h"
 
 #include "CP3DEngine.h"
 #include "Engine/Core/CCP3DEventReceiver.h"
@@ -25,7 +20,7 @@ namespace cp3d {
 namespace cp3d {
 namespace engine {
 
-CCP3DEngine::CCP3DEngine(irr::IrrlichtDevice *device) : Device(device)
+CCP3DEngine::CCP3DEngine(irr::IrrlichtDevice *device) : Device(device), DrawGUI(false)
 {
 	/// Configure rendering
 	Rengine = createRenderingEngine(device);
@@ -57,8 +52,8 @@ CCP3DEngine::~CCP3DEngine() {
 
 void CCP3DEngine::runEngine() {
 	while (Device->run()) {
-		//if (!Device->isWindowActive())
-		//	continue;
+		if (!Device->isWindowActive())
+			continue;
 
 		Driver->beginScene(true, true, SColor(0x0));
 
@@ -77,7 +72,7 @@ void CCP3DEngine::runEngine() {
 			CustomSceneManagers[i]->drawAll();
 		}
 
-		//Driver->setViewPort(rect<s32>(0, 0, Driver->getScreenSize().Width, Driver->getScreenSize().Height));
+		Driver->setViewPort(rect<s32>(0, 0, Driver->getScreenSize().Width, Driver->getScreenSize().Height));
 		if (DrawGUI)
 			Gui->drawAll();
 

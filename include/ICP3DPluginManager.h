@@ -2,6 +2,7 @@
 #define _H_ICP3D_PLUGIN_MANAGER_INCLUDED__
 
 #include <irrlicht.h>
+#include <initializer_list>
 
 #if defined(_IRR_WINDOWS_API_)
 #include <Windows.h>
@@ -10,7 +11,15 @@ typedef HINSTANCE PluginLibraryType;
 typedef void* PluginLibraryType;
 #endif
 
-#include <utility>
+//! Structure that handle the process informations
+//! returns by the startProcess static method
+struct PluginProcessType {
+	bool started;
+
+	#if defined(_IRR_WINDOWS_API_)
+	PROCESS_INFORMATION processInformation;
+	#endif
+};
 
 namespace cp3d {
 namespace engine {
@@ -54,7 +63,6 @@ public:
 	//! \param lib: the library instance (see loadLibrary)
 	//! \param name: the function name
 	//! \param params: the parameters used during the call
-	//! \param 
 	template<typename T, typename... Args>
 	static T callFunction(PluginLibraryType lib, irr::core::stringc name, Args... params) {
 		typedef T (*functionDef)(Args...);
@@ -63,7 +71,7 @@ public:
 		#if defined(_IRR_WINDOWS_API_)
 		fd = reinterpret_cast<functionDef>(GetProcAddress(lib, name.c_str()));
 		#else
-		fd = reinterpret_cast <functionDef> (dlsym(hdll, name.c_str()));
+		fd = reinterpret_cast<functionDef>(dlsym(hdll, name.c_str()));
 		#endif
 
 		if (fd) {
@@ -72,6 +80,74 @@ public:
 		}
 
 		return 0;
+	}
+
+	//! Closes a given process
+	//! \param process: the process structure returned by startProcess()
+	static int closeProcess(PluginProcessType process) {
+		if (!process.started)
+			return 0;
+
+		#if defined(_IRR_WINDOWS_API_)
+		int hProcessResult = CloseHandle(process.processInformation.hProcess);
+		int hThreadresult = CloseHandle(process.processInformation.hThread);
+
+		return !(hProcessResult == 0 || hThreadresult == 0);
+		#endif
+	}
+
+	//! Starts a new process
+	//! \param path: the path to the process (.exe, etc.)
+	//! \param wait: if the current application should wait until the new process has finished
+	//! \param arguments: the arguments to send to the new process
+	/*
+	Example:
+		var process = ICP3DPluginManager::startProcess("app.exe", true, { "game.map", "0" });
+	*/
+	static PluginProcessType startProcess(const irr::core::stringw path, const bool wait, std::initializer_list<irr::core::stringw> arguments = { }) {
+		using namespace irr::core;
+
+		// Get arguments list
+		stringw args = arguments.size() ? path + " " : "";
+		for (stringw argument : arguments)
+			args += argument + " ";
+
+		// Begin process...
+		PluginProcessType process;
+
+		#if defined(_IRR_WINDOWS_API_)
+
+		STARTUPINFO startUpInfo;
+		ZeroMemory(&startUpInfo, sizeof(startUpInfo));
+		startUpInfo.cb = sizeof(startUpInfo);
+		ZeroMemory(&process.processInformation, sizeof(process.processInformation));
+
+		int result = CreateProcess(
+			path.c_str(), // Module name: path to the .exe
+			NULL, // Arguments (args.c_str())
+			NULL, // Process handle inheritable
+			NULL, // Thread handle inheritable
+			NULL, // Handle inheritance
+			NULL, // Creation flags
+			NULL, // Parent's starting block 
+			NULL, // Parent's starting directory 
+			&startUpInfo,
+			&process.processInformation
+		);
+
+		if (!result)
+			process.started = false;
+		else {
+			process.started = true;
+			if (wait) {
+				WaitForSingleObject(process.processInformation.hProcess, INFINITE);
+				closeProcess(process);
+			}
+		}
+
+		#endif
+
+		return process;
 	}
 
 };

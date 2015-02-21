@@ -1,10 +1,7 @@
 
-#include "stdafx.h"
+#include "Stdafx.h"
 
 #define CP3DR_PROJECT_NAME "Community Play 3D Editor"
-#define CP3DR_COMPILE_ENGINE
-#define CP3DR_COMPILE_COLLABORATIVE
-#include <CP3DCompileConfig.h>
 
 #include "CCP3DEditorCore.h"
 #include "CCP3DInterfaceController.h"
@@ -38,6 +35,7 @@ CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), 
 
 	/// Configure engine
 	Engine = cp3d::createEngine(device);
+	Engine->setDrawGUI(true);
 	Engine->getCustomUpdater()->addCustomUpdate(this);
 
 	/// Configure rendering engine
@@ -294,6 +292,7 @@ void CCP3DEditorCore::createTestScene() {
 
 	Handler->getDepthPassManager()->addNodeToPass(planeNode);
 	Handler->getDepthPassManager()->addNodeToPass(cubeNode);
+
 }
 
 } /// End namespace cp3d

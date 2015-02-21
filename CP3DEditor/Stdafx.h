@@ -5,3 +5,8 @@
 #pragma once
 
 #include <irrlicht.h>
+
+#define CP3DR_COMPILE_ENGINE
+#define CP3DR_COMPILE_COLLABORATIVE
+#include <CP3DRenderingEngine.h>
+#include <CP3DEngine.h>

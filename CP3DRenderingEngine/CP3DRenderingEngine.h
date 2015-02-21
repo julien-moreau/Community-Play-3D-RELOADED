@@ -1,5 +1,3 @@
-// CP3DRenderingEngine.h
-
 #ifndef __H_CP3D_RENDERING_ENGINE_INCLUDED__
 #define __H_CP3D_RENDERING_ENGINE_INCLUDED__
 

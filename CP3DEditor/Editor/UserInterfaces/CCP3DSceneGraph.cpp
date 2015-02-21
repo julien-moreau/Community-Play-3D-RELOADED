@@ -45,7 +45,7 @@ CCP3DSceneGraph::CCP3DSceneGraph(CCP3DEditorCore *editorCore) : EditorCore(edito
 
 	/// Finish
 	SControlDescriptor descriptor(EICC_LEFT);
-	descriptor.MaxWidth = std::numeric_limits<s32>::max();
+	descriptor.MaxWidth = INT_MAX;
 	descriptor.MinWidth = 200;
 	editorCore->getInterfaceController()->addElement(this, descriptor);
 

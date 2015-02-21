@@ -26,7 +26,7 @@ public:
 		if (maxSize == 0)
 			MaxHeight = MaxWidth = minSize + 200;
 		else if (maxSize == -1)
-			MaxHeight = MaxWidth = std::numeric_limits<int>::max();
+			MaxHeight = MaxWidth = INT_MAX;
 	}
 
 	irr::s32 Flags;

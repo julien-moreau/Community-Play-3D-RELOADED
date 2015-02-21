@@ -44,7 +44,7 @@ CCP3DEditionTool::CCP3DEditionTool(CCP3DEditorCore *editorCore) : EditorCore(edi
 	/// Configure UI
 	SControlDescriptor descriptor(EICC_RIGHT);
 	descriptor.MinWidth = 200;
-	descriptor.MaxWidth = std::numeric_limits<s32>::max();
+	descriptor.MaxWidth = INT_MAX;
 	editorCore->getInterfaceController()->addElement(this, descriptor);
 
 	/// Finish

@@ -57,6 +57,14 @@ public:
 	//! \param smgr: the scene manager to remove
 	virtual void removeSceneManager(irr::scene::ISceneManager *smgr) = 0;
 
+	//! Returns if the engine draws the GUI
+	//! return: true if the engine draws the GUI
+	virtual const bool isDrawingGUI() const = 0;
+
+	//! Sets if the engine should draw the GUI
+	//! \param draw: true if the engine should draw the GUI
+	virtual void setDrawGUI(const bool draw) = 0;
+
 };
 
 } /// End engine namespace

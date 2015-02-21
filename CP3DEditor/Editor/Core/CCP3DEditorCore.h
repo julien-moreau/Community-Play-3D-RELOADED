@@ -4,8 +4,6 @@
 #include <irrlicht.h>
 #include <ICP3DEditor.h>
 #include <ICP3DFileSelector.h>
-#include <CP3DRenderingEngine.h>
-#include <CP3DEngine.h>
 
 namespace cp3d {
 

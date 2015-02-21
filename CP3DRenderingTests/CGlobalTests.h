@@ -2,6 +2,7 @@
 
 /// CP3D
 #define CP3DR_COMPILE_RENDERING_ENGINE // tell the compiler that we use the rendering engine
+#include <CP3DCompileConfig.h>
 #include <CP3DRenderingEngine.h>
 
 #define SHADOW_MAP_RESOL 1024
@@ -245,10 +246,6 @@ void GlobalTest(irr::IrrlichtDevice *device) {
 
 	IGUIImage *img = gui->addImage(rect<s32>(driver->getScreenSize().Width - 512, 0, driver->getScreenSize().Width, 512));
 	img->setScaleImage(true);
-
-	ITexture *tex = handler->generateRandomVectorTexture(dimension2du(512, 512), "randVec");
-	IImage *randImg = driver->createImage(tex, vector2di(0, 0), dimension2du(512, 512));
-	driver->writeImageToFile(randImg, "test.jpg");
 
 	/// Update the application
 	while (device->run()) {

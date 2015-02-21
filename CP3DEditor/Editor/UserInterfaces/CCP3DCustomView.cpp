@@ -24,7 +24,7 @@ CCP3DCustomView::CCP3DCustomView(CCP3DEditorCore *editorCore) : EditorCore(edito
 	editorCore->getEngine()->getEventReceiver()->addEventReceiver(this);
 	SControlDescriptor descriptor(EICC_TOP);
 	descriptor.MinHeight = CCP3DCustomViewMinHeight;
-	descriptor.MaxHeight = std::numeric_limits<irr::s32>::max();
+	descriptor.MaxHeight = INT_MAX;
 	editorCore->getInterfaceController()->addElement(this, descriptor);
 
 	Gui = editorCore->getRenderingEngine()->getGUIEnvironment();
