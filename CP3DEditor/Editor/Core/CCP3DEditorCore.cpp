@@ -292,7 +292,6 @@ void CCP3DEditorCore::createTestScene() {
 
 	Handler->getDepthPassManager()->addNodeToPass(planeNode);
 	Handler->getDepthPassManager()->addNodeToPass(cubeNode);
-
 }
 
 } /// End namespace cp3d

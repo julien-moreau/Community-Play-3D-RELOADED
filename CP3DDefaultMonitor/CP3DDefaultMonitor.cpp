@@ -2,6 +2,8 @@
 
 #include "CP3DDefaultMonitor.h"
 
+#include <Windows.h>
+
 using namespace irr;
 using namespace core;
 

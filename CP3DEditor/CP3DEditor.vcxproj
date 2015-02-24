@@ -166,6 +166,8 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolSceneNode.h" />
     <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolTextSceneNode.h" />
     <ClInclude Include="Editor\UserInterfaces\EditionTools\SceneNodeEditionTools\CCP3DSceneNodeAnimators.h" />
+    <ClInclude Include="Editor\UserInterfaces\Tools\AddMesh\AddMeshUI.h" />
+    <ClInclude Include="Editor\UserInterfaces\Tools\AddMesh\CUIAddMesh.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stdafx.h" />
   </ItemGroup>
@@ -191,6 +193,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolSceneNode.cpp" />
     <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolTextSceneNode.cpp" />
     <ClCompile Include="Editor\UserInterfaces\EditionTools\SceneNodeEditionTools\CCP3DSceneNodeAnimators.cpp" />
+    <ClCompile Include="Editor\UserInterfaces\Tools\AddMesh\CUIAddMesh.cpp" />
     <ClCompile Include="Stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">Create</PrecompiledHeader>

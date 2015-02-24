@@ -36,6 +36,12 @@
     <Filter Include="Editor\GUIElements\GUIColorDialog">
       <UniqueIdentifier>{0f506ea2-196e-43a4-9b57-137381fc24de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\UserInterfaces\Tools">
+      <UniqueIdentifier>{be5e593e-e847-418c-a076-d015f89b0848}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\UserInterfaces\Tools\AddMesh">
+      <UniqueIdentifier>{a954b8f1-4c3a-49cd-8493-2f287cb1aaac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Stdafx.h">
@@ -100,6 +106,12 @@
     </ClInclude>
     <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolPostProcess.h">
       <Filter>Editor\UserInterfaces\EditionTools</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\UserInterfaces\Tools\AddMesh\CUIAddMesh.h">
+      <Filter>Editor\UserInterfaces\Tools\AddMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\UserInterfaces\Tools\AddMesh\AddMeshUI.h">
+      <Filter>Editor\UserInterfaces\Tools\AddMesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +180,9 @@
     </ClCompile>
     <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolPostProcess.cpp">
       <Filter>Editor\UserInterfaces\EditionTools</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\UserInterfaces\Tools\AddMesh\CUIAddMesh.cpp">
+      <Filter>Editor\UserInterfaces\Tools\AddMesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

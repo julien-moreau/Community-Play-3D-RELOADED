@@ -2,7 +2,6 @@
 #define _H_ICP3D_PLUGIN_MANAGER_INCLUDED__
 
 #include <irrlicht.h>
-#include <initializer_list>
 
 #if defined(_IRR_WINDOWS_API_)
 #include <Windows.h>
@@ -102,16 +101,9 @@ public:
 	//! \param arguments: the arguments to send to the new process
 	/*
 	Example:
-		var process = ICP3DPluginManager::startProcess("app.exe", true, { "game.map", "0" });
+		var process = ICP3DPluginManager::startProcess("app.exe", true, "game.map 0 text.txt" );
 	*/
-	static PluginProcessType startProcess(const irr::core::stringw path, const bool wait, std::initializer_list<irr::core::stringw> arguments = { }) {
-		using namespace irr::core;
-
-		// Get arguments list
-		stringw args = arguments.size() ? path + " " : "";
-		for (stringw argument : arguments)
-			args += argument + " ";
-
+	static PluginProcessType startProcess(const irr::core::stringw path, const bool wait, irr::core::stringw arguments) {
 		// Begin process...
 		PluginProcessType process;
 
@@ -122,13 +114,18 @@ public:
 		startUpInfo.cb = sizeof(startUpInfo);
 		ZeroMemory(&process.processInformation, sizeof(process.processInformation));
 
+		DWORD flags = NULL;
+		#ifdef _DEBUG
+		flags = DEBUG_PROCESS;
+		#endif
+
 		int result = CreateProcess(
 			path.c_str(), // Module name: path to the .exe
-			NULL, // Arguments (args.c_str())
+			(wchar_t *)arguments.c_str(), // Arguments
 			NULL, // Process handle inheritable
 			NULL, // Thread handle inheritable
 			NULL, // Handle inheritance
-			NULL, // Creation flags
+			flags, // Creation flags
 			NULL, // Parent's starting block 
 			NULL, // Parent's starting directory 
 			&startUpInfo,
