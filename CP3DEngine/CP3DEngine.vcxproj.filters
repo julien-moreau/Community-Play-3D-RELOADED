@@ -176,6 +176,9 @@
     <ClInclude Include="..\include\ICP3DUIRegister.h">
       <Filter>include\editor\ui</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\ICP3DSpy.h">
+      <Filter>include\editor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DEngine.cpp">

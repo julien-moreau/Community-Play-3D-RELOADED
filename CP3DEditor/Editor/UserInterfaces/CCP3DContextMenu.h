@@ -47,6 +47,7 @@ private:
 	irr::gui::IGUIContextMenu *EditContextMenu;
 	irr::gui::IGUIContextMenu *ViewContextMenu;
 	irr::gui::IGUIContextMenu *SceneContextMenu;
+	irr::gui::IGUIContextMenu *SpiesContextMenu;
 
 	/// File
 	irr::gui::IGUIContextMenu *FileContextMenuNew;

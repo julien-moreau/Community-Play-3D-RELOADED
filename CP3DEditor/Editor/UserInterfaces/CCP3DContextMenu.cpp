@@ -27,6 +27,7 @@ CCP3DContextMenu::CCP3DContextMenu(CCP3DEditorCore *editorCore) : EditorCore(edi
 	EditContextMenu = ContextMenu->getSubMenu(ContextMenu->addItem(L"Edit", -1, true, true));
 	ViewContextMenu = ContextMenu->getSubMenu(ContextMenu->addItem(L"View", -1, true, true));
 	SceneContextMenu = ContextMenu->getSubMenu(ContextMenu->addItem(L"Scene", -1, true, true));
+	SpiesContextMenu = ContextMenu->getSubMenu(ContextMenu->addItem(L"Spies", -1, true, true));
 
 	/// --------------------------------------------------
 	/// Fill "file"
@@ -106,6 +107,18 @@ CCP3DContextMenu::CCP3DContextMenu(CCP3DEditorCore *editorCore) : EditorCore(edi
 	/// Fille "scene->add light"
 	SceneContextMenuLight->addItem(L"Shadow light... (TO DO)", -1);
 	SceneContextMenuLight->addItem(L"Standard light... (TO DO)", -1);
+	/// --------------------------------------------------
+
+	/// --------------------------------------------------
+	/// Fill Spies
+	SpiesContextMenu->addItem(L"Post-Processes (TO DO)", -1, true, false, false, true);
+	SpiesContextMenu->addItem(L"Scene meshes (TO DO)", -1, true, false, false, true);
+	SpiesContextMenu->addItem(L"Textures (TO DO)", -1, true, false, false, true);
+	SpiesContextMenu->addItem(L"Monitors (TO DO)", -1, true, false, false, true);
+	SpiesContextMenu->addItem(L"Plugins (TO DO)", -1, true, false, false, true);
+	SpiesContextMenu->addItem(L"Application's development instance (TO DO)", -1, true, false, false, true);
+	SpiesContextMenu->addSeparator();
+	SpiesContextMenu->addItem(L"Spies preferences...", -1);
 	/// --------------------------------------------------
 
 }
