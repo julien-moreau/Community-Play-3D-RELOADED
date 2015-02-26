@@ -117,17 +117,25 @@ void CCP3DHandler::setPostProcessingEffectConstant(const irr::s32 materialType, 
 		PostProcessingRoutines[matIndex].callback->uniformDescriptors[name] = ScreenQuadCB::SUniformDescriptor(data, count);
 }
 
-const u32 CCP3DHandler::getPostProcessID(const irr::s32 &id) {
+const s32 CCP3DHandler::getPostProcessID(const s32 &id) {
 	s32 matIndex = -1;
 	if (id >= 0 && id < (s32)PostProcessingRoutines.size())
 		matIndex = id;
 
 	if (matIndex == -1) {
 		SPostProcessingPair tempPair(id, 0);
-		s32 matIndex = PostProcessingRoutines.binary_search(tempPair);
+		matIndex = PostProcessingRoutines.binary_search(tempPair);
 	}
 
 	return matIndex;
+}
+const s32 CCP3DHandler::getPostProcessIDByName(const stringc &name) {
+	for (u32 i = 0; i < PostProcessingRoutines.size(); i++) {
+		if (PostProcessingRoutines[i].path == name)
+			return i;
+	}
+
+	return -1;
 }
 void CCP3DHandler::setPostProcessActivated(const s32 &id, const bool activated) {
 	s32 matIndex = getPostProcessID(id);

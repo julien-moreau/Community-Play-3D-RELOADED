@@ -42,6 +42,9 @@
     <Filter Include="Editor\UserInterfaces\Tools\AddMesh">
       <UniqueIdentifier>{a954b8f1-4c3a-49cd-8493-2f287cb1aaac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\Spies">
+      <UniqueIdentifier>{b7f898bc-20b7-40f0-bd35-8b2f50cd31ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Stdafx.h">
@@ -113,6 +116,12 @@
     <ClInclude Include="Editor\UserInterfaces\Tools\AddMesh\AddMeshUI.h">
       <Filter>Editor\UserInterfaces\Tools\AddMesh</Filter>
     </ClInclude>
+    <ClInclude Include="Editor\Spies\CCP3DPostProcessSpy.h">
+      <Filter>Editor\Spies</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\Spies\CCP3DSpiesManager.h">
+      <Filter>Editor\Spies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DEditor.cpp">
@@ -183,6 +192,12 @@
     </ClCompile>
     <ClCompile Include="Editor\UserInterfaces\Tools\AddMesh\CUIAddMesh.cpp">
       <Filter>Editor\UserInterfaces\Tools\AddMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\Spies\CCP3DPostProcessSpy.cpp">
+      <Filter>Editor\Spies</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\Spies\CCP3DSpiesManager.cpp">
+      <Filter>Editor\Spies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

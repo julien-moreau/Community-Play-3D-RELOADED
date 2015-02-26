@@ -10,6 +10,9 @@ typedef HINSTANCE PluginLibraryType;
 typedef void* PluginLibraryType;
 #endif
 
+namespace cp3d {
+namespace engine {
+
 //! Structure that handle the process informations
 //! returns by the startProcess static method
 struct PluginProcessType {
@@ -19,9 +22,6 @@ struct PluginProcessType {
 	PROCESS_INFORMATION processInformation;
 	#endif
 };
-
-namespace cp3d {
-namespace engine {
 
 class ICP3DPluginManager {
 public:

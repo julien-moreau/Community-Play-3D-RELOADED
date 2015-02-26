@@ -52,25 +52,29 @@ CCP3DEngine::~CCP3DEngine() {
 
 void CCP3DEngine::runEngine() {
 	while (Device->run()) {
-		if (!Device->isWindowActive())
-			continue;
 
 		Driver->beginScene(true, true, SColor(0x0));
 
 		Updater->OnPreUpdate();
 
-		if (MonitorPlugin->getMonitorCount() == 0)
-			Handler->update();
-		else
-			MonitorPlugin->render();
+		//if (!Device->isWindowActive()) {
+		//	Driver->setViewPort(Handler->getViewPort());
+		//	Handler->getScreenQuadPtr()->render(Driver);
+		//}
+		//else {
+			if (MonitorPlugin->getMonitorCount() == 0)
+				Handler->update();
+			else
+				MonitorPlugin->render();
 
-		for (u32 i = 0; i < CustomSceneManagers.size(); i++) {
-			#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
-			if (Driver->getDriverType() == EDT_DIRECT3D11)
-				Driver->clearZBuffer();
-			#endif
-			CustomSceneManagers[i]->drawAll();
-		}
+			for (u32 i = 0; i < CustomSceneManagers.size(); i++) {
+				#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+				if (Driver->getDriverType() == EDT_DIRECT3D11)
+					Driver->clearZBuffer();
+				#endif
+				CustomSceneManagers[i]->drawAll();
+			}
+		//}
 
 		Driver->setViewPort(rect<s32>(0, 0, Driver->getScreenSize().Width, Driver->getScreenSize().Height));
 		if (DrawGUI)

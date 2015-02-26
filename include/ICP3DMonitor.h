@@ -3,6 +3,7 @@
 
 #include <irrlicht.h>
 #include "CP3DCompileConfig.h"
+#include "ICP3DPluginManager.h"
 #include "ICP3DRenderingEngine.h"
 
 namespace cp3d {
@@ -45,6 +46,11 @@ protected:
 };
 
 extern "C" CP3DR_LIB_API ICP3DMonitor *createMonitor(rendering::ICP3DRenderingEngine *rengine);
+
+#define REGISTER_MONITOR(ClassName) \
+	ICP3DMonitor *createMonitor(rendering::ICP3DRenderingEngine *rengine) { \
+		return new ClassName(rengine); \
+	} \
 
 } /// End namespace engine
 } /// End namespace cp3d

@@ -15,6 +15,7 @@ class CCP3DSceneGraph;
 class CCP3DInterfaceController;
 class CCP3DCustomView;
 class CCP3DEditorTransformer;
+class CCP3DSpiesManager;
 
 namespace collaborative {
 	class ICP3DCollaborativeEngine;
@@ -83,6 +84,8 @@ private:
 	CCP3DEditionTool *EditionTool;
 	CCP3DSceneGraph *SceneGraph;
 	CCP3DCustomView *CustomView;
+
+	CCP3DSpiesManager *SpiesManager;
 
 	irr::core::stringc ProjectName, ProjectDirectory;
 	irr::core::stringc WorkingDirectory;

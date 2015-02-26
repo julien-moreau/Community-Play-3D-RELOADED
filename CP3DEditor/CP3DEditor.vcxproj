@@ -153,6 +153,8 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClInclude Include="Editor\GUIElements\GUIColorDialog\CGUIColorDialog.h" />
     <ClInclude Include="Editor\GUIElements\GUIFileSelector\CGUIFileSelector.h" />
     <ClInclude Include="Editor\GUIElements\GUIPanel\CGUIPanel.h" />
+    <ClInclude Include="Editor\Spies\CCP3DPostProcessSpy.h" />
+    <ClInclude Include="Editor\Spies\CCP3DSpiesManager.h" />
     <ClInclude Include="Editor\UserInterfaces\CCP3DContextMenu.h" />
     <ClInclude Include="Editor\UserInterfaces\CCP3DCustomView.h" />
     <ClInclude Include="Editor\UserInterfaces\CCP3DEditionTool.h" />
@@ -180,6 +182,8 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClCompile Include="Editor\GUIElements\GUIColorDialog\CGUIColorDialog.cpp" />
     <ClCompile Include="Editor\GUIElements\GUIFileSelector\CGUIFileSelector.cpp" />
     <ClCompile Include="Editor\GUIElements\GUIPanel\CGUIPanel.cpp" />
+    <ClCompile Include="Editor\Spies\CCP3DPostProcessSpy.cpp" />
+    <ClCompile Include="Editor\Spies\CCP3DSpiesManager.cpp" />
     <ClCompile Include="Editor\UserInterfaces\CCP3DContextMenu.cpp" />
     <ClCompile Include="Editor\UserInterfaces\CCP3DCustomView.cpp" />
     <ClCompile Include="Editor\UserInterfaces\CCP3DEditionTool.cpp" />

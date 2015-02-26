@@ -120,7 +120,12 @@ public:
 
 	//! Returns the post-process id
 	//! \param id: can be the post-process material id in MaterialRenderers, or the direct ID [0, x];
-	virtual const irr::u32 getPostProcessID(const irr::s32 &id) = 0;
+	virtual const irr::s32 getPostProcessID(const irr::s32 &id) = 0;
+
+	//! Returns the post-process id by its name
+	//! \param name: the name of the post-process (path)
+	//! \return: the post-process id
+	virtual const irr::s32 getPostProcessIDByName(const irr::core::stringc &name) = 0;
 
 	//! Sets if the the given post-process is activated or not
 	//! \param id: the material type id to activate or deactivate

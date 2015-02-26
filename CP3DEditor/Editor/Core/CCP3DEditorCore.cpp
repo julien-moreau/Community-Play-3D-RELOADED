@@ -6,12 +6,17 @@
 #include "CCP3DEditorCore.h"
 #include "CCP3DInterfaceController.h"
 #include "CCP3DEditorTransformer.h"
+
 #include "../UserInterfaces/CCP3DContextMenu.h"
 #include "../UserInterfaces/CCP3DMainToolbar.h"
 #include "../UserInterfaces/CCP3DToolsToolbar.h"
 #include "../UserInterfaces/CCP3DEditionTool.h"
 #include "../UserInterfaces/CCP3DSceneGraph.h"
 #include "../UserInterfaces/CCP3DCustomView.h"
+
+#include "../Spies/CCP3DSpiesManager.h"
+#include "../Spies/CCP3DPostProcessSpy.h"
+
 #include "../GUIElements/GUIFileSelector/CGUIFileSelector.h"
 
 using namespace irr;
@@ -65,6 +70,9 @@ CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), 
 	(EditionTool = new CCP3DEditionTool(this))->createDefaultControllers();
 	SceneGraph = new CCP3DSceneGraph(this);
 	CustomView = new CCP3DCustomView(this);
+
+	/// Spies
+	SpiesManager = new CCP3DSpiesManager(this);
 
 	/// Create transformers
 	EditorTransformer = new CCP3DEditorTransformer(this);
@@ -292,6 +300,8 @@ void CCP3DEditorCore::createTestScene() {
 
 	Handler->getDepthPassManager()->addNodeToPass(planeNode);
 	Handler->getDepthPassManager()->addNodeToPass(cubeNode);
+
+	SpiesManager->addSpy(new CCP3DPostProcessSpy(this));
 }
 
 } /// End namespace cp3d

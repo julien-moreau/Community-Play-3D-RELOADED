@@ -1,8 +1,7 @@
 #include "stdafx.h"
-
 #include "CP3DDefaultMonitor.h"
 
-#include <Windows.h>
+#include <ICP3DPluginManager.h>
 
 using namespace irr;
 using namespace core;
@@ -10,10 +9,7 @@ using namespace core;
 namespace cp3d {
 namespace engine {
 
-ICP3DMonitor *createMonitor(rendering::ICP3DRenderingEngine *rengine) {
-	return new CCP3DDefaultMonitor(rengine);
-}
-
+REGISTER_MONITOR(CCP3DDefaultMonitor)
 CCP3DDefaultMonitor::CCP3DDefaultMonitor(rendering::ICP3DRenderingEngine *rengine)
 	: ICP3DMonitor(rengine)
 {

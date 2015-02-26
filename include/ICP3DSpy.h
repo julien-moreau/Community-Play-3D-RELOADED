@@ -8,18 +8,25 @@
 
 namespace cp3d {
 
+typedef irr::core::list<irr::core::stringc> ISpyFileList;
+
 //! 
 class ICP3DSpy {
 public:
 
-	ICP3DSpy(irr::io::IFileSystem *fileSystem, irr::core::stringc workingDirectory) {
-		FileSystem = fileSystem;
-		WorkingDirectory = workingDirectory;
-	}
+	ICP3DSpy(irr::io::IFileSystem *fileSystem, irr::core::stringc workingDirectory, irr::core::stringc name)
+		: FileSystem(fileSystem), WorkingDirectory(workingDirectory), Name(name), Interval(1500), FilesCount(0)
+	{ }
 
 	//! Prepares the spy
-	virtual void prepare()
-	{ }
+	virtual void prepare() {
+		ISpyFileList::ConstIterator it = Files.begin();
+
+		for (; it != Files.end(); ++it) {
+			if (!Changes.find(*it))
+				Changes[*it] = 0;
+		}
+	}
 
 	//! Check the changed files by the user
 	/*
@@ -34,8 +41,13 @@ public:
 	*/
 	virtual void check() = 0;
 
+	//! Returns the spy's name
+	virtual irr::core::stringc getName() {
+		return Name;
+	}
+
 	//! Checks the given files
-	ISpyFileList &checkFiles(ISpyFileList &files) {
+	ISpyFileList checkFiles(ISpyFileList &files) {
 		irr::core::list<irr::core::stringc> f;
 
 		// For each file, verify if it exists and if changed time changed
@@ -44,10 +56,17 @@ public:
 			if (!FileSystem->existFile(*it) && !FileSystem->existFile(WorkingDirectory + *it))
 				continue;
 
-			time_t time = getChangedTime(*it);
+			time_t time = 0;
+
+			if (FileSystem->existFile(*it))
+				time = getChangedTime(*it);
+			else if (FileSystem->existFile(WorkingDirectory + *it))
+				time = getChangedTime(WorkingDirectory + *it);
+			else
+				continue;
 
 			// If changed, add to the list and update dictionary
-			if (Changes[*it] != time) {
+			if (Changes[*it] != time && time >= 0) {
 				f.push_back(*it);
 				Changes[*it] = time;
 			}
@@ -70,9 +89,12 @@ public:
 protected:
 	//! Members
 	irr::u32 Interval;
+	irr::u32 FilesCount;
 
+	ISpyFileList Files;
 	irr::io::IFileSystem *FileSystem;
 	irr::core::stringc WorkingDirectory;
+	irr::core::stringc Name;
 
 	//! Returns the changed time of the given file
 	//! \param filename: the file name on the file system
@@ -91,8 +113,6 @@ private:
 	irr::core::map<irr::core::stringc, time_t> Changes;
 
 };
-
-typedef irr::core::list<irr::core::stringc> ISpyFileList;
 
 } /// End cp3d namespace
 

@@ -96,7 +96,8 @@ public:
 	void setPostProcessingTextureAtIndex(const irr::u32 &index, irr::video::ITexture *texture) {
 		ScreenQuad.getMaterial().setTexture(index, texture);
 	}
-	const irr::u32 getPostProcessID(const irr::s32 &id);
+	const irr::s32 getPostProcessID(const irr::s32 &id);
+	const irr::s32 getPostProcessIDByName(const irr::core::stringc &name);
 	void setPostProcessActivated(const irr::s32 &id, const bool activated);
 	bool isPostProcessActivated(const irr::s32 &id);
 	const irr::u32 getPostProcessingRoutineSize() const {
