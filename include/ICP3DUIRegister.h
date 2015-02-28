@@ -2,6 +2,9 @@
 #define _H_ICP3D_UI_REGISTER_INCLUDED__
 
 namespace cp3d {
+
+class ICP3DEditor;
+
 namespace ui {
 
 #define REGISTER_UI(ClassName, InstanceName) \
@@ -11,13 +14,8 @@ namespace ui {
 		protected: \
 			ClassName *InstanceName; \
 			\
-			void CreateUI(CCP3DEditorCore *editorCore) { \
+			void CreateUI(ICP3DEditor *editorCore) { \
 				InstanceName = new ClassName(editorCore); \
-			} \
-			\
-			void RemoveUI() { \
-				InstanceName->remove(); \
-				delete InstanceName; \
 			} \
 	}; \
 

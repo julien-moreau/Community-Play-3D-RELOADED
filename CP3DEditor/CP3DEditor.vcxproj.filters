@@ -45,6 +45,9 @@
     <Filter Include="Editor\Spies">
       <UniqueIdentifier>{b7f898bc-20b7-40f0-bd35-8b2f50cd31ae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\GUIElements\GUIViewPort">
+      <UniqueIdentifier>{5d59d68f-068a-4456-8e0e-e2a5839d950c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Stdafx.h">
@@ -122,6 +125,12 @@
     <ClInclude Include="Editor\Spies\CCP3DSpiesManager.h">
       <Filter>Editor\Spies</Filter>
     </ClInclude>
+    <ClInclude Include="Editor\GUIElements\GUIViewPort\CGUIViewPort.h">
+      <Filter>Editor\GUIElements\GUIViewPort</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\GUIElements\CGUIManager.h">
+      <Filter>Editor\GUIElements</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DEditor.cpp">
@@ -198,6 +207,12 @@
     </ClCompile>
     <ClCompile Include="Editor\Spies\CCP3DSpiesManager.cpp">
       <Filter>Editor\Spies</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\GUIElements\GUIViewPort\CGUIViewPort.cpp">
+      <Filter>Editor\GUIElements\GUIViewPort</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\GUIElements\CGUIManager.cpp">
+      <Filter>Editor\GUIElements</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -6,6 +6,9 @@
 #include "CCP3DEditionTool.h"
 #include <ICP3DEditionTool.h>
 
+// Scene
+#include "Tools/AddMesh/CUIAddMesh.h"
+
 using namespace irr;
 using namespace scene;
 using namespace video;
@@ -14,7 +17,7 @@ using namespace gui;
 
 namespace cp3d {
 
-CCP3DContextMenu::CCP3DContextMenu(CCP3DEditorCore *editorCore) : EditorCore(editorCore), AddStaticMeshOpenDialog(0)
+CCP3DContextMenu::CCP3DContextMenu(CCP3DEditorCore *editorCore) : EditorCore(editorCore)
 {
 	/// Configure
 	editorCore->getEngine()->getEventReceiver()->addEventReceiver(this);
@@ -111,7 +114,7 @@ CCP3DContextMenu::CCP3DContextMenu(CCP3DEditorCore *editorCore) : EditorCore(edi
 
 	/// --------------------------------------------------
 	/// Fill Spies
-	SpiesContextMenu->addItem(L"Post-Processes (TO DO)", -1, true, false, false, true);
+	SpiesContextMenu->addItem(L"Post-Processes", -1, true, false, true, true);
 	SpiesContextMenu->addItem(L"Scene meshes (TO DO)", -1, true, false, false, true);
 	SpiesContextMenu->addItem(L"Textures (TO DO)", -1, true, false, false, true);
 	SpiesContextMenu->addItem(L"Monitors (TO DO)", -1, true, false, false, true);
@@ -139,10 +142,7 @@ bool CCP3DContextMenu::OnEvent(const SEvent &event) {
 
 			/// Scene context menu
 			if (event.GUIEvent.Caller == SceneContextMenu) {
-				if (SceneContextMenu->getSelectedItem() == ESCM_ADD_STATIC_MESH) {
-					AddStaticMeshOpenDialog = EditorCore->createFileOpenDialog(L"Select Static mesh...", 0, ui::ICP3DFileSelector::EFST_OPEN_DIALOG);
-				}
-
+				checkSceneContextMenu(SceneContextMenu->getItemCommandId(SceneContextMenu->getSelectedItem()));
 				return true;
 			}
 			/// View context menu
@@ -151,22 +151,6 @@ bool CCP3DContextMenu::OnEvent(const SEvent &event) {
 				return true;
 			}
 
-		}
-
-		else if (event.GUIEvent.EventType == EGET_FILE_SELECTED) {
-			if (event.GUIEvent.Caller == AddStaticMeshOpenDialog) {
-				IMesh *m = EditorCore->getEngine()->getSceneNodeCreator()->getStaticMesh(AddStaticMeshOpenDialog->getFileName(), false);
-				ISceneNode *n = EditorCore->getRenderingEngine()->getSceneManager()->addMeshSceneNode(m);
-
-				SEvent ev;
-				ev.EventType = EET_USER_EVENT;
-				ev.UserEvent.UserData1 = EIE_NODE_ADDED;
-				ev.UserEvent.UserData2 = (s32)n;
-				EditorCore->getEngine()->getEventReceiver()->OnEvent(ev);
-
-				AddStaticMeshOpenDialog = 0;
-				return true;
-			}
 		}
 	}
 
@@ -186,6 +170,20 @@ void CCP3DContextMenu::checkViewContextMenu(irr::s32 id) {
 	default:
 		break;
 	}
+}
+
+void CCP3DContextMenu::checkSceneContextMenu(irr::s32 id) {
+	using namespace ui;
+
+	switch (id)
+	{
+	case ESCM_ADD_STATIC_MESH:
+		{ CUIAddMesh *addMesh = new CUIAddMesh(EditorCore); }
+		break;
+	default:
+		break;
+	}
+
 }
 
 } /// End namespace cp3d

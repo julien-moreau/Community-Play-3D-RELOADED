@@ -14,6 +14,8 @@
 #include "../UserInterfaces/CCP3DSceneGraph.h"
 #include "../UserInterfaces/CCP3DCustomView.h"
 
+#include "../GUIElements/CGUIManager.h"
+
 #include "../Spies/CCP3DSpiesManager.h"
 #include "../Spies/CCP3DPostProcessSpy.h"
 
@@ -63,6 +65,8 @@ CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), 
 	skin->setColor(EGDC_3D_LIGHT, SColor(255, 32, 32, 32));
 
 	/// Create User Interface
+	GuiManager = new ui::CGUIManager(this);
+
 	InterfaceController = new CCP3DInterfaceController(this);
 	ContextMenu = new CCP3DContextMenu(this);
 	MainToolbar = new CCP3DMainToolbar(this);
@@ -145,23 +149,6 @@ void CCP3DEditorCore::OnPreUpdate() {
 /// Runs the editor
 void CCP3DEditorCore::runEditor() {
 	Engine->runEngine();
-}
-
-ui::ICP3DFileSelector *CCP3DEditorCore::createFileOpenDialog(irr::core::stringw name, irr::gui::IGUIElement *parent, ui::ICP3DFileSelector::E_FILESELECTOR_TYPE type) {
-	ui::CGUIFileSelector *selector = new ui::CGUIFileSelector(name.c_str(), Gui, parent == 0 ? Gui->getRootGUIElement() : parent, -1, type);
-
-	selector->setCustomDirectoryIcon(Driver->getTexture(WorkingDirectory + "GUI/open.png"));
-	selector->setCustomFileIcon(Driver->getTexture(WorkingDirectory + "GUI/parameters.png"));
-	
-	selector->addPlacePaths(L"CP3D Directory", WorkingDirectory.c_str(), Driver->getTexture(WorkingDirectory + "GUI/parameters.png"));
-	selector->addPlacePaths(L"Project Directory", ProjectDirectory.c_str(), Driver->getTexture(WorkingDirectory + "GUI/play_game.png"));
-	selector->addPlacePaths(L"Opened Place", Device->getFileSystem()->getWorkingDirectory(), Driver->getTexture(WorkingDirectory + "Gui/open.png"));
-
-	return selector;
-}
-
-IGUIWindow *CCP3DEditorCore::createMessageBox(stringw title, stringw text, s32 flags, bool modal, ITexture *texture) {
-	return Gui->addMessageBox(title.c_str(), text.c_str(), modal, flags, 0, -1, texture);
 }
 
 } /// End namespace cp3d
@@ -290,13 +277,11 @@ void CCP3DEditorCore::createTestScene() {
 
 	Handler->setAmbientColor(SColor(255, 32, 32, 32));
 	
-	/*
 	CSSAOCallback *c = new CSSAOCallback(Rengine);
 	Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/SSAO.fragment.fx", c);
 	Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/BlurHP.fragment.fx");
 	Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/BlurHP.fragment.fx");
 	Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/SSAOCombine.fragment.fx");
-	*/
 
 	Handler->getDepthPassManager()->addNodeToPass(planeNode);
 	Handler->getDepthPassManager()->addNodeToPass(cubeNode);

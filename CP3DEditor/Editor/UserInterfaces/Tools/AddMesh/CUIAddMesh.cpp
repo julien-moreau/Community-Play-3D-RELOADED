@@ -15,7 +15,7 @@ CUIAddMesh::CUIAddMesh(CCP3DEditorCore *editorCore) : EditorCore(editorCore)
 }
 
 CUIAddMesh::~CUIAddMesh() {
-	RemoveUI();
+
 }
 
 bool CUIAddMesh::OnEvent(const SEvent& event) {

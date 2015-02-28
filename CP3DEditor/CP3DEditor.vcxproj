@@ -150,9 +150,11 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClInclude Include="Editor\Core\CCP3DEditorCore.h" />
     <ClInclude Include="Editor\Core\CCP3DEditorTransformer.h" />
     <ClInclude Include="Editor\Core\CCP3DInterfaceController.h" />
+    <ClInclude Include="Editor\GUIElements\CGUIManager.h" />
     <ClInclude Include="Editor\GUIElements\GUIColorDialog\CGUIColorDialog.h" />
     <ClInclude Include="Editor\GUIElements\GUIFileSelector\CGUIFileSelector.h" />
     <ClInclude Include="Editor\GUIElements\GUIPanel\CGUIPanel.h" />
+    <ClInclude Include="Editor\GUIElements\GUIViewPort\CGUIViewPort.h" />
     <ClInclude Include="Editor\Spies\CCP3DPostProcessSpy.h" />
     <ClInclude Include="Editor\Spies\CCP3DSpiesManager.h" />
     <ClInclude Include="Editor\UserInterfaces\CCP3DContextMenu.h" />
@@ -179,9 +181,11 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClCompile Include="Editor\Core\CCP3DEditorCore.cpp" />
     <ClCompile Include="Editor\Core\CCP3DEditorTransformer.cpp" />
     <ClCompile Include="Editor\Core\CCP3DInterfaceController.cpp" />
+    <ClCompile Include="Editor\GUIElements\CGUIManager.cpp" />
     <ClCompile Include="Editor\GUIElements\GUIColorDialog\CGUIColorDialog.cpp" />
     <ClCompile Include="Editor\GUIElements\GUIFileSelector\CGUIFileSelector.cpp" />
     <ClCompile Include="Editor\GUIElements\GUIPanel\CGUIPanel.cpp" />
+    <ClCompile Include="Editor\GUIElements\GUIViewPort\CGUIViewPort.cpp" />
     <ClCompile Include="Editor\Spies\CCP3DPostProcessSpy.cpp" />
     <ClCompile Include="Editor\Spies\CCP3DSpiesManager.cpp" />
     <ClCompile Include="Editor\UserInterfaces\CCP3DContextMenu.cpp" />

@@ -1,6 +1,7 @@
 
 #include "stdafx.h"
 #include "../../Core/CCP3DEditorCore.h"
+#include "../../GUIElements/CGUIManager.h"
 #include "../CCP3DCustomView.h"
 #include "../CCP3DEditionTool.h"
 #include "SceneNodeEditionTools/CCP3DSceneNodeAnimators.h"
@@ -35,7 +36,6 @@ OpenPostProcessDialog(0)
 
 CCP3DEditionToolPostProcess::~CCP3DEditionToolPostProcess() {
 	EditorCore->getEngine()->getEventReceiver()->removeEventReceiver(this);
-	EditorCore->getEngine()->getCustomUpdater()->removeCustomUpdate(this);
 }
 
 void CCP3DEditionToolPostProcess::createInterface() {
@@ -51,8 +51,6 @@ void CCP3DEditionToolPostProcess::createInterface() {
 }
 
 void CCP3DEditionToolPostProcess::configure() {
-	EditorCore->getEngine()->getCustomUpdater()->addCustomUpdate(this);
-
 	IGUIListBox *list = PostProcessesList.ListData.List;
 	// Enable or disable UI
 	bool enable = enableUI();
@@ -62,18 +60,12 @@ void CCP3DEditionToolPostProcess::configure() {
 	const u32 size = Handler->getPostProcessingRoutineSize();
 	for (u32 i = 0; i < size; i++) {
 		list->addItem(stringw(Handler->getPostProcessingRoutineName(i)).c_str());
-		Changes[i] = getChangedTime(Handler->getPostProcessingRoutineName(i));
 	}
 }
 
 void CCP3DEditionToolPostProcess::apply() {
 	IGUIListBox *list = PostProcessesList.ListData.List;
 	bool enable = enableUI();
-}
-
-void CCP3DEditionToolPostProcess::clear() {
-	EditorCore->getEngine()->getCustomUpdater()->removeCustomUpdate(this);
-	Changes.clear();
 }
 
 bool CCP3DEditionToolPostProcess::enableUI() {
@@ -84,35 +76,6 @@ bool CCP3DEditionToolPostProcess::enableUI() {
 	return enable;
 }
 
-void CCP3DEditionToolPostProcess::OnPreUpdate() {
-	io::IFileSystem *fs = EditorCore->getDevice()->getFileSystem();
-
-	for (u32 i = 0; i < Handler->getPostProcessingRoutineSize(); i++) {
-		stringc path = Handler->getPostProcessingRoutineName(Handler->getPostProcessID(i));
-		if (path == "")
-			continue;
-
-		time_t time = 0;
-		if (fs->existFile(path.c_str()))
-			time = getChangedTime(path);
-		else
-			fs->existFile(EditorCore->getWorkingDirectory() + path.c_str());
-
-		if (time < 0 || time == Changes[i])
-			continue;
-
-		rendering::IPostProcessingRenderCallback *callback = Handler->getPostProcessingCallback(i);
-		s32 pp;
-		if (fs->existFile(path.c_str()))
-			pp = Handler->replacePostProcessAtIndex(i, path, callback);
-		else
-			pp = Handler->replacePostProcessAtIndex(i, EditorCore->getWorkingDirectory() + path, callback);
-
-		if (pp)
-			Changes[i] = time;
-	}
-}
-
 bool CCP3DEditionToolPostProcess::OnEvent(const SEvent &event) {
 
 	if (event.EventType == EET_GUI_EVENT) {
@@ -121,7 +84,7 @@ bool CCP3DEditionToolPostProcess::OnEvent(const SEvent &event) {
 
 			/// Post-Process list
 			if (event.GUIEvent.Caller == PostProcessesList.ListData.AddButton) {
-				OpenPostProcessDialog = EditorCore->createFileOpenDialog("Choose post-process file", 0, ui::ICP3DFileSelector::EFST_OPEN_DIALOG);
+				OpenPostProcessDialog = EditorCore->getGUIManager()->createFileOpenDialog("Choose post-process file", 0, ui::ICP3DFileSelector::EFST_OPEN_DIALOG);
 				OpenPostProcessDialog->addFileFilter(L"FX files", L"fx", Driver->getTexture("postprocesses.png"));
 				return true;
 			}
@@ -153,10 +116,9 @@ bool CCP3DEditionToolPostProcess::OnEvent(const SEvent &event) {
 				stringc path = OpenPostProcessDialog->getFileName();
 				irr::s32 pp = EditorCore->getRenderingEngine()->getHandler()->addPostProcessingEffectFromFile(path, 0);
 				if (!pp)
-					EditorCore->createMessageBox("", "", EMBF_OK, true, Driver->getTexture("error.png"));
+					EditorCore->getGUIManager()->createMessageBox("", "", EMBF_OK, true, Driver->getTexture("error.png"));
 				else {
 					PostProcessesList.ListData.List->addItem(stringw(path).remove(EditorCore->getWorkingDirectory()).c_str());
-					Changes[Handler->getPostProcessingRoutineSize() - 1] = getChangedTime(path);
 				}
 
 				return true;
@@ -168,12 +130,5 @@ bool CCP3DEditionToolPostProcess::OnEvent(const SEvent &event) {
 	return false;
 }
 
-time_t CCP3DEditionToolPostProcess::getChangedTime(stringc filename) {
-	struct stat buf;
-	int result = stat(filename.c_str(), &buf);
-	if (result >= 0)
-		return buf.st_mtime;
-	return 0;
-}
 
 } /// End namespace cp3d

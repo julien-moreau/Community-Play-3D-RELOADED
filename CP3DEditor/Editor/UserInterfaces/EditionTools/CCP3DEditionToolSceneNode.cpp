@@ -1,6 +1,7 @@
 
 #include "stdafx.h"
 #include "../../Core/CCP3DEditorCore.h"
+#include "../../GUIElements/CGUIManager.h"
 #include "../CCP3DCustomView.h"
 #include "../CCP3DEditionTool.h"
 #include "SceneNodeEditionTools/CCP3DSceneNodeAnimators.h"
@@ -327,7 +328,7 @@ bool CCP3DEditionToolSceneNode::OnEvent(const SEvent &event) {
 			for (u32 i=0; i < video::MATERIAL_MAX_TEXTURES; i++) {
 				/// Browse
 				if (event.GUIEvent.Caller == MaterialTextures[i].TextureData.BrowseButton) {
-					MaterialTextures[i].TextureData.BrowseDialog = EditorCore->createFileOpenDialog("Select Texture...", 0, ui::ICP3DFileSelector::EFST_OPEN_DIALOG);
+					MaterialTextures[i].TextureData.BrowseDialog = EditorCore->getGUIManager()->createFileOpenDialog("Select Texture...", 0, ui::ICP3DFileSelector::EFST_OPEN_DIALOG);
 					return true;
 				}
 				else if (event.GUIEvent.Caller == MaterialTextures[i].TextureData.RemoveButton) {

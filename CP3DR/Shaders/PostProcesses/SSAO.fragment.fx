@@ -116,7 +116,7 @@ float4 pixelMain(VS_OUTPUT In) : COLOR0
 	const float area = 0.0075;
 	const float falloff = 0.000001;
 
-	const float radius = 0.002;
+	const float radius = 0.0002;
 
 	const int samples = 16;
 	float3 sample_sphere[16] = {

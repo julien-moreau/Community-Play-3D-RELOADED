@@ -62,6 +62,7 @@ private:
 
 	/// Methods
 	void checkViewContextMenu(irr::s32 id);
+	void checkSceneContextMenu(irr::s32 id);
 
 	/// --------------------------------------------------
 	/// ENUMS
@@ -81,8 +82,6 @@ private:
 	};
 
 	/// --------------------------------------------------
-
-	irr::gui::IGUIFileOpenDialog *AddStaticMeshOpenDialog;
 };
 
 } /// End namespace cp3d

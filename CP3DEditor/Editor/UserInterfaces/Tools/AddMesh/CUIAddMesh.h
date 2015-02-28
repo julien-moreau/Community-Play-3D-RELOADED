@@ -5,6 +5,9 @@
 #include "AddMeshUI.h"
 
 namespace cp3d {
+
+class CCP3DEditorCore;
+
 namespace ui {
 
 REGISTER_UI(AddMeshUI, UIInstance)
