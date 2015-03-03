@@ -5,11 +5,6 @@
 
 namespace cp3d {
 
-enum ESCENE_CONTEXT_MENU {
-	ESCM_ADD_NEW_TERRAIN = 0,
-	ESCM_ADD_STATIC_MESH
-};
-
 class CCP3DEditorCore;
 
 /*
@@ -66,6 +61,13 @@ private:
 
 	/// --------------------------------------------------
 	/// ENUMS
+	/// Scene
+	enum ESCENE_CONTEXT_MENU {
+		ESCM_ADD_NEW_TERRAIN = 0,
+		ESCM_ADD_STATIC_MESH,
+		ESCM_ADD_ANIMATED_MESH
+	};
+
 	/// View
 	enum EVIEW_CONTEXT_MENU {
 		EVCM_DRAW_POST_PROCESSES = 0,

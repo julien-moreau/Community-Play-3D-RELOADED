@@ -211,7 +211,7 @@ bool CCP3DSceneGraph::OnEvent(const SEvent &event) {
 				return false;
 
 			if (node->getParent() == Smgr->getRootSceneNode()) {
-				RootNode->addChildBack(stringw(node->getName()).c_str(), 0, getIconFromType(node->getType()), -1, node);
+				SceneNode->addChildBack(stringw(node->getName()).c_str(), 0, getIconFromType(node->getType()), -1, node);
 			}
 			else {
 				IGUITreeViewNode *tn = getTreeNodeFromParentSceneNode(0, node);

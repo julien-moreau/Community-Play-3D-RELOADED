@@ -185,6 +185,9 @@
     <ClInclude Include="..\include\ICP3DGUIManager.h">
       <Filter>include\editor\ui</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\ICP3DHardwareSkinningManager.h">
+      <Filter>include\rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DEngine.cpp">

@@ -4,6 +4,8 @@
 #include <irrlicht.h>
 #include "AddMeshUI.h"
 
+#include <ICP3DEditionTool.h>
+
 namespace cp3d {
 
 class CCP3DEditorCore;
@@ -14,21 +16,32 @@ REGISTER_UI(AddMeshUI, UIInstance)
 class CUIAddMesh : public irr::IEventReceiver, public IAddMeshUI {
 public:
 
-	/// Constructor & Destructor
-	CUIAddMesh(CCP3DEditorCore *editorCore);
+	// Constructor & Destructor
+	CUIAddMesh(CCP3DEditorCore *editorCore, const bool animated);
 	~CUIAddMesh();
 
-	/// Inheritance
+	// Inheritance
 	bool OnEvent(const irr::SEvent& event);
 
 private:
 	// Editor
 	CCP3DEditorCore *EditorCore;
+	bool Animated;
 
+	// Window
+	irr::core::stringc MeshPath;
+
+	// Viewport
+	irr::scene::ISceneManager *ViewPortMgr;
+	irr::scene::IMesh *Mesh;
+	irr::scene::ISceneNode *Node;
+
+	// GUI
+	irr::gui::IGUIFileOpenDialog *BrowseDialog;
 };
 
 
-} // end namespace ui
-} // end namespace irr
+} /// End namespace ui
+} /// End namespace irr
 
 #endif

@@ -176,6 +176,8 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClInclude Include="RenderingEngine\Handler\CHandler.h" />
     <ClInclude Include="RenderingEngine\Handler\HandlerShaders.h" />
     <ClInclude Include="RenderingEngine\Handler\CP3DHandler.h" />
+    <ClInclude Include="RenderingEngine\Managers\CHardwareSkinningManager.h" />
+    <ClInclude Include="RenderingEngine\Materials\CHardwareSkinningMaterial.h" />
     <ClInclude Include="RenderingEngine\Materials\CMaterialCreator.h" />
     <ClInclude Include="RenderingEngine\Materials\CNormalMappingMaterial.h" />
     <ClInclude Include="RenderingEngine\Materials\CSolidMaterial.h" />
@@ -190,6 +192,8 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClCompile Include="RenderingEngine\Handler\CHandlerPostProcesses.cpp" />
     <ClCompile Include="RenderingEngine\Handler\CShaderPre.cpp" />
     <ClCompile Include="RenderingEngine\Handler\CHandler.cpp" />
+    <ClCompile Include="RenderingEngine\Managers\CHardwareSkinningManager.cpp" />
+    <ClCompile Include="RenderingEngine\Materials\CHardwareSkinningMaterial.cpp" />
     <ClCompile Include="RenderingEngine\Materials\CMaterialCreator.cpp" />
     <ClCompile Include="RenderingEngine\Materials\CNormalMappingMaterial.cpp" />
     <ClCompile Include="RenderingEngine\Materials\CSolidMaterial.cpp" />
@@ -436,6 +440,14 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
       <FileType>Document</FileType>
     </None>
     <None Include="..\CP3DR\Shaders\Materials\depthExample.vertex.fx">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CP3DR\Shaders\Materials\HardwareSkinning.fragment.fx">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\CP3DR\Shaders\Materials\HardwareSkinning.vertex.fx">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

@@ -32,11 +32,11 @@ CSolidMaterial::~CSolidMaterial() {
 	Driver->getMaterialRenderer(RenderingEngine->Materials[EMT_SOLID_2_LAYER])->drop();
 }
 
-void CSolidMaterial::OnSetMaterial(const irr::video::SMaterial& material) {
+void CSolidMaterial::OnSetMaterial(const SMaterial& material) {
 	Material = &material;
 }
 
-void CSolidMaterial::OnSetConstants(irr::video::IMaterialRendererServices *services, irr::s32 userData) {
+void CSolidMaterial::OnSetConstants(IMaterialRendererServices *services, s32 userData) {
 
 	/// Vertex
 	if (Driver->getDriverType() != EDT_OPENGL) {

@@ -277,11 +277,13 @@ void CCP3DEditorCore::createTestScene() {
 
 	Handler->setAmbientColor(SColor(255, 32, 32, 32));
 	
+	/*
 	CSSAOCallback *c = new CSSAOCallback(Rengine);
 	Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/SSAO.fragment.fx", c);
 	Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/BlurHP.fragment.fx");
 	Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/BlurHP.fragment.fx");
 	Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/SSAOCombine.fragment.fx");
+	*/
 
 	Handler->getDepthPassManager()->addNodeToPass(planeNode);
 	Handler->getDepthPassManager()->addNodeToPass(cubeNode);

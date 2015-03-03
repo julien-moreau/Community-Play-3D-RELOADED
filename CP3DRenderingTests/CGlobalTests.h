@@ -207,22 +207,6 @@ void GlobalTest(irr::IrrlichtDevice *device) {
 	cubeNode->getMaterial(0).Shininess = 0.f;
 	handler->addShadowToNode(cubeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_BOTH);
 
-	//cp3d::rendering::SShadowLight light1(1024, vector3df(0.f, 100.f, 100.f), vector3df(0.f), SColor(255, 255, 255, 255), 1.f, 400.f, 90.f * f32(irr::core::DEGTORAD64), false);
-	//light1.setMustAutoRecalculate(false);
-	//handler->addShadowLight(light1);
-
-	/// Add a custom depth pass
-	//cp3d::rendering::ICP3DCustomDepthPass *customDepthPassMgr = handler->getDepthPassManager();
-	//customDepthPassMgr->addNodeToPass(cubeNode);
-	//customDepthPassMgr->addPass("CustomDepthPassRTT");
-
-	/// Add a custom filter (rendering the custom depth pass result)
-	//CCustomPostProcessFile *customPostProcessFile = new CCustomPostProcessFile(handler, driver);
-	//CCustomPostProcess *customPostProcess = new CCustomPostProcess(handler, driver);
-
-	//CCustomGeneralPostProcess *customPostProcessGeneral = new CCustomGeneralPostProcess(handler, driver, ECGPT_NORMAL);
-	//handler->getGeneralPassManager()->addNodeToPass(sceneNode);
-
 	/// Create the normal mapping material
 	cpre->createNormalMappingMaterial();
 	cubeNode->setMaterialType(cpre->Materials[EMT_SOLID]);
@@ -236,10 +220,20 @@ void GlobalTest(irr::IrrlichtDevice *device) {
 	light->getShadowLight()->setFarValue(600.f);
 	light->getShadowLight()->setShadowMapResolution(SHADOW_MAP_RESOL);
 
-	ISceneNodeAnimator *anim = smgr->createFlyCircleAnimator(vector3df(0.f, 100.f, 0.f), 100.f);
-	ILightSceneNode *l = *light;
-	//l->addAnimator(anim);
-	anim->drop();
+	// Test hardware skinning
+	device->getLogger()->setLogLevel(ELL_NONE);
+	IAnimatedMesh *animatedMesh = smgr->getMesh("Tests/dwarf/dwarf.x");
+
+	IAnimatedMeshSceneNode *animatedNode = smgr->addAnimatedMeshSceneNode(animatedMesh);
+	animatedNode->setScale(vector3df(1.0f));
+	animatedNode->setPosition(vector3df(120.f, 0.f, -150.f));
+	animatedNode->setMaterialFlag(video::EMF_LIGHTING, false);
+
+	device->getLogger()->setLogLevel(ELL_INFORMATION);
+	cpre->getHWSkinningManager()->addNode(animatedNode);
+
+	cp3d::rendering::ICP3DHardwareSkinningMaterial *hwmat = cpre->getHWSkinningManager()->getHWMaterial(animatedNode);
+	handler->addShadowToNode(animatedNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_BOTH, hwmat->getDepthMaterial(), hwmat->getShadowsMaterial(), (cp3d::rendering::ICP3DHandlerCustomCallback *)hwmat);
 
 	/// Finish
 	handler->setAmbientColor(SColor(255, 32, 32, 32));

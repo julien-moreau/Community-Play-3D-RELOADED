@@ -19,7 +19,7 @@
 #ifdef _DEBUG
 #define _XREADER_DEBUG
 #endif
-#define BETTER_MESHBUFFER_SPLITTING_FOR_X
+//#define BETTER_MESHBUFFER_SPLITTING_FOR_X
 
 namespace irr
 {
@@ -143,9 +143,9 @@ bool CXMeshFileLoader::load(io::IReadFile* file)
 					AnimatedMesh->getAllJoints()[mesh->AttachedJointID]->AttachedMeshes.push_back( AnimatedMesh->getMeshBuffers().size()-1 );
 				}
 			}
-
+			
 			#ifdef _IRR_COMPILE_WITH_MATERIAL_NAME_
-			AnimatedMesh->getMeshBuffer(AnimatedMesh->getMeshBufferCount() - 1)->getMaterial().Name = mesh->Materials[i].Name;
+			AnimatedMesh->getMeshBuffer(AnimatedMesh->getMeshBufferCount() - 1)->getMaterial().Name = Meshes[n]->Materials[i].Name;
 			#endif
 		}
 
@@ -748,6 +748,8 @@ bool CXMeshFileLoader::parseDataObjectMesh(SXMesh &mesh)
 #ifdef _XREADER_DEBUG
 	os::Printer::log("CXFileReader: Reading mesh", name.c_str(), ELL_DEBUG);
 #endif
+
+	mesh.Name = name;
 
 	// read vertex count
 	const u32 nVertices = readInt();
@@ -1484,12 +1486,23 @@ bool CXMeshFileLoader::parseDataObjectMaterial(video::SMaterial& material)
 	os::Printer::log("CXFileReader: Reading mesh material", ELL_DEBUG);
 #endif
 
+#ifdef _IRR_COMPILE_WITH_MATERIAL_NAME_
+	core::stringc materialName = "";
+	if (!readHeadOfDataObject(&materialName))
+	{
+#else
 	if (!readHeadOfDataObject())
 	{
+#endif
 		os::Printer::log("No opening brace in Mesh Material found in .x file", ELL_WARNING);
 		os::Printer::log("Line", core::stringc(Line).c_str(), ELL_WARNING);
 		return false;
 	}
+
+	// Name of material
+	#ifdef _IRR_COMPILE_WITH_MATERIAL_NAME_
+	material.Name = materialName;
+	#endif
 
 	// read RGBA
 	readRGBA(material.DiffuseColor); checkForOneFollowingSemicolons();

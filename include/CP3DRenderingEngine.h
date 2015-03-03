@@ -10,5 +10,6 @@
 #include "ICP3DCustomDepthPass.h"
 #include "ICP3DLightSceneNode.h"
 #include "ICP3DMaterialCreator.h"
+#include "ICP3DHardwareSkinningManager.h"
 
 #endif

@@ -35,7 +35,9 @@ CCP3DRenderingEngine::CCP3DRenderingEngine(IrrlichtDevice *device) : NormalMapMa
 		i++;
 	}
 
+	/// Materials
 	SolidMaterialType = new CSolidMaterial(this);
+	HWSkinningManager = new CHardwareSkinningManager(Handler);
 }
 
 CCP3DRenderingEngine::~CCP3DRenderingEngine() {
@@ -44,40 +46,33 @@ CCP3DRenderingEngine::~CCP3DRenderingEngine() {
 
 /// Irrlicht
 IrrlichtDevice *CCP3DRenderingEngine::getDevice() {
-	return ((CCP3DHandler*)Handler)->getIrrlichtDevice();
+	return Handler->getIrrlichtDevice();
 }
 
 IVideoDriver *CCP3DRenderingEngine::getVideoDriver() {
-	return ((CCP3DHandler*)Handler)->getIrrlichtDevice()->getVideoDriver();
+	return Handler->getIrrlichtDevice()->getVideoDriver();
 }
 
 ISceneManager *CCP3DRenderingEngine::getSceneManager() {
-	return ((CCP3DHandler*)Handler)->getIrrlichtDevice()->getSceneManager();
+	return Handler->getIrrlichtDevice()->getSceneManager();
 }
 
 IGUIEnvironment *CCP3DRenderingEngine::getGUIEnvironment() {
-	return ((CCP3DHandler*)Handler)->getIrrlichtDevice()->getGUIEnvironment();
-}
-
-/// Creators
-ICP3DMaterialCreator *CCP3DRenderingEngine::createMaterialCreator() {
-	return new CMaterialCreator(((CCP3DHandler*)Handler)->getIrrlichtDevice()->getVideoDriver());
+	return Handler->getIrrlichtDevice()->getGUIEnvironment();
 }
 
 /// Lights
 ICP3DLightSceneNode *CCP3DRenderingEngine::createLightSceneNode(const bool computeNormalMapping, const bool computeShadows) {
-	CCP3DHandler *Chandler = (CCP3DHandler *)Handler;
-
 	SShadowLight shadowLight;
 	s32 shadowLightIndex = -1;
 
 	if (computeShadows)
-		shadowLightIndex = Chandler->addShadowLight(shadowLight);
+		shadowLightIndex = Handler->addShadowLight(shadowLight);
 
 	ILightSceneNode *lightSceneNode = getDevice()->getSceneManager()->addLightSceneNode();
 	ICP3DLightSceneNode *light = new ICP3DLightSceneNode(lightSceneNode, computeNormalMapping, shadowLightIndex);
 
-	light->ShadowLight = (shadowLightIndex == -1) ? 0 : Chandler->getShadowLightPtr(shadowLightIndex);
+	light->ShadowLight = (shadowLightIndex == -1) ? 0 : Handler->getShadowLightPtr(shadowLightIndex);
 	if (light->ShadowLight)
 		light->ShadowLight->LightScenenode = lightSceneNode;
 
@@ -91,7 +86,7 @@ void CCP3DRenderingEngine::removeLightSceneNode(ICP3DLightSceneNode *node) {
 		return;
 
 	if (node->ShadowLight)
-		((CCP3DHandler *)Handler)->removeShadowLight(node->ShadowLightIndex);
+		Handler->removeShadowLight(node->ShadowLightIndex);
 	
 	delete node;
 	Lights.erase(index);
@@ -120,7 +115,7 @@ s32 CCP3DRenderingEngine::setLightSceneNodeComputeShadows(ICP3DLightSceneNode *n
 		return node->ShadowLightIndex;
 
 	if (!compute) {
-		((CCP3DHandler*)Handler)->removeShadowLight(node->ShadowLightIndex);
+		Handler->removeShadowLight(node->ShadowLightIndex);
 		node->ShadowLightIndex = -1;
 		node->ShadowLight = 0;
 		return -1;
@@ -130,14 +125,18 @@ s32 CCP3DRenderingEngine::setLightSceneNodeComputeShadows(ICP3DLightSceneNode *n
 	shadowLight.DiffuseColor = node->getLightData().DiffuseColor;
 	shadowLight.LightScenenode = *node;
 
-	s32 shadowLightIndex = (s32)((CCP3DHandler*)Handler)->addShadowLight(shadowLight);
+	s32 shadowLightIndex = (s32)Handler->addShadowLight(shadowLight);
 	node->ShadowLightIndex = shadowLightIndex;
-	node->ShadowLight = ((CCP3DHandler*)Handler)->getShadowLightPtr(shadowLightIndex);
+	node->ShadowLight = Handler->getShadowLightPtr(shadowLightIndex);
 
 	return shadowLightIndex;
 }
 
 /// Materials
+ICP3DMaterialCreator *CCP3DRenderingEngine::createMaterialCreator() {
+	return new CMaterialCreator(Handler->getIrrlichtDevice()->getVideoDriver());
+}
+
 void CCP3DRenderingEngine::createNormalMappingMaterial() {
 	if (!NormalMapMaterialType)
 		NormalMapMaterialType = new CNormalMappingMaterial(this);
@@ -155,6 +154,10 @@ void CCP3DRenderingEngine::destroyNormalMappingMaterial() {
 	Materials[EMT_NORMAL_MAP_SOLID] = (E_MATERIAL_TYPE)-1;
 	Materials[EMT_NORMAL_MAP_TRANSPARENT_ADD_COLOR] = (E_MATERIAL_TYPE)-1;
 	Materials[EMT_NORMAL_MAP_TRANSPARENT_VERTEX_ALPHA] = (E_MATERIAL_TYPE)-1;
+}
+
+CHardwareSkinningManager *CCP3DRenderingEngine::getHWSkinningManager() {
+	return HWSkinningManager;
 }
 
 } /// End namespace rendering

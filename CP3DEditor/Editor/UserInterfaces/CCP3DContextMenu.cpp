@@ -91,9 +91,9 @@ CCP3DContextMenu::CCP3DContextMenu(CCP3DEditorCore *editorCore) : EditorCore(edi
 
 	/// --------------------------------------------------
 	/// Fill "scene"
-	SceneContextMenu->addItem(L"Add new terrain... (TO DO)", ESCM_ADD_NEW_TERRAIN);
-	SceneContextMenu->addItem(L"Add static mesh... (TO DO)", ESCM_ADD_STATIC_MESH);
-	SceneContextMenu->addItem(L"Add animated mesh... (TO DO)", -1);
+	SceneContextMenu->addItem(L"Add new terrain... (TO DO)", -1);
+	SceneContextMenu->addItem(L"Add static mesh...", ESCM_ADD_STATIC_MESH);
+	SceneContextMenu->addItem(L"Add animated mesh...", ESCM_ADD_ANIMATED_MESH);
 	SceneContextMenuLight = SceneContextMenu->getSubMenu(SceneContextMenu->addItem(L"Add light", -1, true, true));
 	SceneContextMenu->addSeparator();
 	SceneContextMenu->addItem(L"Add cube... (TO DO)", -1);
@@ -178,7 +178,10 @@ void CCP3DContextMenu::checkSceneContextMenu(irr::s32 id) {
 	switch (id)
 	{
 	case ESCM_ADD_STATIC_MESH:
-		{ CUIAddMesh *addMesh = new CUIAddMesh(EditorCore); }
+		{ CUIAddMesh *addMesh = new CUIAddMesh(EditorCore, false); }
+		break;
+	case ESCM_ADD_ANIMATED_MESH:
+	{ CUIAddMesh *addMesh = new CUIAddMesh(EditorCore, true); }
 		break;
 	default:
 		break;

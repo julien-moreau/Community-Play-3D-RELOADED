@@ -102,12 +102,14 @@ public:
 		ShadowsCallback = (computeShadows) ? new ICP3DHandlerShadowsCallback() : 0;
 	}
 
+	//! Destructor
 	virtual ~ICP3DHandlerCustomCallback() {
 		delete DepthCallback;
 		delete ShadowsCallback;
 	}
 
-	//! OnSetConstants
+	//! Sets constants to the active material
+	//! Should be use by internel engine
 	virtual inline void OnSetConstants(irr::video::IMaterialRendererServices* services, irr::s32 userData) {
 		if (PassType == ECHPT_NONE)
 			return;

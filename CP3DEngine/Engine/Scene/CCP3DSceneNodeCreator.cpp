@@ -91,7 +91,6 @@ void CCP3DSceneNodeCreator::configureSceneNode(irr::scene::ISceneNode *node) {
 
 	if (m) {
 		manipulator->recalculateNormals(m, true, true);
-		manipulator->recalculateTangents(m, false, true, true);
 	}
 
 	for (u32 i=0; i < node->getMaterialCount(); i++) {

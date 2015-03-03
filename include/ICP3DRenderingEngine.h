@@ -8,6 +8,7 @@ namespace rendering {
 
 class ICP3DHandler;
 class ICP3DMaterialCreator;
+class ICP3DHardwareSkinningManager;
 struct ICP3DLightSceneNode;
 
 /*
@@ -85,6 +86,9 @@ public:
 	//! Removes the normal mapping material
 	//! Sets the cp3d::rendering::NormalMappingMaterial etc. to default material
 	virtual void destroyNormalMappingMaterial() = 0;
+
+	//! Returns the hardware skinning manager
+	virtual ICP3DHardwareSkinningManager *getHWSkinningManager() = 0;
 
 };
 

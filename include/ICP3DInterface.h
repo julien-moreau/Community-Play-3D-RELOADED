@@ -2,7 +2,6 @@
 #define _H_ICP3D_INTERFACE_INCLUDED__
 
 #include <irrlicht.h>
-#include <functional>
 
 namespace cp3d {
 

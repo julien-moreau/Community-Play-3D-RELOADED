@@ -39,9 +39,6 @@ private:
 /// Main function
 int main(int argc, char* argv[]) {
 
-	for (u32 i = 0; i < argc; i++)
-		printf("%s\n", argv[i]);
-
 	/// Create a device
 	irr::video::E_DRIVER_TYPE driverType = EDT_DIRECT3D9;
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_

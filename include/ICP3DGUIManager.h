@@ -11,6 +11,10 @@ namespace ui {
 class ICP3DGUIManager {
 public:
 
+	//! Centers the window on the screen
+	//! \param window: the window to center
+	virtual void centerWindow(irr::gui::IGUIWindow *window) = 0;
+
 	//! Creates a view port to draw a scene
 	//! \param rectangle: the element's relative position
 	//! \param parent: the element's parent
@@ -21,7 +25,8 @@ public:
 	//! \param name: the element's name
 	//! \param parent: the element's parent
 	//! \param type: the file picker type (open, save, etc.)
-	virtual ICP3DFileSelector *createFileOpenDialog(irr::core::stringw name, irr::gui::IGUIElement *parent, ICP3DFileSelector::E_FILESELECTOR_TYPE type) = 0;
+	//! \param modal: true if the window should be modal
+	virtual ICP3DFileSelector *createFileOpenDialog(irr::core::stringw name, irr::gui::IGUIElement *parent, ICP3DFileSelector::E_FILESELECTOR_TYPE type, bool modal = true) = 0;
 
 	//! Creates a messagebox
 	//! \param title: the messagebox title

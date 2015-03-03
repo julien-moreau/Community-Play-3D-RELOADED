@@ -4,6 +4,10 @@
 #include <CP3DCompileConfig.h>
 #include <ICP3DRenderingEngine.h>
 #include <ICP3DLightSceneNode.h>
+#include <ICP3DHardwareSkinningManager.h>
+
+#include "RenderingEngine/Handler/CP3DHandler.h"
+#include "RenderingEngine/Managers/CHardwareSkinningManager.h"
 
 namespace cp3d {
 namespace rendering {
@@ -29,9 +33,15 @@ public:
 		return Handler;
 	}
 
-	/// Creators
+	/// Materials
 	ICP3DMaterialCreator *createMaterialCreator();
 
+	void createNormalMappingMaterial();
+	void destroyNormalMappingMaterial();
+
+	CHardwareSkinningManager *getHWSkinningManager();
+
+	/// Lights
 	ICP3DLightSceneNode *createLightSceneNode(const bool computeNormalMapping = false, const bool computeShadows = false);
 	irr::u32 getLightCount() {
 		return Lights.size();
@@ -47,16 +57,14 @@ public:
 	irr::s32 setLightSceneNodeComputeShadows(ICP3DLightSceneNode *node, const bool compute);
 	irr::s32 setLightSceneNodeComputeShadows(const irr::u32 index, const bool compute);
 
-	void createNormalMappingMaterial();
-	void destroyNormalMappingMaterial();
-
 private:
 	/// Rendering
-	ICP3DHandler *Handler;
+	CCP3DHandler *Handler;
 
 	/// Materials
 	CSolidMaterial *SolidMaterialType;
 	CNormalMappingMaterial *NormalMapMaterialType;
+	CHardwareSkinningManager *HWSkinningManager;
 
 	/// Datas
 	irr::core::array<ICP3DLightSceneNode *> Lights;

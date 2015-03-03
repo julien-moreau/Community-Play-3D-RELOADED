@@ -17,6 +17,10 @@ namespace ui {
 			void CreateUI(ICP3DEditor *editorCore) { \
 				InstanceName = new ClassName(editorCore); \
 			} \
+			\
+			void RemoveUI() { \
+				delete InstanceName; \
+			} \
 	}; \
 
 

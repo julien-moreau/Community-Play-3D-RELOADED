@@ -118,6 +118,7 @@ public:
 	void setClearColour(irr::video::SColor ClearCol) { ClearColour = ClearCol; }
 	void setViewPort(const irr::core::rect<irr::s32> viewPort) { ViewPort = viewPort; }
 	irr::core::rect<irr::s32> getViewPort() { return ViewPort; }
+	irr::video::IVideoDriver *getVideoDriver() { return driver; }
 
 	/// Custom Passes
 	void addCustomPass(ICP3DCustomPass *pass) {
