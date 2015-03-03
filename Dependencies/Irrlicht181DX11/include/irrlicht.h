@@ -37,6 +37,7 @@
 #include "CMeshBuffer.h"
 #include "coreutil.h"
 #include "CVertexBuffer.h"
+#include "IProfiler.h"
 #include "dimension2d.h"
 #include "ECullingTypes.h"
 #include "EDebugSceneTypes.h"
@@ -98,6 +99,7 @@
 #include "IGUIToolbar.h"
 #include "IGUIWindow.h"
 #include "IGUITreeView.h"
+#include "IGUIProfiler.h"
 #include "IImage.h"
 #include "IImageLoader.h"
 #include "IImageWriter.h"
@@ -146,6 +148,7 @@
 #include "IShadowVolumeSceneNode.h"
 #include "ISkinnedMesh.h"
 #include "ITerrainSceneNode.h"
+#include "IInstancedMeshSceneNode.h"
 #include "ITextSceneNode.h"
 #include "ITexture.h"
 #include "ITimer.h"
@@ -182,7 +185,7 @@
 #include "vector2d.h"
 #include "vector3d.h"
 
-/*! \mainpage Irrlicht Engine 1.8 API documentation
+/*! \mainpage Irrlicht Engine 1.9 API documentation
  *
  * <div align="center"><img src="logobig.png" ></div>
  *

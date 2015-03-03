@@ -33,8 +33,8 @@ void CGUIManager::centerWindow(IGUIWindow *window) {
 	window->setRelativePosition(rect<s32>(
 		driver->getScreenSize().Width / 2 - position.getWidth() / 2,
 		driver->getScreenSize().Height / 2 - position.getHeight() / 2,
-		driver->getScreenSize().Width + position.getWidth() / 2,
-		driver->getScreenSize().Height + position.getHeight() / 2
+		driver->getScreenSize().Width / 2 + position.getWidth() / 2,
+		driver->getScreenSize().Height / 2 + position.getHeight() / 2
 	));
 }
 

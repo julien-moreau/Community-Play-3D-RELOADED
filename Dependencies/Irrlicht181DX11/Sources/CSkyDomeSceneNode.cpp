@@ -45,13 +45,13 @@ CSkyDomeSceneNode::CSkyDomeSceneNode(video::ITexture* sky, u32 horiRes, u32 vert
 	setAutomaticCulling(scene::EAC_OFF);
 
 	Buffer = new CMeshBuffer<video::S3DVertex>(mgr->getVideoDriver()->getVertexDescriptor(0));
-	Buffer->Material.Lighting = false;
-	Buffer->Material.ZBuffer = video::ECFN_DISABLED;
-	Buffer->Material.ZWriteEnable = false;
-	Buffer->Material.AntiAliasing = video::EAAM_OFF;
-	Buffer->Material.setTexture(0, sky);
-	Buffer->BoundingBox.MaxEdge.set(0,0,0);
-	Buffer->BoundingBox.MinEdge.set(0,0,0);
+	Buffer->getMaterial().Lighting = false;
+	Buffer->getMaterial().ZBuffer = video::ECFN_DISABLED;
+	Buffer->getMaterial().ZWriteEnable = false;
+	Buffer->getMaterial().AntiAliasing = video::EAAM_OFF;
+	Buffer->getMaterial().setTexture(0, sky);
+	Buffer->getBoundingBox().MaxEdge.set(0, 0, 0);
+	Buffer->getBoundingBox().MinEdge.set(0,0,0);
 
 	// regenerate the mesh
 	generateMesh();
@@ -146,7 +146,7 @@ void CSkyDomeSceneNode::render()
 
 		driver->setTransform(video::ETS_WORLD, mat);
 
-		driver->setMaterial(Buffer->Material);
+		driver->setMaterial(Buffer->getMaterial());
 		driver->drawMeshBuffer(Buffer);
 	}
 
@@ -180,7 +180,7 @@ void CSkyDomeSceneNode::render()
 //! returns the axis aligned bounding box of this node
 const core::aabbox3d<f32>& CSkyDomeSceneNode::getBoundingBox() const
 {
-	return Buffer->BoundingBox;
+	return Buffer->getBoundingBox();
 }
 
 
@@ -202,7 +202,7 @@ void CSkyDomeSceneNode::OnRegisterSceneNode()
 //! to directly modify the material of a scene node.
 video::SMaterial& CSkyDomeSceneNode::getMaterial(u32 i)
 {
-	return Buffer->Material;
+	return Buffer->getMaterial();
 }
 
 
@@ -249,7 +249,7 @@ ISceneNode* CSkyDomeSceneNode::clone(ISceneNode* newParent, ISceneManager* newMa
 	if (!newManager)
 		newManager = SceneManager;
 
-	CSkyDomeSceneNode* nb = new CSkyDomeSceneNode(Buffer->Material.TextureLayer[0].Texture, HorizontalResolution, VerticalResolution, TexturePercentage,
+	CSkyDomeSceneNode* nb = new CSkyDomeSceneNode(Buffer->getMaterial().TextureLayer[0].Texture, HorizontalResolution, VerticalResolution, TexturePercentage,
 		SpherePercentage, Radius, newParent, newManager, ID);
 
 	nb->cloneMembers(this, newManager);

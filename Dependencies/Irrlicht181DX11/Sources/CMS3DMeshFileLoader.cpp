@@ -362,26 +362,26 @@ bool CMS3DMeshFileLoader::load(io::IReadFile* file)
 		CMeshBuffer<video::S3DVertex>* tmpBuffer = new CMeshBuffer<video::S3DVertex>(Driver->getVertexDescriptor(0));
 		AnimatedMesh->addMeshBuffer(tmpBuffer);
 
-		tmpBuffer->Material.MaterialType = video::EMT_SOLID;
+		tmpBuffer->getMaterial().MaterialType = video::EMT_SOLID;
 
-		tmpBuffer->Material.AmbientColor = video::SColorf(material->Ambient[0], material->Ambient[1], material->Ambient[2], material->Ambient[3]).toSColor ();
-		tmpBuffer->Material.DiffuseColor = video::SColorf(material->Diffuse[0], material->Diffuse[1], material->Diffuse[2], material->Diffuse[3]).toSColor ();
-		tmpBuffer->Material.EmissiveColor = video::SColorf(material->Emissive[0], material->Emissive[1], material->Emissive[2], material->Emissive[3]).toSColor ();
-		tmpBuffer->Material.SpecularColor = video::SColorf(material->Specular[0], material->Specular[1], material->Specular[2], material->Specular[3]).toSColor ();
-		tmpBuffer->Material.Shininess = material->Shininess;
+		tmpBuffer->getMaterial().AmbientColor = video::SColorf(material->Ambient[0], material->Ambient[1], material->Ambient[2], material->Ambient[3]).toSColor();
+		tmpBuffer->getMaterial().DiffuseColor = video::SColorf(material->Diffuse[0], material->Diffuse[1], material->Diffuse[2], material->Diffuse[3]).toSColor();
+		tmpBuffer->getMaterial().EmissiveColor = video::SColorf(material->Emissive[0], material->Emissive[1], material->Emissive[2], material->Emissive[3]).toSColor();
+		tmpBuffer->getMaterial().SpecularColor = video::SColorf(material->Specular[0], material->Specular[1], material->Specular[2], material->Specular[3]).toSColor();
+		tmpBuffer->getMaterial().Shininess = material->Shininess;
 
 		core::stringc TexturePath(material->Texture);
 		if (TexturePath.trim()!="")
 		{
 			TexturePath=stripPathFromString(file->getFileName(),true) + stripPathFromString(TexturePath,false);
-			tmpBuffer->Material.setTexture(0, Driver->getTexture(TexturePath));
+			tmpBuffer->getMaterial().setTexture(0, Driver->getTexture(TexturePath));
 		}
 
 		core::stringc AlphamapPath=(const c8*)material->Alphamap;
 		if (AlphamapPath.trim()!="")
 		{
 			AlphamapPath=stripPathFromString(file->getFileName(),true) + stripPathFromString(AlphamapPath,false);
-			tmpBuffer->Material.setTexture(2, Driver->getTexture(AlphamapPath));
+			tmpBuffer->getMaterial().setTexture(2, Driver->getTexture(AlphamapPath));
 		}
 
 		tmpBuffer->drop();
@@ -509,7 +509,7 @@ bool CMS3DMeshFileLoader::load(io::IReadFile* file)
 
 			tmpMatrix=jnt->LocalMatrix*tmpMatrix;
 
-			// IRR_TEST_BROKEN_QUATERNION_USE: TODO - switched from tmpMatrix to tmpMatrix.getTransposed() for downward compatibility. 
+			// IRR_TEST_BROKEN_QUATERNION_USE: TODO - switched from tmpMatrix to tmpMatrix.getTransposed() for downward compatibility.
 			//								   Not tested so far if this was correct or wrong before quaternion fix!
 			k->rotation  = core::quaternion(tmpMatrix.getTransposed());
 		}

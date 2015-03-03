@@ -58,8 +58,8 @@ void CWaterSurfaceSceneNode::OnAnimate(u32 timeMs)
 
 		for (u32 b=0; b<meshBufferCount; ++b)
 		{
-			video::IVertexAttribute* attribute = Mesh->getMeshBuffer(b)->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
-			video::IVertexAttribute* attributeOriginal = OriginalMesh->getMeshBuffer(b)->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
+			video::IVertexAttribute* attribute = Mesh->getMeshBuffer(b)->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
+			video::IVertexAttribute* attributeOriginal = OriginalMesh->getMeshBuffer(b)->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
 
 			if(!attribute || !attributeOriginal)
 				continue;

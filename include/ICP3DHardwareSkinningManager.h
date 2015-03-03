@@ -36,7 +36,7 @@ public:
 	//! Adds a hardware skinning instance to the rendering engine
 	//! for the given node
 	//! \param node: the node to apply hardware skinning
-	virtual bool addNode(irr::scene::IAnimatedMeshSceneNode *node) = 0;
+	virtual ICP3DHardwareSkinningMaterial *addNode(irr::scene::IAnimatedMeshSceneNode *node) = 0;
 
 	//! Removes a hardware skinning instance to the rendering engine
 	//! for the given node

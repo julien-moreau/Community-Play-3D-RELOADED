@@ -16,52 +16,23 @@ namespace irr
 namespace video
 {
 
-//! Base class for all internal OpenGL material renderers
-class COpenGLMaterialRenderer : public IMaterialRenderer
-{
-public:
-
-	//! Constructor
-	COpenGLMaterialRenderer(video::COpenGLDriver* driver) : Driver(driver)
-	{
-	}
-
-	//! On set material method for shader based materials
-	virtual void OnSetBaseMaterial(const SMaterial& material)
-	{
-	}
-
-	//! On unset material method for shader based materials
-	virtual void OnUnsetBaseMaterial()
-	{
-	}
-    
-    virtual bool OnRender(IMaterialRendererServices* service, E_VERTEX_TYPE vtxtype)
-    {
-        Driver->setTextureRenderStates(Driver->getCurrentMaterial(), false, true);
-        
-        return true;
-    }
-
-protected:
-
-	video::COpenGLDriver* Driver;
-};
-
-
 //! Solid material renderer
-class COpenGLMaterialRenderer_SOLID : public COpenGLMaterialRenderer
+class COpenGLMaterialRenderer_SOLID : public IMaterialRenderer
 {
 public:
 
-	COpenGLMaterialRenderer_SOLID(video::COpenGLDriver* d)
-		: COpenGLMaterialRenderer(d) {}
+	COpenGLMaterialRenderer_SOLID(video::COpenGLDriver* d) : Driver(d) {}
 
 	virtual void OnSetMaterial(const SMaterial& material, const SMaterial& lastMaterial,
-		bool resetAllRenderstates, IMaterialRendererServices* services)
+		bool resetAllRenderstates, IMaterialRendererServices* services) _IRR_OVERRIDE_
 	{
+		if (Driver->getFixedPipelineState() == COpenGLDriver::EOFPS_DISABLE)
+			Driver->setFixedPipelineState(COpenGLDriver::EOFPS_DISABLE_TO_ENABLE);
+		else
+			Driver->setFixedPipelineState(COpenGLDriver::EOFPS_ENABLE);
+
 		Driver->disableTextures(1);
-		Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates, true);
+		Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates);
 
 		if (resetAllRenderstates || (material.MaterialType != lastMaterial.MaterialType))
 		{
@@ -70,31 +41,51 @@ public:
 			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		}
 	}
+
+protected:
+
+	video::COpenGLDriver* Driver;
 };
 
 
 //! Generic Texture Blend
-class COpenGLMaterialRenderer_ONETEXTURE_BLEND : public COpenGLMaterialRenderer
+class COpenGLMaterialRenderer_ONETEXTURE_BLEND : public IMaterialRenderer
 {
 public:
 
-	COpenGLMaterialRenderer_ONETEXTURE_BLEND(video::COpenGLDriver* d)
-		: COpenGLMaterialRenderer(d) {}
+	COpenGLMaterialRenderer_ONETEXTURE_BLEND(video::COpenGLDriver* d) : Driver(d) {}
 
 	virtual void OnSetMaterial(const SMaterial& material, const SMaterial& lastMaterial,
-		bool resetAllRenderstates, IMaterialRendererServices* services)
+		bool resetAllRenderstates, IMaterialRendererServices* services) _IRR_OVERRIDE_
 	{
+		if (Driver->getFixedPipelineState() == COpenGLDriver::EOFPS_DISABLE)
+			Driver->setFixedPipelineState(COpenGLDriver::EOFPS_DISABLE_TO_ENABLE);
+		else
+			Driver->setFixedPipelineState(COpenGLDriver::EOFPS_ENABLE);
+
 		Driver->disableTextures(1);
-		Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates, true);
+		Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates);
 
 //		if (material.MaterialType != lastMaterial.MaterialType ||
 //			material.MaterialTypeParam != lastMaterial.MaterialTypeParam ||
 //			resetAllRenderstates)
 		{
-			E_BLEND_FACTOR srcFact,dstFact;
+            E_BLEND_FACTOR srcRGBFact,dstRGBFact,srcAlphaFact,dstAlphaFact;
 			E_MODULATE_FUNC modulate;
 			u32 alphaSource;
-			unpack_textureBlendFunc(srcFact, dstFact, modulate, alphaSource, material.MaterialTypeParam);
+			unpack_textureBlendFuncSeparate(srcRGBFact, dstRGBFact, srcAlphaFact, dstAlphaFact, modulate, alphaSource, material.MaterialTypeParam);
+
+            Driver->getBridgeCalls()->setBlend(true);
+
+            if (Driver->queryFeature(EVDF_BLEND_SEPARATE))
+            {
+                Driver->getBridgeCalls()->setBlendFuncSeparate(Driver->getGLBlend(srcRGBFact), Driver->getGLBlend(dstRGBFact),
+                    Driver->getGLBlend(srcAlphaFact), Driver->getGLBlend(dstAlphaFact));
+            }
+            else
+            {
+                Driver->getBridgeCalls()->setBlendFunc(Driver->getGLBlend(srcRGBFact), Driver->getGLBlend(dstRGBFact));
+            }
 
 #ifdef GL_ARB_texture_env_combine
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE_ARB);
@@ -106,16 +97,12 @@ public:
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE_EXT);
 			glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_RGB_EXT, GL_MODULATE);
 			glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE0_RGB_EXT, GL_TEXTURE);
-			glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE1_RGB_EXT, GL_PREVIOUS_EXT);			
+			glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE1_RGB_EXT, GL_PREVIOUS_EXT);
 			glTexEnvf(GL_TEXTURE_ENV, GL_RGB_SCALE_EXT, (f32) modulate );
 #endif
 
-			Driver->getBridgeCalls()->setBlendFunc(Driver->getGLBlend(srcFact), Driver->getGLBlend(dstFact));
-			Driver->getBridgeCalls()->setAlphaTest(true);
-			Driver->getBridgeCalls()->setAlphaFunc(GL_GREATER, 0.f);
-			Driver->getBridgeCalls()->setBlend(true);
-
-			if ( textureBlendFunc_hasAlpha(srcFact) || textureBlendFunc_hasAlpha(dstFact) )
+			if (textureBlendFunc_hasAlpha(srcRGBFact) || textureBlendFunc_hasAlpha(dstRGBFact) ||
+                textureBlendFunc_hasAlpha(srcAlphaFact) || textureBlendFunc_hasAlpha(dstAlphaFact))
 			{
 				if (alphaSource==EAS_VERTEX_COLOR)
 				{
@@ -153,71 +140,7 @@ public:
 		}
 	}
 
-	virtual void OnSetBaseMaterial(const SMaterial& material)
-	{
-		E_BLEND_FACTOR srcFact,dstFact;
-		E_MODULATE_FUNC modulate;
-		u32 alphaSource;
-		unpack_textureBlendFunc(srcFact, dstFact, modulate, alphaSource, material.MaterialTypeParam);
-
-		Driver->getBridgeCalls()->setBlendFunc(Driver->getGLBlend(srcFact), Driver->getGLBlend(dstFact));
-
-		Driver->getBridgeCalls()->setAlphaTest(true);
-		Driver->getBridgeCalls()->setAlphaFunc(GL_GREATER, 0.f);
-		Driver->getBridgeCalls()->setBlend(true);
-
-#ifdef GL_ARB_texture_env_combine
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE_ARB);
-		glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_RGB_ARB, GL_MODULATE);
-		glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE0_RGB_ARB, GL_TEXTURE);
-		glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE1_RGB_ARB, GL_PREVIOUS_ARB);
-		glTexEnvf(GL_TEXTURE_ENV, GL_RGB_SCALE_ARB, (f32) modulate );
-#else
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE_EXT);
-		glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_RGB_EXT, GL_MODULATE);
-		glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE0_RGB_EXT, GL_TEXTURE);
-		glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE1_RGB_EXT, GL_PREVIOUS_EXT);			
-		glTexEnvf(GL_TEXTURE_ENV, GL_RGB_SCALE_EXT, (f32) modulate );
-#endif
-
-		if (textureBlendFunc_hasAlpha(srcFact) || textureBlendFunc_hasAlpha(dstFact) )
-		{
-			if (alphaSource==EAS_VERTEX_COLOR)
-			{
-#ifdef GL_ARB_texture_env_combine
-				glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_ALPHA_ARB, GL_REPLACE);
-				glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA_ARB, GL_PRIMARY_COLOR_ARB);
-#else
-				glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_ALPHA_EXT, GL_REPLACE);
-				glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA_EXT, GL_PRIMARY_COLOR_EXT);
-#endif
-			}
-			else if (alphaSource==EAS_TEXTURE)
-			{
-#ifdef GL_ARB_texture_env_combine
-				glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_ALPHA_ARB, GL_REPLACE);
-				glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA_ARB, GL_TEXTURE);
-#else
-				glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_ALPHA_EXT, GL_REPLACE);
-				glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA_EXT, GL_TEXTURE);
-#endif
-			}
-			else
-			{
-#ifdef GL_ARB_texture_env_combine
-				glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_ALPHA_ARB, GL_MODULATE);
-				glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA_ARB, GL_PRIMARY_COLOR_ARB);
-				glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE1_ALPHA_ARB, GL_TEXTURE);
-#else
-				glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_ALPHA_EXT, GL_MODULATE);
-				glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA_EXT, GL_PRIMARY_COLOR_EXT);
-				glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE1_ALPHA_EXT, GL_TEXTURE);
-#endif
-			}
-		}
-	}
-
-	virtual void OnUnsetMaterial()
+	virtual void OnUnsetMaterial() _IRR_OVERRIDE_
 	{
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 #ifdef GL_ARB_texture_env_combine
@@ -231,46 +154,38 @@ public:
 #endif
 
 		Driver->getBridgeCalls()->setBlend(false);
-		Driver->getBridgeCalls()->setAlphaTest(false);
 	}
 
-	virtual void OnUnsetBaseMaterial()
+	//! Returns if the material is transparent.
+	/** Is not always transparent, but mostly. */
+	virtual bool isTransparent() const _IRR_OVERRIDE_
 	{
-#ifdef GL_ARB_texture_env_combine
-		glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_ALPHA_ARB, GL_MODULATE);
-		glTexEnvf(GL_TEXTURE_ENV, GL_RGB_SCALE_ARB, 1.f );
-		glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE1_RGB_ARB, GL_PREVIOUS_ARB);
-#else
-		glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_ALPHA_EXT, GL_MODULATE);
-		glTexEnvf(GL_TEXTURE_ENV, GL_RGB_SCALE_EXT, 1.f );
-		glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE1_RGB_EXT, GL_PREVIOUS_EXT);
-#endif
-		Driver->getBridgeCalls()->setBlend(false);
-		Driver->getBridgeCalls()->setAlphaTest(false);
+		return true;
 	}
 
- 	//! Returns if the material is transparent.
- 	/** Is not always transparent, but mostly. */
- 	virtual bool isTransparent() const
- 	{
- 		return true;
- 	}
+protected:
+
+	video::COpenGLDriver* Driver;
 };
 
 
 //! Solid 2 layer material renderer
-class COpenGLMaterialRenderer_SOLID_2_LAYER : public COpenGLMaterialRenderer
+class COpenGLMaterialRenderer_SOLID_2_LAYER : public IMaterialRenderer
 {
 public:
 
-	COpenGLMaterialRenderer_SOLID_2_LAYER(video::COpenGLDriver* d)
-		: COpenGLMaterialRenderer(d) {}
+	COpenGLMaterialRenderer_SOLID_2_LAYER(video::COpenGLDriver* d) : Driver(d) {}
 
 	virtual void OnSetMaterial(const SMaterial& material, const SMaterial& lastMaterial,
-		bool resetAllRenderstates, IMaterialRendererServices* services)
+		bool resetAllRenderstates, IMaterialRendererServices* services) _IRR_OVERRIDE_
 	{
+		if (Driver->getFixedPipelineState() == COpenGLDriver::EOFPS_DISABLE)
+			Driver->setFixedPipelineState(COpenGLDriver::EOFPS_DISABLE_TO_ENABLE);
+		else
+			Driver->setFixedPipelineState(COpenGLDriver::EOFPS_ENABLE);
+
 		Driver->disableTextures(2);
-		Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates, true);
+		Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates);
 
 		if (material.MaterialType != lastMaterial.MaterialType || resetAllRenderstates)
 		{
@@ -300,7 +215,7 @@ public:
 		}
 	}
 
-	virtual void OnUnsetMaterial()
+	virtual void OnUnsetMaterial() _IRR_OVERRIDE_
 	{
 		if (Driver->queryFeature(EVDF_MULTITEXTURE))
 		{
@@ -314,68 +229,75 @@ public:
 			Driver->getBridgeCalls()->setActiveTexture(GL_TEXTURE0_ARB);
 		}
 	}
+
+protected:
+
+	video::COpenGLDriver* Driver;
 };
 
 
 //! Transparent add color material renderer
-class COpenGLMaterialRenderer_TRANSPARENT_ADD_COLOR : public COpenGLMaterialRenderer
+class COpenGLMaterialRenderer_TRANSPARENT_ADD_COLOR : public IMaterialRenderer
 {
 public:
 
-	COpenGLMaterialRenderer_TRANSPARENT_ADD_COLOR(video::COpenGLDriver* d)
-		: COpenGLMaterialRenderer(d) {}
+	COpenGLMaterialRenderer_TRANSPARENT_ADD_COLOR(video::COpenGLDriver* d) : Driver(d) {}
 
 	virtual void OnSetMaterial(const SMaterial& material, const SMaterial& lastMaterial,
-		bool resetAllRenderstates, IMaterialRendererServices* services)
+		bool resetAllRenderstates, IMaterialRendererServices* services) _IRR_OVERRIDE_
 	{
+		if (Driver->getFixedPipelineState() == COpenGLDriver::EOFPS_DISABLE)
+			Driver->setFixedPipelineState(COpenGLDriver::EOFPS_DISABLE_TO_ENABLE);
+		else
+			Driver->setFixedPipelineState(COpenGLDriver::EOFPS_ENABLE);
+
 		Driver->disableTextures(1);
-		Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates, true);
+		Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates);
 
-		if ((material.MaterialType != lastMaterial.MaterialType) || resetAllRenderstates)
-		{
-			Driver->getBridgeCalls()->setBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR);
-			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-			Driver->getBridgeCalls()->setBlend(true);
-		}
-	}
-
-	virtual void OnSetBaseMaterial(const SMaterial& material)
-	{
 		Driver->getBridgeCalls()->setBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR);
 		Driver->getBridgeCalls()->setBlend(true);
+
+		if ((material.MaterialType != lastMaterial.MaterialType) || resetAllRenderstates)
+			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	}
 
-	virtual void OnUnsetMaterial()
-	{
-		Driver->getBridgeCalls()->setBlend(false);
-	}
-
-	virtual void OnUnsetBaseMaterial()
+	virtual void OnUnsetMaterial() _IRR_OVERRIDE_
 	{
 		Driver->getBridgeCalls()->setBlend(false);
 	}
 
 	//! Returns if the material is transparent.
-	virtual bool isTransparent() const
+	virtual bool isTransparent() const _IRR_OVERRIDE_
 	{
 		return true;
 	}
+
+protected:
+
+	video::COpenGLDriver* Driver;
 };
 
 
 //! Transparent vertex alpha material renderer
-class COpenGLMaterialRenderer_TRANSPARENT_VERTEX_ALPHA : public COpenGLMaterialRenderer
+class COpenGLMaterialRenderer_TRANSPARENT_VERTEX_ALPHA : public IMaterialRenderer
 {
 public:
 
-	COpenGLMaterialRenderer_TRANSPARENT_VERTEX_ALPHA(video::COpenGLDriver* d)
-		: COpenGLMaterialRenderer(d) {}
+	COpenGLMaterialRenderer_TRANSPARENT_VERTEX_ALPHA(video::COpenGLDriver* d) : Driver(d) {}
 
 	virtual void OnSetMaterial(const SMaterial& material, const SMaterial& lastMaterial,
-		bool resetAllRenderstates, IMaterialRendererServices* services)
+		bool resetAllRenderstates, IMaterialRendererServices* services) _IRR_OVERRIDE_
 	{
+		if (Driver->getFixedPipelineState() == COpenGLDriver::EOFPS_DISABLE)
+			Driver->setFixedPipelineState(COpenGLDriver::EOFPS_DISABLE_TO_ENABLE);
+		else
+			Driver->setFixedPipelineState(COpenGLDriver::EOFPS_ENABLE);
+
 		Driver->disableTextures(1);
-		Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates, true);
+		Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates);
+
+		Driver->getBridgeCalls()->setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        Driver->getBridgeCalls()->setBlend(true);
 
 		if (material.MaterialType != lastMaterial.MaterialType || resetAllRenderstates)
 		{
@@ -394,33 +316,10 @@ public:
 			glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE0_RGB_EXT, GL_TEXTURE);
 			glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE1_RGB_EXT, GL_PREVIOUS_EXT);
 #endif
-			Driver->getBridgeCalls()->setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			Driver->getBridgeCalls()->setBlend(true);
 		}
 	}
 
-	virtual void OnSetBaseMaterial(const SMaterial& material)
-	{
-#ifdef GL_ARB_texture_env_combine
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE_ARB);
-		glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_ALPHA_ARB, GL_REPLACE);
-		glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA_ARB, GL_PRIMARY_COLOR_ARB);
-		glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_RGB_ARB, GL_MODULATE);
-		glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE0_RGB_ARB, GL_TEXTURE);
-		glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE1_RGB_ARB, GL_PREVIOUS_ARB);
-#else
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE_EXT);
-		glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_ALPHA_EXT, GL_REPLACE);
-		glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA_EXT, GL_PRIMARY_COLOR_EXT );
-		glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_RGB_EXT, GL_MODULATE);
-		glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE0_RGB_EXT, GL_TEXTURE);
-		glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE1_RGB_EXT, GL_PREVIOUS_EXT);
-#endif
-		Driver->getBridgeCalls()->setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		Driver->getBridgeCalls()->setBlend(true);
-	}
-
-	virtual void OnUnsetMaterial()
+	virtual void OnUnsetMaterial() _IRR_OVERRIDE_
 	{
 		// default values
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -434,38 +333,40 @@ public:
 		Driver->getBridgeCalls()->setBlend(false);
 	}
 
-	virtual void OnUnsetBaseMaterial()
-	{
-#ifdef GL_ARB_texture_env_combine
-		glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_ALPHA_ARB, GL_MODULATE );
-		glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA_ARB, GL_TEXTURE );
-#else
-		glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_ALPHA_EXT, GL_MODULATE );
-		glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA_EXT, GL_TEXTURE );
-#endif
-	}
-
 	//! Returns if the material is transparent.
-	virtual bool isTransparent() const
+	virtual bool isTransparent() const _IRR_OVERRIDE_
 	{
 		return true;
 	}
+
+protected:
+
+	video::COpenGLDriver* Driver;
 };
 
 
 //! Transparent alpha channel material renderer
-class COpenGLMaterialRenderer_TRANSPARENT_ALPHA_CHANNEL : public COpenGLMaterialRenderer
+class COpenGLMaterialRenderer_TRANSPARENT_ALPHA_CHANNEL : public IMaterialRenderer
 {
 public:
 
-	COpenGLMaterialRenderer_TRANSPARENT_ALPHA_CHANNEL(video::COpenGLDriver* d)
-		: COpenGLMaterialRenderer(d) {}
+	COpenGLMaterialRenderer_TRANSPARENT_ALPHA_CHANNEL(video::COpenGLDriver* d) : Driver(d) {}
 
 	virtual void OnSetMaterial(const SMaterial& material, const SMaterial& lastMaterial,
-		bool resetAllRenderstates, IMaterialRendererServices* services)
+		bool resetAllRenderstates, IMaterialRendererServices* services) _IRR_OVERRIDE_
 	{
+		if (Driver->getFixedPipelineState() == COpenGLDriver::EOFPS_DISABLE)
+			Driver->setFixedPipelineState(COpenGLDriver::EOFPS_DISABLE_TO_ENABLE);
+		else
+			Driver->setFixedPipelineState(COpenGLDriver::EOFPS_ENABLE);
+
 		Driver->disableTextures(1);
 		Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates);
+
+        Driver->getBridgeCalls()->setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        Driver->getBridgeCalls()->setBlend(true);
+        Driver->getBridgeCalls()->setAlphaTest(true);
+        Driver->getBridgeCalls()->setAlphaFunc(GL_GREATER, material.MaterialTypeParam);
 
 		if (material.MaterialType != lastMaterial.MaterialType || resetAllRenderstates
 			|| material.MaterialTypeParam != lastMaterial.MaterialTypeParam )
@@ -485,39 +386,10 @@ public:
 			glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_ALPHA_EXT, GL_REPLACE);
 			glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA_EXT, GL_TEXTURE);
 #endif
-			Driver->getBridgeCalls()->setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			Driver->getBridgeCalls()->setBlend(true);
-			Driver->getBridgeCalls()->setAlphaTest(true);
-
-			Driver->getBridgeCalls()->setAlphaFunc(GL_GREATER, material.MaterialTypeParam);
 		}
 	}
 
-	virtual void OnSetBaseMaterial(const SMaterial& material)
-	{
-#ifdef GL_ARB_texture_env_combine
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE_ARB);
-		glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_RGB_ARB, GL_MODULATE);
-		glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE0_RGB_ARB, GL_TEXTURE);
-		glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE1_RGB_ARB, GL_PREVIOUS_ARB);
-		glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_ALPHA_ARB, GL_REPLACE);
-		glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA_ARB, GL_TEXTURE);
-#else
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE_EXT);
-		glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_RGB_EXT, GL_MODULATE);
-		glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE0_RGB_EXT, GL_TEXTURE);
-		glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE1_RGB_EXT, GL_PREVIOUS_EXT);
-		glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_ALPHA_EXT, GL_REPLACE);
-		glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE0_ALPHA_EXT, GL_TEXTURE);
-#endif
-
-		Driver->getBridgeCalls()->setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		Driver->getBridgeCalls()->setBlend(true);
-		Driver->getBridgeCalls()->setAlphaTest(true);
-		Driver->getBridgeCalls()->setAlphaFunc(GL_GREATER, material.MaterialTypeParam);
-	}
-
-	virtual void OnUnsetMaterial()
+	virtual void OnUnsetMaterial() _IRR_OVERRIDE_
 	{
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 #ifdef GL_ARB_texture_env_combine
@@ -529,38 +401,35 @@ public:
 		Driver->getBridgeCalls()->setBlend(false);
 	}
 
-	virtual void OnUnsetBaseMaterial()
-	{
-#ifdef GL_ARB_texture_env_combine
-		glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_ALPHA_ARB, GL_MODULATE );
-#else
-		glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_ALPHA_EXT, GL_MODULATE );
-#endif
-		Driver->getBridgeCalls()->setBlend(false);
-		Driver->getBridgeCalls()->setAlphaTest(false);
-	}
-
 	//! Returns if the material is transparent.
-	virtual bool isTransparent() const
+	virtual bool isTransparent() const _IRR_OVERRIDE_
 	{
 		return true;
 	}
+
+protected:
+
+	video::COpenGLDriver* Driver;
 };
 
 
 //! Transparent alpha channel material renderer
-class COpenGLMaterialRenderer_TRANSPARENT_ALPHA_CHANNEL_REF : public COpenGLMaterialRenderer
+class COpenGLMaterialRenderer_TRANSPARENT_ALPHA_CHANNEL_REF : public IMaterialRenderer
 {
 public:
 
-	COpenGLMaterialRenderer_TRANSPARENT_ALPHA_CHANNEL_REF(video::COpenGLDriver* d)
-		: COpenGLMaterialRenderer(d) {}
+	COpenGLMaterialRenderer_TRANSPARENT_ALPHA_CHANNEL_REF(video::COpenGLDriver* d) : Driver(d) {}
 
 	virtual void OnSetMaterial(const SMaterial& material, const SMaterial& lastMaterial,
-		bool resetAllRenderstates, IMaterialRendererServices* services)
+		bool resetAllRenderstates, IMaterialRendererServices* services) _IRR_OVERRIDE_
 	{
+		if (Driver->getFixedPipelineState() == COpenGLDriver::EOFPS_DISABLE)
+			Driver->setFixedPipelineState(COpenGLDriver::EOFPS_DISABLE_TO_ENABLE);
+		else
+			Driver->setFixedPipelineState(COpenGLDriver::EOFPS_ENABLE);
+
 		Driver->disableTextures(1);
-		Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates, true);
+		Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates);
 
 		if (material.MaterialType != lastMaterial.MaterialType || resetAllRenderstates)
 		{
@@ -570,43 +439,40 @@ public:
 		}
 	}
 
-	virtual void OnSetBaseMaterial(const SMaterial& material)
-	{
-		Driver->getBridgeCalls()->setAlphaTest(true);
-		Driver->getBridgeCalls()->setAlphaFunc(GL_GREATER, 0.5f);
-	}
-
-	virtual void OnUnsetMaterial()
-	{
-		Driver->getBridgeCalls()->setAlphaTest(false);
-	}
-
-	virtual void OnUnsetBaseMaterial()
+	virtual void OnUnsetMaterial() _IRR_OVERRIDE_
 	{
 		Driver->getBridgeCalls()->setAlphaTest(false);
 	}
 
 	//! Returns if the material is transparent.
-	virtual bool isTransparent() const
+	virtual bool isTransparent() const _IRR_OVERRIDE_
 	{
 		return false;  // this material is not really transparent because it does no blending.
 	}
+
+protected:
+
+	video::COpenGLDriver* Driver;
 };
 
 
 //! material renderer for all kinds of lightmaps
-class COpenGLMaterialRenderer_LIGHTMAP : public COpenGLMaterialRenderer
+class COpenGLMaterialRenderer_LIGHTMAP : public IMaterialRenderer
 {
 public:
 
-	COpenGLMaterialRenderer_LIGHTMAP(video::COpenGLDriver* d)
-		: COpenGLMaterialRenderer(d) {}
+	COpenGLMaterialRenderer_LIGHTMAP(video::COpenGLDriver* d) : Driver(d) {}
 
 	virtual void OnSetMaterial(const SMaterial& material, const SMaterial& lastMaterial,
-		bool resetAllRenderstates, IMaterialRendererServices* services)
+		bool resetAllRenderstates, IMaterialRendererServices* services) _IRR_OVERRIDE_
 	{
+		if (Driver->getFixedPipelineState() == COpenGLDriver::EOFPS_DISABLE)
+			Driver->setFixedPipelineState(COpenGLDriver::EOFPS_DISABLE_TO_ENABLE);
+		else
+			Driver->setFixedPipelineState(COpenGLDriver::EOFPS_ENABLE);
+
 		Driver->disableTextures(2);
-		Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates, true);
+		Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates);
 
 		if (material.MaterialType != lastMaterial.MaterialType || resetAllRenderstates)
 		{
@@ -648,12 +514,12 @@ public:
 				glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE1_ALPHA_ARB, GL_PREVIOUS_ARB);
 #else
 				glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE_EXT);
-				
+
 				if (material.MaterialType == EMT_LIGHTMAP_ADD)
 					glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB_EXT, GL_ADD);
 				else
 					glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB_EXT, GL_MODULATE);
-				
+
 				glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB_EXT, GL_TEXTURE);
 				glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE1_RGB_EXT, GL_PREVIOUS_EXT);
 				glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_ALPHA_EXT, GL_MODULATE);
@@ -691,7 +557,7 @@ public:
 		}
 	}
 
-	virtual void OnUnsetMaterial()
+	virtual void OnUnsetMaterial() _IRR_OVERRIDE_
 	{
 		if (Driver->queryFeature(EVDF_MULTITEXTURE))
 		{
@@ -706,23 +572,31 @@ public:
 			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		}
 	}
+
+protected:
+
+	video::COpenGLDriver* Driver;
 };
 
 
 
 //! detail map  material renderer
-class COpenGLMaterialRenderer_DETAIL_MAP : public COpenGLMaterialRenderer
+class COpenGLMaterialRenderer_DETAIL_MAP : public IMaterialRenderer
 {
 public:
 
-	COpenGLMaterialRenderer_DETAIL_MAP(video::COpenGLDriver* d)
-		: COpenGLMaterialRenderer(d) {}
+	COpenGLMaterialRenderer_DETAIL_MAP(video::COpenGLDriver* d) : Driver(d) {}
 
 	virtual void OnSetMaterial(const SMaterial& material, const SMaterial& lastMaterial,
-		bool resetAllRenderstates, IMaterialRendererServices* services)
+		bool resetAllRenderstates, IMaterialRendererServices* services) _IRR_OVERRIDE_
 	{
+		if (Driver->getFixedPipelineState() == COpenGLDriver::EOFPS_DISABLE)
+			Driver->setFixedPipelineState(COpenGLDriver::EOFPS_DISABLE_TO_ENABLE);
+		else
+			Driver->setFixedPipelineState(COpenGLDriver::EOFPS_ENABLE);
+
 		Driver->disableTextures(2);
-		Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates, true);
+		Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates);
 
 		if (material.MaterialType != lastMaterial.MaterialType || resetAllRenderstates)
 		{
@@ -747,7 +621,7 @@ public:
 		}
 	}
 
-	virtual void OnUnsetMaterial()
+	virtual void OnUnsetMaterial() _IRR_OVERRIDE_
 	{
 		if (Driver->queryFeature(EVDF_MULTITEXTURE))
 		{
@@ -756,26 +630,34 @@ public:
 			Driver->getBridgeCalls()->setActiveTexture(GL_TEXTURE0_ARB);
 		}
 	}
+
+protected:
+
+	video::COpenGLDriver* Driver;
 };
 
 
 //! sphere map material renderer
-class COpenGLMaterialRenderer_SPHERE_MAP : public COpenGLMaterialRenderer
+class COpenGLMaterialRenderer_SPHERE_MAP : public IMaterialRenderer
 {
 public:
 
-	COpenGLMaterialRenderer_SPHERE_MAP(video::COpenGLDriver* d)
-		: COpenGLMaterialRenderer(d) {}
+	COpenGLMaterialRenderer_SPHERE_MAP(video::COpenGLDriver* d) : Driver(d) {}
 
 	virtual void OnSetMaterial(const SMaterial& material, const SMaterial& lastMaterial,
-		bool resetAllRenderstates, IMaterialRendererServices* services)
+		bool resetAllRenderstates, IMaterialRendererServices* services) _IRR_OVERRIDE_
 	{
+		if (Driver->getFixedPipelineState() == COpenGLDriver::EOFPS_DISABLE)
+			Driver->setFixedPipelineState(COpenGLDriver::EOFPS_DISABLE_TO_ENABLE);
+		else
+			Driver->setFixedPipelineState(COpenGLDriver::EOFPS_ENABLE);
+
 		Driver->disableTextures(1);
 		// texture needs to be flipped for OpenGL
 		core::matrix4 tmp = Driver->getTransform(ETS_TEXTURE_0);
 		tmp[5]*=-1;
 		Driver->setTransform(ETS_TEXTURE_0, tmp);
-		Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates, true);
+		Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates);
 
 		if (material.MaterialType != lastMaterial.MaterialType || resetAllRenderstates)
 		{
@@ -787,27 +669,35 @@ public:
 		}
 	}
 
-	virtual void OnUnsetMaterial()
+	virtual void OnUnsetMaterial() _IRR_OVERRIDE_
 	{
 		glDisable(GL_TEXTURE_GEN_S);
 		glDisable(GL_TEXTURE_GEN_T);
 	}
+
+protected:
+
+	video::COpenGLDriver* Driver;
 };
 
 
 //! reflection 2 layer material renderer
-class COpenGLMaterialRenderer_REFLECTION_2_LAYER : public COpenGLMaterialRenderer
+class COpenGLMaterialRenderer_REFLECTION_2_LAYER : public IMaterialRenderer
 {
 public:
 
-	COpenGLMaterialRenderer_REFLECTION_2_LAYER(video::COpenGLDriver* d)
-		: COpenGLMaterialRenderer(d) {}
+	COpenGLMaterialRenderer_REFLECTION_2_LAYER(video::COpenGLDriver* d) : Driver(d) {}
 
 	virtual void OnSetMaterial(const SMaterial& material, const SMaterial& lastMaterial,
-		bool resetAllRenderstates, IMaterialRendererServices* services)
+		bool resetAllRenderstates, IMaterialRendererServices* services) _IRR_OVERRIDE_
 	{
+		if (Driver->getFixedPipelineState() == COpenGLDriver::EOFPS_DISABLE)
+			Driver->setFixedPipelineState(COpenGLDriver::EOFPS_DISABLE_TO_ENABLE);
+		else
+			Driver->setFixedPipelineState(COpenGLDriver::EOFPS_ENABLE);
+
 		Driver->disableTextures(2);
-		Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates, true);
+		Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates);
 
 		if (material.MaterialType != lastMaterial.MaterialType || resetAllRenderstates)
 		{
@@ -833,7 +723,7 @@ public:
 		}
 	}
 
-	virtual void OnUnsetMaterial()
+	virtual void OnUnsetMaterial() _IRR_OVERRIDE_
 	{
 		if (Driver->queryFeature(EVDF_MULTITEXTURE))
 		{
@@ -847,22 +737,33 @@ public:
 			Driver->getBridgeCalls()->setActiveTexture(GL_TEXTURE0_ARB);
 		}
 	}
+
+protected:
+
+	video::COpenGLDriver* Driver;
 };
 
 
 //! reflection 2 layer material renderer
-class COpenGLMaterialRenderer_TRANSPARENT_REFLECTION_2_LAYER : public COpenGLMaterialRenderer
+class COpenGLMaterialRenderer_TRANSPARENT_REFLECTION_2_LAYER : public IMaterialRenderer
 {
 public:
 
-	COpenGLMaterialRenderer_TRANSPARENT_REFLECTION_2_LAYER(video::COpenGLDriver* d)
-		: COpenGLMaterialRenderer(d) {}
+	COpenGLMaterialRenderer_TRANSPARENT_REFLECTION_2_LAYER(video::COpenGLDriver* d) : Driver(d) {}
 
 	virtual void OnSetMaterial(const SMaterial& material, const SMaterial& lastMaterial,
-		bool resetAllRenderstates, IMaterialRendererServices* services)
+		bool resetAllRenderstates, IMaterialRendererServices* services) _IRR_OVERRIDE_
 	{
+		if (Driver->getFixedPipelineState() == COpenGLDriver::EOFPS_DISABLE)
+			Driver->setFixedPipelineState(COpenGLDriver::EOFPS_DISABLE_TO_ENABLE);
+		else
+			Driver->setFixedPipelineState(COpenGLDriver::EOFPS_ENABLE);
+
 		Driver->disableTextures(2);
-		Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates, true);
+		Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates);
+
+		Driver->getBridgeCalls()->setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        Driver->getBridgeCalls()->setBlend(true);
 
 		if (material.MaterialType != lastMaterial.MaterialType || resetAllRenderstates)
 		{
@@ -904,13 +805,10 @@ public:
 			glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
 			glEnable(GL_TEXTURE_GEN_S);
 			glEnable(GL_TEXTURE_GEN_T);
-
-			Driver->getBridgeCalls()->setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			Driver->getBridgeCalls()->setBlend(true);
 		}
 	}
 
-	virtual void OnUnsetMaterial()
+	virtual void OnUnsetMaterial() _IRR_OVERRIDE_
 	{
 		if (Driver->queryFeature(EVDF_MULTITEXTURE))
 		{
@@ -927,10 +825,14 @@ public:
 	}
 
 	//! Returns if the material is transparent.
-	virtual bool isTransparent() const
+	virtual bool isTransparent() const _IRR_OVERRIDE_
 	{
 		return true;
 	}
+
+protected:
+
+	video::COpenGLDriver* Driver;
 };
 
 } // end namespace video

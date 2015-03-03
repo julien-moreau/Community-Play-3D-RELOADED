@@ -3,6 +3,7 @@
 #include "../Core/CCP3DInterfaceController.h"
 #include "../Core/CCP3DEditorCore.h"
 #include "../Core/CCP3DEditorTransformer.h"
+#include "../UserInterfaces/CCP3DEditionTool.h"
 
 #include <ICP3DEditionTool.h>
 #include <ICP3DEngine.h>
@@ -130,6 +131,7 @@ bool CCP3DSceneGraph::OnEvent(const SEvent &event) {
 					EditorCore->getEditorTransformer()->removeSceneNode(sceneNode);
 					node->getParent()->deleteChild(node);
 					SelectedSceneNode = 0;
+					EditorCore->getEditionTool()->clear();
 				}
 
 				ContextMenu = 0;

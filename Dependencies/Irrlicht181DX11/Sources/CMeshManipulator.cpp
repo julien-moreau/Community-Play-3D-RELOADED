@@ -56,7 +56,7 @@ void CMeshManipulator::setVertexColor(IMeshBuffer* meshBuffer, video::SColor col
 	if (!meshBuffer)
 		return;
 
-	video::IVertexAttribute* attribute = meshBuffer->getVertexBuffer(0)->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_COLOR);
+	video::IVertexAttribute* attribute = meshBuffer->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_COLOR);
 
 	if (!attribute)
 		return;
@@ -96,7 +96,7 @@ void CMeshManipulator::scale(IMeshBuffer* meshBuffer, const core::vector3df& fac
 	if (!meshBuffer)
 		return;
 
-	video::IVertexAttribute* attribute = meshBuffer->getVertexBuffer(0)->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
+	video::IVertexAttribute* attribute = meshBuffer->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
 
 	if (!attribute)
 		return;
@@ -135,7 +135,7 @@ void CMeshManipulator::scaleTCoords(IMeshBuffer* meshBuffer, const core::vector2
 		value += j;
 		semantic = (video::E_VERTEX_ATTRIBUTE_SEMANTIC)value;
 
-		video::IVertexAttribute* attribute = meshBuffer->getVertexBuffer(0)->getVertexDescriptor()->getAttributeBySemantic(semantic);
+		video::IVertexAttribute* attribute = meshBuffer->getVertexDescriptor()->getAttributeBySemantic(semantic);
 
 		if (!attribute)
 			continue;
@@ -163,7 +163,7 @@ void CMeshManipulator::transform(IMeshBuffer* meshBuffer, const core::matrix4& m
 	if (!meshBuffer)
 		return;
 
-	video::IVertexAttribute* attribute = meshBuffer->getVertexBuffer(0)->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
+	video::IVertexAttribute* attribute = meshBuffer->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
 
 	if (!attribute)
 		return;
@@ -216,7 +216,7 @@ void CMeshManipulator::recalculateNormals(IMeshBuffer* meshBuffer, bool smooth, 
 
 	int Found = 0;
 
-	video::IVertexDescriptor* vd = meshBuffer->getVertexBuffer(0)->getVertexDescriptor();
+	video::IVertexDescriptor* vd = meshBuffer->getVertexDescriptor();
 
 	u32 positionBufferID = 0;
 	u32 positionOffset = 0;
@@ -408,7 +408,7 @@ void CMeshManipulator::recalculateTangents(IMeshBuffer* meshBuffer, bool recalcu
 
 	int Found = 0;
 
-	video::IVertexDescriptor* vd = meshBuffer->getVertexBuffer(0)->getVertexDescriptor();
+	video::IVertexDescriptor* vd = meshBuffer->getVertexDescriptor();
 
 	u32 positionBufferID = 0;
 	u32 positionOffset = 0;
@@ -586,7 +586,7 @@ void CMeshManipulator::makePlanarTextureMapping(IMeshBuffer* meshBuffer, f32 res
 
 	int Found = 0;
 
-	video::IVertexDescriptor* vd = meshBuffer->getVertexBuffer(0)->getVertexDescriptor();
+	video::IVertexDescriptor* vd = meshBuffer->getVertexDescriptor();
 
 	u32 positionBufferID = 0;
 	u32 positionOffset = 0;
@@ -696,7 +696,7 @@ void CMeshManipulator::makePlanarTextureMapping(IMeshBuffer* meshBuffer, f32 res
 
 	int Found = 0;
 
-	video::IVertexDescriptor* vd = meshBuffer->getVertexBuffer(0)->getVertexDescriptor();
+	video::IVertexDescriptor* vd = meshBuffer->getVertexDescriptor();
 
 	u32 positionBufferID = 0;
 	u32 positionOffset = 0;
@@ -802,20 +802,18 @@ bool CMeshManipulator::copyIndices(IIndexBuffer* srcBuffer, IIndexBuffer* dstBuf
 	return true;
 }
 
-bool CMeshManipulator::copyVertices(IVertexBuffer* srcBuffer, IVertexBuffer* dstBuffer, u32 srcDescriptionBufferID, u32 dstDescriptionBufferID, bool copyCustomAttribute) const
+bool CMeshManipulator::copyVertices(IVertexBuffer* srcBuffer, u32 srcDescriptionBufferID, video::IVertexDescriptor* srcDescriptor,
+	IVertexBuffer* dstBuffer, u32 dstDescriptionBufferID, video::IVertexDescriptor* dstDescriptor, bool copyCustomAttribute) const
 {
-	video::IVertexDescriptor* vdSrc = (srcBuffer) ? srcBuffer->getVertexDescriptor() : 0;
-	video::IVertexDescriptor* vdDst = (dstBuffer) ? dstBuffer->getVertexDescriptor() : 0;
-
-	if (!srcBuffer || !dstBuffer || !srcBuffer->getVertexDescriptor() || !dstBuffer->getVertexDescriptor() || srcBuffer->getVertexCount() == 0)
+	if (!srcBuffer || !dstBuffer || !srcDescriptor || !dstDescriptor || srcBuffer->getVertexCount() == 0)
 		return false;
 
 	bool FillBuffer = false;
 
-	for (u32 i = 0; i < vdDst->getAttributeCount(); ++i)
+	for (u32 i = 0; i < dstDescriptor->getAttributeCount(); ++i)
 	{
 		video::IVertexAttribute* attributeSrc = 0;
-		video::IVertexAttribute* attributeDst = vdDst->getAttribute(i);
+		video::IVertexAttribute* attributeDst = dstDescriptor->getAttribute(i);
 
 		if (dstDescriptionBufferID != attributeDst->getBufferID())
 			continue;
@@ -823,16 +821,16 @@ bool CMeshManipulator::copyVertices(IVertexBuffer* srcBuffer, IVertexBuffer* dst
 		video::E_VERTEX_ATTRIBUTE_SEMANTIC semantic = attributeDst->getSemantic();
 
 		if (semantic != video::EVAS_CUSTOM)
-			attributeSrc = vdSrc->getAttributeBySemantic(semantic);
+			attributeSrc = srcDescriptor->getAttributeBySemantic(semantic);
 		else if (copyCustomAttribute)
 		{
 			core::stringc name = attributeDst->getName();
 
-			for (u32 j = 0; j < vdSrc->getAttributeCount(); ++j)
+			for (u32 j = 0; j < srcDescriptor->getAttributeCount(); ++j)
 			{
-				if (name == vdSrc->getAttribute(j)->getName())
+				if (name == srcDescriptor->getAttribute(j)->getName())
 				{
-					attributeSrc = vdSrc->getAttribute(j);
+					attributeSrc = srcDescriptor->getAttribute(j);
 					break;
 				}
 			}
@@ -886,7 +884,7 @@ bool CMeshManipulator::createTangents(IMeshBuffer* srcBuffer, IMeshBuffer* dstBu
 
 	int Found = 0;
 
-	video::IVertexDescriptor* vd = dstBuffer->getVertexBuffer(0)->getVertexDescriptor();
+	video::IVertexDescriptor* vd = dstBuffer->getVertexDescriptor();
 
 	for (u32 i = 0; i < vd->getAttributeCount(); ++i)
 	{
@@ -924,7 +922,7 @@ bool CMeshManipulator::createTangents(IMeshBuffer* srcBuffer, IMeshBuffer* dstBu
 		if (i >= dstBuffer->getVertexBufferCount())
 			break;
 
-		copyVertices(srcBuffer->getVertexBuffer(i), dstBuffer->getVertexBuffer(i), i, i, copyCustomAttribute);
+		copyVertices(srcBuffer->getVertexBuffer(i), i, srcBuffer->getVertexDescriptor(), dstBuffer->getVertexBuffer(i), i, dstBuffer->getVertexDescriptor(), copyCustomAttribute);
 	}
 
 	// Calculate tangents.
@@ -1008,7 +1006,7 @@ bool CMeshManipulator::createWelded(IMeshBuffer* srcBuffer, IMeshBuffer* dstBuff
 		check4Component
 	};
 
-	video::IVertexDescriptor* vd = srcVertexBuffer->getVertexDescriptor();
+	video::IVertexDescriptor* vd = srcBuffer->getVertexDescriptor();
 
 	const u32 vertexSize = srcVertexBuffer->getVertexSize();
 
@@ -1486,11 +1484,11 @@ IMesh* CMeshManipulator::createForsythOptimizedMesh(const IMesh* mesh) const
 			{
 				video::S3DVertex *v = (video::S3DVertex *) mb->getVertexBuffer(0)->getVertices();
 
-				CMeshBuffer<video::S3DVertex> *buf = new CMeshBuffer<video::S3DVertex>(mb->getVertexBuffer(0)->getVertexDescriptor(), video::EIT_16BIT);
-				buf->Material = mb->getMaterial();
+				CMeshBuffer<video::S3DVertex> *buf = new CMeshBuffer<video::S3DVertex>(mb->getVertexDescriptor(), video::EIT_16BIT);
+				buf->getMaterial() = mb->getMaterial();
 
 				buf->getVertexBuffer(0)->reallocate(vcount);
-				buf->IndexBuffer->reallocate(icount);
+				buf->getIndexBuffer()->reallocate(icount);
 
 				core::map<const video::S3DVertex, const u16> sind; // search index for fast operation
 				typedef core::map<const video::S3DVertex, const u16>::Node snode;
@@ -1528,13 +1526,13 @@ IMesh* CMeshManipulator::createForsythOptimizedMesh(const IMesh* mesh) const
 					if (!s)
 					{
 						buf->getVertexBuffer(0)->addVertex(&v[tc[highest].ind[0]]);
-						buf->IndexBuffer->addIndex(newind);
+						buf->getIndexBuffer()->addIndex(newind);
 						sind.insert(v[tc[highest].ind[0]], newind);
 						newind++;
 					}
 					else
 					{
-						buf->IndexBuffer->addIndex(s->getValue());
+						buf->getIndexBuffer()->addIndex(s->getValue());
 					}
 
 					s = sind.find(v[tc[highest].ind[1]]);
@@ -1542,13 +1540,13 @@ IMesh* CMeshManipulator::createForsythOptimizedMesh(const IMesh* mesh) const
 					if (!s)
 					{
 						buf->getVertexBuffer(0)->addVertex(&v[tc[highest].ind[1]]);
-						buf->IndexBuffer->addIndex(newind);
+						buf->getIndexBuffer()->addIndex(newind);
 						sind.insert(v[tc[highest].ind[1]], newind);
 						newind++;
 					}
 					else
 					{
-						buf->IndexBuffer->addIndex(s->getValue());
+						buf->getIndexBuffer()->addIndex(s->getValue());
 					}
 
 					s = sind.find(v[tc[highest].ind[2]]);
@@ -1556,12 +1554,12 @@ IMesh* CMeshManipulator::createForsythOptimizedMesh(const IMesh* mesh) const
 					if (!s)
 					{
 						buf->getVertexBuffer(0)->addVertex(&v[tc[highest].ind[2]]);
-						buf->IndexBuffer->addIndex(newind);
+						buf->getIndexBuffer()->addIndex(newind);
 						sind.insert(v[tc[highest].ind[2]], newind);
 					}
 					else
 					{
-						buf->IndexBuffer->addIndex(s->getValue());
+						buf->getIndexBuffer()->addIndex(s->getValue());
 					}
 
 					vc[tc[highest].ind[0]].NumActiveTris--;
@@ -1589,7 +1587,7 @@ IMesh* CMeshManipulator::createForsythOptimizedMesh(const IMesh* mesh) const
 					drawcalls++;
 				}
 
-				buf->setBoundingBox(mb->getBoundingBox());
+				buf->getBoundingBox() = mb->getBoundingBox();
 				newmesh->addMeshBuffer(buf);
 				buf->drop();
 			}
@@ -1598,11 +1596,11 @@ IMesh* CMeshManipulator::createForsythOptimizedMesh(const IMesh* mesh) const
 			{
 				video::S3DVertex2TCoords *v = (video::S3DVertex2TCoords *) mb->getVertexBuffer(0)->getVertices();
 
-				CMeshBuffer<video::S3DVertex2TCoords> *buf = new CMeshBuffer<video::S3DVertex2TCoords>(mb->getVertexBuffer(0)->getVertexDescriptor(), video::EIT_16BIT);
-				buf->Material = mb->getMaterial();
+				CMeshBuffer<video::S3DVertex2TCoords> *buf = new CMeshBuffer<video::S3DVertex2TCoords>(mb->getVertexDescriptor(), video::EIT_16BIT);
+				buf->getMaterial() = mb->getMaterial();
 
 				buf->getVertexBuffer(0)->reallocate(vcount);
-				buf->IndexBuffer->reallocate(icount);
+				buf->getIndexBuffer()->reallocate(icount);
 
 				core::map<const video::S3DVertex2TCoords, const u16> sind; // search index for fast operation
 				typedef core::map<const video::S3DVertex2TCoords, const u16>::Node snode;
@@ -1640,13 +1638,13 @@ IMesh* CMeshManipulator::createForsythOptimizedMesh(const IMesh* mesh) const
 					if (!s)
 					{
 						buf->getVertexBuffer(0)->addVertex(&v[tc[highest].ind[0]]);
-						buf->IndexBuffer->addIndex(newind);
+						buf->getIndexBuffer()->addIndex(newind);
 						sind.insert(v[tc[highest].ind[0]], newind);
 						newind++;
 					}
 					else
 					{
-						buf->IndexBuffer->addIndex(s->getValue());
+						buf->getIndexBuffer()->addIndex(s->getValue());
 					}
 
 					s = sind.find(v[tc[highest].ind[1]]);
@@ -1654,13 +1652,13 @@ IMesh* CMeshManipulator::createForsythOptimizedMesh(const IMesh* mesh) const
 					if (!s)
 					{
 						buf->getVertexBuffer(0)->addVertex(&v[tc[highest].ind[1]]);
-						buf->IndexBuffer->addIndex(newind);
+						buf->getIndexBuffer()->addIndex(newind);
 						sind.insert(v[tc[highest].ind[1]], newind);
 						newind++;
 					}
 					else
 					{
-						buf->IndexBuffer->addIndex(s->getValue());
+						buf->getIndexBuffer()->addIndex(s->getValue());
 					}
 
 					s = sind.find(v[tc[highest].ind[2]]);
@@ -1668,12 +1666,12 @@ IMesh* CMeshManipulator::createForsythOptimizedMesh(const IMesh* mesh) const
 					if (!s)
 					{
 						buf->getVertexBuffer(0)->addVertex(&v[tc[highest].ind[2]]);
-						buf->IndexBuffer->addIndex(newind);
+						buf->getIndexBuffer()->addIndex(newind);
 						sind.insert(v[tc[highest].ind[2]], newind);
 					}
 					else
 					{
-						buf->IndexBuffer->addIndex(s->getValue());
+						buf->getIndexBuffer()->addIndex(s->getValue());
 					}
 
 					vc[tc[highest].ind[0]].NumActiveTris--;
@@ -1701,7 +1699,7 @@ IMesh* CMeshManipulator::createForsythOptimizedMesh(const IMesh* mesh) const
 					drawcalls++;
 				}
 
-				buf->setBoundingBox(mb->getBoundingBox());
+				buf->getBoundingBox() = mb->getBoundingBox();
 				newmesh->addMeshBuffer(buf);
 				buf->drop();
 
@@ -1711,11 +1709,11 @@ IMesh* CMeshManipulator::createForsythOptimizedMesh(const IMesh* mesh) const
 			{
 				video::S3DVertexTangents *v = (video::S3DVertexTangents *) mb->getVertexBuffer(0)->getVertices();
 
-				CMeshBuffer<video::S3DVertexTangents> *buf = new CMeshBuffer<video::S3DVertexTangents>(mb->getVertexBuffer(0)->getVertexDescriptor(), video::EIT_16BIT);
-				buf->Material = mb->getMaterial();
+				CMeshBuffer<video::S3DVertexTangents> *buf = new CMeshBuffer<video::S3DVertexTangents>(mb->getVertexDescriptor(), video::EIT_16BIT);
+				buf->getMaterial() = mb->getMaterial();
 
 				buf->getVertexBuffer(0)->reallocate(vcount);
-				buf->IndexBuffer->reallocate(icount);
+				buf->getIndexBuffer()->reallocate(icount);
 
 				core::map<const video::S3DVertexTangents, const u16> sind; // search index for fast operation
 				typedef core::map<const video::S3DVertexTangents, const u16>::Node snode;
@@ -1753,13 +1751,13 @@ IMesh* CMeshManipulator::createForsythOptimizedMesh(const IMesh* mesh) const
 					if (!s)
 					{
 						buf->getVertexBuffer(0)->addVertex(&v[tc[highest].ind[0]]);
-						buf->IndexBuffer->addIndex(newind);
+						buf->getIndexBuffer()->addIndex(newind);
 						sind.insert(v[tc[highest].ind[0]], newind);
 						newind++;
 					}
 					else
 					{
-						buf->IndexBuffer->addIndex(s->getValue());
+						buf->getIndexBuffer()->addIndex(s->getValue());
 					}
 
 					s = sind.find(v[tc[highest].ind[1]]);
@@ -1767,13 +1765,13 @@ IMesh* CMeshManipulator::createForsythOptimizedMesh(const IMesh* mesh) const
 					if (!s)
 					{
 						buf->getVertexBuffer(0)->addVertex(&v[tc[highest].ind[1]]);
-						buf->IndexBuffer->addIndex(newind);
+						buf->getIndexBuffer()->addIndex(newind);
 						sind.insert(v[tc[highest].ind[1]], newind);
 						newind++;
 					}
 					else
 					{
-						buf->IndexBuffer->addIndex(s->getValue());
+						buf->getIndexBuffer()->addIndex(s->getValue());
 					}
 
 					s = sind.find(v[tc[highest].ind[2]]);
@@ -1781,12 +1779,12 @@ IMesh* CMeshManipulator::createForsythOptimizedMesh(const IMesh* mesh) const
 					if (!s)
 					{
 						buf->getVertexBuffer(0)->addVertex(&v[tc[highest].ind[2]]);
-						buf->IndexBuffer->addIndex(newind);
+						buf->getIndexBuffer()->addIndex(newind);
 						sind.insert(v[tc[highest].ind[2]], newind);
 					}
 					else
 					{
-						buf->IndexBuffer->addIndex(s->getValue());
+						buf->getIndexBuffer()->addIndex(s->getValue());
 					}
 
 					vc[tc[highest].ind[0]].NumActiveTris--;
@@ -1814,7 +1812,7 @@ IMesh* CMeshManipulator::createForsythOptimizedMesh(const IMesh* mesh) const
 					drawcalls++;
 				}
 
-				buf->setBoundingBox(mb->getBoundingBox());
+				buf->getBoundingBox() = mb->getBoundingBox();
 				newmesh->addMeshBuffer(buf);
 				buf->drop();
 			}

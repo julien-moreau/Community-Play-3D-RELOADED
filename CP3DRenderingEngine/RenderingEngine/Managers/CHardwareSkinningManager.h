@@ -19,7 +19,7 @@ public:
 	~CHardwareSkinningManager();
 
 	// ICP3DHardwareSkinningManager
-	bool addNode(irr::scene::IAnimatedMeshSceneNode *node);
+	ICP3DHardwareSkinningMaterial *addNode(irr::scene::IAnimatedMeshSceneNode *node);
 	bool removeNode(irr::scene::IAnimatedMeshSceneNode *node);
 	ICP3DHardwareSkinningMaterial *getHWMaterial(irr::scene::IAnimatedMeshSceneNode *node);
 

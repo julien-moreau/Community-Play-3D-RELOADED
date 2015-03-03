@@ -209,7 +209,8 @@ namespace scene
 
 		virtual bool copyIndices(IIndexBuffer* srcBuffer, IIndexBuffer* dstBuffer) const = 0;
 
-		virtual bool copyVertices(IVertexBuffer* srcBuffer, IVertexBuffer* dstBuffer, u32 srcDescriptionBufferID, u32 dstDescriptionBufferID, bool copyCustomAttribute) const = 0;
+		virtual bool copyVertices(IVertexBuffer* srcBuffer, u32 srcDescriptionBufferID, video::IVertexDescriptor* srcDescriptor,
+			IVertexBuffer* dstBuffer, u32 dstDescriptionBufferID, video::IVertexDescriptor* dstDescriptor, bool copyCustomAttribute) const = 0;
 
 		virtual bool createTangents(IMeshBuffer* srcBuffer, IMeshBuffer* dstBuffer, bool copyCustomAttribute) = 0;
 
@@ -226,12 +227,13 @@ namespace scene
 				!descriptor || descriptor->getVertexSize(0) != sizeof(T))
 				return false;
 
-			scene::CVertexBuffer<T>* vb = new scene::CVertexBuffer<T>(descriptor);
+			scene::CVertexBuffer<T>* vb = new scene::CVertexBuffer<T>();
 
 			bool status = false;
 			
-			if (copyVertices(buffer->getVertexBuffer(0), vb, 0, 0, false))
+			if (copyVertices(buffer->getVertexBuffer(0), 0, buffer->getVertexDescriptor(), vb, 0, descriptor, false))
 			{
+				buffer->setVertexDescriptor(descriptor);
 				buffer->setVertexBuffer(vb, 0);
 				status = true;
 			}
@@ -278,10 +280,10 @@ namespace scene
 				IIndexBuffer* srcIndexBuffer = srcBuffer->getIndexBuffer();
 				CMeshBuffer<T>* dstBuffer = new CMeshBuffer<T>(descriptor, srcIndexBuffer->getType());
 
-				dstBuffer->Material = srcBuffer->getMaterial();
+				dstBuffer->getMaterial() = srcBuffer->getMaterial();
 
 				copyIndices(srcIndexBuffer, dstBuffer->getIndexBuffer());
-				copyVertices(srcBuffer->getVertexBuffer(0), dstBuffer->getVertexBuffer(0), 0, 0, copyCustomAttribute);
+				copyVertices(srcBuffer->getVertexBuffer(0), 0, srcBuffer->getVertexDescriptor(), dstBuffer->getVertexBuffer(0), 0, dstBuffer->getVertexDescriptor(), copyCustomAttribute);
 
 				dstMesh->addMeshBuffer(dstBuffer);
 				dstBuffer->drop();

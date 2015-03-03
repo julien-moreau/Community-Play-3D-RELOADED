@@ -12,6 +12,7 @@
 #ifdef _IRR_COMPILE_WITH_MY3D_LOADER_
 
 #include "CMY3DMeshFileLoader.h"
+#include "CMeshTextureLoader.h"
 
 #include "SAnimatedMesh.h"
 #include "CMeshBuffer.h"
@@ -60,6 +61,8 @@ CMY3DMeshFileLoader::CMY3DMeshFileLoader(ISceneManager* scmgr, io::IFileSystem* 
 
 	if (FileSystem)
 		FileSystem->grab();
+
+	TextureLoader = new CMeshTextureLoader( FileSystem, SceneManager->getVideoDriver() );
 }
 
 
@@ -78,16 +81,16 @@ bool CMY3DMeshFileLoader::isALoadableFileExtension(const io::path& filename) con
 
 IAnimatedMesh* CMY3DMeshFileLoader::createMesh(io::IReadFile* file)
 {
+	if ( getMeshTextureLoader() )
+	{
+		getMeshTextureLoader()->setMeshFile(file);
+		if ( SceneManager->getParameters()->existsAttribute(MY3D_TEXTURE_PATH) )
+			getMeshTextureLoader()->setTexturePath(SceneManager->getParameters()->getAttributeAsString(MY3D_TEXTURE_PATH));
+	}
+
 	MaterialEntry.clear();
 	MeshBufferEntry.clear();
 	ChildNodes.clear();
-
-	// working directory (from which we load the scene)
-	core::stringc filepath = FileSystem->getFileDir(file->getFileName());
-	if (filepath==".")
-		filepath="";
-	else
-		filepath.append("/");
 
 	// read file into memory
 	SMyFileHeader fileHeader;
@@ -133,9 +136,6 @@ IAnimatedMesh* CMY3DMeshFileLoader::createMesh(io::IReadFile* file)
 		os::Printer::log("Can not find MY3D_MAT_LIST_ID, loading failed!", ELL_ERROR);
 		return 0;
 	}
-
-	core::stringc texturePath =
-		SceneManager->getParameters()->getAttributeAsString(MY3D_TEXTURE_PATH);
 
 	file->read(&id, sizeof(id));
 #ifdef __BIG_ENDIAN__
@@ -188,12 +188,9 @@ IAnimatedMesh* CMY3DMeshFileLoader::createMesh(io::IReadFile* file)
 				const bool oldMipMapState = SceneManager->getVideoDriver()->getTextureCreationFlag(video::ETCF_CREATE_MIP_MAPS);
 				SceneManager->getVideoDriver()->setTextureCreationFlag(video::ETCF_CREATE_MIP_MAPS, false);
 
-				me.Texture2FileName = texturePath.size() ? texturePath : filepath;
-				me.Texture2FileName.append("Lightmaps/");
+				me.Texture2FileName = "Lightmaps/";
 				me.Texture2FileName.append(name);
-
-				if (name.size())
-					me.Texture2 = SceneManager->getVideoDriver()->getTexture(me.Texture2FileName);
+				me.Texture2 = getMeshTextureLoader() ? getMeshTextureLoader()->getTexture(me.Texture2FileName) : NULL;
 
 				me.MaterialType = video::EMT_LIGHTMAP_M2;
 				gotLightMap = true;
@@ -203,21 +200,28 @@ IAnimatedMesh* CMY3DMeshFileLoader::createMesh(io::IReadFile* file)
 			else
 			if (!gotLightMap && gotMainMap)
 			{
-				me.Texture2FileName = texturePath.size() ? texturePath : filepath;
-				me.Texture2FileName.append(name);
-
-				if (name.size())
-					me.Texture2 = SceneManager->getVideoDriver()->getTexture(me.Texture2FileName);
+				if ( getMeshTextureLoader() )
+				{
+					me.Texture2 = getMeshTextureLoader() ? getMeshTextureLoader()->getTexture(name) : NULL;
+					if ( me.Texture2 )
+						me.Texture2FileName = me.Texture2->getName();
+				}
+				else
+					me.Texture2FileName = name;
 
 				me.MaterialType = video::EMT_REFLECTION_2_LAYER;
 			}
 			else
 			if (!gotMainMap && !gotLightMap)
 			{
-				me.Texture1FileName = filepath;
-				me.Texture1FileName.append(name);
-				if (name.size())
-					me.Texture1 = SceneManager->getVideoDriver()->getTexture(me.Texture1FileName);
+				if ( getMeshTextureLoader() )
+				{
+					me.Texture1 = getMeshTextureLoader() ? getMeshTextureLoader()->getTexture(name) : NULL;
+					if ( me.Texture1 )
+						me.Texture1FileName = me.Texture1->getName();
+				}
+				else
+					me.Texture1FileName = name;
 
 				gotMainMap = true;
 				me.MaterialType = video::EMT_SOLID;
@@ -403,87 +407,87 @@ IAnimatedMesh* CMY3DMeshFileLoader::createMesh(io::IReadFile* file)
 			// creating new mesh buffer for this material
 			buffer = new CMeshBuffer<video::S3DVertex2TCoords>(SceneManager->getVideoDriver()->getVertexDescriptor(1));
 
-			buffer->Material.MaterialType = video::EMT_LIGHTMAP_M2; // EMT_LIGHTMAP_M4 also possible
-			buffer->Material.Wireframe = false;
-			buffer->Material.Lighting = false;
+			buffer->getMaterial().MaterialType = video::EMT_LIGHTMAP_M2; // EMT_LIGHTMAP_M4 also possible
+			buffer->getMaterial().Wireframe = false;
+			buffer->getMaterial().Lighting = false;
 
 			if (matEnt)
 			{
-				buffer->Material.MaterialType = matEnt->MaterialType;
+				buffer->getMaterial().MaterialType = matEnt->MaterialType;
 
-				if (buffer->Material.MaterialType == video::EMT_REFLECTION_2_LAYER)
+				if (buffer->getMaterial().MaterialType == video::EMT_REFLECTION_2_LAYER)
 				{
-					buffer->Material.Lighting = true;
-					buffer->Material.setTexture(1, matEnt->Texture1);
-					buffer->Material.setTexture(0, matEnt->Texture2);
+					buffer->getMaterial().Lighting = true;
+					buffer->getMaterial().setTexture(1, matEnt->Texture1);
+					buffer->getMaterial().setTexture(0, matEnt->Texture2);
 				}
 				else
 				{
-					buffer->Material.setTexture(0, matEnt->Texture1);
-					buffer->Material.setTexture(1, matEnt->Texture2);
+					buffer->getMaterial().setTexture(0, matEnt->Texture1);
+					buffer->getMaterial().setTexture(1, matEnt->Texture2);
 				}
 
-				if (buffer->Material.MaterialType == video::EMT_TRANSPARENT_ALPHA_CHANNEL)
+				if (buffer->getMaterial().MaterialType == video::EMT_TRANSPARENT_ALPHA_CHANNEL)
 				{
-					buffer->Material.BackfaceCulling = true;
-					buffer->Material.Lighting  = true;
+					buffer->getMaterial().BackfaceCulling = true;
+					buffer->getMaterial().Lighting = true;
 				}
 				else
-				if (buffer->Material.MaterialType == video::EMT_SPHERE_MAP)
+				if (buffer->getMaterial().MaterialType == video::EMT_SPHERE_MAP)
 				{
-					buffer->Material.Lighting  = true;
+					buffer->getMaterial().Lighting = true;
 				}
 
-				buffer->Material.AmbientColor = video::SColor(
+				buffer->getMaterial().AmbientColor = video::SColor(
 					matEnt->Header.AmbientColor.A, matEnt->Header.AmbientColor.R,
 					matEnt->Header.AmbientColor.G, matEnt->Header.AmbientColor.B
 					);
-				buffer->Material.DiffuseColor =	video::SColor(
+				buffer->getMaterial().DiffuseColor = video::SColor(
 					matEnt->Header.DiffuseColor.A, matEnt->Header.DiffuseColor.R,
 					matEnt->Header.DiffuseColor.G, matEnt->Header.DiffuseColor.B
 					);
-				buffer->Material.EmissiveColor = video::SColor(
+				buffer->getMaterial().EmissiveColor = video::SColor(
 					matEnt->Header.EmissiveColor.A, matEnt->Header.EmissiveColor.R,
 					matEnt->Header.EmissiveColor.G, matEnt->Header.EmissiveColor.B
 					);
-				buffer->Material.SpecularColor = video::SColor(
+				buffer->getMaterial().SpecularColor = video::SColor(
 					matEnt->Header.SpecularColor.A, matEnt->Header.SpecularColor.R,
 					matEnt->Header.SpecularColor.G, matEnt->Header.SpecularColor.B
 					);
 			}
 			else
 			{
-				buffer->Material.setTexture(0, 0);
-				buffer->Material.setTexture(1, 0);
+				buffer->getMaterial().setTexture(0, 0);
+				buffer->getMaterial().setTexture(1, 0);
 
-				buffer->Material.AmbientColor = video::SColor(255, 255, 255, 255);
-				buffer->Material.DiffuseColor =	video::SColor(255, 255, 255, 255);
-				buffer->Material.EmissiveColor = video::SColor(0, 0, 0, 0);
-				buffer->Material.SpecularColor = video::SColor(0, 0, 0, 0);
+				buffer->getMaterial().AmbientColor = video::SColor(255, 255, 255, 255);
+				buffer->getMaterial().DiffuseColor = video::SColor(255, 255, 255, 255);
+				buffer->getMaterial().EmissiveColor = video::SColor(0, 0, 0, 0);
+				buffer->getMaterial().SpecularColor = video::SColor(0, 0, 0, 0);
 			}
 
 			if (matEnt && matEnt->Header.Transparency!=0)
 			{
-				if (buffer->Material.MaterialType == video::EMT_REFLECTION_2_LAYER )
+				if (buffer->getMaterial().MaterialType == video::EMT_REFLECTION_2_LAYER)
 				{
-					buffer->Material.MaterialType = video::EMT_TRANSPARENT_REFLECTION_2_LAYER;
-					buffer->Material.Lighting  = true;
-					buffer->Material.BackfaceCulling = true;
+					buffer->getMaterial().MaterialType = video::EMT_TRANSPARENT_REFLECTION_2_LAYER;
+					buffer->getMaterial().Lighting = true;
+					buffer->getMaterial().BackfaceCulling = true;
 				}
 				else
 				{
-					buffer->Material.MaterialType = video::EMT_TRANSPARENT_VERTEX_ALPHA;
-					buffer->Material.Lighting = false;
-					buffer->Material.BackfaceCulling = false;
+					buffer->getMaterial().MaterialType = video::EMT_TRANSPARENT_VERTEX_ALPHA;
+					buffer->getMaterial().Lighting = false;
+					buffer->getMaterial().BackfaceCulling = false;
 				}
 			}
 			else if (
-				!buffer->Material.getTexture(1) &&
-				buffer->Material.MaterialType != video::EMT_TRANSPARENT_ALPHA_CHANNEL &&
-				buffer->Material.MaterialType != video::EMT_SPHERE_MAP)
+				!buffer->getMaterial().getTexture(1) &&
+				buffer->getMaterial().MaterialType != video::EMT_TRANSPARENT_ALPHA_CHANNEL &&
+				buffer->getMaterial().MaterialType != video::EMT_SPHERE_MAP)
 			{
-				buffer->Material.MaterialType = video::EMT_SOLID;
-				buffer->Material.Lighting  = true;
+				buffer->getMaterial().MaterialType = video::EMT_SOLID;
+				buffer->getMaterial().Lighting = true;
 			}
 
 			MeshBufferEntry.push_back(
@@ -495,8 +499,8 @@ IAnimatedMesh* CMY3DMeshFileLoader::createMesh(io::IReadFile* file)
 		// vertices (A, B, C) color
 		video::SColor vert_color;
 		if (matEnt &&
-			(buffer->Material.MaterialType == video::EMT_TRANSPARENT_VERTEX_ALPHA ||
-			buffer->Material.MaterialType == video::EMT_TRANSPARENT_REFLECTION_2_LAYER))
+			(buffer->getMaterial().MaterialType == video::EMT_TRANSPARENT_VERTEX_ALPHA ||
+			buffer->getMaterial().MaterialType == video::EMT_TRANSPARENT_REFLECTION_2_LAYER))
 		{
 			video::SColor color(
 			matEnt->Header.DiffuseColor.A, matEnt->Header.DiffuseColor.R,
@@ -507,12 +511,12 @@ IAnimatedMesh* CMY3DMeshFileLoader::createMesh(io::IReadFile* file)
 		}
 		else
 		{
-			vert_color = buffer->Material.DiffuseColor;
+			vert_color = buffer->getMaterial().DiffuseColor;
 		}
 
 		VertexA.Color = VertexB.Color = VertexC.Color = vert_color;
 
-		if (buffer->Material.MaterialType == video::EMT_TRANSPARENT_ALPHA_CHANNEL)
+		if (buffer->getMaterial().MaterialType == video::EMT_TRANSPARENT_ALPHA_CHANNEL)
 		{
 			buffer->getIndexBuffer()->reallocate(buffer->getIndexBuffer()->getIndexCount()+6*facesNum);
 			buffer->getVertexBuffer()->reallocate(buffer->getVertexBuffer()->getVertexCount()+6*facesNum);
@@ -610,7 +614,7 @@ IAnimatedMesh* CMY3DMeshFileLoader::createMesh(io::IReadFile* file)
 			//          !!!!!! W A R N I N G !!!!!!!
 			//*****************************************************************
 
-			if (buffer->Material.MaterialType == video::EMT_TRANSPARENT_ALPHA_CHANNEL)
+			if (buffer->getMaterial().MaterialType == video::EMT_TRANSPARENT_ALPHA_CHANNEL)
 			{
 				VertexA.Normal = core::vector3df(-VertexA.Normal.X, -VertexA.Normal.Y, -VertexA.Normal.Z);
 				VertexB.Normal = core::vector3df(-VertexB.Normal.X, -VertexB.Normal.Y, -VertexB.Normal.Z);

@@ -124,6 +124,8 @@ CCP3DContextMenu::CCP3DContextMenu(CCP3DEditorCore *editorCore) : EditorCore(edi
 	SpiesContextMenu->addItem(L"Spies preferences...", -1);
 	/// --------------------------------------------------
 
+	//using namespace ui;
+	//CUIAddMesh *addMesh = new CUIAddMesh(EditorCore, false);
 }
 
 CCP3DContextMenu::~CCP3DContextMenu() {

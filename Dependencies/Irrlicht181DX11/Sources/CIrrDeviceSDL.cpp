@@ -478,7 +478,7 @@ bool CIrrDeviceSDL::run()
 				joyevent.JoystickEvent.ButtonStates |= (SDL_JoystickGetButton(joystick, j)<<j);
 
 			// query all axes, already in correct range
-			const int numAxes = core::min_(SDL_JoystickNumAxes(joystick), SEvent::SJoystickEvent::NUMBER_OF_AXES);
+			const int numAxes = core::min_(SDL_JoystickNumAxes(joystick), (int)SEvent::SJoystickEvent::NUMBER_OF_AXES);
 			joyevent.JoystickEvent.Axis[SEvent::SJoystickEvent::AXIS_X]=0;
 			joyevent.JoystickEvent.Axis[SEvent::SJoystickEvent::AXIS_Y]=0;
 			joyevent.JoystickEvent.Axis[SEvent::SJoystickEvent::AXIS_Z]=0;
@@ -751,6 +751,12 @@ void CIrrDeviceSDL::minimizeWindow()
 void CIrrDeviceSDL::maximizeWindow()
 {
 	// do nothing
+}
+
+//! Get the position of this window on screen
+core::position2di CIrrDeviceSDL::getWindowPosition()
+{
+    return core::position2di(-1, -1);
 }
 
 

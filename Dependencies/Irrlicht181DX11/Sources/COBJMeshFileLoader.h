@@ -31,13 +31,13 @@ public:
 
 	//! returns true if the file maybe is able to be loaded by this class
 	//! based on the file extension (e.g. ".obj")
-	virtual bool isALoadableFileExtension(const io::path& filename) const;
+	virtual bool isALoadableFileExtension(const io::path& filename) const _IRR_OVERRIDE_;
 
 	//! creates/loads an animated mesh from the file.
 	//! \return Pointer to the created mesh. Returns 0 if loading failed.
 	//! If you no longer need the mesh, you should call IAnimatedMesh::drop().
 	//! See IReferenceCounted::drop() for more information.
-	virtual IAnimatedMesh* createMesh(io::IReadFile* file);
+	virtual IAnimatedMesh* createMesh(io::IReadFile* file) _IRR_OVERRIDE_;
 
 private:
 
@@ -47,10 +47,10 @@ private:
 			RecalculateNormals(false), SceneManager(smgr)
 		{
 			Meshbuffer = new CMeshBuffer<video::S3DVertex>(SceneManager->getVideoDriver()->getVertexDescriptor(0));
-			Meshbuffer->Material.Shininess = 0.0f;
-			Meshbuffer->Material.AmbientColor = video::SColorf(0.2f, 0.2f, 0.2f, 1.0f).toSColor();
-			Meshbuffer->Material.DiffuseColor = video::SColorf(0.8f, 0.8f, 0.8f, 1.0f).toSColor();
-			Meshbuffer->Material.SpecularColor = video::SColorf(1.0f, 1.0f, 1.0f, 1.0f).toSColor();
+			Meshbuffer->getMaterial().Shininess = 0.0f;
+			Meshbuffer->getMaterial().AmbientColor = video::SColorf(0.2f, 0.2f, 0.2f, 1.0f).toSColor();
+			Meshbuffer->getMaterial().DiffuseColor = video::SColorf(0.8f, 0.8f, 0.8f, 1.0f).toSColor();
+			Meshbuffer->getMaterial().SpecularColor = video::SColorf(1.0f, 1.0f, 1.0f, 1.0f).toSColor();
 		}
 
 		SObjMtl(const SObjMtl& o)
@@ -59,7 +59,7 @@ private:
 			RecalculateNormals(false), SceneManager(o.SceneManager)
 		{
 			Meshbuffer = new CMeshBuffer<video::S3DVertex>(SceneManager->getVideoDriver()->getVertexDescriptor(0));
-			Meshbuffer->Material = o.Meshbuffer->Material;
+			Meshbuffer->getMaterial() = o.Meshbuffer->getMaterial();
 		}
 
 		core::map<video::S3DVertex, int> VertMap;

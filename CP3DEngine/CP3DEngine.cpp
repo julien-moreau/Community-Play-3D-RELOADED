@@ -52,8 +52,8 @@ CCP3DEngine::~CCP3DEngine() {
 
 void CCP3DEngine::runEngine() {
 	while (Device->run()) {
-		//if (!Device->isWindowActive())
-		//	continue;
+		if (!Device->isWindowActive())
+			continue;
 
 		Driver->beginScene(true, true, SColor(0x0));
 

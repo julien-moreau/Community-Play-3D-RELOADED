@@ -29,6 +29,7 @@ struct VS_OUTPUT
 	float4 MVar        			: TEXCOORD1;
 
 	#else
+
 	float4 TexCoord : TEXCOORD0;
 	#endif
 };

@@ -23,22 +23,22 @@ namespace video
 		virtual ~CDepthBuffer();
 
 		//! clears the zbuffer
-		virtual void clear();
+		virtual void clear() _IRR_OVERRIDE_;
 
 		//! sets the new size of the zbuffer
-		virtual void setSize(const core::dimension2d<u32>& size);
+		virtual void setSize(const core::dimension2d<u32>& size) _IRR_OVERRIDE_;
 
 		//! returns the size of the zbuffer
-		virtual const core::dimension2d<u32>& getSize() const;
+		virtual const core::dimension2d<u32>& getSize() const _IRR_OVERRIDE_;
 
 		//! locks the zbuffer
-		virtual void* lock() { return (void*) Buffer; }
+		virtual void* lock() _IRR_OVERRIDE_ { return (void*) Buffer; }
 
 		//! unlocks the zbuffer
-		virtual void unlock() {}
+		virtual void unlock() _IRR_OVERRIDE_ {}
 
 		//! returns pitch of depthbuffer (in bytes)
-		virtual u32 getPitch() const { return Pitch; }
+		virtual u32 getPitch() const _IRR_OVERRIDE_ { return Pitch; }
 
 
 	private:
@@ -61,22 +61,22 @@ namespace video
 		virtual ~CStencilBuffer();
 
 		//! clears the zbuffer
-		virtual void clear();
+		virtual void clear() _IRR_OVERRIDE_;
 
 		//! sets the new size of the zbuffer
-		virtual void setSize(const core::dimension2d<u32>& size);
+		virtual void setSize(const core::dimension2d<u32>& size) _IRR_OVERRIDE_;
 
 		//! returns the size of the zbuffer
-		virtual const core::dimension2d<u32>& getSize() const;
+		virtual const core::dimension2d<u32>& getSize() const _IRR_OVERRIDE_;
 
 		//! locks the zbuffer
-		virtual void* lock() { return (void*) Buffer; }
+		virtual void* lock() _IRR_OVERRIDE_ { return (void*) Buffer; }
 
 		//! unlocks the zbuffer
-		virtual void unlock() {}
+		virtual void unlock() _IRR_OVERRIDE_ {}
 
 		//! returns pitch of depthbuffer (in bytes)
-		virtual u32 getPitch() const { return Pitch; }
+		virtual u32 getPitch() const _IRR_OVERRIDE_ { return Pitch; }
 
 
 	private:

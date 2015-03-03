@@ -11,6 +11,7 @@
 #include "CBlit.h"
 #include "os.h"
 #include "S3DVertex.h"
+#include "CMeshBuffer.h"
 
 namespace irr
 {
@@ -256,7 +257,7 @@ ITexture* CSoftwareDriver::createDeviceDependentTexture(IImage* surface, const i
 
 //! sets a render target
 bool CSoftwareDriver::setRenderTarget(video::ITexture* texture, bool clearBackBuffer,
-								bool clearZBuffer, SColor color)
+	bool clearZBuffer, SColor color, video::ITexture* depthStencil)
 {
 	if (texture && texture->getDriverType() != EDT_SOFTWARE)
 	{
@@ -336,47 +337,62 @@ void CSoftwareDriver::setViewPort(const core::rect<s32>& area)
 }
 
 
-void CSoftwareDriver::drawVertexPrimitiveList(bool hardwareVertex, scene::IVertexBuffer* vertexBuffer, bool hardwareIndex, scene::IIndexBuffer* indexBuffer, u32 primitiveCount, scene::E_PRIMITIVE_TYPE pType)
-
+void CSoftwareDriver::drawMeshBuffer(const scene::IMeshBuffer* mb)
 {
-	if(!primitiveCount || !vertexBuffer->getVertexCount())
+	if (!mb || !mb->isVertexBufferCompatible())
 		return;
+
+	if (!checkPrimitiveCount(mb->getPrimitiveCount()))
+		return;
+
+	if (mb->getVertexBufferCount() > 1)
+	{
+		os::Printer::log("Software driver can not handle more than one vertex buffer per mesh buffer", ELL_ERROR);
+		return;
+	}
+
+	IVertexDescriptor* descriptor = mb->getVertexDescriptor();
+	scene::IVertexBuffer* vertexBuffer = mb->getVertexBuffer(0);
+	const u32 vertexSize = vertexBuffer->getVertexSize();
+
+	scene::IIndexBuffer* indexBuffer = mb->getIndexBuffer();
+	const E_INDEX_TYPE indexType = indexBuffer->getType();
+
+	const u32 primitiveCount = mb->getPrimitiveCount();
+	const scene::E_PRIMITIVE_TYPE primitiveType = mb->getPrimitiveType();
 		
-	if(indexBuffer->getType() == EIT_32BIT)
+	if (indexType == EIT_32BIT)
 	{
 		os::Printer::log("Software driver can not render 32bit buffers", ELL_ERROR);
 		return;
 	}
 
-	video::IVertexAttribute* AttributeP = vertexBuffer->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
-	video::IVertexAttribute* AttributeC = vertexBuffer->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_COLOR);
+	video::IVertexAttribute* AttributeP = descriptor->getAttributeBySemantic(video::EVAS_POSITION);
+	video::IVertexAttribute* AttributeC = descriptor->getAttributeBySemantic(video::EVAS_COLOR);
 
-	if(!AttributeP)
+	if (!AttributeP)
 		return;
 
 	scene::CIndexBuffer NewBuffer(EIT_16BIT);
 	scene::IIndexBuffer* IndexPointer = 0;
 
-	u8* OffsetP = static_cast<u8*>(vertexBuffer->getVertices());
-	OffsetP += AttributeP->getOffset();
+	u8* vertexData = static_cast<u8*>(vertexBuffer->getVertices());
 
-	u8* OffsetC = static_cast<u8*>(vertexBuffer->getVertices());
+	u8* OffsetP = vertexData + AttributeP->getOffset();
+	u8* OffsetC = (AttributeC) ? vertexData + AttributeC->getOffset() : 0;
 
-	if(AttributeC)
-		OffsetC += AttributeC->getOffset();
-
-	switch (pType)
+	switch (primitiveType)
 	{
 	case scene::EPT_LINE_STRIP:
 		{
 			for (u32 i=0; i < primitiveCount-1; ++i)
 			{
-				core::vector3df* PositionA = (core::vector3df*)OffsetP + vertexBuffer->getVertexSize() * indexBuffer->getIndex(i);
-				core::vector3df* PositionB = (core::vector3df*)OffsetP + vertexBuffer->getVertexSize() * indexBuffer->getIndex(i+1);
+				core::vector3df* PositionA = (core::vector3df*)OffsetP + vertexSize * indexBuffer->getIndex(i);
+				core::vector3df* PositionB = (core::vector3df*)OffsetP + vertexSize * indexBuffer->getIndex(i + 1);
 
 				if(AttributeC)
 				{
-					SColor* Color = (SColor*)OffsetC + vertexBuffer->getVertexSize() * indexBuffer->getIndex(i);
+					SColor* Color = (SColor*)OffsetC + vertexSize * indexBuffer->getIndex(i);
 
 					draw3DLine(*PositionA, *PositionB, *Color);
 				}
@@ -386,14 +402,28 @@ void CSoftwareDriver::drawVertexPrimitiveList(bool hardwareVertex, scene::IVerte
 		}
 		return;
 	case scene::EPT_LINE_LOOP:
-		drawVertexPrimitiveList(hardwareVertex, vertexBuffer, hardwareIndex, indexBuffer, primitiveCount, scene::EPT_LINE_STRIP);
 		{
-			core::vector3df* PositionA = (core::vector3df*)OffsetP + vertexBuffer->getVertexSize() * indexBuffer->getIndex(primitiveCount-1);
-			core::vector3df* PositionB = (core::vector3df*)OffsetP + vertexBuffer->getVertexSize() * indexBuffer->getIndex(0);
+			for (u32 i=0; i < primitiveCount-1; ++i)
+			{
+				core::vector3df* PositionA = (core::vector3df*)OffsetP + vertexSize * indexBuffer->getIndex(i);
+				core::vector3df* PositionB = (core::vector3df*)OffsetP + vertexSize * indexBuffer->getIndex(i + 1);
+
+				if(AttributeC)
+				{
+					SColor* Color = (SColor*)OffsetC + vertexSize * indexBuffer->getIndex(i);
+
+					draw3DLine(*PositionA, *PositionB, *Color);
+				}
+				else
+					draw3DLine(*PositionA, *PositionB);
+			}
+
+			core::vector3df* PositionA = (core::vector3df*)OffsetP + vertexSize * indexBuffer->getIndex(primitiveCount - 1);
+			core::vector3df* PositionB = (core::vector3df*)OffsetP + vertexSize * indexBuffer->getIndex(0);
 
 			if(AttributeC)
 			{
-				SColor* Color = (SColor*)OffsetC + vertexBuffer->getVertexSize() * indexBuffer->getIndex(primitiveCount-1);
+				SColor* Color = (SColor*)OffsetC + vertexSize * indexBuffer->getIndex(primitiveCount-1);
 
 				draw3DLine(*PositionA, *PositionB, *Color);
 			}
@@ -405,12 +435,12 @@ void CSoftwareDriver::drawVertexPrimitiveList(bool hardwareVertex, scene::IVerte
 		{
 			for (u32 i=0; i < 2*primitiveCount; i+=2)
 			{
-				core::vector3df* PositionA = (core::vector3df*)OffsetP + vertexBuffer->getVertexSize() * indexBuffer->getIndex(i);
-				core::vector3df* PositionB = (core::vector3df*)OffsetP + vertexBuffer->getVertexSize() * indexBuffer->getIndex(i+1);
+				core::vector3df* PositionA = (core::vector3df*)OffsetP + vertexSize * indexBuffer->getIndex(i);
+				core::vector3df* PositionB = (core::vector3df*)OffsetP + vertexSize * indexBuffer->getIndex(i + 1);
 
 				if(AttributeC)
 				{
-					SColor* Color = (SColor*)OffsetC + vertexBuffer->getVertexSize() * indexBuffer->getIndex(i);
+					SColor* Color = (SColor*)OffsetC + vertexSize * indexBuffer->getIndex(i);
 
 					draw3DLine(*PositionA, *PositionB, *Color);
 				}
@@ -442,7 +472,7 @@ void CSoftwareDriver::drawVertexPrimitiveList(bool hardwareVertex, scene::IVerte
 	}
 
 	// Supported are only built-in Irrlicht vertex formats.
-	switch(vertexBuffer->getVertexSize())
+	switch (vertexSize)
 	{
 	case sizeof(S3DVertex):
 		drawClippedIndexedTriangleListT((S3DVertex*)vertexBuffer->getVertices(), vertexBuffer->getVertexCount(), (u16*)IndexPointer->getIndices(), primitiveCount);
@@ -635,25 +665,31 @@ void CSoftwareDriver::drawClippedIndexedTriangleListT(const VERTEXTYPE* vertices
 
 	// draw triangles
 
-	scene::CVertexBuffer<S3DVertex> VtxBuffer(VertexDescriptor[0]);
-	VtxBuffer.reallocate(clippedVertices.size());
+	scene::IMeshBuffer* meshBuffer = new scene::CMeshBuffer<S3DVertex>(VertexDescriptor[0], EIT_16BIT);
 
-	for(u32 i = 0; i < clippedVertices.size(); ++i)
-		VtxBuffer.addVertex(&clippedVertices[i]);
+	scene::IVertexBuffer* vtxBuffer = meshBuffer->getVertexBuffer(0);
+	scene::IIndexBuffer* idxBuffer = meshBuffer->getIndexBuffer();
 
-	scene::CIndexBuffer IdxBuffer(video::EIT_16BIT);
-	IdxBuffer.reallocate(clippedIndices.size());
+	vtxBuffer->reallocate(clippedVertices.size());
+	idxBuffer->reallocate(clippedIndices.size());
 
-	for(u32 i = 0; i < clippedIndices.size(); ++i)
-		IdxBuffer.addIndex(clippedIndices[i]);
+	for (u32 i = 0; i < clippedVertices.size(); ++i)
+		vtxBuffer->addVertex(&clippedVertices[i]);
 
-	CNullDriver::drawVertexPrimitiveList(false, &VtxBuffer, false, &IdxBuffer, clippedIndices.size()/3, scene::EPT_TRIANGLES);
+	for (u32 i = 0; i < clippedIndices.size(); ++i)
+		idxBuffer->addIndex(clippedIndices[i]);
+
+	CNullDriver::drawMeshBuffer(meshBuffer);
 
 	if (TransformedPoints.size() < clippedVertices.size())
 		TransformedPoints.set_used(clippedVertices.size());
 
 	if (TransformedPoints.empty())
+	{
+		meshBuffer->drop();
+
 		return;
+	}
 
 	const VERTEXTYPE* currentVertex = clippedVertices.pointer();
 	S2DVertex* tp = &TransformedPoints[0];
@@ -700,6 +736,8 @@ void CSoftwareDriver::drawClippedIndexedTriangleListT(const VERTEXTYPE* vertices
 	// draw all transformed points from the index list
 	CurrentTriangleRenderer->drawIndexedTriangleList(&TransformedPoints[0],
 		clippedVertices.size(), clippedIndices.pointer(), clippedIndices.size()/3);
+
+	meshBuffer->drop();
 }
 
 
@@ -726,19 +764,23 @@ void CSoftwareDriver::draw3DLine(const core::vector3df& start,
 
 	u16 idx[12] = {0,1,2, 0,2,1, 0,1,3, 0,3,1};
 
-	scene::CVertexBuffer<S3DVertex> VtxBuffer(VertexDescriptor[0]);
-	VtxBuffer.reallocate(4);
+	scene::IMeshBuffer* meshBuffer = new scene::CMeshBuffer<S3DVertex>(VertexDescriptor[0], EIT_16BIT);
 
-	for(u32 i = 0; i < 4; ++i)
-		VtxBuffer.addVertex(&vtx[i]);
+	scene::IVertexBuffer* vtxBuffer = meshBuffer->getVertexBuffer(0);
+	scene::IIndexBuffer* idxBuffer = meshBuffer->getIndexBuffer();
 
-	scene::CIndexBuffer IdxBuffer(video::EIT_16BIT);
-	IdxBuffer.reallocate(12);
+	vtxBuffer->reallocate(4);
+	idxBuffer->reallocate(12);
 
-	for(u32 i = 0; i < 12; ++i)
-		IdxBuffer.addIndex(idx[i]);
+	for (u32 i = 0; i < 4; ++i)
+		vtxBuffer->addVertex(&vtx[i]);
 
-	drawIndexedTriangleList(false, &VtxBuffer, false, &IdxBuffer, 4);
+	for (u32 i = 0; i < 12; ++i)
+		idxBuffer->addIndex(idx[i]);
+
+	drawMeshBuffer(meshBuffer);
+
+	meshBuffer->drop();
 }
 
 

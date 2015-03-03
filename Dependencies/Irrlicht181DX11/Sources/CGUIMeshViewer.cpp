@@ -148,12 +148,9 @@ void CGUIMeshViewer::draw()
 		if(Mesh->getFrameCount())
 			frame = (os::Timer::getTime()/20)%Mesh->getFrameCount();
 		const scene::IMesh* const m = Mesh->getMesh(frame);
+
 		for (u32 i=0; i<m->getMeshBufferCount(); ++i)
-		{
-			scene::IMeshBuffer* mb = m->getMeshBuffer(i);
-			driver->drawVertexPrimitiveList(false, mb->getVertexBuffer(), false, mb->getIndexBuffer(),
-					mb->getIndexBuffer()->getIndexCount() / 3, scene::EPT_TRIANGLES);
-		}
+			driver->drawMeshBuffer(m->getMeshBuffer(i));
 
 		driver->setViewPort(oldViewPort);
 	}

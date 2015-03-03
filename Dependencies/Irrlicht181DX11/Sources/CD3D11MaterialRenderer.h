@@ -17,8 +17,6 @@
 
 #include <d3d11.h>
 
-#define ALIGN16 __declspec(align(16))
-
 typedef struct _D3D11_SHADER_BUFFER_DESC D3D11_SHADER_BUFFER_DESC;
 
 namespace irr

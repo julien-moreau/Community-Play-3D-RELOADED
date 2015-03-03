@@ -101,7 +101,7 @@ bool CSTLMeshWriter::writeMeshBinary(io::IWriteFile* file, scene::IMesh* mesh, s
 			const u32 indexCount = buffer->getIndexBuffer()->getIndexCount();
 			const u16 attributes = 0;
 
-			video::IVertexAttribute* attribute = buffer->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
+			video::IVertexAttribute* attribute = buffer->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
 
 			if(!attribute)
 				continue;
@@ -147,7 +147,7 @@ bool CSTLMeshWriter::writeMeshASCII(io::IWriteFile* file, scene::IMesh* mesh, s3
 		IMeshBuffer* buffer = mesh->getMeshBuffer(i);
 		if (buffer)
 		{
-			video::IVertexAttribute* attribute = buffer->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
+			video::IVertexAttribute* attribute = buffer->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
 
 			if(!attribute)
 				continue;

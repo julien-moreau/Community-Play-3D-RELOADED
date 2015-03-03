@@ -206,7 +206,7 @@ namespace scene
 			Vertices[i].Pos += TerrainData.Position;
 		}
 
-		SceneManager->getMeshManipulator()->copyVertices(mb->getVertexBuffer(), RenderBuffer->getVertexBuffer(), 0, 0, false);
+		SceneManager->getMeshManipulator()->copyVertices(mb->getVertexBuffer(), 0, mb->getVertexDescriptor(), RenderBuffer->getVertexBuffer(), 0, RenderBuffer->getVertexDescriptor(), false);
 
 		for (u32 i = 0; i < numVertices; ++i)
 		{
@@ -459,7 +459,7 @@ namespace scene
 			Vertices[i].Pos += TerrainData.Position;
 		}
 
-		SceneManager->getMeshManipulator()->copyVertices(mb->getVertexBuffer(), RenderBuffer->getVertexBuffer(), 0, 0, false);
+		SceneManager->getMeshManipulator()->copyVertices(mb->getVertexBuffer(), 0, mb->getVertexDescriptor(), RenderBuffer->getVertexBuffer(), 0, RenderBuffer->getVertexDescriptor(), false);
 
 		for (u32 i = 0; i < vertexCount; ++i)
 		{
@@ -572,8 +572,8 @@ namespace scene
 		const s32 vtxCount = Mesh->getMeshBuffer(0)->getVertexBuffer()->getVertexCount();
 		const s32 vtxCountRB = RenderBuffer->getVertexBuffer()->getVertexCount();
 
-		video::IVertexAttribute* attribute = Mesh->getMeshBuffer(0)->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
-		video::IVertexAttribute* attributeRB = RenderBuffer->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
+		video::IVertexAttribute* attribute = Mesh->getMeshBuffer(0)->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
+		video::IVertexAttribute* attributeRB = RenderBuffer->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
 
         if(!attribute || !attributeRB || vtxCount != vtxCountRB)
             return;
@@ -858,7 +858,8 @@ namespace scene
 
 		LOD = core::clamp(LOD, 0, TerrainData.MaxLOD - 1);
 
-        SceneManager->getMeshManipulator()->copyVertices(Mesh->getMeshBuffer(0)->getVertexBuffer(), mb.getVertexBuffer(), 0, 0, false);
+		IMeshBuffer* meshBuffer = Mesh->getMeshBuffer(0);
+		SceneManager->getMeshManipulator()->copyVertices(meshBuffer->getVertexBuffer(), 0, meshBuffer->getVertexDescriptor(), mb.getVertexBuffer(), 0, mb.getVertexDescriptor(), false);
 		mb.getIndexBuffer()->setType(RenderBuffer->getIndexBuffer()->getType());
 
 		// calculate the step we take for all patches, since LOD is the same
@@ -1028,8 +1029,8 @@ namespace scene
 	//! specifying the relation between world space and texture coordinate space.
 	void CTerrainSceneNode::scaleTexture(f32 resolution, f32 resolution2)
 	{
-        video::IVertexAttribute* attribute = RenderBuffer->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_TEXCOORD0);
-		video::IVertexAttribute* attributeTC1 = RenderBuffer->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_TEXCOORD1);
+        video::IVertexAttribute* attribute = RenderBuffer->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_TEXCOORD0);
+		video::IVertexAttribute* attributeTC1 = RenderBuffer->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_TEXCOORD1);
 
         if(!attribute)
             return;
@@ -1141,7 +1142,7 @@ namespace scene
 	//! smooth the terrain
 	void CTerrainSceneNode::smoothTerrain(IMeshBuffer* mb, s32 smoothFactor)
 	{
-	    video::IVertexAttribute* attribute = mb->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
+	    video::IVertexAttribute* attribute = mb->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
 
         if(!attribute)
             return;
@@ -1173,8 +1174,8 @@ namespace scene
 	//! calculate smooth normals
 	void CTerrainSceneNode::calculateNormals(IMeshBuffer* mb)
 	{
-	    video::IVertexAttribute* attributeP = mb->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
-	    video::IVertexAttribute* attributeN = mb->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_NORMAL);
+	    video::IVertexAttribute* attributeP = mb->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
+	    video::IVertexAttribute* attributeN = mb->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_NORMAL);
 
         if(!attributeP || !attributeN)
             return;
@@ -1356,7 +1357,7 @@ namespace scene
 	//! used to calculate the internal STerrainData structure both at creation and after scaling/position calls.
 	void CTerrainSceneNode::calculatePatchData()
 	{
-	    video::IVertexAttribute* attribute = RenderBuffer->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
+	    video::IVertexAttribute* attribute = RenderBuffer->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
 
         if(!attribute)
             return;
@@ -1478,7 +1479,7 @@ namespace scene
 		if (!Mesh->getMeshBufferCount())
 			return 0;
 
-        video::IVertexAttribute* attribute = Mesh->getMeshBuffer(0)->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
+        video::IVertexAttribute* attribute = Mesh->getMeshBuffer(0)->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
 
         if(!attribute)
             return 0.0f;

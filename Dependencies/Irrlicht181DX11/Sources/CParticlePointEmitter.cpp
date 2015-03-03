@@ -25,7 +25,7 @@ CParticlePointEmitter::CParticlePointEmitter(
 	MaxParticlesPerSecond(maxParticlesPerSecond),
 	MinStartColor(minStartColor), MaxStartColor(maxStartColor),
 	MinLifeTime(lifeTimeMin), MaxLifeTime(lifeTimeMax),
-	MaxAngleDegrees(maxAngleDegrees), Time(0), Emitted(0)
+	MaxAngleDegrees(maxAngleDegrees), Time(0)
 {
 	#ifdef _DEBUG
 	setDebugName("CParticlePointEmitter");
@@ -91,7 +91,7 @@ void CParticlePointEmitter::serializeAttributes(io::IAttributes* out, io::SAttri
 	out->addFloat("MinStartSizeWidth", MinStartSize.Width);
 	out->addFloat("MinStartSizeHeight", MinStartSize.Height);
 	out->addFloat("MaxStartSizeWidth", MaxStartSize.Width);
-	out->addFloat("MaxStartSizeHeight", MaxStartSize.Height); 
+	out->addFloat("MaxStartSizeHeight", MaxStartSize.Height);
 	out->addInt("MinParticlesPerSecond", MinParticlesPerSecond);
 	out->addInt("MaxParticlesPerSecond", MaxParticlesPerSecond);
 	out->addColor("MinStartColor", MinStartColor);

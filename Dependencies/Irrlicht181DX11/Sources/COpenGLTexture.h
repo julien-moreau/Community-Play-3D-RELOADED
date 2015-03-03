@@ -55,19 +55,20 @@ public:
 	//! Cache structure.
 	struct SStatesCache
 	{
-		SStatesCache() : WrapU(ETC_REPEAT), WrapV(ETC_REPEAT), BilinearFilter(false),
-			TrilinearFilter(false), AnisotropicFilter(0), MipMapStatus(false), IsCached(false), LODBias(0)
+		SStatesCache() : WrapU(ETC_REPEAT), WrapV(ETC_REPEAT),
+				LODBias(0), AnisotropicFilter(0),
+				BilinearFilter(false), TrilinearFilter(false),
+				MipMapStatus(false), IsCached(false)
 		{
 		}
 
 		u8 WrapU;
 		u8 WrapV;
+		s8 LODBias;
+		u8 AnisotropicFilter;
 		bool BilinearFilter;
 		bool TrilinearFilter;
-		u8 AnisotropicFilter;
 		bool MipMapStatus;
-		s8 LODBias;
-
 		bool IsCached;
 	};
 
@@ -78,42 +79,27 @@ public:
 	virtual ~COpenGLTexture();
 
 	//! lock function
-	virtual void* lock(E_TEXTURE_LOCK_MODE mode=ETLM_READ_WRITE, u32 mipmapLevel=0);
+	virtual void* lock(E_TEXTURE_LOCK_MODE mode=ETLM_READ_WRITE, u32 mipmapLevel=0) _IRR_OVERRIDE_;
 
 	//! unlock function
-	virtual void unlock();
-
-	//! Returns original size of the texture (image).
-	virtual const core::dimension2d<u32>& getOriginalSize() const;
-
-	//! Returns size of the texture.
-	virtual const core::dimension2d<u32>& getSize() const;
-
-	//! returns driver type of texture (=the driver, that created it)
-	virtual E_DRIVER_TYPE getDriverType() const;
-
-	//! returns color format of texture
-	virtual ECOLOR_FORMAT getColorFormat() const;
-
-	//! returns pitch of texture (in bytes)
-	virtual u32 getPitch() const;
-
-	//! return open gl texture name
-	GLuint getOpenGLTextureName() const;
-
-	//! return whether this texture has mipmaps
-	virtual bool hasMipMaps() const;
+	virtual void unlock() _IRR_OVERRIDE_;
 
 	//! Regenerates the mip map levels of the texture.
 	/** Useful after locking and modifying the texture
 	\param mipmapData Pointer to raw mipmap data, including all necessary mip levels, in the same format as the main texture image. If not set the mipmaps are derived from the main image. */
-	virtual void regenerateMipMapLevels(void* mipmapData=0);
+	virtual void regenerateMipMapLevels(void* mipmapData = 0) _IRR_OVERRIDE_;
 
-	//! Is it a render target?
-	virtual bool isRenderTarget() const;
+	//! return open gl texture name
+	GLuint getOpenGLTextureName() const;
 
 	//! Is it a FrameBufferObject?
 	virtual bool isFrameBufferObject() const;
+
+	//! Is it a depth texture?
+	bool isDepthTexture() const;
+
+	//! Is it a renderbuffer?
+	bool isRenderBuffer() const;
 
 	//! Bind RenderTargetTexture
 	virtual void bindRTT();
@@ -148,9 +134,6 @@ protected:
 	\param mipLevel If set to non-zero, only that specific miplevel is updated, using the MipImage member. */
 	void uploadTexture(bool newTexture=false, void* mipmapData=0, u32 mipLevel=0);
 
-	core::dimension2d<u32> ImageSize;
-	core::dimension2d<u32> TextureSize;
-	ECOLOR_FORMAT ColorFormat;
 	COpenGLDriver* Driver;
 	IImage* Image;
 	IImage* MipImage;
@@ -161,12 +144,14 @@ protected:
 	GLenum PixelType;
 
 	u8 MipLevelStored;
-	bool HasMipMaps;
 	bool MipmapLegacyMode;
-	bool IsRenderTarget;
+	bool IsCompressed;
 	bool AutomaticMipmapUpdate;
 	bool ReadOnlyLock;
 	bool KeepImage;
+
+	bool IsDepthTexture;
+	bool IsRenderBuffer;
 
 	mutable SStatesCache StatesCache;
 };
@@ -178,48 +163,53 @@ public:
 
 	//! FrameBufferObject constructor
 	COpenGLFBOTexture(const core::dimension2d<u32>& size, const io::path& name,
-		COpenGLDriver* driver = 0, const ECOLOR_FORMAT format = ECF_UNKNOWN);
+		COpenGLDriver* driver = 0, ECOLOR_FORMAT format = ECF_UNKNOWN);
 
 	//! destructor
 	virtual ~COpenGLFBOTexture();
 
 	//! Is it a FrameBufferObject?
-	virtual bool isFrameBufferObject() const;
+	virtual bool isFrameBufferObject() const _IRR_OVERRIDE_;
 
 	//! Bind RenderTargetTexture
-	virtual void bindRTT();
+	virtual void bindRTT() _IRR_OVERRIDE_;
 
 	//! Unbind RenderTargetTexture
-	virtual void unbindRTT();
+	virtual void unbindRTT() _IRR_OVERRIDE_;
 
-	ITexture* DepthTexture;
+	//! Return depth texture.
+	ITexture* getDepthTexture() const;
+
+	//! Set depth texture.
+	bool setDepthTexture(ITexture* depthTexture);
+
 protected:
-	GLuint ColorFrameBuffer;
+	GLuint BufferID;
+
+	COpenGLTexture* DepthTexture;
 };
 
 
-//! OpenGL FBO depth texture.
-class COpenGLFBODepthTexture : public COpenGLTexture
+//! OpenGL Render Buffer.
+class COpenGLRenderBuffer : public COpenGLTexture
 {
 public:
 	//! FrameBufferObject depth constructor
-	COpenGLFBODepthTexture(const core::dimension2d<u32>& size, const io::path& name, COpenGLDriver* driver=0, bool useStencil=false);
+	COpenGLRenderBuffer(const core::dimension2d<u32>& size, const io::path& name, COpenGLDriver* driver=0, bool useStencil=false);
 
 	//! destructor
-	virtual ~COpenGLFBODepthTexture();
+	virtual ~COpenGLRenderBuffer();
 
 	//! Bind RenderTargetTexture
-	virtual void bindRTT();
+	virtual void bindRTT() _IRR_OVERRIDE_;
 
 	//! Unbind RenderTargetTexture
-	virtual void unbindRTT();
+	virtual void unbindRTT() _IRR_OVERRIDE_;
 
-	bool attach(ITexture*);
+	GLuint getBufferID() const;
 
 protected:
-	GLuint DepthRenderBuffer;
-	GLuint StencilRenderBuffer;
-	bool UseStencil;
+	GLuint BufferID;
 };
 
 

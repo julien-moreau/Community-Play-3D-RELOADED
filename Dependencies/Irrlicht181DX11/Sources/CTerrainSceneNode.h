@@ -52,21 +52,22 @@ namespace scene
 
 		//! Initializes the terrain data.  Loads the vertices from the heightMapFile.
 		virtual bool loadHeightMap(io::IReadFile* file,
-			video::SColor vertexColor = video::SColor ( 255, 255, 255, 255 ), s32 smoothFactor = 0 );
+			video::SColor vertexColor = video::SColor ( 255, 255, 255, 255 ), s32 smoothFactor = 0 ) _IRR_OVERRIDE_;
 
 		//! Initializes the terrain data.  Loads the vertices from the heightMapFile.
 		virtual bool loadHeightMapRAW(io::IReadFile* file, s32 bitsPerPixel = 16,
-			bool signedData=true, bool floatVals=false, s32 width=0, video::SColor vertexColor = video::SColor ( 255, 255, 255, 255 ), s32 smoothFactor = 0 );
+			bool signedData=true, bool floatVals=false, s32 width=0,
+			video::SColor vertexColor = video::SColor ( 255, 255, 255, 255 ), s32 smoothFactor = 0 ) _IRR_OVERRIDE_;
 
 		//! Returns the material based on the zero based index i. This scene node only uses
 		//! 1 material.
 		//! \param i: Zero based index i. UNUSED, left in for virtual purposes.
 		//! \return Returns the single material this scene node uses.
-		virtual video::SMaterial& getMaterial(u32 i);
+		virtual video::SMaterial& getMaterial(u32 i) _IRR_OVERRIDE_;
 
 		//! Returns amount of materials used by this scene node ( always 1 )
 		//! \return Returns current count of materials used by this scene node ( always 1 )
-		virtual u32 getMaterialCount() const;
+		virtual u32 getMaterialCount() const _IRR_OVERRIDE_;
 
 		//! Gets the last scaling factor applied to the scene node.  This value only represents the
 		//! last scaling factor presented to the node.  For instance, if you make create the node
@@ -75,25 +76,25 @@ namespace scene
 		//! core::vector3df ( 2.0f, 2.0f, 2.0f ), although the total scaling of the scene node is
 		//! core::vector3df ( 100.0f, 10.0f, 100.0f ).
 		//! \return Returns the last scaling factor passed to the scene node.
-		virtual const core::vector3df& getScale() const
+		virtual const core::vector3df& getScale() const _IRR_OVERRIDE_
 		{
 			return TerrainData.Scale;
 		}
 
 		//! Scales the scene nodes vertices by the vector specified.
 		//! \param scale: Scaling factor to apply to the node.
-		virtual void setScale(const core::vector3df& scale);
+		virtual void setScale(const core::vector3df& scale) _IRR_OVERRIDE_;
 
 		//! Gets the last rotation factor applied to the scene node.
 		//! \return Returns the last rotation factor applied to the scene node.
-		virtual const core::vector3df& getRotation() const
+		virtual const core::vector3df& getRotation() const _IRR_OVERRIDE_
 		{
 			return TerrainData.Rotation;
 		}
 
 		//! Rotates the node. This only modifies the relative rotation of the node.
 		//! \param rotation: New rotation of the node in degrees.
-		virtual void setRotation(const core::vector3df& rotation);
+		virtual void setRotation(const core::vector3df& rotation) _IRR_OVERRIDE_;
 
 		//! Sets the pivot point for rotation of this node.
 		//! NOTE: The default for the RotationPivot will be the center of the individual tile.
@@ -101,44 +102,44 @@ namespace scene
 
 		//! Gets the last positioning vector applied to the scene node.
 		//! \return Returns the last position vector applied to the scene node.
-		virtual const core::vector3df& getPosition() const
+		virtual const core::vector3df& getPosition() const _IRR_OVERRIDE_
 		{
 			return TerrainData.Position;
 		}
 
 		//! Moves the scene nodes vertices by the vector specified.
 		//! \param newpos: Vector specifying how much to move each vertex of the scene node.
-		virtual void setPosition(const core::vector3df& newpos);
+		virtual void setPosition(const core::vector3df& newpos) _IRR_OVERRIDE_;
 
 		//! Updates the scene nodes indices if the camera has moved or rotated by a certain
 		//! threshold, which can be changed using the SetCameraMovementDeltaThreshold and
 		//! SetCameraRotationDeltaThreshold functions.  This also determines if a given patch
 		//! for the scene node is within the view frustum and if it's not the indices are not
 		//! generated for that patch.
-		virtual void OnRegisterSceneNode();
+		virtual void OnRegisterSceneNode() _IRR_OVERRIDE_;
 
 		//! Render the scene node
-		virtual void render();
+		virtual void render() _IRR_OVERRIDE_;
 
 		//! Return the bounding box of the entire terrain.
-		virtual const core::aabbox3d<f32>& getBoundingBox() const;
+		virtual const core::aabbox3d<f32>& getBoundingBox() const _IRR_OVERRIDE_;
 
 		//! Return the bounding box of a patch
-		virtual const core::aabbox3d<f32>& getBoundingBox(s32 patchX, s32 patchZ) const;
+		virtual const core::aabbox3d<f32>& getBoundingBox(s32 patchX, s32 patchZ) const _IRR_OVERRIDE_;
 
 		//! Return the number of indices currently used to draw the scene node.
-		virtual u32 getIndexCount() const { return IndicesToRender; }
+		virtual u32 getIndexCount() const _IRR_OVERRIDE_ { return IndicesToRender; }
 
 		//! Returns the mesh
-		virtual IMesh* getMesh();
+		virtual IMesh* getMesh() _IRR_OVERRIDE_;
 
 		//! Returns a pointer to the buffer used by the terrain (most users will not need this)
-		virtual IMeshBuffer* getRenderBuffer() { return RenderBuffer; }
+		virtual IMeshBuffer* getRenderBuffer() _IRR_OVERRIDE_ { return RenderBuffer; }
 
 		//! Gets the meshbuffer data based on a specified Level of Detail.
-		//! \param mb: A reference to an IDynamicMeshBuffer object
+		//! \param mb: A reference to an IMeshBuffer object
 		//! \param LOD: The Level Of Detail you want the indices from.
-		virtual void getMeshBufferForLOD(IMeshBuffer& mb, s32 LOD=0) const;
+		virtual void getMeshBufferForLOD(IMeshBuffer& mb, s32 LOD=0) const _IRR_OVERRIDE_;
 
 		//! Gets the indices for a specified patch at a specified Level of Detail.
 		//! \param indices: A reference to an array of u32 indices.
@@ -149,38 +150,38 @@ namespace scene
 		//! then it will retrieve the triangles at the highest LOD (0).
 		//! \return: Number of indices put into the buffer.
 		virtual s32 getIndicesForPatch(core::array<u32>& indices,
-			s32 patchX, s32 patchZ, s32 LOD=0);
+			s32 patchX, s32 patchZ, s32 LOD=0) _IRR_OVERRIDE_;
 
 		//! Populates an array with the CurrentLOD of each patch.
 		//! \param LODs: A reference to a core::array<s32> to hold the values
 		//! \return Returns the number of elements in the array
-		virtual s32 getCurrentLODOfPatches(core::array<s32>& LODs) const;
+		virtual s32 getCurrentLODOfPatches(core::array<s32>& LODs) const _IRR_OVERRIDE_;
 
 		//! Manually sets the LOD of a patch
 		//! \param patchX: Patch x coordinate.
 		//! \param patchZ: Patch z coordinate.
 		//! \param LOD: The level of detail to set the patch to.
-		virtual void setLODOfPatch(s32 patchX, s32 patchZ, s32 LOD=0);
+		virtual void setLODOfPatch(s32 patchX, s32 patchZ, s32 LOD=0) _IRR_OVERRIDE_;
 
 		//! Returns center of terrain.
-		virtual const core::vector3df& getTerrainCenter() const
+		virtual const core::vector3df& getTerrainCenter() const _IRR_OVERRIDE_
 		{
 			return TerrainData.Center;
 		}
 
 		//! Returns center of terrain.
-		virtual f32 getHeight( f32 x, f32 y ) const;
+		virtual f32 getHeight( f32 x, f32 y ) const _IRR_OVERRIDE_;
 
 		//! Sets the movement camera threshold which is used to determine when to recalculate
 		//! indices for the scene node.  The default value is 10.0f.
-		virtual void setCameraMovementDelta(f32 delta)
+		virtual void setCameraMovementDelta(f32 delta) _IRR_OVERRIDE_
 		{
 			CameraMovementDelta = delta;
 		}
 
 		//! Sets the rotation camera threshold which is used to determine when to recalculate
 		//! indices for the scene node.  The default value is 1.0f.
-		virtual void setCameraRotationDelta(f32 delta)
+		virtual void setCameraRotationDelta(f32 delta) _IRR_OVERRIDE_
 		{
 			CameraRotationDelta = delta;
 		}
@@ -189,32 +190,32 @@ namespace scene
 		//! the geomipmap data changes.
 		//! param bVal: Boolean value representing whether or not to update selector dynamically.
 		//! NOTE: Temporarily disabled while working out issues with DynamicSelectorUpdate
-		virtual void setDynamicSelectorUpdate(bool bVal ) { DynamicSelectorUpdate = false; }
+		virtual void setDynamicSelectorUpdate(bool bVal ) _IRR_OVERRIDE_ { DynamicSelectorUpdate = false; }
 
 		//! Override the default generation of distance thresholds for determining the LOD a patch
 		//! is rendered at. If any LOD is overridden, then the scene node will no longer apply
 		//! scaling factors to these values. If you override these distances and then apply
 		//! a scale to the scene node, it is your responsibility to update the new distances to
 		//! work best with your new terrain size.
-		virtual bool overrideLODDistance( s32 LOD, f64 newDistance );
+		virtual bool overrideLODDistance( s32 LOD, f64 newDistance ) _IRR_OVERRIDE_;
 
 		//! Scales the two textures
-		virtual void scaleTexture(f32 scale = 1.0f, f32 scale2 = 0.0f);
+		virtual void scaleTexture(f32 scale = 1.0f, f32 scale2 = 0.0f) _IRR_OVERRIDE_;
 
 		//! Returns type of the scene node
-		virtual ESCENE_NODE_TYPE getType() const {return ESNT_TERRAIN;}
+		virtual ESCENE_NODE_TYPE getType() const _IRR_OVERRIDE_ {return ESNT_TERRAIN;}
 
 		//! Writes attributes of the scene node.
 		virtual void serializeAttributes(io::IAttributes* out,
-				io::SAttributeReadWriteOptions* options=0) const;
+				io::SAttributeReadWriteOptions* options=0) const _IRR_OVERRIDE_;
 
 		//! Reads attributes of the scene node.
 		virtual void deserializeAttributes(io::IAttributes* in,
-				io::SAttributeReadWriteOptions* options=0);
+				io::SAttributeReadWriteOptions* options=0) _IRR_OVERRIDE_;
 
 		//! Creates a clone of this scene node and its children.
 		virtual ISceneNode* clone(ISceneNode* newParent,
-				ISceneManager* newManager);
+				ISceneManager* newManager) _IRR_OVERRIDE_;
 
 	private:
 		friend class CTerrainTriangleSelector;
@@ -259,11 +260,9 @@ namespace scene
 			core::array<f64> LODDistanceThreshold;
 		};
 
-
-    virtual void preRenderCalculationsIfNeeded();
-
-		virtual void preRenderLODCalculations();
-		virtual void preRenderIndicesCalculations();
+		void preRenderCalculationsIfNeeded();
+		void preRenderLODCalculations();
+		void preRenderIndicesCalculations();
 
 		//! get indices when generating index data for patches at varying levels of detail.
 		u32 getIndex(const s32 PatchX, const s32 PatchZ, const s32 PatchIndex, u32 vX, u32 vZ) const;

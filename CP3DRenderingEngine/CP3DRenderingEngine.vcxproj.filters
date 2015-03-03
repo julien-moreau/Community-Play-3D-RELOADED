@@ -214,13 +214,11 @@
     <None Include="..\CP3DR\Shaders\Materials\depthExample.vertex.fx">
       <Filter>Shaders\Materials</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="..\CP3DR\Shaders\Materials\HardwareSkinning.fragment.fx">
+    <None Include="..\CP3DR\Shaders\Materials\HardwareSkinning.vertex.fx">
       <Filter>Shaders\Materials</Filter>
-    </FxCompile>
-    <FxCompile Include="..\CP3DR\Shaders\Materials\HardwareSkinning.vertex.fx">
+    </None>
+    <None Include="..\CP3DR\Shaders\Materials\HardwareSkinning.fragment.fx">
       <Filter>Shaders\Materials</Filter>
-    </FxCompile>
+    </None>
   </ItemGroup>
 </Project>

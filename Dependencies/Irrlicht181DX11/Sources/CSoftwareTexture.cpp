@@ -16,21 +16,37 @@ namespace video
 //! constructor
 CSoftwareTexture::CSoftwareTexture(IImage* image, const io::path& name,
 		bool renderTarget, void* mipmapData)
-: ITexture(name), Texture(0), IsRenderTarget(renderTarget)
+: ITexture(name), Texture(0)
 {
 	#ifdef _DEBUG
 	setDebugName("CSoftwareTexture");
 	#endif
 
+	DriverType = EDT_SOFTWARE;
+	ColorFormat = ECF_A1R5G5B5;
+	HasMipMaps = false;
+	HasAlpha = true;
+	IsRenderTarget = renderTarget;
+
 	if (image)
 	{
-		OrigSize = image->getDimension();
-		core::dimension2d<u32> optSize=OrigSize.getOptimalSize();
+		bool IsCompressed = false;
 
-		Image = new CImage(ECF_A1R5G5B5, OrigSize);
-		image->copyTo(Image);
+		if(IImage::isCompressedFormat(image->getColorFormat()))
+		{
+			os::Printer::log("Texture compression not available.", ELL_ERROR);
+			IsCompressed = true;
+		}
 
-		if (optSize == OrigSize)
+		OriginalSize = image->getDimension();
+		core::dimension2d<u32> optSize = OriginalSize.getOptimalSize();
+
+		Image = new CImage(ECF_A1R5G5B5, OriginalSize);
+
+		if (!IsCompressed)
+			image->copyTo(Image);
+
+		if (optSize == OriginalSize)
 		{
 			Texture = Image;
 			Texture->grab();
@@ -40,6 +56,9 @@ CSoftwareTexture::CSoftwareTexture(IImage* image, const io::path& name,
 			Texture = new CImage(ECF_A1R5G5B5, optSize);
 			Image->copyToScaling(Texture);
 		}
+
+		Size = Texture->getDimension();
+		Pitch = Texture->getDimension().Width * 2;
 	}
 }
 
@@ -78,26 +97,11 @@ void CSoftwareTexture::unlock()
 }
 
 
-//! Returns original size of the texture.
-const core::dimension2d<u32>& CSoftwareTexture::getOriginalSize() const
-{
-	return OrigSize;
-}
-
-
-//! Returns (=size) of the texture.
-const core::dimension2d<u32>& CSoftwareTexture::getSize() const
-{
-	return Image->getDimension();
-}
-
-
 //! returns unoptimized surface
 CImage* CSoftwareTexture::getImage()
 {
 	return Image;
 }
-
 
 
 //! returns texture surface
@@ -107,40 +111,11 @@ CImage* CSoftwareTexture::getTexture()
 }
 
 
-
-//! returns driver type of texture (=the driver, who created the texture)
-E_DRIVER_TYPE CSoftwareTexture::getDriverType() const
-{
-	return EDT_SOFTWARE;
-}
-
-
-
-//! returns color format of texture
-ECOLOR_FORMAT CSoftwareTexture::getColorFormat() const
-{
-	return ECF_A1R5G5B5;
-}
-
-
-
-//! returns pitch of texture (in bytes)
-u32 CSoftwareTexture::getPitch() const
-{
-	return Image->getDimension().Width * 2;
-}
-
-
 //! Regenerates the mip map levels of the texture. Useful after locking and
 //! modifying the texture
 void CSoftwareTexture::regenerateMipMapLevels(void* mipmapData)
 {
 	// our software textures don't have mip maps
-}
-
-bool CSoftwareTexture::isRenderTarget() const
-{
-	return IsRenderTarget;
 }
 
 

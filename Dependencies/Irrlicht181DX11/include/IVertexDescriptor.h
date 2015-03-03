@@ -47,6 +47,12 @@ namespace video
 		EVAT_DOUBLE
 	};
 
+	enum E_INSTANCE_DATA_STEP_RATE
+	{
+		EIDSR_PER_VERTEX,
+		EIDSR_PER_INSTANCE
+	};
+
 	class IVertexAttribute
 	{
 	public:
@@ -74,6 +80,10 @@ namespace video
 
 		virtual u32 getVertexSize(u32 bufferID) const = 0;
 
+		virtual E_INSTANCE_DATA_STEP_RATE getInstanceDataStepRate(u32 bufferID) const = 0;
+
+		virtual void setInstanceDataStepRate(E_INSTANCE_DATA_STEP_RATE rate, u32 bufferID) = 0;
+
 		virtual bool addAttribute(const core::stringc& name, u32 elementCount, E_VERTEX_ATTRIBUTE_SEMANTIC semantic, E_VERTEX_ATTRIBUTE_TYPE type, u32 bufferID) = 0;
 
 		virtual IVertexAttribute* getAttribute(u32 id) const = 0;
@@ -88,7 +98,6 @@ namespace video
 
 		virtual void removeAllAttribute() = 0;
 	};
-
 }
 }
 

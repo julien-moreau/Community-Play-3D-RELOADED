@@ -13,6 +13,7 @@
 #ifdef _IRR_COMPILE_WITH_OCT_LOADER_
 
 #include "COCTLoader.h"
+#include "CMeshTextureLoader.h"
 #include "IVideoDriver.h"
 #include "IFileSystem.h"
 #include "os.h"
@@ -35,6 +36,8 @@ COCTLoader::COCTLoader(ISceneManager* smgr, io::IFileSystem* fs)
 	#endif
 	if (FileSystem)
 		FileSystem->grab();
+
+	TextureLoader = new CMeshTextureLoader( FileSystem, SceneManager->getVideoDriver() );
 }
 
 
@@ -85,6 +88,9 @@ IAnimatedMesh* COCTLoader::createMesh(io::IReadFile* file)
 	if (!file)
 		return 0;
 
+	if ( getMeshTextureLoader() )
+		getMeshTextureLoader()->setMeshFile(file);
+
 	octHeader header;
 	file->read(&header, sizeof(octHeader));
 
@@ -124,8 +130,8 @@ IAnimatedMesh* COCTLoader::createMesh(io::IReadFile* file)
 	{
 		CMeshBuffer<video::S3DVertex2TCoords>* buffer = new CMeshBuffer<video::S3DVertex2TCoords>(SceneManager->getVideoDriver()->getVertexDescriptor(1));
 
-		buffer->Material.MaterialType = video::EMT_LIGHTMAP;
-		buffer->Material.Lighting = false;
+		buffer->getMaterial().MaterialType = video::EMT_LIGHTMAP;
+		buffer->getMaterial().Lighting = false;
 		Mesh->addMeshBuffer(buffer);
 		buffer->drop();
 	}
@@ -199,16 +205,9 @@ IAnimatedMesh* COCTLoader::createMesh(io::IReadFile* file)
 	tex.reallocate(header.numTextures + 1);
 	tex.push_back(0);
 
-	const core::stringc relpath = FileSystem->getFileDir(file->getFileName())+"/";
 	for (i = 1; i < (header.numTextures + 1); i++)
 	{
-		core::stringc path(textures[i-1].fileName);
-		path.replace('\\','/');
-		if (FileSystem->existFile(path))
-			tex.push_back(SceneManager->getVideoDriver()->getTexture(path));
-		else
-			// try to read in the relative path of the OCT file
-			tex.push_back(SceneManager->getVideoDriver()->getTexture( (relpath + path) ));
+		tex.push_back( getMeshTextureLoader() ? getMeshTextureLoader()->getTexture(textures[i-1].fileName) : NULL );
 	}
 
 	// prepare lightmaps
@@ -263,22 +262,22 @@ IAnimatedMesh* COCTLoader::createMesh(io::IReadFile* file)
 		{
 			u32 mb = i * (header.numTextures + 1) + j;
 			CMeshBuffer<video::S3DVertex2TCoords> * meshBuffer = (CMeshBuffer<video::S3DVertex2TCoords>*)Mesh->getMeshBuffer(mb);
-			meshBuffer->Material.setTexture(0, tex[j]);
-			meshBuffer->Material.setTexture(1, lig[i]);
+			meshBuffer->getMaterial().setTexture(0, tex[j]);
+			meshBuffer->getMaterial().setTexture(1, lig[i]);
 
-			if (meshBuffer->Material.getTexture(0) == 0)
+			if (meshBuffer->getMaterial().getTexture(0) == 0)
 			{
 				// This material has no texture, so we'll just show the lightmap if there is one.
 				// We swapped the texture coordinates earlier.
-				meshBuffer->Material.setTexture(0, meshBuffer->Material.getTexture(1));
-				meshBuffer->Material.setTexture(1, 0);
+				meshBuffer->getMaterial().setTexture(0, meshBuffer->getMaterial().getTexture(1));
+				meshBuffer->getMaterial().setTexture(1, 0);
 			}
-			if (meshBuffer->Material.getTexture(1) == 0)
+			if (meshBuffer->getMaterial().getTexture(1) == 0)
 			{
 				// If there is only one texture, it should be solid and lit.
 				// Among other things, this way you can preview OCT lights.
-				meshBuffer->Material.MaterialType = video::EMT_SOLID;
-				meshBuffer->Material.Lighting = true;
+				meshBuffer->getMaterial().MaterialType = video::EMT_SOLID;
+				meshBuffer->getMaterial().Lighting = true;
 			}
 		}
 	}

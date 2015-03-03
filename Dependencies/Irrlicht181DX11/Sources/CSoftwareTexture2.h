@@ -36,24 +36,22 @@ public:
 	virtual ~CSoftwareTexture2();
 
 	//! lock function
-	virtual void* lock(E_TEXTURE_LOCK_MODE mode=ETLM_READ_WRITE, u32 mipmapLevel=0)
+	virtual void* lock(E_TEXTURE_LOCK_MODE mode=ETLM_READ_WRITE, u32 mipmapLevel=0) _IRR_OVERRIDE_
 	{
 		if (Flags & GEN_MIPMAP)
-			MipMapLOD=mipmapLevel;
+		{
+			MipMapLOD = mipmapLevel;
+			Size = MipMap[MipMapLOD]->getDimension();
+			Pitch = MipMap[MipMapLOD]->getPitch();
+		}
+
 		return MipMap[MipMapLOD]->lock();
 	}
 
 	//! unlock function
-	virtual void unlock()
+	virtual void unlock() _IRR_OVERRIDE_
 	{
 		MipMap[MipMapLOD]->unlock();
-	}
-
-	//! Returns original size of the texture.
-	virtual const core::dimension2d<u32>& getOriginalSize() const
-	{
-		//return MipMap[0]->getDimension();
-		return OrigSize;
 	}
 
 	//! Returns the size of the largest mipmap.
@@ -61,12 +59,6 @@ public:
 	{
 		return OrigImageDataSizeInPixels * texArea;
 		//return MipMap[0]->getImageDataSizeInPixels () * texArea;
-	}
-
-	//! Returns (=size) of the texture.
-	virtual const core::dimension2d<u32>& getSize() const
-	{
-		return MipMap[MipMapLOD]->getDimension();
 	}
 
 	//! returns unoptimized surface
@@ -81,50 +73,12 @@ public:
 		return MipMap[MipMapLOD];
 	}
 
-
-	//! returns driver type of texture (=the driver, who created the texture)
-	virtual E_DRIVER_TYPE getDriverType() const
-	{
-		return EDT_BURNINGSVIDEO;
-	}
-
-	//! returns color format of texture
-	virtual ECOLOR_FORMAT getColorFormat() const
-	{
-		return BURNINGSHADER_COLOR_FORMAT;
-	}
-
-	//! returns pitch of texture (in bytes)
-	virtual u32 getPitch() const
-	{
-		return MipMap[MipMapLOD]->getPitch();
-	}
-
 	//! Regenerates the mip map levels of the texture. Useful after locking and
 	//! modifying the texture
-	virtual void regenerateMipMapLevels(void* mipmapData=0);
-
-	//! support mipmaps
-	virtual bool hasMipMaps() const
-	{
-		return (Flags & GEN_MIPMAP ) != 0;
-	}
-
-	//! Returns if the texture has an alpha channel
-	virtual bool hasAlpha() const
-	{
-		return (Flags & HAS_ALPHA ) != 0;
-	}
-
-	//! is a render target
-	virtual bool isRenderTarget() const
-	{
-		return (Flags & IS_RENDERTARGET) != 0;
-	}
+	virtual void regenerateMipMapLevels(void* mipmapData=0) _IRR_OVERRIDE_;
 
 private:
 	f32 OrigImageDataSizeInPixels;
-	core::dimension2d<u32> OrigSize;
 
 	CImage * MipMap[SOFTWARE_DRIVER_2_MIPMAPPING_MAX];
 

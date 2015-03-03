@@ -6,6 +6,7 @@
 #ifdef _IRR_COMPILE_WITH_3DS_LOADER_
 
 #include "C3DSMeshFileLoader.h"
+#include "CMeshTextureLoader.h"
 #include "os.h"
 #include "CMeshBuffer.h"
 #include "SAnimatedMesh.h"
@@ -136,6 +137,8 @@ C3DSMeshFileLoader::C3DSMeshFileLoader(ISceneManager* smgr, io::IFileSystem* fs)
 
 	if (FileSystem)
 		FileSystem->grab();
+
+	TextureLoader = new CMeshTextureLoader( FileSystem, SceneManager->getVideoDriver() );
 }
 
 
@@ -166,6 +169,9 @@ bool C3DSMeshFileLoader::isALoadableFileExtension(const io::path& filename) cons
 //! See IReferenceCounted::drop() for more information.
 IAnimatedMesh* C3DSMeshFileLoader::createMesh(io::IReadFile* file)
 {
+	if ( getMeshTextureLoader() )
+		getMeshTextureLoader()->setMeshFile(file);
+
 	ChunkData data;
 
 	readChunkData(file, data);
@@ -200,8 +206,10 @@ IAnimatedMesh* C3DSMeshFileLoader::createMesh(io::IReadFile* file)
 			{
 				if (mb->getMaterial().MaterialType == video::EMT_PARALLAX_MAP_SOLID)
 				{
-					CVertexBuffer<video::S3DVertexTangents>* vb = new CVertexBuffer<video::S3DVertexTangents>(SceneManager->getVideoDriver()->getVertexDescriptor(2));
-					SceneManager->getMeshManipulator()->copyVertices(mb->getVertexBuffer(0), vb, 0, 0, false);
+					video::IVertexDescriptor* vd = SceneManager->getVideoDriver()->getVertexDescriptor(2);
+					CVertexBuffer<video::S3DVertexTangents>* vb = new CVertexBuffer<video::S3DVertexTangents>();
+					SceneManager->getMeshManipulator()->copyVertices(mb->getVertexBuffer(0), 0, mb->getVertexDescriptor(), vb, 0, vd, false);
+					mb->setVertexDescriptor(vd);
 					mb->setVertexBuffer(vb, 0);
 					vb->drop();
 
@@ -1012,7 +1020,7 @@ void C3DSMeshFileLoader::composeObject(io::IReadFile* file, const core::stringc&
 		SMaterialGroup group;
 		group.faceCount = CountFaces;
 		group.faces = new u16[group.faceCount];
-		for (u32 i=0; i<group.faceCount; ++i)
+		for (u16 i=0; i<group.faceCount; ++i)
 			group.faces[i] = i;
 		MaterialGroups.push_back(group);
 
@@ -1126,12 +1134,10 @@ void C3DSMeshFileLoader::composeObject(io::IReadFile* file, const core::stringc&
 
 void C3DSMeshFileLoader::loadMaterials(io::IReadFile* file)
 {
-	// create a mesh buffer for every material
-	core::stringc modelFilename = file->getFileName();
-
 	if (Materials.empty())
 		os::Printer::log("No materials found in 3ds file.", ELL_INFORMATION);
 
+	// create a mesh buffer for every material
 	MeshBufferNames.reallocate(Materials.size());
 	for (u32 i=0; i<Materials.size(); ++i)
 	{
@@ -1142,33 +1148,19 @@ void C3DSMeshFileLoader::loadMaterials(io::IReadFile* file)
 		m->getMaterial() = Materials[i].Material;
 		if (Materials[i].Filename[0].size())
 		{
-			video::ITexture* texture = 0;
-			if (FileSystem->existFile(Materials[i].Filename[0]))
-				texture = SceneManager->getVideoDriver()->getTexture(Materials[i].Filename[0]);
+			video::ITexture* texture = getMeshTextureLoader() ? getMeshTextureLoader()->getTexture(Materials[i].Filename[0]) : NULL;
 			if (!texture)
 			{
-				const core::stringc fname = FileSystem->getFileDir(modelFilename) + "/" + FileSystem->getFileBasename(Materials[i].Filename[0]);
-				if (FileSystem->existFile(fname))
-					texture = SceneManager->getVideoDriver()->getTexture(fname);
-			}
-			if (!texture)
 				os::Printer::log("Could not load a texture for entry in 3ds file",
 					Materials[i].Filename[0].c_str(), ELL_WARNING);
+			}
 			else
 				m->getMaterial().setTexture(0, texture);
 		}
 
 		if (Materials[i].Filename[2].size())
 		{
-			video::ITexture* texture = 0;
-			if (FileSystem->existFile(Materials[i].Filename[2]))
-				texture = SceneManager->getVideoDriver()->getTexture(Materials[i].Filename[2]);
-			if (!texture)
-			{
-				const core::stringc fname = FileSystem->getFileDir(modelFilename) + "/" + FileSystem->getFileBasename(Materials[i].Filename[2]);
-				if (FileSystem->existFile(fname))
-					texture = SceneManager->getVideoDriver()->getTexture(fname);
-			}
+			video::ITexture* texture = getMeshTextureLoader() ? getMeshTextureLoader()->getTexture(Materials[i].Filename[2]) : NULL;
 			if (!texture)
 			{
 				os::Printer::log("Could not load a texture for entry in 3ds file",
@@ -1183,16 +1175,7 @@ void C3DSMeshFileLoader::loadMaterials(io::IReadFile* file)
 
 		if (Materials[i].Filename[3].size())
 		{
-			video::ITexture* texture = 0;
-			if (FileSystem->existFile(Materials[i].Filename[3]))
-				texture = SceneManager->getVideoDriver()->getTexture(Materials[i].Filename[3]);
-			if (!texture)
-			{
-				const core::stringc fname = FileSystem->getFileDir(modelFilename) + "/" + FileSystem->getFileBasename(Materials[i].Filename[3]);
-				if (FileSystem->existFile(fname))
-					texture = SceneManager->getVideoDriver()->getTexture(fname);
-			}
-
+			video::ITexture* texture = getMeshTextureLoader() ? getMeshTextureLoader()->getTexture(Materials[i].Filename[3]) : NULL;
 			if (!texture)
 			{
 				os::Printer::log("Could not load a texture for entry in 3ds file",
@@ -1208,18 +1191,12 @@ void C3DSMeshFileLoader::loadMaterials(io::IReadFile* file)
 
 		if (Materials[i].Filename[4].size())
 		{
-			video::ITexture* texture = 0;
-			if (FileSystem->existFile(Materials[i].Filename[4]))
-				texture = SceneManager->getVideoDriver()->getTexture(Materials[i].Filename[4]);
+			video::ITexture* texture = getMeshTextureLoader() ? getMeshTextureLoader()->getTexture(Materials[i].Filename[4]) : NULL;
 			if (!texture)
 			{
-				const core::stringc fname = FileSystem->getFileDir(modelFilename) + "/" + FileSystem->getFileBasename(Materials[i].Filename[4]);
-				if (FileSystem->existFile(fname))
-					texture = SceneManager->getVideoDriver()->getTexture(fname);
-			}
-			if (!texture)
 				os::Printer::log("Could not load a texture for entry in 3ds file",
 					Materials[i].Filename[4].c_str(), ELL_WARNING);
+			}
 			else
 			{
 				m->getMaterial().setTexture(1, texture);

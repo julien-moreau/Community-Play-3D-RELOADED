@@ -38,11 +38,14 @@ CD3D9CgMaterialRenderer::CD3D9CgMaterialRenderer(CD3D9Driver* driver, s32& mater
 	const c8* geometryProgram, const c8* geometryEntry, E_GEOMETRY_SHADER_TYPE geometryProfile,
 	scene::E_PRIMITIVE_TYPE inType, scene::E_PRIMITIVE_TYPE outType, u32 vertices,
 	IShaderConstantSetCallBack* callback, IMaterialRenderer* baseMaterial, s32 userData) :
-	Driver(driver), CCgMaterialRenderer(callback, baseMaterial, userData)
+	BaseMaterial(baseMaterial), Driver(driver), CCgMaterialRenderer(callback, userData)
 {
 	#ifdef _DEBUG
 	setDebugName("CD3D9CgMaterialRenderer");
 	#endif
+
+	if(BaseMaterial)
+		BaseMaterial->grab();
 
 	init(materialType, vertexProgram, vertexEntry, vertexProfile, fragmentProgram, fragmentEntry, fragmentProfile,
 		geometryProgram, geometryEntry, geometryProfile, inType, outType, vertices);
@@ -50,6 +53,9 @@ CD3D9CgMaterialRenderer::CD3D9CgMaterialRenderer(CD3D9Driver* driver, s32& mater
 
 CD3D9CgMaterialRenderer::~CD3D9CgMaterialRenderer()
 {
+	if(BaseMaterial)
+		BaseMaterial->drop();
+
 	if (VertexProgram)
 	{
 		cgD3D9UnloadProgram(VertexProgram);
@@ -60,17 +66,15 @@ CD3D9CgMaterialRenderer::~CD3D9CgMaterialRenderer()
 		cgD3D9UnloadProgram(FragmentProgram);
 		cgDestroyProgram(FragmentProgram);
 	}
-	/*if (GeometryProgram)
-	{
-		cgD3D9UnloadProgram(GeometryProgram);
-		cgDestroyProgram(GeometryProgram);
-	}*/
+}
+
+bool CD3D9CgMaterialRenderer::isTransparent() const
+{
+	return BaseMaterial ? BaseMaterial->isTransparent() : false;
 }
 
 void CD3D9CgMaterialRenderer::OnSetMaterial(const SMaterial& material, const SMaterial& lastMaterial, bool resetAllRenderstates, IMaterialRendererServices* services)
 {
-	Material = material;
-
 	if (material.MaterialType != lastMaterial.MaterialType || resetAllRenderstates)
 	{
 		if (VertexProgram)
@@ -78,18 +82,17 @@ void CD3D9CgMaterialRenderer::OnSetMaterial(const SMaterial& material, const SMa
 
 		if (FragmentProgram)
 			cgD3D9BindProgram(FragmentProgram);
-
-		/*if (GeometryProgram)
-			cgD3D9BindProgram(GeometryProgram);*/
-
-		if (BaseMaterial)
-			BaseMaterial->OnSetMaterial(material, material, true, this);
 	}
+
+	Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates);
+
+	if (BaseMaterial)
+        BaseMaterial->OnSetMaterial(material, lastMaterial, resetAllRenderstates, this);
 
 	if (CallBack)
 		CallBack->OnSetMaterial(material);
 
-	Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates);
+    Material = material;
 }
 
 bool CD3D9CgMaterialRenderer::OnRender(IMaterialRendererServices* services, E_VERTEX_TYPE vtxtype)

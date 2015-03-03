@@ -78,36 +78,9 @@ void CTriangleSelector::createFromMesh(const IMesh* mesh)
 	for (u32 j=0; j<cnt; ++j)
 		totalFaceCount += mesh->getMeshBuffer(j)->getIndexBuffer()->getIndexCount();
 	totalFaceCount /= 3;
-	Triangles.reallocate(totalFaceCount);
-	BoundingBox.reset(0.f, 0.f, 0.f);
+	Triangles.set_used(totalFaceCount);
 
-	for (u32 i=0; i<cnt; ++i)
-	{
-		const IMeshBuffer* buf = mesh->getMeshBuffer(i);
-
-		const u32 idxCnt = buf->getIndexBuffer()->getIndexCount();
-
-		video::IVertexAttribute* attribute = buf->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
-
-		if(!attribute)
-			continue;
-
-		u8* offset = static_cast<u8*>(buf->getVertexBuffer()->getVertices());
-		offset += attribute->getOffset();
-
-		for (u32 j=0; j<idxCnt; j+=3)
-		{
-			core::vector3df* position0 = (core::vector3df*)(offset + buf->getVertexBuffer()->getVertexSize() * buf->getIndexBuffer()->getIndex(j+0));
-			core::vector3df* position1 = (core::vector3df*)(offset + buf->getVertexBuffer()->getVertexSize() * buf->getIndexBuffer()->getIndex(j+1));
-			core::vector3df* position2 = (core::vector3df*)(offset + buf->getVertexBuffer()->getVertexSize() * buf->getIndexBuffer()->getIndex(j+2));
-
-			Triangles.push_back(core::triangle3df(*position0, *position1, *position2));
-			const core::triangle3df& tri = Triangles.getLast();
-			BoundingBox.addInternalPoint(tri.pointA);
-			BoundingBox.addInternalPoint(tri.pointB);
-			BoundingBox.addInternalPoint(tri.pointC);
-		}
-	}
+	updateFromMesh(mesh);
 }
 
 
@@ -125,7 +98,7 @@ void CTriangleSelector::updateFromMesh(const IMesh* mesh) const
 		IMeshBuffer* buf = mesh->getMeshBuffer(i);
 		u32 idxCnt = buf->getIndexBuffer()->getIndexCount();
 		
-		video::IVertexAttribute* attribute = buf->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
+		video::IVertexAttribute* attribute = buf->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
 
 		if(!attribute)
 			continue;
@@ -235,7 +208,7 @@ void CTriangleSelector::getTriangles(core::triangle3df* triangles,
 	const u32 cnt = Triangles.size();
 	for (u32 i=0; i<cnt; ++i)
 	{
-		// This isn't an accurate test, but it's fast, and the 
+		// This isn't an accurate test, but it's fast, and the
 		// API contract doesn't guarantee complete accuracy.
 		if (Triangles[i].isTotalOutsideBox(tBox))
 		   continue;

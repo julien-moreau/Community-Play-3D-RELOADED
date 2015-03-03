@@ -1408,6 +1408,21 @@
     <ClInclude Include="..\include\CDynamicMeshBuffer.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="CInstancedMeshSceneNode.h">
+      <Filter>Irrlicht\scene\sceneNodes</Filter>
+    </ClInclude>
+    <ClInclude Include="CMeshTextureLoader.h">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIProfiler.h">
+      <Filter>Irrlicht\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CProfiler.h">
+      <Filter>Irrlicht\irr</Filter>
+    </ClInclude>
+    <ClInclude Include="EProfileIDs.h">
+      <Filter>Irrlicht\irr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\changes.txt">
@@ -2374,6 +2389,18 @@
     </ClCompile>
     <ClCompile Include="CD3D11VertexDescriptor.cpp">
       <Filter>Irrlicht\video\Direct3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="CInstancedMeshSceneNode.cpp">
+      <Filter>Irrlicht\scene\sceneNodes</Filter>
+    </ClCompile>
+    <ClCompile Include="CMeshTextureLoader.cpp">
+      <Filter>Irrlicht\scene\loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUIProfiler.cpp">
+      <Filter>Irrlicht\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CProfiler.cpp">
+      <Filter>Irrlicht\irr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

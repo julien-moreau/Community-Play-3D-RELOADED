@@ -24,19 +24,19 @@ CHardwareSkinningManager::~CHardwareSkinningManager() {
 	Materials.clear();
 }
 
-bool CHardwareSkinningManager::addNode(IAnimatedMeshSceneNode *node) {
+ICP3DHardwareSkinningMaterial *CHardwareSkinningManager::addNode(IAnimatedMeshSceneNode *node) {
 	if (node->getMesh()->getMeshType() != EAMT_SKINNED)
-		return false;
+		return 0;
 
 	for (u32 i = 0; i < Materials.size(); i++) {
 		if (Materials[i]->getNode() == node)
-			return false;
+			return Materials[i];
 	}
 
 	CHardwareSkinningMaterial *hwmat = new CHardwareSkinningMaterial(Handler, node, 17);
 	Materials.push_back(hwmat);
 
-	return true;
+	return hwmat;
 }
 
 bool CHardwareSkinningManager::removeNode(IAnimatedMeshSceneNode *node) {

@@ -61,8 +61,11 @@ public:
 
 		for (u32 i=0; i!=meshes.size(); ++i)
 		{
+			scene::IIndexBuffer* indexBuffer = meshes[i]->getIndexBuffer();
+			u32 indexCount = indexBuffer->getIndexCount();
+
 			IndexData[i].CurrentSize = 0;
-			IndexData[i].MaxSize = meshes[i]->getIndexBuffer()->getIndexCount();
+			IndexData[i].MaxSize = indexCount;
 			IndexData[i].IndexBuffer = new scene::CIndexBuffer(meshes[i]->getIndexBuffer()->getType());
 			IndexData[i].IndexBuffer->reallocate(IndexData[i].MaxSize);
 
@@ -71,8 +74,8 @@ public:
 			SIndexChunk& tic = indexChunks->getLast();
 			tic.MaterialId = meshesMatID[i];
 
-			for(u32 j = 0; j < meshes[i]->getIndexBuffer()->getIndexCount(); ++j)
-				tic.IndexBuffer.addIndex(meshes[i]->getIndexBuffer()->getIndex(j));
+			for (u32 j = 0; j < indexCount; ++j)
+				tic.IndexBuffer.addIndex(indexBuffer->getIndex(j));
 		}
 
 		// create tree
@@ -84,7 +87,10 @@ public:
 	void calculatePolys(const core::aabbox3d<f32>& box)
 	{
 		for (u32 i=0; i!=IndexDataCount; ++i)
+		{
+			IndexData[i].IndexBuffer->set_used(0);
 			IndexData[i].CurrentSize = 0;
+		}
 
 		Root->getPolys(box, IndexData, 0);
 	}
@@ -94,7 +100,10 @@ public:
 	void calculatePolys(const scene::SViewFrustum& frustum)
 	{
 		for (u32 i=0; i!=IndexDataCount; ++i)
+		{
+			IndexData[i].IndexBuffer->set_used(0);
 			IndexData[i].CurrentSize = 0;
+		}
 
 		Root->getPolys(frustum, IndexData, 0);
 	}
@@ -163,17 +172,21 @@ private:
 
 			for (i=0; i<indices->size(); ++i)
 			{
-				video::IVertexAttribute* attribute = meshes[i]->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
+				const video::IVertexDescriptor* descriptor = (meshes[i] && meshes[i]->isVertexBufferCompatible()) ? meshes[i]->getVertexDescriptor() : 0;
+				const video::IVertexAttribute* attribute = (descriptor) ? descriptor->getAttributeBySemantic(video::EVAS_POSITION) : 0;
+				scene::IVertexBuffer* vertexBuffer = (attribute) ? meshes[i]->getVertexBuffer(attribute->getBufferID()) : 0;
 
-				if(!attribute)
+				if (!vertexBuffer || vertexBuffer->getVertexCount() == 0)
 					continue;
 
-				u8* offset = static_cast<u8*>(meshes[i]->getVertexBuffer()->getVertices());
+				u8* offset = static_cast<u8*>(vertexBuffer->getVertices());
 				offset += attribute->getOffset();
+
+				const u32 vertexSize = vertexBuffer->getVertexSize();
 
 				if((*indices)[i].IndexBuffer.getIndexCount() > 0)
 				{
-					core::vector3df* position = (core::vector3df*)(offset + meshes[i]->getVertexBuffer()->getVertexSize() * (*indices)[i].IndexBuffer.getIndex(0));
+					core::vector3df* position = (core::vector3df*)(offset + vertexSize * (*indices)[i].IndexBuffer.getIndex(0));
 
 					Box.reset(*position);
 					found = true;
@@ -192,19 +205,23 @@ private:
 			// now lets calculate our bounding box
 			for (i=0; i<indices->size(); ++i)
 			{
-				video::IVertexAttribute* attribute = meshes[i]->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
+				const video::IVertexDescriptor* descriptor = (meshes[i] && meshes[i]->isVertexBufferCompatible()) ? meshes[i]->getVertexDescriptor() : 0;
+				const video::IVertexAttribute* attribute = (descriptor) ? descriptor->getAttributeBySemantic(video::EVAS_POSITION) : 0;
+				scene::IVertexBuffer* vertexBuffer = (attribute) ? meshes[i]->getVertexBuffer(attribute->getBufferID()) : 0;
 
-				if(!attribute)
+				if (!vertexBuffer || vertexBuffer->getVertexCount() == 0)
 					continue;
 
 				u8* offset = static_cast<u8*>(meshes[i]->getVertexBuffer()->getVertices());
 				offset += attribute->getOffset();
 
+				const u32 vertexSize = vertexBuffer->getVertexSize();
+
 				totalPrimitives += (*indices)[i].IndexBuffer.getIndexCount();
 
 				for (u32 j=0; j<(*indices)[i].IndexBuffer.getIndexCount(); ++j)
 				{
-					core::vector3df* position = (core::vector3df*)(offset + meshes[i]->getVertexBuffer()->getVertexSize() * (*indices)[i].IndexBuffer.getIndex(j));
+					core::vector3df* position = (core::vector3df*)(offset + vertexSize * (*indices)[i].IndexBuffer.getIndex(j));
 					Box.addInternalPoint(*position);
 				}
 			}
@@ -229,13 +246,17 @@ private:
 				cindexChunks->reallocate(meshes.size());
 				for (i=0; i<meshes.size(); ++i)
 				{
-					video::IVertexAttribute* attribute = meshes[i]->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
+					const video::IVertexDescriptor* descriptor = (meshes[i] && meshes[i]->isVertexBufferCompatible()) ? meshes[i]->getVertexDescriptor() : 0;
+					const video::IVertexAttribute* attribute = (descriptor) ? descriptor->getAttributeBySemantic(video::EVAS_POSITION) : 0;
+					scene::IVertexBuffer* vertexBuffer = (attribute) ? meshes[i]->getVertexBuffer(attribute->getBufferID()) : 0;
 
-					if(!attribute)
+					if (!vertexBuffer || vertexBuffer->getVertexCount() == 0)
 						continue;
 
 					u8* offset = static_cast<u8*>(meshes[i]->getVertexBuffer()->getVertices());
 					offset += attribute->getOffset();
+
+					const u32 vertexSize = vertexBuffer->getVertexSize();
 
 					cindexChunks->push_back(SIndexChunk());
 					SIndexChunk& tic = cindexChunks->getLast();
@@ -243,9 +264,9 @@ private:
 
 					for (u32 t=0; t<(*indices)[i].IndexBuffer.getIndexCount(); t+=3)
 					{
-						core::vector3df* position0 = (core::vector3df*)(offset + meshes[i]->getVertexBuffer()->getVertexSize() * (*indices)[i].IndexBuffer.getIndex(t));
-						core::vector3df* position1 = (core::vector3df*)(offset + meshes[i]->getVertexBuffer()->getVertexSize() * (*indices)[i].IndexBuffer.getIndex(t+1));
-						core::vector3df* position2 = (core::vector3df*)(offset + meshes[i]->getVertexBuffer()->getVertexSize() * (*indices)[i].IndexBuffer.getIndex(t+2));
+						core::vector3df* position0 = (core::vector3df*)(offset + vertexSize * (*indices)[i].IndexBuffer.getIndex(t));
+						core::vector3df* position1 = (core::vector3df*)(offset + vertexSize * (*indices)[i].IndexBuffer.getIndex(t+1));
+						core::vector3df* position2 = (core::vector3df*)(offset + vertexSize * (*indices)[i].IndexBuffer.getIndex(t+2));
 
 						if (box.isPointInside(*position0) && box.isPointInside(*position1) && box.isPointInside(*position2))
 						{
@@ -343,9 +364,10 @@ private:
 							dst = dst2;
 						}
 
-						memcpy(dst, src, idxcnt * IndexType);
-
 						idxdata[i].CurrentSize += idxcnt;
+						idxdata[i].IndexBuffer->set_used(idxdata[i].CurrentSize);
+
+						memcpy(dst, src, idxcnt * IndexType);
 					}
 				}
 
@@ -413,9 +435,10 @@ private:
 						dst = dst2;
 					}
 
-					memcpy(dst, src, idxcnt * IndexType);
-
 					idxdata[i].CurrentSize += idxcnt;
+					idxdata[i].IndexBuffer->set_used(idxdata[i].CurrentSize);
+
+					memcpy(dst, src, idxcnt * IndexType);
 				}
 			}
 

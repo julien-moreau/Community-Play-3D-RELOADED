@@ -28,6 +28,7 @@ namespace video
 	inline void logFormatError(HRESULT hr, irr::core::stringc msg);
 
 	class CD3D11VertexDeclaration;
+	class CD3D11HardwareBuffer;
 
 	struct SDepthSurface11 : public IReferenceCounted
 	{
@@ -50,7 +51,7 @@ namespace video
 	class CD3D11Driver : public CNullDriver, IMaterialRendererServices
 	{
 	public:
-
+		friend class CD3D11HardwareBuffer;
 		friend class CD3D11Texture;
 
 		//! constructor
@@ -78,6 +79,17 @@ namespace video
 		//! sets a material
 		virtual void setMaterial(const SMaterial& material);
 
+		virtual void drawMeshBuffer(const scene::IMeshBuffer* mb) _IRR_OVERRIDE_;
+
+		virtual void draw2DVertexPrimitiveList(const void* vertices, u32 vertexCount, const void* indices,
+			u32 primitiveCount, E_VERTEX_TYPE vType, scene::E_PRIMITIVE_TYPE pType, E_INDEX_TYPE iType) _IRR_OVERRIDE_;
+
+		virtual IHardwareBuffer* createHardwareBuffer(scene::IIndexBuffer* indexBuffer) _IRR_OVERRIDE_;
+
+		virtual IHardwareBuffer* createHardwareBuffer(scene::IVertexBuffer* vertexBuffer) _IRR_OVERRIDE_;
+
+		void removeAllHardwareBuffers();
+
 				//! Create occlusion query.
 		/** Use node for identification and mesh for occlusion test. */
 		virtual void addOcclusionQuery(scene::ISceneNode* node,
@@ -103,70 +115,28 @@ namespace video
 		virtual u32 getOcclusionQueryResult(scene::ISceneNode* node) const;
 
 		//! sets a render target
-		virtual bool setRenderTarget(video::ITexture* texture,
-			bool clearBackBuffer=true, bool clearZBuffer=true,
-			SColor color=video::SColor(0,0,0,0));
+		virtual bool setRenderTarget(video::ITexture* texture, bool clearBackBuffer,
+			bool clearZBuffer, SColor color, video::ITexture* depthStencil) _IRR_OVERRIDE_;
 
 		//! Sets multiple render targets
-		virtual bool setRenderTarget(const core::array<video::IRenderTarget>& texture,
-			bool clearBackBuffer=true, bool clearZBuffer=true,
-			SColor color=video::SColor(0,0,0,0));
+		virtual bool setRenderTarget(const core::array<video::IRenderTarget>& targets,
+			bool clearBackBuffer, bool clearZBuffer, SColor color, video::ITexture* depthStencil) _IRR_OVERRIDE_;
 
 		//! sets a viewport
 		virtual void setViewPort(const core::rect<s32>& area);
 
 		//! gets the area of the current viewport
 		virtual const core::rect<s32>& getViewPort() const;
-
-		struct SD3D11HwBufferLink : public SHWBufferLink
-		{
-			SD3D11HwBufferLink(const scene::IMeshBuffer *_MeshBuffer):
-				SHWBufferLink(_MeshBuffer),
-					vertexBuffer(0), indexBuffer(0),
-					vertexBufferSize(0), vertexBufferSize2(0), indexBufferSize(0) {}
-
-			ID3D11Buffer* vertexBuffer;
-			ID3D11Buffer* indexBuffer;
-
-			u32 vertexBufferSize;
-			u32 vertexBufferSize2;
-            u32 indexBufferSize;
- 		};
-
-		bool updateVertexHardwareBuffer(SD3D11HwBufferLink *HWBuffer);
-
-		bool updateIndexHardwareBuffer(SD3D11HwBufferLink *HWBuffer);
-
-		//! updates hardware buffer if needed
-		virtual bool updateHardwareBuffer(SHWBufferLink *HWBuffer);
-
-		//! Create hardware buffer from mesh
-		virtual SHWBufferLink *createHardwareBuffer(const scene::IMeshBuffer* mb);
-
-		//! Delete hardware buffer (only some drivers can)
-		virtual void deleteHardwareBuffer(SHWBufferLink *HWBuffer);
 		
 		//! is vbo recommended on this mesh? for DirectX 11 ALWAYS YES!!!!!!!!!!!
 		// DirectX 11 doesn't use methods like drawPrimitiveUp (DX9) or glVertex (OpenGL)
 		virtual bool isHardwareBufferRecommend(const scene::IMeshBuffer* mb) { return true; }
-
-		//! Draw hardware buffer
-		virtual void drawHardwareBuffer(SHWBufferLink* buffer);
 
 		//! draw
 		virtual void drawHardwareBuffer(IHardwareBuffer* vertices,
 				IHardwareBuffer* indices, E_VERTEX_TYPE vType=EVT_STANDARD,
 				scene::E_PRIMITIVE_TYPE pType=scene::EPT_TRIANGLES,
 				E_INDEX_TYPE iType=EIT_16BIT, u32 numInstances = 0);
-
-		virtual void drawVertexPrimitiveList(bool hardwareVertex, scene::IVertexBuffer* vertexBuffer,
-				bool hardwareIndex, scene::IIndexBuffer* indexBuffer, u32 primitiveCount, scene::E_PRIMITIVE_TYPE pType);
-
-		//! draws a vertex primitive list in 2d
-		virtual void draw2DVertexPrimitiveList(const void* vertices, u32 vertexCount,
-				const void* indices, u32 primitiveCount,
-				E_VERTEX_TYPE vType, scene::E_PRIMITIVE_TYPE pType,
-				E_INDEX_TYPE iType);
 
 		//! draws an 2d image, using a color (if color is other then Color(255,255,255,255)) and the alpha channel of the texture if wanted.
 		virtual void draw2DImage(const video::ITexture* texture, const core::position2d<s32>& destPos,
@@ -377,10 +347,6 @@ namespace video
 		D3D11_DEPTH_STENCIL_DESC& getDepthStencilDesc() { return DepthStencilDesc; }
 		D3D11_SAMPLER_DESC* getSamplerDescs() { return SamplerDesc; }
 
-		//! Create a implementation dependant hardware buffer
-		virtual IHardwareBuffer* createHardwareBuffer(E_HARDWARE_BUFFER_TYPE type, E_HARDWARE_BUFFER_ACCESS accessType, 
-							u32 size, u32 flags = 0, const void* initialData = 0);
-
 		//! Check multisample quality levels
 		virtual u32 queryMultisampleLevels(ECOLOR_FORMAT format, u32 numSamples) const;
 
@@ -468,6 +434,8 @@ namespace video
 		SColorf AmbientLight;
 		u32 MaxActiveLights;
 
+		core::array<CD3D11HardwareBuffer*> HardwareBuffer;
+
 		core::stringc VendorName;
 		u16 VendorID;
 
@@ -503,7 +471,7 @@ namespace video
 
 		void draw2D3DVertexPrimitiveList(const void* vertices, u32 vertexCount, u32 pVertexSize, 
 			const void* indices, u32 primitiveCount, E_VERTEX_TYPE vType, 
-			scene::E_PRIMITIVE_TYPE pType, E_INDEX_TYPE iType, bool is3D);
+			scene::E_PRIMITIVE_TYPE pType, E_INDEX_TYPE iType, bool is3D, u32 numInstances = 0);
 
 		D3D11_TEXTURE_ADDRESS_MODE getTextureWrapMode(const u8 clamp);
 
@@ -547,7 +515,6 @@ namespace video
 
 		//! handle screen resize
 		void reset();
-		void resetScreenSize();
 
 		bool disableTextures( u32 fromStage = 0);
 

@@ -68,13 +68,14 @@ Version 1.0 - 29 July 2004
 #include "IrrCompileConfig.h"
 #ifdef _IRR_COMPILE_WITH_LMTS_LOADER_
 
+#include "CLMTSMeshFileLoader.h"
+#include "CMeshTextureLoader.h"
 #include "SAnimatedMesh.h"
 #include "CMeshBuffer.h"
 #include "irrString.h"
 #include "IReadFile.h"
 #include "IAttributes.h"
 #include "ISceneManager.h"
-#include "CLMTSMeshFileLoader.h"
 #include "os.h"
 
 namespace irr
@@ -96,6 +97,8 @@ CLMTSMeshFileLoader::CLMTSMeshFileLoader(io::IFileSystem* fs,
 
 	if (FileSystem)
 		FileSystem->grab();
+
+	TextureLoader = new CMeshTextureLoader( FileSystem, Driver );
 }
 
 
@@ -130,6 +133,9 @@ bool CLMTSMeshFileLoader::isALoadableFileExtension(const io::path& filename) con
 
 IAnimatedMesh* CLMTSMeshFileLoader::createMesh(io::IReadFile* file)
 {
+	if ( getMeshTextureLoader() )
+		getMeshTextureLoader()->setMeshFile(file);
+
 	u32 i;
 	u32 id;
 
@@ -266,9 +272,9 @@ void CLMTSMeshFileLoader::constructMesh(SMesh* mesh)
 		CMeshBuffer<video::S3DVertex2TCoords>* meshBuffer = new CMeshBuffer<video::S3DVertex2TCoords>(Driver->getVertexDescriptor(1));
 
 		// EMT_LIGHTMAP_M2/EMT_LIGHTMAP_M4 also possible
-		meshBuffer->Material.MaterialType = video::EMT_LIGHTMAP;
-		meshBuffer->Material.Wireframe = false;
-		meshBuffer->Material.Lighting = false;
+		meshBuffer->getMaterial().MaterialType = video::EMT_LIGHTMAP;
+		meshBuffer->getMaterial().Wireframe = false;
+		meshBuffer->getMaterial().Lighting = false;
 
 		mesh->addMeshBuffer(meshBuffer);
 
@@ -329,19 +335,20 @@ void CLMTSMeshFileLoader::loadTextures(SMesh* mesh)
 	core::array<u32> id2id;
 	id2id.reallocate(Header.TextureCount);
 
-	const core::stringc Path = Parameters->getAttributeAsString(LMTS_TEXTURE_PATH);
+	if ( getMeshTextureLoader() )
+	{
+		if ( Parameters->existsAttribute(LMTS_TEXTURE_PATH) )
+			getMeshTextureLoader()->setTexturePath(Parameters->getAttributeAsString(LMTS_TEXTURE_PATH));
+	}
 
 	core::stringc s;
 	for (u32 t=0; t<Header.TextureCount; ++t)
 	{
-		video::ITexture* tmptex = 0;
-		s = Path;
-		s.append(Textures[t].Filename);
-
-		if (FileSystem->existFile(s))
-			tmptex = Driver->getTexture(s);
-		else
+		video::ITexture* tmptex = getMeshTextureLoader() ? getMeshTextureLoader()->getTexture(Textures[t].Filename) : NULL;
+		if ( !tmptex )
+		{
 			os::Printer::log("LMTS WARNING: Texture does not exist", s.c_str(), ELL_WARNING);
+		}
 
 		if (Textures[t].Flags & 0x01)
 		{

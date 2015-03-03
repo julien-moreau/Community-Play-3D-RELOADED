@@ -10,6 +10,7 @@
 #ifdef _IRR_COMPILE_WITH_B3D_LOADER_
 
 #include "CB3DMeshFileLoader.h"
+#include "CMeshTextureLoader.h"
 
 #include "IVideoDriver.h"
 #include "IFileSystem.h"
@@ -33,6 +34,8 @@ CB3DMeshFileLoader::CB3DMeshFileLoader(scene::ISceneManager* smgr)
 	#ifdef _DEBUG
 	setDebugName("CB3DMeshFileLoader");
 	#endif
+
+	TextureLoader = new CMeshTextureLoader( SceneManager->getFileSystem(), SceneManager->getVideoDriver() );
 }
 
 
@@ -48,12 +51,15 @@ bool CB3DMeshFileLoader::isALoadableFileExtension(const io::path& filename) cons
 //! \return Pointer to the created mesh. Returns 0 if loading failed.
 //! If you no longer need the mesh, you should call IAnimatedMesh::drop().
 //! See IReferenceCounted::drop() for more information.
-IAnimatedMesh* CB3DMeshFileLoader::createMesh(io::IReadFile* f)
+IAnimatedMesh* CB3DMeshFileLoader::createMesh(io::IReadFile* file)
 {
-	if (!f)
+	if (!file)
 		return 0;
 
-	B3DFile = f;
+	if ( getMeshTextureLoader() )
+		getMeshTextureLoader()->setMeshFile(file);
+
+	B3DFile = file;
 	AnimatedMesh = new scene::CSkinnedMesh();
 	ShowWarning = true; // If true a warning is issued if too many textures are used
 	VerticesStart=0;
@@ -159,7 +165,7 @@ bool CB3DMeshFileLoader::readChunkNODE(CSkinnedMesh::SJoint *inJoint)
 	for ( u32 i=1; i < B3dStack.size(); ++i )
 		logStr += "-";
 	logStr += "read ChunkNODE";
-	os::Printer::log(logStr.c_str(), joint->Name.c_str());
+	os::Printer::log(logStr.c_str(), joint->Name.c_str(), ELL_DEBUG);
 #endif
 
 	f32 position[3], scale[3], rotation[4];
@@ -245,7 +251,7 @@ bool CB3DMeshFileLoader::readChunkMESH(CSkinnedMesh::SJoint *inJoint)
 	for ( u32 i=1; i < B3dStack.size(); ++i )
 		logStr += "-";
 	logStr += "read ChunkMESH";
-	os::Printer::log(logStr.c_str());
+	os::Printer::log(logStr.c_str(), ELL_DEBUG);
 #endif
 
 	s32 brushID;
@@ -281,7 +287,7 @@ bool CB3DMeshFileLoader::readChunkMESH(CSkinnedMesh::SJoint *inJoint)
 			if (brushID!=-1)
 			{
 				loadTextures(Materials[brushID]);
-				meshBuffer->Material=Materials[brushID].Material;
+				meshBuffer->getMaterial() = Materials[brushID].Material;
 			}
 
 			if(readChunkTRIS(meshBuffer,AnimatedMesh->getMeshBuffers().size()-1, VerticesStart)==false)
@@ -294,12 +300,12 @@ bool CB3DMeshFileLoader::readChunkMESH(CSkinnedMesh::SJoint *inJoint)
 				video::IVertexAttribute* attributeP = 0;
 				video::IVertexAttribute* attributeN = 0;
 
-				for(u32 t = 0; t < meshBuffer->getVertexBuffer()->getVertexDescriptor()->getAttributeCount(); ++t)
+				for(u32 t = 0; t < meshBuffer->getVertexDescriptor()->getAttributeCount(); ++t)
 				{
-					if(meshBuffer->getVertexBuffer()->getVertexDescriptor()->getAttribute(t)->getSemantic() == video::EVAS_POSITION)
-						attributeP = meshBuffer->getVertexBuffer()->getVertexDescriptor()->getAttribute(t);
-					else if(meshBuffer->getVertexBuffer()->getVertexDescriptor()->getAttribute(t)->getSemantic() == video::EVAS_NORMAL)
-						attributeN = meshBuffer->getVertexBuffer()->getVertexDescriptor()->getAttribute(t);
+					if(meshBuffer->getVertexDescriptor()->getAttribute(t)->getSemantic() == video::EVAS_POSITION)
+						attributeP = meshBuffer->getVertexDescriptor()->getAttribute(t);
+					else if(meshBuffer->getVertexDescriptor()->getAttribute(t)->getSemantic() == video::EVAS_NORMAL)
+						attributeN = meshBuffer->getVertexDescriptor()->getAttribute(t);
 				}
 
 				if(attributeP && attributeN)
@@ -372,7 +378,7 @@ bool CB3DMeshFileLoader::readChunkVRTS(CSkinnedMesh::SJoint *inJoint)
 	for ( u32 i=1; i < B3dStack.size(); ++i )
 		logStr += "-";
 	logStr += "ChunkVRTS";
-	os::Printer::log(logStr.c_str());
+	os::Printer::log(logStr.c_str(), ELL_DEBUG);
 #endif
 
 	const s32 max_tex_coords = 3;
@@ -478,7 +484,7 @@ bool CB3DMeshFileLoader::readChunkTRIS(scene::IMeshBuffer *meshBuffer, u32 meshB
 	for ( u32 i=1; i < B3dStack.size(); ++i )
 		logStr += "-";
 	logStr += "ChunkTRIS";
-	os::Printer::log(logStr.c_str());
+	os::Printer::log(logStr.c_str(), ELL_DEBUG);
 #endif
 
 	bool showVertexWarning=false;
@@ -543,8 +549,10 @@ bool CB3DMeshFileLoader::readChunkTRIS(scene::IMeshBuffer *meshBuffer, u32 meshB
 				{
 					if (meshBuffer->getVertexBuffer(0)->getVertexSize() != sizeof(video::S3DVertex2TCoords))
 					{
-						CVertexBuffer<video::S3DVertex2TCoords>* vb = new CVertexBuffer<video::S3DVertex2TCoords>(SceneManager->getVideoDriver()->getVertexDescriptor(1));
-						SceneManager->getMeshManipulator()->copyVertices(meshBuffer->getVertexBuffer(0), vb, 0, 0, false);
+						video::IVertexDescriptor* vd = SceneManager->getVideoDriver()->getVertexDescriptor(1);
+						CVertexBuffer<video::S3DVertex2TCoords>* vb = new CVertexBuffer<video::S3DVertex2TCoords>();
+						SceneManager->getMeshManipulator()->copyVertices(meshBuffer->getVertexBuffer(0), 0, meshBuffer->getVertexDescriptor(), vb, 0, vd, false);
+						meshBuffer->setVertexDescriptor(vd);
 						meshBuffer->setVertexBuffer(vb, 0);
 						vb->drop();
 					}
@@ -623,7 +631,7 @@ bool CB3DMeshFileLoader::readChunkBONE(CSkinnedMesh::SJoint *inJoint)
 	for ( u32 i=1; i < B3dStack.size(); ++i )
 		logStr += "-";
 	logStr += "read ChunkBONE";
-	os::Printer::log(logStr.c_str());
+	os::Printer::log(logStr.c_str(), ELL_DEBUG);
 #endif
 
 	if (B3dStack.getLast().length > 8)
@@ -670,7 +678,7 @@ bool CB3DMeshFileLoader::readChunkKEYS(CSkinnedMesh::SJoint *inJoint)
 		for ( u32 i=1; i < B3dStack.size(); ++i )
 			logStr += "-";
 		logStr += "read ChunkKEYS";
-		os::Printer::log(logStr.c_str());
+		os::Printer::log(logStr.c_str(), ELL_DEBUG);
 	}
 #endif
 
@@ -814,7 +822,7 @@ bool CB3DMeshFileLoader::readChunkANIM()
 	for ( u32 i=1; i < B3dStack.size(); ++i )
 		logStr += "-";
 	logStr += "read ChunkANIM";
-	os::Printer::log(logStr.c_str());
+	os::Printer::log(logStr.c_str(), ELL_DEBUG);
 #endif
 
 	s32 animFlags; //not stored\used
@@ -845,7 +853,7 @@ bool CB3DMeshFileLoader::readChunkTEXS()
 	for ( u32 i=1; i < B3dStack.size(); ++i )
 		logStr += "-";
 	logStr += "read ChunkTEXS";
-	os::Printer::log(logStr.c_str());
+	os::Printer::log(logStr.c_str(), ELL_DEBUG);
 #endif
 
 	while((B3dStack.getLast().startposition + B3dStack.getLast().length) > B3DFile->getPos()) //this chunk repeats
@@ -856,7 +864,7 @@ bool CB3DMeshFileLoader::readChunkTEXS()
 		readString(B3dTexture.TextureName);
 		B3dTexture.TextureName.replace('\\','/');
 #ifdef _B3D_READER_DEBUG
-		os::Printer::log("read Texture", B3dTexture.TextureName.c_str());
+		os::Printer::log("read Texture", B3dTexture.TextureName.c_str(), ELL_DEBUG);
 #endif
 
 		B3DFile->read(&B3dTexture.Flags, sizeof(s32));
@@ -866,8 +874,8 @@ bool CB3DMeshFileLoader::readChunkTEXS()
 		B3dTexture.Blend = os::Byteswap::byteswap(B3dTexture.Blend);
 #endif
 #ifdef _B3D_READER_DEBUG
-		os::Printer::log("Flags", core::stringc(B3dTexture.Flags).c_str());
-		os::Printer::log("Blend", core::stringc(B3dTexture.Blend).c_str());
+		os::Printer::log("Flags", core::stringc(B3dTexture.Flags).c_str(), ELL_DEBUG);
+		os::Printer::log("Blend", core::stringc(B3dTexture.Blend).c_str(), ELL_DEBUG);
 #endif
 		readFloats(&B3dTexture.Xpos, 1);
 		readFloats(&B3dTexture.Ypos, 1);
@@ -889,7 +897,7 @@ bool CB3DMeshFileLoader::readChunkBRUS()
 	for ( u32 i=1; i < B3dStack.size(); ++i )
 		logStr += "-";
 	logStr += "read ChunkBRUS";
-	os::Printer::log(logStr.c_str());
+	os::Printer::log(logStr.c_str(), ELL_DEBUG);
 #endif
 
 	u32 n_texs;
@@ -910,7 +918,7 @@ bool CB3DMeshFileLoader::readChunkBRUS()
 		core::stringc name;
 		readString(name);
 #ifdef _B3D_READER_DEBUG
-		os::Printer::log("read Material", name);
+		os::Printer::log("read Material", name, ELL_DEBUG);
 #endif
 		Materials.push_back(SB3dMaterial());
 		SB3dMaterial& B3dMaterial=Materials.getLast();
@@ -928,8 +936,8 @@ bool CB3DMeshFileLoader::readChunkBRUS()
 		B3dMaterial.fx = os::Byteswap::byteswap(B3dMaterial.fx);
 #endif
 #ifdef _B3D_READER_DEBUG
-		os::Printer::log("Blend", core::stringc(B3dMaterial.blend).c_str());
-		os::Printer::log("FX", core::stringc(B3dMaterial.fx).c_str());
+		os::Printer::log("Blend", core::stringc(B3dMaterial.blend).c_str(), ELL_DEBUG);
+		os::Printer::log("FX", core::stringc(B3dMaterial.fx).c_str(), ELL_DEBUG);
 #endif
 
 		u32 i;
@@ -945,8 +953,8 @@ bool CB3DMeshFileLoader::readChunkBRUS()
 			{
 				B3dMaterial.Textures[i]=&Textures[texture_id];
 #ifdef _B3D_READER_DEBUG
-				os::Printer::log("Layer", core::stringc(i).c_str());
-				os::Printer::log("using texture", Textures[texture_id].TextureName.c_str());
+				os::Printer::log("Layer", core::stringc(i).c_str(), ELL_DEBUG);
+				os::Printer::log("using texture", Textures[texture_id].TextureName.c_str(), ELL_DEBUG);
 #endif
 			}
 			else
@@ -1083,6 +1091,12 @@ bool CB3DMeshFileLoader::readChunkBRUS()
 
 void CB3DMeshFileLoader::loadTextures(SB3dMaterial& material) const
 {
+	if ( getMeshTextureLoader() )
+	{
+		if ( SceneManager->getParameters()->existsAttribute(B3D_TEXTURE_PATH) )
+			getMeshTextureLoader()->setTexturePath( SceneManager->getParameters()->getAttributeAsString(B3D_TEXTURE_PATH) );
+	}
+
 	const bool previous32BitTextureFlag = SceneManager->getVideoDriver()->getTextureCreationFlag(video::ETCF_ALWAYS_32_BIT);
 	SceneManager->getVideoDriver()->setTextureCreationFlag(video::ETCF_ALWAYS_32_BIT, true);
 
@@ -1098,23 +1112,7 @@ void CB3DMeshFileLoader::loadTextures(SB3dMaterial& material) const
 			if (!SceneManager->getParameters()->getAttributeAsBool(B3D_LOADER_IGNORE_MIPMAP_FLAG))
 				SceneManager->getVideoDriver()->setTextureCreationFlag(video::ETCF_CREATE_MIP_MAPS, (B3dTexture->Flags & 0x8) ? true:false);
 			{
-				video::ITexture* tex = 0;
-				io::IFileSystem* fs = SceneManager->getFileSystem();
-				io::path texnameWithUserPath( SceneManager->getParameters()->getAttributeAsString(B3D_TEXTURE_PATH) );
-				if ( texnameWithUserPath.size() )
-				{
-					texnameWithUserPath += '/';
-					texnameWithUserPath += B3dTexture->TextureName;
-				}
-				if (fs->existFile(texnameWithUserPath))
-					tex = SceneManager->getVideoDriver()->getTexture(texnameWithUserPath);
-				else if (fs->existFile(B3dTexture->TextureName))
-					tex = SceneManager->getVideoDriver()->getTexture(B3dTexture->TextureName);
-				else if (fs->existFile(fs->getFileDir(B3DFile->getFileName()) +"/"+ fs->getFileBasename(B3dTexture->TextureName)))
-					tex = SceneManager->getVideoDriver()->getTexture(fs->getFileDir(B3DFile->getFileName()) +"/"+ fs->getFileBasename(B3dTexture->TextureName));
-				else
-					tex = SceneManager->getVideoDriver()->getTexture(fs->getFileBasename(B3dTexture->TextureName));
-
+				video::ITexture* tex = getMeshTextureLoader() ? getMeshTextureLoader()->getTexture(B3dTexture->TextureName) : NULL;
 				material.Material.setTexture(i, tex);
 			}
 			if (material.Textures[i]->Flags & 0x10) // Clamp U

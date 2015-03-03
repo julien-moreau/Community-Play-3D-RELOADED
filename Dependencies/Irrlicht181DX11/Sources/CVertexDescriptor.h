@@ -14,9 +14,10 @@ namespace video
 	class CVertexAttribute : public IVertexAttribute
 	{
 	public:
-		CVertexAttribute(const CVertexAttribute& vertexAttribute);
 		CVertexAttribute(const core::stringc& name, u32 elementCount, E_VERTEX_ATTRIBUTE_SEMANTIC semantic, E_VERTEX_ATTRIBUTE_TYPE type, u32 offset, u32 bufferID);
 		virtual ~CVertexAttribute();
+
+		bool operator < (const CVertexAttribute& other) const;
 
 		virtual const core::stringc& getName() const;
 
@@ -64,6 +65,10 @@ namespace video
 
 		virtual u32 getVertexSize(u32 bufferID) const;
 
+		virtual E_INSTANCE_DATA_STEP_RATE getInstanceDataStepRate(u32 bufferID) const;
+
+		virtual void setInstanceDataStepRate(E_INSTANCE_DATA_STEP_RATE rate, u32 bufferID);
+
 		virtual bool addAttribute(const core::stringc& name, u32 elementCount, E_VERTEX_ATTRIBUTE_SEMANTIC semantic, E_VERTEX_ATTRIBUTE_TYPE type, u32 bufferID);
 
 		virtual IVertexAttribute* getAttribute(u32 id) const;
@@ -84,9 +89,10 @@ namespace video
 		core::stringc Name;
 
 		core::array<u32> VertexSize;
-		core::array<CVertexAttribute> Attribute;
+		core::array<E_INSTANCE_DATA_STEP_RATE> InstanceDataStepRate;
+		core::array<CVertexAttribute*> Attribute;
 
-		s32 AttributePointer[(u32)EVAS_CUSTOM+1];
+		s32 AttributePointer[(u32)EVAS_COUNT];
 	};
 
 }

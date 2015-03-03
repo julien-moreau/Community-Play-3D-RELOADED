@@ -9,9 +9,8 @@
 
 cbuffer cbParams : register(c0)
 {
-	uniform float4x4 mWorldViewProj;
-	uniform float4x4 mWorld;
-	uniform float4x4 JointTransform[MAX_JOINT_NUM];
+	float4x4 mWorldViewProj;
+	float4x4 JointTransform[MAX_JOINT_NUM];
 };
 
 struct VS_INPUT
@@ -47,7 +46,6 @@ VS_OUTPUT vertexMain(VS_INPUT input)
 	VS_OUTPUT OUT = (VS_OUTPUT)0;
 
 	int verCol = int(input.Color.r * 255.9);
-	float4x4 ModelTransform = mWorldViewProj;
 	float4x4 matTran = JointTransform[verCol - 1];
 	float4 MeshPos = float4(input.Position.x, input.Position.y, input.Position.z, 1.0);
 
@@ -63,8 +61,10 @@ VS_OUTPUT vertexMain(VS_INPUT input)
 	if (verCol != 0)
 		matTran += JointTransform[verCol - 1];
 
+	float4x4 ModelTransform = mWorldViewProj;
 	ModelTransform = mul(matTran, ModelTransform);
 	float4 hpos = mul(MeshPos, ModelTransform);
+
 	OUT.Position = hpos;
 
 	#if defined(CP3D_COMPUTE_DEPTH_MATERIAL)

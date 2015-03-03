@@ -61,7 +61,7 @@ void CTextSceneNode::render()
 		SceneManager->getActiveCamera());
 
 	core::rect<s32> r(pos, core::dimension2d<s32>(1,1));
-	Font->draw(Text.c_str(), r, Color, true, true);
+	Font->draw(Text, r, Color, true, true);
 }
 
 
@@ -69,17 +69,6 @@ void CTextSceneNode::render()
 const core::aabbox3d<f32>& CTextSceneNode::getBoundingBox() const
 {
 	return Box;
-}
-
-//! gets the text string
-const wchar_t *CTextSceneNode::getText()
-{
-	return Text.c_str();
-}
-
-//! gets the text color
-const video::SColor CTextSceneNode::getTextColor(){
-	return Color;
 }
 
 //! sets the text string
@@ -131,8 +120,8 @@ CBillboardTextSceneNode::CBillboardTextSceneNode(ISceneNode* parent, ISceneManag
 			for (u32 i=0; i<Font->getSpriteBank()->getTextureCount(); ++i)
 			{
 				CMeshBuffer<video::S3DVertex> *mb = new CMeshBuffer<video::S3DVertex>(mgr->getVideoDriver()->getVertexDescriptor(0));
-				mb->Material = Material;
-				mb->Material.setTexture(0, Font->getSpriteBank()->getTexture(i));
+				mb->getMaterial() = Material;
+				mb->getMaterial().setTexture(0, Font->getSpriteBank()->getTexture(i));
 				Mesh->addMeshBuffer(mb);
 				mb->drop();
 			}
@@ -161,16 +150,6 @@ CBillboardTextSceneNode::~CBillboardTextSceneNode()
 
 }
 
-//! gets the text string
-const wchar_t *CBillboardTextSceneNode::getText()
-{
-	return Text.c_str();
-}
-
-//! gets the text color
-const video::SColor CBillboardTextSceneNode::getTextColor(){
-	return Color;
-}
 
 //! sets the text string
 void CBillboardTextSceneNode::setText(const wchar_t* text)
@@ -262,7 +241,7 @@ void CBillboardTextSceneNode::setText(const wchar_t* text)
 void CBillboardTextSceneNode::OnAnimate(u32 timeMs)
 {
 	ISceneNode::OnAnimate(timeMs);
-	
+
 	if (!IsVisible || !Font || !Mesh)
 		return;
 

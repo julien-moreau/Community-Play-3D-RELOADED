@@ -7,8 +7,7 @@
 
 #include "IBillboardSceneNode.h"
 #include "S3DVertex.h"
-#include "CVertexBuffer.h"
-#include "CIndexBuffer.h"
+#include "CMeshBuffer.h"
 
 namespace irr
 {
@@ -16,13 +15,13 @@ namespace scene
 {
 
 //! Scene node which is a billboard. A billboard is like a 3d sprite: A 2d element,
-//! which always looks to the camera. 
+//! which always looks to the camera.
 class CBillboardSceneNode : virtual public IBillboardSceneNode
 {
 public:
 
 	//! constructor
-	CBillboardSceneNode(ISceneNode* parent, ISceneManager* mgr, s32 id,	
+	CBillboardSceneNode(ISceneNode* parent, ISceneManager* mgr, s32 id,
 		const core::vector3df& position, const core::dimension2d<f32>& size,
 		video::SColor colorTop=video::SColor(0xFFFFFFFF),
 		video::SColor colorBottom=video::SColor(0xFFFFFFFF));
@@ -31,69 +30,66 @@ public:
 	~CBillboardSceneNode();
 
 	//! pre render event
-	virtual void OnRegisterSceneNode();
+	virtual void OnRegisterSceneNode() _IRR_OVERRIDE_;
 
 	//! render
-	virtual void render();
+	virtual void render() _IRR_OVERRIDE_;
 
 	//! returns the axis aligned bounding box of this node
-	virtual const core::aabbox3d<f32>& getBoundingBox() const;
+	virtual const core::aabbox3d<f32>& getBoundingBox() const _IRR_OVERRIDE_;
 
 	//! sets the size of the billboard
-	virtual void setSize(const core::dimension2d<f32>& size);
+	virtual void setSize(const core::dimension2d<f32>& size) _IRR_OVERRIDE_;
 
 	//! Sets the widths of the top and bottom edges of the billboard independently.
-	virtual void setSize(f32 height, f32 bottomEdgeWidth, f32 topEdgeWidth);
+	virtual void setSize(f32 height, f32 bottomEdgeWidth, f32 topEdgeWidth) _IRR_OVERRIDE_;
 
- 	//! gets the size of the billboard
- 	virtual const core::dimension2d<f32>& getSize() const;
- 
+	//! gets the size of the billboard
+	virtual const core::dimension2d<f32>& getSize() const _IRR_OVERRIDE_;
+
 	//! Gets the widths of the top and bottom edges of the billboard.
-	virtual void getSize(f32& height, f32& bottomEdgeWidth, f32& topEdgeWidth) const;
+	virtual void getSize(f32& height, f32& bottomEdgeWidth, f32& topEdgeWidth) const _IRR_OVERRIDE_;
 
-	virtual video::SMaterial& getMaterial(u32 i);
-	
+	virtual video::SMaterial& getMaterial(u32 i) _IRR_OVERRIDE_;
+
 	//! returns amount of materials used by this scene node.
-	virtual u32 getMaterialCount() const;
-	
+	virtual u32 getMaterialCount() const _IRR_OVERRIDE_;
+
 	//! Set the color of all vertices of the billboard
 	//! \param overallColor: the color to set
-	virtual void setColor(const video::SColor& overallColor);
+	virtual void setColor(const video::SColor& overallColor) _IRR_OVERRIDE_;
 
 	//! Set the color of the top and bottom vertices of the billboard
 	//! \param topColor: the color to set the top vertices
 	//! \param bottomColor: the color to set the bottom vertices
 	virtual void setColor(const video::SColor& topColor,
-			const video::SColor& bottomColor);
+			const video::SColor& bottomColor) _IRR_OVERRIDE_;
 
 	//! Gets the color of the top and bottom vertices of the billboard
 	//! \param[out] topColor: stores the color of the top vertices
 	//! \param[out] bottomColor: stores the color of the bottom vertices
 	virtual void getColor(video::SColor& topColor,
-			video::SColor& bottomColor) const;
+			video::SColor& bottomColor) const _IRR_OVERRIDE_;
 
 	//! Writes attributes of the scene node.
-	virtual void serializeAttributes(io::IAttributes* out, io::SAttributeReadWriteOptions* options=0) const;
+	virtual void serializeAttributes(io::IAttributes* out, io::SAttributeReadWriteOptions* options=0) const _IRR_OVERRIDE_;
 
 	//! Reads attributes of the scene node.
-	virtual void deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options=0);
+	virtual void deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options=0) _IRR_OVERRIDE_;
 
 	//! Returns type of the scene node
-	virtual ESCENE_NODE_TYPE getType() const { return ESNT_BILLBOARD; }
+	virtual ESCENE_NODE_TYPE getType() const _IRR_OVERRIDE_ { return ESNT_BILLBOARD; }
 
 	//! Creates a clone of this scene node and its children.
-	virtual ISceneNode* clone(ISceneNode* newParent=0, ISceneManager* newManager=0);
-	
+	virtual ISceneNode* clone(ISceneNode* newParent=0, ISceneManager* newManager=0) _IRR_OVERRIDE_;
+
 private:
 
 	//! Size.Width is the bottom edge width
 	core::dimension2d<f32> Size;
 	f32 TopEdgeWidth;
-	core::aabbox3d<f32> BBox;
-	video::SMaterial Material;
 
-	IVertexBuffer* VertexBuffer;
-	IIndexBuffer* IndexBuffer;
+	IMeshBuffer* MeshBuffer;
 };
 
 

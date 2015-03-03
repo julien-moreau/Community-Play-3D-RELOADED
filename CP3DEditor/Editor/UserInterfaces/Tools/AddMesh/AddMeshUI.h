@@ -19,6 +19,8 @@ public:
 		ICP3DGUIManager *guiManager = EditorCore->getGUIManager();
 
 		Window = gui->addWindow(irr::core::rect<irr::s32>(360, 90, 1035, 450), false, L"Add Static Mesh", 0, -1);
+		guiManager->centerWindow(Window);
+
 		Viewport = guiManager->createViewPort(irr::core::rect<irr::s32>(10, 30, 370, 350), Window, -1);
 
 		PathEditBox = gui->addEditBox(L"", irr::core::rect<irr::s32>(380, 30, 570, 50), false, Window, -1);

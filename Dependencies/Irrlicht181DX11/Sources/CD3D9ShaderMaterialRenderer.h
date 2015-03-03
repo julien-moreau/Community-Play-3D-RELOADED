@@ -39,14 +39,14 @@ public:
 	~CD3D9ShaderMaterialRenderer();
 
 	virtual void OnSetMaterial(const video::SMaterial& material, const video::SMaterial& lastMaterial,
-		bool resetAllRenderstates, video::IMaterialRendererServices* services);
+		bool resetAllRenderstates, video::IMaterialRendererServices* services) _IRR_OVERRIDE_;
 
-	virtual void OnUnsetMaterial();
+	virtual void OnUnsetMaterial() _IRR_OVERRIDE_;
 
-	virtual bool OnRender(IMaterialRendererServices* service, E_VERTEX_TYPE vtxtype);
+	virtual bool OnRender(IMaterialRendererServices* service, E_VERTEX_TYPE vtxtype) _IRR_OVERRIDE_;
 
 	//! Returns if the material is transparent.
-	virtual bool isTransparent() const;
+	virtual bool isTransparent() const _IRR_OVERRIDE_;
 
 protected:
 
@@ -68,7 +68,7 @@ protected:
 					LPD3DXBUFFER* ppErrorMsgs);
 
 	HRESULT stubD3DXAssembleShaderFromFile(LPCSTR pSrcFile,
-				        CONST D3DXMACRO* pDefines, LPD3DXINCLUDE  pInclude, DWORD Flags,
+					CONST D3DXMACRO* pDefines, LPD3DXINCLUDE  pInclude, DWORD Flags,
 					LPD3DXBUFFER* ppShader, LPD3DXBUFFER* ppErrorMsgs);
 
 	HRESULT stubD3DXCompileShader(LPCSTR pSrcData, UINT SrcDataLen, CONST D3DXMACRO* pDefines,

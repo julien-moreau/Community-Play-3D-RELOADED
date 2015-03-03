@@ -27,7 +27,7 @@ CParticleMeshEmitter::CParticleMeshEmitter(
 	MinParticlesPerSecond(minParticlesPerSecond), MaxParticlesPerSecond(maxParticlesPerSecond),
 	MinStartColor(minStartColor), MaxStartColor(maxStartColor),
 	MinLifeTime(lifeTimeMin), MaxLifeTime(lifeTimeMax),
-	Time(0), Emitted(0), MaxAngleDegrees(maxAngleDegrees),
+	Time(0), MaxAngleDegrees(maxAngleDegrees),
 	EveryMeshVertex(everyMeshVertex), UseNormalDirection(useNormalDirection)
 {
 	#ifdef _DEBUG
@@ -63,8 +63,8 @@ s32 CParticleMeshEmitter::emitt(u32 now, u32 timeSinceLastCall, SParticle*& outA
 			{
 				for( u32 j=0; j<Mesh->getMeshBufferCount(); ++j )
 				{
-					video::IVertexAttribute* attributePosition = Mesh->getMeshBuffer(j)->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
-					video::IVertexAttribute* attributeNormal = Mesh->getMeshBuffer(j)->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_NORMAL);
+					video::IVertexAttribute* attributePosition = Mesh->getMeshBuffer(j)->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
+					video::IVertexAttribute* attributeNormal = Mesh->getMeshBuffer(j)->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_NORMAL);
 
 					if(!attributePosition || !attributeNormal)
 						continue;
@@ -127,8 +127,8 @@ s32 CParticleMeshEmitter::emitt(u32 now, u32 timeSinceLastCall, SParticle*& outA
 
 				u32 vertexNumber = Mesh->getMeshBuffer(randomMB)->getVertexBuffer()->getVertexCount();
 				
-				video::IVertexAttribute* attributePosition = Mesh->getMeshBuffer(randomMB)->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
-				video::IVertexAttribute* attributeNormal = Mesh->getMeshBuffer(randomMB)->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_NORMAL);
+				video::IVertexAttribute* attributePosition = Mesh->getMeshBuffer(randomMB)->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
+				video::IVertexAttribute* attributeNormal = Mesh->getMeshBuffer(randomMB)->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_NORMAL);
 
 				if(!attributePosition || !attributeNormal || !vertexNumber)
 					continue;

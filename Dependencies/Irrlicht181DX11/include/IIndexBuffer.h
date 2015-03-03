@@ -7,7 +7,7 @@
 
 #include "IReferenceCounted.h"
 #include "irrArray.h"
-#include "EHardwareBufferFlags.h"
+#include "IHardwareBuffer.h"
 
 namespace irr
 {
@@ -24,6 +24,16 @@ namespace scene
 	class IIndexBuffer : public virtual IReferenceCounted
 	{
 	public:
+		IIndexBuffer() : HardwareBuffer(0)
+		{
+		}
+
+		virtual ~IIndexBuffer()
+		{
+			if (HardwareBuffer)
+				HardwareBuffer->drop();
+		}
+
 		virtual void clear() = 0;
 
 		virtual u32 getLast() = 0;
@@ -59,6 +69,26 @@ namespace scene
 		virtual void setDirty() = 0;
 
 		virtual u32 getChangedID() const = 0;
+
+		video::IHardwareBuffer* getHardwareBuffer() const
+		{
+			return HardwareBuffer;
+		}
+
+		// externalMemoryHandler parameter is used only by hardware buffers.
+		void setHardwareBuffer(video::IHardwareBuffer* hardwareBuffer, bool externalMemoryHandler = false)
+		{
+			if (!externalMemoryHandler && HardwareBuffer)
+				HardwareBuffer->drop();
+
+			HardwareBuffer = hardwareBuffer;
+
+			if (!externalMemoryHandler && HardwareBuffer)
+				HardwareBuffer->grab();
+		}
+
+	protected:
+		video::IHardwareBuffer* HardwareBuffer;
 	};
 }
 }

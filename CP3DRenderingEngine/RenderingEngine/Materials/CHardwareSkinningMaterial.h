@@ -19,6 +19,7 @@ public:
 	~CHardwareSkinningMaterial();
 
 	// IShaderConstantSetCallback
+	virtual void OnSetMaterial(const irr::video::SMaterial &material);
 	virtual void OnSetConstants(irr::video::IMaterialRendererServices* services, irr::s32 userData);
 
 	// Materials

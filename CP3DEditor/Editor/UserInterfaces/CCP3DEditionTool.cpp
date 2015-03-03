@@ -346,6 +346,7 @@ SCP3DInterfaceData CCP3DEditionTool::addField(IGUITab *tab, EGUI_ELEMENT_TYPE ty
 	case EGUIET_IMAGE: e = createTextureField(tab, panel); break;
 	case EGUIET_CHECK_BOX: e = createCheckBoxField(tab, panel); break;
 	case EGUIET_COLOR_SELECT_DIALOG: e = createColorField(tab, panel); break;
+	case ECET_VIEW_PORT: e = createViewportField(tab, panel); break;
 
 	default: break;
 	}
@@ -568,6 +569,17 @@ SCP3DInterfaceData CCP3DEditionTool::createColorField(irr::gui::IGUITab *tab, ui
 
 	return e;
 
+}
+
+SCP3DInterfaceData CCP3DEditionTool::createViewportField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel) {
+	SCP3DInterfaceData e(EGUIET_MESH_VIEWER);
+
+	s32 width = getPanelWidth(panel);
+	s32 offset = getElementPositionOffset(tab, panel);
+
+	e.ViewPort = EditorCore->getGUIManager()->createViewPort(rect<s32>(5, offset, width - 25, offset + 20), panel, -1);
+
+	return e;
 }
 
 s32 CCP3DEditionTool::getPanelWidth(IGUIElement *panel) {

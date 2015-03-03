@@ -34,14 +34,15 @@ public:
 	virtual ~CSceneLoaderIrr();
 
 	//! Returns true if the class might be able to load this file.
-	virtual bool isALoadableFileExtension(const io::path& filename) const;
+	virtual bool isALoadableFileExtension(const io::path& filename) const _IRR_OVERRIDE_;
 
 	//! Returns true if the class might be able to load this file.
-	virtual bool isALoadableFileFormat(io::IReadFile *file) const;
+	virtual bool isALoadableFileFormat(io::IReadFile *file) const _IRR_OVERRIDE_;
 
 	//! Loads the scene into the scene manager.
-	virtual bool loadScene(io::IReadFile* file, ISceneUserDataSerializer* userDataSerializer=0,
-	                       ISceneNode* rootNode=0);
+	virtual bool loadScene(io::IReadFile* file,
+		ISceneUserDataSerializer* userDataSerializer=0,
+		ISceneNode* rootNode=0) _IRR_OVERRIDE_;
 
 private:
 

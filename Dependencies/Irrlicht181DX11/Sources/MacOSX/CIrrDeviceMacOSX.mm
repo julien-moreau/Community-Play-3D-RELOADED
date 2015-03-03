@@ -26,7 +26,7 @@
 #include "COSOperator.h"
 #include "CColorConverter.h"
 #include "irrlicht.h"
-
+#include <algorithm>
 
 #import <wchar.h>
 #import <time.h>
@@ -506,7 +506,7 @@ CIrrDeviceMacOSX::CIrrDeviceMacOSX(const SIrrlichtCreationParameters& param)
 		chdir([path fileSystemRepresentation]);
 		[path release];
 	}
-
+    NSWindow* a;
 	uname(&name);
 	Operator = new COSOperator(name.version);
 	os::Printer::log(name.version,ELL_INFORMATION);
@@ -623,9 +623,18 @@ bool CIrrDeviceMacOSX::createWindow()
 		{
 			if(!CreationParams.WindowId) //create another window when WindowId is null
 			{
-				NSBackingStoreType type = (CreationParams.DriverType == video::EDT_OPENGL) ? NSBackingStoreBuffered : NSBackingStoreNonretained;
+				const NSBackingStoreType type = (CreationParams.DriverType == video::EDT_OPENGL) ? NSBackingStoreBuffered : NSBackingStoreNonretained;
 
-				Window = [[NSWindow alloc] initWithContentRect:NSMakeRect(0,0,CreationParams.WindowSize.Width,CreationParams.WindowSize.Height) styleMask:NSTitledWindowMask+NSClosableWindowMask+NSResizableWindowMask backing:type defer:FALSE];
+				int x = std::max(0, CreationParams.WindowPosition.X);
+				int y = std::max(0, CreationParams.WindowPosition.Y);
+				
+				if (CreationParams.WindowPosition.Y > -1)
+				{
+					int screenHeight = [[[NSScreen screens] objectAtIndex:0] frame].size.height;
+					y = screenHeight - y - CreationParams.WindowSize.Height;
+				}
+
+				Window = [[NSWindow alloc] initWithContentRect:NSMakeRect(x,y,CreationParams.WindowSize.Width,CreationParams.WindowSize.Height) styleMask:NSTitledWindowMask+NSClosableWindowMask+NSResizableWindowMask backing:type defer:FALSE];
 			}
 
 			if (Window != NULL || CreationParams.WindowId)
@@ -718,7 +727,10 @@ bool CIrrDeviceMacOSX::createWindow()
 				{
 					if (!CreationParams.WindowId)
 					{
-						[Window center];
+						if (CreationParams.WindowPosition.X == -1 && CreationParams.WindowPosition.Y == -1)
+						{
+							[Window center];
+						}
 						[Window setDelegate:[NSApp delegate]];
 
 						if(CreationParams.DriverType == video::EDT_OPENGL)
@@ -959,10 +971,7 @@ void CIrrDeviceMacOSX::createDriver()
 void CIrrDeviceMacOSX::flush()
 {
 	if (CGLContext != NULL)
-	{
-		glFinish();
 		CGLFlushDrawable(CGLContext);
-	}
 }
 
 bool CIrrDeviceMacOSX::run()
@@ -1330,14 +1339,13 @@ void CIrrDeviceMacOSX::setMouseLocation(int x,int y)
 	c.y = p.y;
 
 #ifdef __MAC_10_6
-	/*CGEventSourceRef SourceRef = CGEventSourceCreate(0);
-	CGEventSourceSetLocalEventsSuppressionInterval(SourceRef, 0);
-	CFRelease(SourceRef);*/
-	CGSetLocalEventsSuppressionInterval(0);
+    CGEventRef ev = CGEventCreateMouseEvent(0, kCGEventMouseMoved, c, 0);
+    CGEventPost(kCGHIDEventTap, ev);
+    CFRelease(ev);
 #else
-	CGSetLocalEventsSuppressionInterval(0);
+    CGSetLocalEventsSuppressionInterval(0);
+    CGWarpMouseCursorPosition(c);
 #endif
-	CGWarpMouseCursorPosition(c);
 }
 
 
@@ -1497,11 +1505,20 @@ void CIrrDeviceMacOSX::maximizeWindow()
 }
 
 
-//! Restore the window to normal size if possible.
+//! get the window to normal size if possible.
 void CIrrDeviceMacOSX::restoreWindow()
 {
 	[Window deminiaturize:[NSApp self]];
 }
+    
+//! Get the position of this window on screen
+core::position2di CIrrDeviceMacOSX::getWindowPosition()
+{
+	NSRect rect = [Window frame];
+	int screenHeight = [[[NSScreen screens] objectAtIndex:0] frame].size.height;
+	return core::position2di(rect.origin.x, screenHeight - rect.origin.y - rect.size.height);
+}
+
 
 
 bool CIrrDeviceMacOSX::present(video::IImage* surface, void* windowId, core::rect<s32>* src )

@@ -37,9 +37,11 @@ public:
 
 	virtual	void clear();
 
+	void rebuild();
+
 protected:
 	//! Parse semantic
-	LPCSTR getSemanticName(E_VERTEX_ATTRIBUTE_SEMANTIC semantic) const;
+	c8* getSemanticName(E_VERTEX_ATTRIBUTE_SEMANTIC semantic) const;
 
 	DXGI_FORMAT getFormat(E_VERTEX_ATTRIBUTE_TYPE type, u32 count) const;
 

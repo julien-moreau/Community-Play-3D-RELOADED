@@ -23,8 +23,8 @@ namespace video
 COpenGLShaderMaterialRenderer::COpenGLShaderMaterialRenderer(video::COpenGLDriver* driver,
 	s32& outMaterialTypeNr, const c8* vertexShaderProgram, const c8* pixelShaderProgram,
 	IShaderConstantSetCallBack* callback, E_MATERIAL_TYPE baseMaterial, s32 userData)
-	: Driver(driver), CallBack(callback), BaseMaterial(0),
-		VertexShader(0), UserData(userData)
+	: Driver(driver), CallBack(callback), Alpha(false), Blending(false), FixedBlending(false),
+		AlphaTest(false), VertexShader(0), UserData(userData)
 {
 	#ifdef _DEBUG
 	setDebugName("COpenGLShaderMaterialRenderer");
@@ -36,14 +36,28 @@ COpenGLShaderMaterialRenderer::COpenGLShaderMaterialRenderer(video::COpenGLDrive
 		PixelShader[i]=0;
 	}
 
-	if (baseMaterial == EMT_ONETEXTURE_BLEND || baseMaterial == EMT_TRANSPARENT_ADD_COLOR || baseMaterial == EMT_TRANSPARENT_VERTEX_ALPHA ||
-		baseMaterial == EMT_TRANSPARENT_ALPHA_CHANNEL || baseMaterial == EMT_TRANSPARENT_ALPHA_CHANNEL_REF)
+	switch (baseMaterial)
 	{
-		BaseMaterial = static_cast<COpenGLMaterialRenderer*>(Driver->getMaterialRenderer(baseMaterial));
+	case EMT_TRANSPARENT_VERTEX_ALPHA:
+	case EMT_TRANSPARENT_ALPHA_CHANNEL:
+	case EMT_NORMAL_MAP_TRANSPARENT_VERTEX_ALPHA:
+	case EMT_PARALLAX_MAP_TRANSPARENT_VERTEX_ALPHA:
+		Alpha = true;
+		break;
+	case EMT_TRANSPARENT_ADD_COLOR:
+	case EMT_NORMAL_MAP_TRANSPARENT_ADD_COLOR:
+	case EMT_PARALLAX_MAP_TRANSPARENT_ADD_COLOR:
+		FixedBlending = true;
+		break;
+	case EMT_ONETEXTURE_BLEND:
+		Blending = true;
+		break;
+	case EMT_TRANSPARENT_ALPHA_CHANNEL_REF:
+		AlphaTest = true;
+		break;
+	default:
+		break;
 	}
-
-	if (BaseMaterial)
-		BaseMaterial->grab();
 
 	if (CallBack)
 		CallBack->grab();
@@ -57,8 +71,8 @@ COpenGLShaderMaterialRenderer::COpenGLShaderMaterialRenderer(video::COpenGLDrive
 COpenGLShaderMaterialRenderer::COpenGLShaderMaterialRenderer(COpenGLDriver* driver,
 				IShaderConstantSetCallBack* callback,
 				E_MATERIAL_TYPE baseMaterial, s32 userData)
-: Driver(driver), CallBack(callback), BaseMaterial(0),
-		VertexShader(0), UserData(userData)
+: Driver(driver), CallBack(callback), Alpha(false), Blending(false), FixedBlending(false),
+	AlphaTest(false), VertexShader(0), UserData(userData)
 {
 	PixelShader.set_used(4);
 	for (u32 i=0; i<4; ++i)
@@ -66,14 +80,28 @@ COpenGLShaderMaterialRenderer::COpenGLShaderMaterialRenderer(COpenGLDriver* driv
 		PixelShader[i]=0;
 	}
 
-	if (baseMaterial == EMT_ONETEXTURE_BLEND || baseMaterial == EMT_TRANSPARENT_ADD_COLOR || baseMaterial == EMT_TRANSPARENT_VERTEX_ALPHA ||
-		baseMaterial == EMT_TRANSPARENT_ALPHA_CHANNEL || baseMaterial == EMT_TRANSPARENT_ALPHA_CHANNEL_REF)
+	switch (baseMaterial)
 	{
-		BaseMaterial = static_cast<COpenGLMaterialRenderer*>(Driver->getMaterialRenderer(baseMaterial));
+	case EMT_TRANSPARENT_VERTEX_ALPHA:
+	case EMT_TRANSPARENT_ALPHA_CHANNEL:
+	case EMT_NORMAL_MAP_TRANSPARENT_VERTEX_ALPHA:
+	case EMT_PARALLAX_MAP_TRANSPARENT_VERTEX_ALPHA:
+		Alpha = true;
+		break;
+	case EMT_TRANSPARENT_ADD_COLOR:
+	case EMT_NORMAL_MAP_TRANSPARENT_ADD_COLOR:
+	case EMT_PARALLAX_MAP_TRANSPARENT_ADD_COLOR:
+		FixedBlending = true;
+		break;
+	case EMT_ONETEXTURE_BLEND:
+		Blending = true;
+		break;
+	case EMT_TRANSPARENT_ALPHA_CHANNEL_REF:
+		AlphaTest = true;
+		break;
+	default:
+		break;
 	}
-
-	if (BaseMaterial)
-		BaseMaterial->grab();
 
 	if (CallBack)
 		CallBack->grab();
@@ -95,9 +123,6 @@ COpenGLShaderMaterialRenderer::~COpenGLShaderMaterialRenderer()
 	for (u32 i=0; i<PixelShader.size(); ++i)
 		if (PixelShader[i])
 			Driver->extGlDeletePrograms(1, &PixelShader[i]);
-
-	if (BaseMaterial)
-		BaseMaterial->drop();
 }
 
 
@@ -123,8 +148,6 @@ void COpenGLShaderMaterialRenderer::init(s32& outMaterialTypeNr,
 
 bool COpenGLShaderMaterialRenderer::OnRender(IMaterialRendererServices* service, E_VERTEX_TYPE vtxtype)
 {
-    Driver->setTextureRenderStates(Driver->getCurrentMaterial(), false, false);
-
 	// call callback to set shader constants
 	if (CallBack && (VertexShader || PixelShader[0]))
 		CallBack->OnSetConstants(service, UserData);
@@ -136,6 +159,13 @@ bool COpenGLShaderMaterialRenderer::OnRender(IMaterialRendererServices* service,
 void COpenGLShaderMaterialRenderer::OnSetMaterial(const video::SMaterial& material, const video::SMaterial& lastMaterial,
 	bool resetAllRenderstates, video::IMaterialRendererServices* services)
 {
+	if (Driver->getFixedPipelineState() == COpenGLDriver::EOFPS_ENABLE)
+		Driver->setFixedPipelineState(COpenGLDriver::EOFPS_ENABLE_TO_DISABLE);
+	else
+		Driver->setFixedPipelineState(COpenGLDriver::EOFPS_DISABLE);
+
+	COpenGLCallBridge* bridgeCalls = Driver->getBridgeCalls();
+
 	if (material.MaterialType != lastMaterial.MaterialType || resetAllRenderstates)
 	{
 		if (VertexShader)
@@ -175,16 +205,47 @@ void COpenGLShaderMaterialRenderer::OnSetMaterial(const video::SMaterial& materi
 			glEnable(GL_FRAGMENT_PROGRAM_NV);
 #endif
 		}
-
-		if (BaseMaterial)
-			BaseMaterial->OnSetBaseMaterial(material);
 	}
 
-	//let callback know used material
+	Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates);
+
+	if (Alpha)
+	{
+		bridgeCalls->setBlend(true);
+		bridgeCalls->setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
+	else if (FixedBlending)
+	{
+		bridgeCalls->setBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR);
+		bridgeCalls->setBlend(true);
+	}
+	else if (Blending)
+	{
+		E_BLEND_FACTOR srcRGBFact,dstRGBFact,srcAlphaFact,dstAlphaFact;
+		E_MODULATE_FUNC modulate;
+		u32 alphaSource;
+		unpack_textureBlendFuncSeparate(srcRGBFact, dstRGBFact, srcAlphaFact, dstAlphaFact, modulate, alphaSource, material.MaterialTypeParam);
+
+		if (Driver->queryFeature(EVDF_BLEND_SEPARATE))
+        {
+            bridgeCalls->setBlendFuncSeparate(Driver->getGLBlend(srcRGBFact), Driver->getGLBlend(dstRGBFact),
+                Driver->getGLBlend(srcAlphaFact), Driver->getGLBlend(dstAlphaFact));
+        }
+        else
+        {
+            bridgeCalls->setBlendFunc(Driver->getGLBlend(srcRGBFact), Driver->getGLBlend(dstRGBFact));
+        }
+
+		bridgeCalls->setBlend(true);
+	}
+	else if (AlphaTest)
+	{
+		bridgeCalls->setAlphaTest(true);
+		bridgeCalls->setAlphaFunc(GL_GREATER, 0.5f);
+	}
+
 	if (CallBack)
 		CallBack->OnSetMaterial(material);
-
-	Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates);
 
 	Driver->setActiveARBProgram(VertexShader);
 }
@@ -210,16 +271,13 @@ void COpenGLShaderMaterialRenderer::OnUnsetMaterial()
 	if (PixelShader[0])
 		glDisable(GL_FRAGMENT_PROGRAM_NV);
 #endif
-
-	if (BaseMaterial)
-		BaseMaterial->OnUnsetBaseMaterial();
 }
 
 
 //! Returns if the material is transparent.
 bool COpenGLShaderMaterialRenderer::isTransparent() const
 {
-	return BaseMaterial ? BaseMaterial->isTransparent() : false;
+	return (Alpha || Blending || FixedBlending);
 }
 
 

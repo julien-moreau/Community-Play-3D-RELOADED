@@ -7,6 +7,7 @@
 #ifdef _IRR_COMPILE_WITH_SMF_LOADER_
 
 #include "CSMFMeshFileLoader.h"
+#include "CMeshTextureLoader.h"
 #include "SAnimatedMesh.h"
 #include "CMeshBuffer.h"
 #include "IReadFile.h"
@@ -19,9 +20,9 @@ namespace irr
 namespace scene
 {
 
-CSMFMeshFileLoader::CSMFMeshFileLoader(video::IVideoDriver* driver)
-: Driver(driver)
+	CSMFMeshFileLoader::CSMFMeshFileLoader(irr::io::IFileSystem* fs, video::IVideoDriver* driver) : Driver(driver)
 {
+	TextureLoader = new CMeshTextureLoader( fs, driver );
 }
 
 //! Returns true if the file might be loaded by this class.
@@ -33,6 +34,12 @@ bool CSMFMeshFileLoader::isALoadableFileExtension(const io::path& filename) cons
 //! Creates/loads an animated mesh from the file.
 IAnimatedMesh* CSMFMeshFileLoader::createMesh(io::IReadFile* file)
 {
+	if ( !file )
+		return 0;
+
+	if ( getMeshTextureLoader() )
+		getMeshTextureLoader()->setMeshFile(file);
+
 	// create empty mesh
 	SMesh *mesh = new SMesh();
 
@@ -93,9 +100,12 @@ void CSMFMeshFileLoader::loadLimb(io::IReadFile* file, SMesh* mesh, const core::
 
 	for (const c8 **ext = extensions; !texture && *ext; ++ext)
 	{
-		texture = Driver->getTexture(textureName + *ext);
+		texture = getMeshTextureLoader() ? getMeshTextureLoader()->getTexture(textureName + *ext) : NULL;
 		if (texture)
+		{
 			textureName = textureName + *ext;
+			break;
+		}
 	}
 	// find the correct mesh buffer
 	u32 i;
@@ -107,13 +117,13 @@ void CSMFMeshFileLoader::loadLimb(io::IReadFile* file, SMesh* mesh, const core::
 	if (i == mesh->MeshBuffers.size())
 	{
 		CMeshBuffer<video::S3DVertex>* mb = new CMeshBuffer<video::S3DVertex>(Driver->getVertexDescriptor(0));
-		mb->Material.TextureLayer[0].Texture = texture;
+		mb->getMaterial().TextureLayer[0].Texture = texture;
 
 		// horribly hacky way to do this, maybe it's in the flags?
 		if (core::hasFileExtension(textureName, "tga", "png"))
-			mb->Material.MaterialType = video::EMT_TRANSPARENT_ALPHA_CHANNEL;
+			mb->getMaterial().MaterialType = video::EMT_TRANSPARENT_ALPHA_CHANNEL;
 		else
-			mb->Material.MaterialType = video::EMT_SOLID;
+			mb->getMaterial().MaterialType = video::EMT_SOLID;
 
 		mesh->MeshBuffers.push_back(mb);
 	}

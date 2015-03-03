@@ -46,9 +46,9 @@ private:
 		core::matrix4 g_mWorldViewProj;
 		SColorf	g_lightColor1;
 		SColorf	g_lightColor2;
-		ALIGN16 core::vector3df g_eyePosition;		
-		ALIGN16 core::vector3df g_lightPos1;
-		ALIGN16 core::vector3df g_lightPos2;
+		core::vector3df g_eyePosition;		
+		core::vector3df g_lightPos1;
+		core::vector3df g_lightPos2;
 		f32 g_scaleFactor;
 	} cbPerFrame;
 };

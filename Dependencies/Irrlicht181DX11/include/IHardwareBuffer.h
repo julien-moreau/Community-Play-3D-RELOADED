@@ -7,6 +7,7 @@
 
 #include "IReferenceCounted.h"
 #include "EDriverTypes.h"
+#include "EHardwareBufferFlags.h"
 
 namespace irr
 {
@@ -58,49 +59,68 @@ enum E_HARDWARE_BUFFER_FLAGS
 class IHardwareBuffer : public virtual IReferenceCounted
 {
 public:
-
-	IHardwareBuffer()
+	IHardwareBuffer(const scene::E_HARDWARE_MAPPING mapping, const u32 flags, const u32 size, const E_HARDWARE_BUFFER_TYPE type, const E_DRIVER_TYPE driverType) :
+		Mapping(mapping), Flags(flags), Size(size), Type(type), DriverType(driverType), RequiredUpdate(true)
 	{
 	}
 
-	//! Lock function.
-	/** Locks the Buffer and returns a pointer to access the
-	data. After lock() has been called and all operations on the data
-	are done, you must call unlock().
-	Locks are not accumulating, hence one unlock will do for an arbitrary
-	number of previous locks.
-	\param readOnly Specifies that no changes to the locked buffer are
-	made. Unspecified behavior will arise if still write access happens.
-	\return Returns a pointer to the data. 0 is returned, if
-	the texture cannot be locked. */
-	virtual void* lock(bool readOnly = false) = 0;
+	virtual ~IHardwareBuffer()
+	{
+	}
 
-	//! Unlock function. Must be called after a lock() to the buffer.
-	/** One should avoid to call unlock more than once before another lock. */
-	virtual void unlock() = 0;
+	// Update hardware buffer.
+	virtual bool update(const scene::E_HARDWARE_MAPPING mapping, const u32 size, const void* data) = 0;
 
-	//! Copy data from system memory
-	virtual void copyFromMemory(const void* sysData, u32 offset, u32 length) = 0;
+	// Inform if update is required.
+	inline bool isRequiredUpdate() const
+	{
+		return RequiredUpdate;
+	}
 
-	//! Copy data from another buffer
-	virtual void copyFromBuffer(IHardwareBuffer* buffer, u32 srcOffset, u32 descOffset, u32 length) = 0;
+	// Request update.
+	inline void requestUpdate()
+	{
+		RequiredUpdate = true;
+	}
 
-	//! Get size of buffer in bytes
-	virtual u32 size() const = 0;
+	//! Get mapping for buffer.
+	inline scene::E_HARDWARE_MAPPING getMapping() const
+	{
+		return Mapping;
+	}
 
-	//! Get driver type of buffer.
-	/** This is the driver, which created the buffer. This method is used
-	internally by the video devices, to check, if they may use a texture
-	because textures may be incompatible between different devices.
-	\return Driver type of buffer. */
-	virtual E_DRIVER_TYPE getDriverType() const = 0;
+	//! Get flags for buffer.
+	inline u32 getFlags() const
+	{
+		return Flags;
+	}
+
+	//! Get size of buffer in bytes.
+	inline u32 size() const
+	{
+		return Size;
+	}
 
 	//! Get type of buffer.
-	virtual E_HARDWARE_BUFFER_TYPE getType() const = 0;
+	inline E_HARDWARE_BUFFER_TYPE getType() const
+	{
+		return Type;
+	}
 
-	//! Get flags for buffer
-	virtual u32 getFlags() const = 0;
+	//! Get driver type of buffer.
+	inline E_DRIVER_TYPE getDriverType() const
+	{
+		return DriverType;
+	}
 
+protected:
+	scene::E_HARDWARE_MAPPING Mapping;
+	u32 Flags;
+	u32 Size;
+	E_HARDWARE_BUFFER_TYPE Type;
+	E_DRIVER_TYPE DriverType;
+
+	bool RequiredUpdate;
 };
 
 }

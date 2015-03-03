@@ -18,8 +18,8 @@ namespace scene
 	public:
 
 		//! constructor
-		CShadowVolumeSceneNode(const IMesh* shadowMesh, ISceneNode* parent, ISceneManager* mgr, 
-			s32 id,  bool zfailmethod=true, f32 infinity=10000.0f);
+		CShadowVolumeSceneNode(const IMesh* shadowMesh, ISceneNode* parent, ISceneManager* mgr,
+			s32 id, bool zfailmethod=true, f32 infinity=10000.0f);
 
 		//! destructor
 		virtual ~CShadowVolumeSceneNode();
@@ -27,23 +27,23 @@ namespace scene
 		//! Sets the mesh from which the shadow volume should be generated.
 		/** To optimize shadow rendering, use a simpler mesh for shadows.
 		*/
-		virtual void setShadowMesh(const IMesh* mesh);
+		virtual void setShadowMesh(const IMesh* mesh) _IRR_OVERRIDE_;
 
 		//! Updates the shadow volumes for current light positions.
 		/** Called each render cycle from Animated Mesh SceneNode render method. */
-		virtual void updateShadowVolumes();
+		virtual void updateShadowVolumes() _IRR_OVERRIDE_;
 
 		//! pre render method
-		virtual void OnRegisterSceneNode();
+		virtual void OnRegisterSceneNode() _IRR_OVERRIDE_;
 
 		//! renders the node.
-		virtual void render();
+		virtual void render() _IRR_OVERRIDE_;
 
 		//! returns the axis aligned bounding box of this node
-		virtual const core::aabbox3d<f32>& getBoundingBox() const;
+		virtual const core::aabbox3d<f32>& getBoundingBox() const _IRR_OVERRIDE_;
 
 		//! Returns type of the scene node
-		virtual ESCENE_NODE_TYPE getType() const { return ESNT_SHADOW_VOLUME; }
+		virtual ESCENE_NODE_TYPE getType() const _IRR_OVERRIDE_ { return ESNT_SHADOW_VOLUME; }
 
 	private:
 

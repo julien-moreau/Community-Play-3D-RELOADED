@@ -24,15 +24,29 @@ CSoftwareTexture2::CSoftwareTexture2(IImage* image, const io::path& name,
 	setDebugName("CSoftwareTexture2");
 	#endif
 
-	#ifndef SOFTWARE_DRIVER_2_MIPMAPPING
-		Flags &= ~GEN_MIPMAP;
-	#endif
+#ifndef SOFTWARE_DRIVER_2_MIPMAPPING
+	Flags &= ~GEN_MIPMAP;
+#endif
+
+	DriverType = EDT_BURNINGSVIDEO;
+	ColorFormat = BURNINGSHADER_COLOR_FORMAT;
+	HasMipMaps = (Flags & GEN_MIPMAP) != 0;
+	HasAlpha = (Flags & HAS_ALPHA) != 0;
+	IsRenderTarget = (Flags & IS_RENDERTARGET) != 0;
 
 	memset32 ( MipMap, 0, sizeof ( MipMap ) );
 
 	if (image)
 	{
-		OrigSize = image->getDimension();
+		bool IsCompressed = false;
+
+		if (IImage::isCompressedFormat(image->getColorFormat()))
+		{
+			os::Printer::log("Texture compression not available.", ELL_ERROR);
+			IsCompressed = true;
+		}
+
+		OriginalSize = image->getDimension();
 		OriginalFormat = image->getColorFormat();
 
 		core::setbit_cond(Flags,
@@ -41,15 +55,17 @@ CSoftwareTexture2::CSoftwareTexture2(IImage* image, const io::path& name,
 				HAS_ALPHA);
 
 		core::dimension2d<u32> optSize(
-				OrigSize.getOptimalSize( 0 != ( Flags & NP2_SIZE ),
+				OriginalSize.getOptimalSize(0 != (Flags & NP2_SIZE),
 				false, false,
 				( Flags & NP2_SIZE ) ? SOFTWARE_DRIVER_2_TEXTURE_MAXSIZE : 0)
 			);
 
-		if ( OrigSize == optSize )
+		if (OriginalSize == optSize)
 		{
 			MipMap[0] = new CImage(BURNINGSHADER_COLOR_FORMAT, image->getDimension());
-			image->copyTo(MipMap[0]);
+
+			if (!IsCompressed)
+				image->copyTo(MipMap[0]);
 		}
 		else
 		{
@@ -57,15 +73,20 @@ CSoftwareTexture2::CSoftwareTexture2(IImage* image, const io::path& name,
 			core::stringw showName ( name );
 			snprintf ( buf, 256, "Burningvideo: Warning Texture %ls reformat %dx%d -> %dx%d,%d",
 							showName.c_str(),
-							OrigSize.Width, OrigSize.Height, optSize.Width, optSize.Height,
+							OriginalSize.Width, OriginalSize.Height, optSize.Width, optSize.Height,
 							BURNINGSHADER_COLOR_FORMAT
 						);
 
-			OrigSize = optSize;
+			OriginalSize = optSize;
 			os::Printer::log ( buf, ELL_WARNING );
 			MipMap[0] = new CImage(BURNINGSHADER_COLOR_FORMAT, optSize);
-			image->copyToScalingBoxFilter ( MipMap[0],0, false );
+
+			if (!IsCompressed)
+				image->copyToScalingBoxFilter ( MipMap[0],0, false );
 		}
+
+		Size = MipMap[MipMapLOD]->getDimension();
+		Pitch = MipMap[MipMapLOD]->getPitch();
 
 		OrigImageDataSizeInPixels = (f32) 0.3f * MipMap[0]->getImageDataSizeInPixels();
 	}
@@ -102,7 +123,7 @@ void CSoftwareTexture2::regenerateMipMapLevels(void* mipmapData)
 	}
 
 	core::dimension2d<u32> newSize;
-	core::dimension2d<u32> origSize=OrigSize;
+	core::dimension2d<u32> origSize = OriginalSize;
 
 	for (i=1; i < SOFTWARE_DRIVER_2_MIPMAPPING_MAX; ++i)
 	{

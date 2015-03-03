@@ -72,7 +72,8 @@ bool COBJMeshWriter::writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 fla
 
 	// write OBJ MESH header
 
-	const core::stringc name(FileSystem->getFileBasename(SceneManager->getMeshCache()->getMeshName(mesh), false)+".mtl");
+	io::path name;
+	core::cutFilenameExtension(name,file->getFileName()) += ".mtl";
 	file->write("# exported by Irrlicht\n",23);
 	file->write("mtllib ",7);
 	file->write(name.c_str(),name.size());
@@ -98,7 +99,7 @@ bool COBJMeshWriter::writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 fla
 
 			u8* Vertices = static_cast<u8*>(buffer->getVertexBuffer()->getVertices());
 
-			video::IVertexAttribute* attribute = buffer->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
+			video::IVertexAttribute* attribute = buffer->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
 
 			if(attribute)
 				for (j=0; j<vertexCount; ++j)
@@ -110,7 +111,7 @@ bool COBJMeshWriter::writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 fla
 					file->write(num.c_str(), num.size());
 				}
 
-			attribute = buffer->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_TEXCOORD1);
+			attribute = buffer->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_TEXCOORD1);
 
 			if(attribute)
 				for (j=0; j<vertexCount; ++j)
@@ -122,7 +123,7 @@ bool COBJMeshWriter::writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 fla
 					file->write(num.c_str(), num.size());
 				}
 
-			attribute = buffer->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_TANGENT);
+			attribute = buffer->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_TANGENT);
 
 			if(attribute)
 				for (j=0; j<vertexCount; ++j)
@@ -218,7 +219,12 @@ bool COBJMeshWriter::writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 fla
 			if (mat[i]->getTexture(0))
 			{
 				file->write("map_Kd ", 7);
-				file->write(mat[i]->getTexture(0)->getName().getPath().c_str(), mat[i]->getTexture(0)->getName().getPath().size());
+				io::path tname = FileSystem->getRelativeFilename(mat[i]->getTexture(0)->getName(),
+						FileSystem->getFileDir(file->getFileName()));
+				// avoid blanks as .obj cannot handle strings with spaces
+				if (tname.findFirst(' ') != -1)
+					tname = FileSystem->getFileBasename(tname);
+				file->write(tname.c_str(), tname.size());
 				file->write("\n",1);
 			}
 			file->write("\n",1);
@@ -244,7 +250,7 @@ void COBJMeshWriter::getVectorAsStringLine(const core::vector2df& v, core::strin
 {
 	s = core::stringc(v.X);
 	s += " ";
-	s += core::stringc(-v.Y);
+	s += core::stringc(1-v.Y);
 	s += "\n";
 }
 

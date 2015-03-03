@@ -8,6 +8,7 @@
 #include "COpenGLCgMaterialRenderer.h"
 #include "COpenGLDriver.h"
 #include "COpenGLTexture.h"
+#include "COpenGLMaterialRenderer.h"
 
 namespace irr
 {
@@ -38,12 +39,21 @@ COpenGLCgMaterialRenderer::COpenGLCgMaterialRenderer(COpenGLDriver* driver, s32&
 	const c8* fragmentProgram, const c8* fragmentEntry, E_PIXEL_SHADER_TYPE fragmentProfile,
 	const c8* geometryProgram, const c8* geometryEntry, E_GEOMETRY_SHADER_TYPE geometryProfile,
 	scene::E_PRIMITIVE_TYPE inType, scene::E_PRIMITIVE_TYPE outType, u32 vertices,
-	IShaderConstantSetCallBack* callback, IMaterialRenderer* baseMaterial, s32 userData) :
-	Driver(driver), CCgMaterialRenderer(callback, baseMaterial, userData)
+	IShaderConstantSetCallBack* callback, E_MATERIAL_TYPE baseMaterial, s32 userData) :
+	BaseMaterial(0), Driver(driver), CCgMaterialRenderer(callback, userData)
 {
 	#ifdef _DEBUG
 	setDebugName("COpenGLCgMaterialRenderer");
 	#endif
+
+	if (baseMaterial == EMT_ONETEXTURE_BLEND || baseMaterial == EMT_TRANSPARENT_ADD_COLOR || baseMaterial == EMT_TRANSPARENT_VERTEX_ALPHA ||
+		baseMaterial == EMT_TRANSPARENT_ALPHA_CHANNEL || baseMaterial == EMT_TRANSPARENT_ALPHA_CHANNEL_REF)
+	{
+		BaseMaterial = static_cast<COpenGLMaterialRenderer*>(Driver->getMaterialRenderer(baseMaterial));
+	}
+
+	if (BaseMaterial)
+		BaseMaterial->grab();
 
 	init(materialType, vertexProgram, vertexEntry, vertexProfile, fragmentProgram, fragmentEntry, fragmentProfile,
 		geometryProgram, geometryEntry, geometryProfile, inType, outType, vertices);
@@ -51,6 +61,9 @@ COpenGLCgMaterialRenderer::COpenGLCgMaterialRenderer(COpenGLDriver* driver, s32&
 
 COpenGLCgMaterialRenderer::~COpenGLCgMaterialRenderer()
 {
+	if(BaseMaterial)
+		BaseMaterial->drop();
+
 	if (VertexProgram)
 	{
 		cgGLUnloadProgram(VertexProgram);
@@ -68,9 +81,17 @@ COpenGLCgMaterialRenderer::~COpenGLCgMaterialRenderer()
 	}
 }
 
+bool COpenGLCgMaterialRenderer::isTransparent() const
+{
+	return BaseMaterial ? BaseMaterial->isTransparent() : false;
+}
+
 void COpenGLCgMaterialRenderer::OnSetMaterial(const SMaterial& material, const SMaterial& lastMaterial, bool resetAllRenderstates, IMaterialRendererServices* services)
 {
-	Material = material;
+	if (Driver->getFixedPipelineState() == COpenGLDriver::EOFPS_ENABLE)
+		Driver->setFixedPipelineState(COpenGLDriver::EOFPS_ENABLE_TO_DISABLE);
+	else
+		Driver->setFixedPipelineState(COpenGLDriver::EOFPS_DISABLE);
 
 	if (material.MaterialType != lastMaterial.MaterialType || resetAllRenderstates)
 	{
@@ -91,20 +112,22 @@ void COpenGLCgMaterialRenderer::OnSetMaterial(const SMaterial& material, const S
 			cgGLEnableProfile(GeometryProfile);
 			cgGLBindProgram(GeometryProgram);
 		}
-
-		if (BaseMaterial)
-			BaseMaterial->OnSetMaterial(material, material, true, this);
 	}
+
+	Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates);
+
+	if (BaseMaterial)
+        BaseMaterial->OnSetBaseMaterial(material);
 
 	if (CallBack)
 		CallBack->OnSetMaterial(material);
 
-	Driver->setBasicRenderStates(material, lastMaterial, resetAllRenderstates);
+    Material = material;
 }
 
 bool COpenGLCgMaterialRenderer::OnRender(IMaterialRendererServices* services, E_VERTEX_TYPE vtxtype)
 {
-    Driver->setTextureRenderStates(Driver->getCurrentMaterial(), false, false);
+    Driver->setTextureRenderStates(Driver->getCurrentMaterial(), false);
 
 	if (CallBack && (VertexProgram || FragmentProgram || GeometryProgram))
 		CallBack->OnSetConstants(this, UserData);
@@ -131,9 +154,9 @@ void COpenGLCgMaterialRenderer::OnUnsetMaterial()
 	}
 
 	if (BaseMaterial)
-		BaseMaterial->OnUnsetMaterial();
+		BaseMaterial->OnUnsetBaseMaterial();
 
-	Material = IdentityMaterial;;
+	Material = IdentityMaterial;
 }
 
 void COpenGLCgMaterialRenderer::setBasicRenderStates(const SMaterial& material, const SMaterial& lastMaterial, bool resetAllRenderstates)
@@ -152,7 +175,7 @@ void COpenGLCgMaterialRenderer::init(s32& materialType,
 	const c8* geometryProgram, const c8* geometryEntry, E_GEOMETRY_SHADER_TYPE geometryProfile,
 	scene::E_PRIMITIVE_TYPE inType, scene::E_PRIMITIVE_TYPE outType, u32 vertices)
 {
-	bool Status = true;
+	bool shaderStatus = true;
 	CGerror Error = CG_NO_ERROR;
 	materialType = -1;
 
@@ -171,7 +194,7 @@ void COpenGLCgMaterialRenderer::init(s32& materialType,
 			os::Printer::log("Cg vertex program failed to compile:", ELL_ERROR);
 			os::Printer::log(cgGetLastListing(Driver->getCgContext()), ELL_ERROR);
 
-			Status = false;
+			shaderStatus = false;
 		}
 		else
 			cgGLLoadProgram(VertexProgram);
@@ -190,7 +213,7 @@ void COpenGLCgMaterialRenderer::init(s32& materialType,
 			os::Printer::log("Cg fragment program failed to compile:", ELL_ERROR);
 			os::Printer::log(cgGetLastListing(Driver->getCgContext()), ELL_ERROR);
 
-			Status = false;
+			shaderStatus = false;
 		}
 		else
 			cgGLLoadProgram(FragmentProgram);
@@ -209,7 +232,7 @@ void COpenGLCgMaterialRenderer::init(s32& materialType,
 			os::Printer::log("Cg geometry program failed to compile:", ELL_ERROR);
 			os::Printer::log(cgGetLastListing(Driver->getCgContext()), ELL_ERROR);
 
-			Status = false;
+			shaderStatus = false;
 		}
 		else
 			cgGLLoadProgram(GeometryProgram);
@@ -233,7 +256,7 @@ void COpenGLCgMaterialRenderer::init(s32& materialType,
 		}
 	}
 
-	if (Status)
+	if (shaderStatus)
 		materialType = Driver->addMaterialRenderer(this);
 }
 

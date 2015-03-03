@@ -20,36 +20,27 @@
 #include <d3dcompiler.h>
 
 class CShaderInclude : public ID3DInclude
-{ 
+{
 public:
 	CShaderInclude(irr::io::IFileSystem* fileSystem)
 	{
 		FileSystem = fileSystem;
-
-		if (FileSystem)
-			FileSystem->grab();
-	} 
-
-	~CShaderInclude()
-	{
-		if (FileSystem)
-			FileSystem->drop();
 	}
 
-	virtual STDMETHODIMP Close( THIS_ LPCVOID pData ) 
+	STDMETHOD(Close(LPCVOID pData))
 	{
 		irr::c8* data = (irr::c8*)pData;
-		
-		if(data)
+
+		if (data)
 			delete[] data;
 
 		return S_OK;
 	}
 
-	virtual STDMETHODIMP Open( THIS_ D3D_INCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOID pParentData, LPCVOID *ppData, UINT *pBytes ) 
+	STDMETHOD(Open(D3D_INCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOID pParentData, LPCVOID *ppData, UINT *pBytes))
 	{
 		irr::io::IReadFile* file = FileSystem->createAndOpenFile(pFileName);
-		
+
 		if (!file)
 		{
 			irr::os::Printer::log("Could not open included shader program file",
@@ -60,7 +51,8 @@ public:
 		irr::u32 mBytes = file->getSize();
 		pBytes = &mBytes;
 
-		irr::c8* retInclude = new irr::c8[mBytes+1];
+		irr::c8* retInclude = new irr::c8[mBytes + 1];
+		ZeroMemory(retInclude, mBytes + 1);
 		file->read(retInclude, mBytes);
 		retInclude[mBytes] = '\0';
 
@@ -97,7 +89,7 @@ CD3D11MaterialRenderer::CD3D11MaterialRenderer(ID3D11Device* device, video::IVid
 
 	outMaterialTypeNr = -1;
 
-	for (int i = 0; i < EST_COUNT; ++i)
+	for (u32 i = 0; i < EST_COUNT; ++i)
 		shaders[i] = NULL;
 
 	if (Device)
@@ -146,7 +138,7 @@ CD3D11MaterialRenderer::CD3D11MaterialRenderer(ID3D11Device* device, video::IVid
 	if(CallBack)
 		CallBack->grab();
 
-	for (int i = 0; i < EST_COUNT; ++i)
+	for (u32 i = 0; i < EST_COUNT; ++i)
 		shaders[i] = NULL;
 
 	if(fileSystem)
@@ -170,7 +162,7 @@ CD3D11MaterialRenderer::~CD3D11MaterialRenderer()
 	if(includer)
 		delete includer;
 
-	for (int i = 0; i < EST_COUNT; ++i)
+	for (u32 i = 0; i < EST_COUNT; ++i)
 		if (shaders[i])
 			shaders[i]->Release();
 
@@ -483,7 +475,7 @@ bool CD3D11MaterialRenderer::OnRender(IMaterialRendererServices* service, E_VERT
 	if (!Context)
 		return false;
 
-	if (BaseRenderer)
+	if(BaseRenderer && (vtxtype == EVT_STANDARD || vtxtype == EVT_2TCOORDS || vtxtype == EVT_TANGENTS))
 		BaseRenderer->OnRender(service, vtxtype);
 
 	if (CallBack)
@@ -638,7 +630,7 @@ bool CD3D11MaterialRenderer::compileShader(LPCVOID pSrcData, SIZE_T SrcDataSize,
 												   LPCSTR pEntrypoint, LPCSTR pTarget, UINT Flags1, UINT Flags2, ID3DBlob** ppCode)
 {	
 	static bool LoadFailed = false;
-	static pD3DCompile pFn = 0;
+	static pD3DCompile pFn = NULL;
 
 	if(LoadFailed)
 		return false;

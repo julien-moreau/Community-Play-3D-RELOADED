@@ -16,35 +16,66 @@ namespace io
 {
 
 	/*!
-		Class for reading and writing from memory.
+		Class for reading from memory.
 	*/
-	class CMemoryFile : public IReadFile, public IWriteFile
+	class CMemoryReadFile : public IReadFile
 	{
 	public:
 
 		//! Constructor
-		CMemoryFile(void* memory, long len, const io::path& fileName, bool deleteMemoryWhenDropped);
+		CMemoryReadFile(const void* memory, long len, const io::path& fileName, bool deleteMemoryWhenDropped);
 
 		//! Destructor
-		virtual ~CMemoryFile();
+		virtual ~CMemoryReadFile();
 
 		//! returns how much was read
-		virtual s32 read(void* buffer, u32 sizeToRead);
-
-		//! returns how much was written
-		virtual s32 write(const void* buffer, u32 sizeToWrite);
+		virtual s32 read(void* buffer, u32 sizeToRead) _IRR_OVERRIDE_;
 
 		//! changes position in file, returns true if successful
-		virtual bool seek(long finalPos, bool relativeMovement = false);
+		virtual bool seek(long finalPos, bool relativeMovement = false) _IRR_OVERRIDE_;
 
 		//! returns size of file
-		virtual long getSize() const;
+		virtual long getSize() const _IRR_OVERRIDE_;
 
 		//! returns where in the file we are.
-		virtual long getPos() const;
+		virtual long getPos() const _IRR_OVERRIDE_;
 
 		//! returns name of file
-		virtual const io::path& getFileName() const;
+		virtual const io::path& getFileName() const _IRR_OVERRIDE_;
+
+	private:
+
+		const void *Buffer;
+		long Len;
+		long Pos;
+		io::path Filename;
+		bool deleteMemoryWhenDropped;
+	};
+
+	/*!
+		Class for writing to memory.
+	*/
+	class CMemoryWriteFile : public IWriteFile
+	{
+	public:
+
+		//! Constructor
+		CMemoryWriteFile(void* memory, long len, const io::path& fileName, bool deleteMemoryWhenDropped);
+
+		//! Destructor
+		virtual ~CMemoryWriteFile();
+
+		//! returns how much was written
+		virtual s32 write(const void* buffer, u32 sizeToWrite) _IRR_OVERRIDE_;
+
+		//! changes position in file, returns true if successful
+		virtual bool seek(long finalPos, bool relativeMovement = false) _IRR_OVERRIDE_;
+
+		//! returns where in the file we are.
+		virtual long getPos() const _IRR_OVERRIDE_;
+
+		//! returns name of file
+		virtual const io::path& getFileName() const _IRR_OVERRIDE_;
 
 	private:
 

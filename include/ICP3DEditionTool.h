@@ -5,6 +5,7 @@
 #include <functional>
 
 #include <ICP3DColorDialog.h>
+#include <ICP3DViewPort.h>
 
 namespace cp3d {
 
@@ -87,6 +88,7 @@ struct SCP3DInterfaceData {
 		irr::gui::IGUIEditBox *TextBox;
 		irr::gui::IGUIComboBox *ComboBox;
 		irr::gui::IGUICheckBox *CheckBox;
+		cp3d::ui::ICP3DViewPort *ViewPort;
 	};
 
 };

@@ -512,7 +512,7 @@ void CD3D11CallBridge::setBlendState(const SD3D11_BLEND_DESC& blendDesc)
 }
 
 
-void CD3D11CallBridge::setShaderResources(SD3D11_SAMPLER_DESC samplerDesc[], ITexture* currentTextures[])
+void CD3D11CallBridge::setShaderResources(SD3D11_SAMPLER_DESC samplerDesc[MATERIAL_MAX_TEXTURES], ITexture* currentTextures[MATERIAL_MAX_TEXTURES])
 {
 	texturesChanged = 0;
 	samplersChanged = 0;
@@ -525,14 +525,14 @@ void CD3D11CallBridge::setShaderResources(SD3D11_SAMPLER_DESC samplerDesc[], ITe
 
 			SamplerStates[i] = getSamplerState(i);
 
-			samplersChanged += 1 << i;
+			samplersChanged |= (1 << i);
 		}
 
 		if(CurrentTextures[i] != currentTextures[i])
 		{
 			CurrentTextures[i] = currentTextures[i];
 
-			texturesChanged += 1 << i;
+			texturesChanged |= (1 << i);
 		}
 	}
 }
@@ -572,7 +572,7 @@ void CD3D11CallBridge::setInputLayout(IVertexDescriptor* vtxDescriptor, IMateria
 
 			HRESULT hr;
 			if (SUCCEEDED(hr = Device->CreateInputLayout(inputLayoutDesc.pointer(), inputLayoutDesc.size(),
-				renderer->getShaderByteCode(), renderer->getShaderByteCodeSize(), &state)))
+				ShaderByteCode, ShaderByteCodeSize, &state)))
 			{
 				LayoutMap.insert(signature, state);
 			}

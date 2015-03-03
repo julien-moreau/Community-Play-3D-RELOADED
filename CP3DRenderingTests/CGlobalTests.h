@@ -233,7 +233,7 @@ void GlobalTest(irr::IrrlichtDevice *device) {
 	cpre->getHWSkinningManager()->addNode(animatedNode);
 
 	cp3d::rendering::ICP3DHardwareSkinningMaterial *hwmat = cpre->getHWSkinningManager()->getHWMaterial(animatedNode);
-	handler->addShadowToNode(animatedNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_BOTH, hwmat->getDepthMaterial(), hwmat->getShadowsMaterial(), (cp3d::rendering::ICP3DHandlerCustomCallback *)hwmat);
+	//handler->addShadowToNode(animatedNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_BOTH, hwmat->getDepthMaterial(), hwmat->getShadowsMaterial(), (cp3d::rendering::ICP3DHandlerCustomCallback *)hwmat);
 
 	/// Finish
 	handler->setAmbientColor(SColor(255, 32, 32, 32));

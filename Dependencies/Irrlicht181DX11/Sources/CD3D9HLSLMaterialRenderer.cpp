@@ -96,7 +96,7 @@ bool CD3D9HLSLMaterialRenderer::createHLSLVertexShader(const char* vertexShaderP
 		0, // no includes
 		shaderEntryPointName,
 		shaderTargetName,
-		0, // no flags
+		D3DXSHADER_OPTIMIZATION_LEVEL3 , // no flags
 		&buffer,
 		&errors,
 		&VSConstantsTable);

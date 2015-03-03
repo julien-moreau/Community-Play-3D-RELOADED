@@ -26,7 +26,7 @@ IMesh* CGeometryCreator::createCubeMesh(const core::vector3df& size) const
 	IVertexBuffer* vb = buffer->getVertexBuffer(0);
 
 	// Recalculate bounding box
-	buffer->BoundingBox.reset(0, 0, 0);
+	buffer->getBoundingBox().reset(0, 0, 0);
 
 	// Create indices
 	const u16 u[36] = {   0,2,1,   0,3,2,   1,5,4,   1,2,5,   4,6,7,   4,5,6,
@@ -63,7 +63,7 @@ IMesh* CGeometryCreator::createCubeMesh(const core::vector3df& size) const
 		Vertices[i].Pos *= size;
 
 		vb->addVertex(&Vertices[i]);
-		buffer->BoundingBox.addInternalPoint(Vertices[i].Pos);
+		buffer->getBoundingBox().addInternalPoint(Vertices[i].Pos);
 	}
 
 	SMesh* mesh = new SMesh;
@@ -172,7 +172,7 @@ IMesh* CGeometryCreator::createHillPlaneMesh(
 	}
 
 	if (material)
-		buffer->Material = *material;
+		buffer->getMaterial() = *material;
 
 	buffer->recalculateBoundingBox();
 	buffer->setHardwareMappingHint(EHM_STATIC);
@@ -184,6 +184,107 @@ IMesh* CGeometryCreator::createHillPlaneMesh(
 	return mesh;
 }
 
+namespace
+{
+
+// Return the position on an exponential curve. Input from 0 to 1.
+float geopos(float pos)
+{
+	pos = core::clamp<float>(pos, 0, 1);
+	pos *= 5;
+
+	const float out = powf(2.5f, pos - 5);
+
+	return out;
+}
+
+}
+
+//! Create a geoplane.
+IMesh* CGeometryCreator::createGeoplaneMesh(f32 radius, u32 rows, u32 columns) const
+{
+	using namespace core;
+	using namespace video;
+
+	rows = clamp<u32>(rows, 3, 2048);
+	columns = clamp<u32>(columns, 3, 2048);
+
+	CMeshBuffer<video::S3DVertex>* buffer = new CMeshBuffer<video::S3DVertex>(Driver->getVertexDescriptor(0));
+	buffer->setHardwareMappingHint(scene::EHM_STATIC);
+
+	IIndexBuffer* ib = buffer->getIndexBuffer();
+	IVertexBuffer* vb = buffer->getVertexBuffer(0);
+
+	vb->reallocate((rows * columns) + 1);
+	ib->reallocate((((rows - 2) * columns * 2) + columns) * 3);
+
+	S3DVertex v(0, 0, 0, 0, 1, 0, SColor(255, 255, 255, 255), 0, 0);
+	const float anglestep = (2 * PI) / columns;
+
+	u32 i, j;
+	vb->addVertex(&v);
+	for (j = 1; j < rows; j++)
+	{
+		const float len = radius * geopos((float) j/(rows-1));
+
+		for (i = 0; i < columns; i++)
+		{
+			const float angle = anglestep * i;
+			v.Pos = vector3df(len * sinf(angle), 0, len * cosf(angle));
+
+			vb->addVertex(&v);
+		}
+	}
+
+	// Indices
+	// First the inner fan
+	for (i = 0; i < columns; i++)
+	{
+		ib->addIndex(0);
+		ib->addIndex(1 + i);
+
+		if (i == columns - 1)
+			ib->addIndex(1);
+		else
+			ib->addIndex(2 + i);
+	}
+
+	// Then the surrounding quads
+	for (j = 0; j < rows - 2; j++)
+	{
+		for (i = 0; i < columns; i++)
+		{
+			u32 start = ((j * columns) + i) + 1;
+			u32 next = start + 1;
+			u32 far = (((j + 1) * columns) + i) + 1;
+			u32 farnext = far + 1;
+
+			if (i == columns - 1)
+			{
+				next = ((j * columns)) + 1;
+				farnext = (((j + 1) * columns)) + 1;
+			}
+
+			ib->addIndex(start);
+			ib->addIndex(far);
+			ib->addIndex(next);
+
+			ib->addIndex(next);
+			ib->addIndex(far);
+			ib->addIndex(farnext);
+		}
+	}
+
+	// Done
+
+	SMesh* mesh = new SMesh();
+	buffer->recalculateBoundingBox();
+	mesh->addMeshBuffer(buffer);
+	buffer->drop();
+	mesh->recalculateBoundingBox();
+
+	return mesh;
+}
 
 IMesh* CGeometryCreator::createTerrainMesh(video::IImage* texture,
 		video::IImage* heightmap, const core::dimension2d<f32>& stretchSize,
@@ -297,14 +398,14 @@ IMesh* CGeometryCreator::createTerrainMesh(video::IImage* texture,
 
 				sprintf(textureName, "terrain%u_%u", tm, mesh->getMeshBufferCount());
 
-				buffer->Material.setTexture(0, driver->addTexture(textureName, img));
+				buffer->getMaterial().setTexture(0, driver->addTexture(textureName, img));
 
-				if (buffer->Material.getTexture(0))
+				if (buffer->getMaterial().getTexture(0))
 				{
 					c8 tmp[255];
 					sprintf(tmp, "Generated terrain texture (%dx%d): %s",
-						buffer->Material.getTexture(0)->getSize().Width,
-						buffer->Material.getTexture(0)->getSize().Height,
+						buffer->getMaterial().getTexture(0)->getSize().Width,
+						buffer->getMaterial().getTexture(0)->getSize().Height,
 						textureName);
 					os::Printer::log(tmp);
 				}
@@ -530,12 +631,12 @@ IMesh* CGeometryCreator::createSphereMesh(f32 radius, u32 polyCountX, u32 polyCo
 
 	// recalculate bounding box
 
-	buffer->BoundingBox.reset(Vertices[i].Pos);
-	buffer->BoundingBox.addInternalPoint(Vertices[i-1].Pos);
-	buffer->BoundingBox.addInternalPoint(radius,0.0f,0.0f);
-	buffer->BoundingBox.addInternalPoint(-radius,0.0f,0.0f);
-	buffer->BoundingBox.addInternalPoint(0.0f,0.0f,radius);
-	buffer->BoundingBox.addInternalPoint(0.0f,0.0f,-radius);
+	buffer->getBoundingBox().reset(Vertices[i].Pos);
+	buffer->getBoundingBox().addInternalPoint(Vertices[i - 1].Pos);
+	buffer->getBoundingBox().addInternalPoint(radius, 0.0f, 0.0f);
+	buffer->getBoundingBox().addInternalPoint(-radius, 0.0f, 0.0f);
+	buffer->getBoundingBox().addInternalPoint(0.0f, 0.0f, radius);
+	buffer->getBoundingBox().addInternalPoint(0.0f, 0.0f, -radius);
 
 	SMesh* mesh = new SMesh();
 	mesh->addMeshBuffer(buffer);
@@ -793,7 +894,7 @@ IMesh* CGeometryCreator::createConeMesh(f32 radius, f32 length, u32 tesselation,
 }
 
 
-void CGeometryCreator::addToBuffer(const video::S3DVertex& v, CMeshBuffer<video::S3DVertex>* buffer) const
+void CGeometryCreator::addToBuffer(const video::S3DVertex& v, IMeshBuffer* buffer) const
 {
 	IIndexBuffer* ib = buffer->getIndexBuffer();
 	IVertexBuffer* vb = buffer->getVertexBuffer(0);
@@ -940,11 +1041,11 @@ IMesh* CGeometryCreator::createVolumeLightMesh(
 
 	buffer->recalculateBoundingBox();
 
-	buffer->Material.MaterialType = video::EMT_ONETEXTURE_BLEND;
-	buffer->Material.MaterialTypeParam = pack_textureBlendFunc(video::EBF_SRC_COLOR, video::EBF_SRC_ALPHA, video::EMFN_MODULATE_1X);
+	buffer->getMaterial().MaterialType = video::EMT_ONETEXTURE_BLEND;
+	buffer->getMaterial().MaterialTypeParam = pack_textureBlendFunc(video::EBF_SRC_COLOR, video::EBF_SRC_ALPHA, video::EMFN_MODULATE_1X);
 
-	buffer->Material.Lighting = false;
-	buffer->Material.ZWriteEnable = false;
+	buffer->getMaterial().Lighting = false;
+	buffer->getMaterial().ZWriteEnable = false;
 
 	buffer->setDirty(EBT_VERTEX_AND_INDEX);
 

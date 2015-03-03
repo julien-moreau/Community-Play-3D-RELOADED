@@ -28,16 +28,10 @@ public:
 	virtual ~CSoftwareTexture();
 
 	//! lock function
-	virtual void* lock(E_TEXTURE_LOCK_MODE mode=ETLM_READ_WRITE, u32 mipmapLevel=0);
+	virtual void* lock(E_TEXTURE_LOCK_MODE mode=ETLM_READ_WRITE, u32 mipmapLevel=0) _IRR_OVERRIDE_;
 
 	//! unlock function
-	virtual void unlock();
-
-	//! Returns original size of the texture.
-	virtual const core::dimension2d<u32>& getOriginalSize() const;
-
-	//! Returns (=size) of the texture.
-	virtual const core::dimension2d<u32>& getSize() const;
+	virtual void unlock() _IRR_OVERRIDE_;
 
 	//! returns unoptimized surface
 	virtual CImage* getImage();
@@ -45,27 +39,13 @@ public:
 	//! returns texture surface
 	virtual CImage* getTexture();
 
-	//! returns driver type of texture (=the driver, who created the texture)
-	virtual E_DRIVER_TYPE getDriverType() const;
-
-	//! returns color format of texture
-	virtual ECOLOR_FORMAT getColorFormat() const;
-
-	//! returns pitch of texture (in bytes)
-	virtual u32 getPitch() const;
-
 	//! Regenerates the mip map levels of the texture. Useful after locking and
 	//! modifying the texture
-	virtual void regenerateMipMapLevels(void* mipmapData=0);
-
-	//! is it a render target?
-	virtual bool isRenderTarget() const;
+	virtual void regenerateMipMapLevels(void* mipmapData=0) _IRR_OVERRIDE_;
 
 private:
 	CImage* Image;
 	CImage* Texture;
-	core::dimension2d<u32> OrigSize;
-	bool IsRenderTarget;
 };
 
 

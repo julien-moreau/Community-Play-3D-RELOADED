@@ -7,6 +7,7 @@
 #ifdef _IRR_COMPILE_WITH_OGRE_LOADER_
 
 #include "COgreMeshFileLoader.h"
+#include "CMeshTextureLoader.h"
 #include "os.h"
 #include "CMeshBuffer.h"
 #include "SAnimatedMesh.h"
@@ -76,6 +77,8 @@ COgreMeshFileLoader::COgreMeshFileLoader(io::IFileSystem* fs, scene::ISceneManag
 
 	if (Driver)
 		Driver->grab();
+
+	TextureLoader = new CMeshTextureLoader( FileSystem, Driver );
 }
 
 
@@ -109,6 +112,12 @@ bool COgreMeshFileLoader::isALoadableFileExtension(const io::path& filename) con
 //! See IReferenceCounted::drop() for more information.
 IAnimatedMesh* COgreMeshFileLoader::createMesh(io::IReadFile* file)
 {
+	if ( !file )
+		return 0;
+
+	if ( getMeshTextureLoader() )
+		getMeshTextureLoader()->setMeshFile(file);
+
 	s16 id;
 
 	file->read(&id, 2);
@@ -469,10 +478,13 @@ void COgreMeshFileLoader::composeMeshBufferMaterial(scene::IMeshBuffer* mb, cons
 			material=Materials[k].Techniques[0].Passes[0].Material;
 			for (u32 i=0; i<Materials[k].Techniques[0].Passes[0].Texture.Filename.size(); ++i)
 			{
-				if (FileSystem->existFile(Materials[k].Techniques[0].Passes[0].Texture.Filename[i]))
-					material.setTexture(i, Driver->getTexture(Materials[k].Techniques[0].Passes[0].Texture.Filename[i]));
-				else
-					material.setTexture(i, Driver->getTexture((CurrentlyLoadingFromPath+"/"+FileSystem->getFileBasename(Materials[k].Techniques[0].Passes[0].Texture.Filename[i]))));
+				video::ITexture * texture = NULL;
+				if ( getMeshTextureLoader() )
+				{
+					texture = getMeshTextureLoader()->getTexture(Materials[k].Techniques[0].Passes[0].Texture.Filename[i]);
+					if ( texture )
+						material.setTexture(i, texture);
+				}
 			}
 			break;
 		}
@@ -505,7 +517,7 @@ scene::CMeshBuffer<video::S3DVertex>* COgreMeshFileLoader::composeMeshBuffer(con
 					u32 ePos=geom.Elements[i].Offset;
 					for (s32 k=0; k<geom.NumVertex; ++k)
 					{
-						Vertices[k].Color=mb->Material.DiffuseColor;
+						Vertices[k].Color = mb->getMaterial().DiffuseColor;
 						Vertices[k].Pos.set(geom.Buffers[j].Data[ePos],geom.Buffers[j].Data[ePos+1],geom.Buffers[j].Data[ePos+2]);
 						ePos += eSize;
 					}
@@ -576,7 +588,7 @@ scene::CMeshBuffer<video::S3DVertex2TCoords>* COgreMeshFileLoader::composeMeshBu
 					u32 ePos=geom.Elements[i].Offset;
 					for (s32 k=0; k<geom.NumVertex; ++k)
 					{
-						Vertices[k].Color=mb->Material.DiffuseColor;
+						Vertices[k].Color = mb->getMaterial().DiffuseColor;
 						Vertices[k].Pos.set(geom.Buffers[j].Data[ePos],geom.Buffers[j].Data[ePos+1],geom.Buffers[j].Data[ePos+2]);
 						ePos += eSize;
 					}
@@ -808,7 +820,7 @@ void COgreMeshFileLoader::composeObject(void)
 			ISkinnedMesh::SJoint* joint = m->addJoint();
 			joint->Name=Skeleton.Bones[i].Name;
 
-			// IRR_TEST_BROKEN_QUATERNION_USE: TODO - switched to getMatrix_transposed instead of getMatrix for downward compatibility. 
+			// IRR_TEST_BROKEN_QUATERNION_USE: TODO - switched to getMatrix_transposed instead of getMatrix for downward compatibility.
 			//								   Not tested so far if this was correct or wrong before quaternion fix!
 			Skeleton.Bones[i].Orientation.getMatrix_transposed(joint->LocalMatrix);
 
@@ -862,8 +874,8 @@ void COgreMeshFileLoader::composeObject(void)
 				ISkinnedMesh::SRotationKey* rotkey = m->addRotationKey(keyjoint);
 				rotkey->frame=frame.Time*25;
 
-				// IRR_TEST_BROKEN_QUATERNION_USE: TODO - switched from keyjoint->LocalMatrix to keyjoint->LocalMatrix.getTransposed() for downward compatibility. 
-				//								   Not tested so far if this was correct or wrong before quaternion fix!
+				// IRR_TEST_BROKEN_QUATERNION_USE: TODO - switched from keyjoint->LocalMatrix to keyjoint->LocalMatrix.getTransposed() for downward compatibility.
+				// Not tested so far if this was correct or wrong before quaternion fix!
 				rotkey->rotation=core::quaternion(keyjoint->LocalMatrix.getTransposed())*frame.Orientation;
 
 				ISkinnedMesh::SScaleKey* scalekey = m->addScaleKey(keyjoint);

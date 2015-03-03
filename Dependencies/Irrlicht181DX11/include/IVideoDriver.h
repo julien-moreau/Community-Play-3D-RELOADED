@@ -298,6 +298,7 @@ namespace video
 						case EMF_COLOR_MATERIAL: material.ColorMaterial = Material.ColorMaterial; break;
 						case EMF_USE_MIP_MAPS: material.UseMipMaps = Material.UseMipMaps; break;
 						case EMF_BLEND_OPERATION: material.BlendOperation = Material.BlendOperation; break;
+						case EMF_BLEND_FACTOR: material.BlendFactor = Material.BlendFactor; break;
 						case EMF_POLYGON_OFFSET:
 							material.PolygonOffsetDirection = Material.PolygonOffsetDirection;
 							material.PolygonOffsetFactor = Material.PolygonOffsetFactor; break;
@@ -561,11 +562,9 @@ namespace video
 		0 or another texture first. */
 		virtual void removeAllTextures() =0;
 
-		//! Remove hardware buffer
-		virtual void removeHardwareBuffer(const scene::IMeshBuffer* mb) =0;
+		virtual IHardwareBuffer* createHardwareBuffer(scene::IIndexBuffer* indexBuffer) = 0;
 
-		//! Remove all hardware buffers
-		virtual void removeAllHardwareBuffers() =0;
+		virtual IHardwareBuffer* createHardwareBuffer(scene::IVertexBuffer* vertexBuffer) = 0;
 
 		//! Create occlusion query.
 		/** Use node for identification and mesh for occlusion test. */
@@ -652,7 +651,7 @@ namespace video
 		information is multiplied.*/
 		virtual void makeNormalMapTexture(video::ITexture* texture, f32 amplitude=1.0f) const =0;
 
-		//! Sets a new render target.
+		//! Sets a new render target. (this prototype will be removed in future)
 		/** This will only work if the driver supports the
 		EVDF_RENDER_TO_TARGET feature, which can be queried with
 		queryFeature(). Usually, rendering to textures is done in this
@@ -686,7 +685,32 @@ namespace video
 		\return True if sucessful and false if not. */
 		virtual bool setRenderTarget(video::ITexture* texture,
 			bool clearBackBuffer=true, bool clearZBuffer=true,
-			SColor color=video::SColor(0,0,0,0)) =0;
+			SColor color=video::SColor(0,0,0,0),
+			video::ITexture* depthStencil = 0) =0;
+
+		//! Sets a new render target.
+		virtual bool setRenderTarget(video::ITexture* texture,
+			video::ITexture* depthStencil,
+			bool clearBackBuffer=true, bool clearZBuffer=true,
+			SColor color=video::SColor(0,0,0,0))
+		{
+			return setRenderTarget(texture, clearBackBuffer, clearZBuffer, color, depthStencil);
+		}
+
+		//! Sets new multiple render targets. (this prototype will be removed in future)
+		virtual bool setRenderTarget(const core::array<video::IRenderTarget>& texture,
+			bool clearBackBuffer=true, bool clearZBuffer=true,
+			SColor color=video::SColor(0,0,0,0),
+			video::ITexture* depthStencil = 0) =0;
+
+		//! Sets new multiple render targets.
+		virtual bool setRenderTarget(const core::array<video::IRenderTarget>& texture,
+			video::ITexture* depthStencil,
+			bool clearBackBuffer=true, bool clearZBuffer=true,
+			SColor color=video::SColor(0,0,0,0))
+		{
+			return setRenderTarget(texture, clearBackBuffer, clearZBuffer, color, depthStencil);
+		}
 
 		//! set or reset special render targets
 		/** This method enables access to special color buffers such as
@@ -704,11 +728,6 @@ namespace video
 					bool clearZBuffer=true,
 					SColor color=video::SColor(0,0,0,0)) =0;
 
-		//! Sets new multiple render targets.
-		virtual bool setRenderTarget(const core::array<video::IRenderTarget>& texture,
-			bool clearBackBuffer=true, bool clearZBuffer=true,
-			SColor color=video::SColor(0,0,0,0)) =0;
-
 		//! Sets a new viewport.
 		/** Every rendering operation is done into this new area.
 		\param area: Rectangle defining the new area of rendering
@@ -718,24 +737,6 @@ namespace video
 		//! Gets the area of the current viewport.
 		/** \return Rectangle of the current viewport. */
 		virtual const core::rect<s32>& getViewPort() const =0;
-
-		//! Draws a vertex primitive list
-		/** Note that, depending on the index type, some vertices might be not
-		accessible through the index list. The limit is at 65535 vertices for 16bit
-		indices. Please note that currently not all primitives are available for
-		all drivers, and some might be emulated via triangle renders.
-		\param vertices Pointer to array of vertices.
-		\param vertexCount Amount of vertices in the array.
-		\param indexList Pointer to array of indices. These define the vertices used
-		for each primitive. Depending on the type, indices are interpreted as single
-		objects (for point like primitives), pairs (for lines), triplets (for
-		triangles), or quads.
-		\param primCount Amount of Primitives
-		\param vType Vertex type, e.g. video::EVT_STANDARD for S3DVertex.
-		\param type Primitive type, e.g. scene::EPT_TRIANGLE_FAN for a triangle fan.
-		\param iType Index type, e.g. video::EIT_16BIT for 16bit indices. */
-		virtual void drawVertexPrimitiveList(bool hardwareVertex, scene::IVertexBuffer* vertexBuffer,
-			bool hardwareIndex, scene::IIndexBuffer* indexBuffer, u32 primitiveCount, scene::E_PRIMITIVE_TYPE pType = scene::EPT_TRIANGLES) = 0;
 
 		//! Draws a vertex primitive list in 2d
 		/** Compared to the general (3d) version of this method, this
@@ -762,20 +763,6 @@ namespace video
 				E_VERTEX_TYPE vType=EVT_STANDARD,
 				scene::E_PRIMITIVE_TYPE pType=scene::EPT_TRIANGLES,
 				E_INDEX_TYPE iType=EIT_16BIT) =0;
-
-		//! Draws an indexed triangle list.
-		void drawIndexedTriangleList(bool hardwareVertex, scene::IVertexBuffer* vertexBuffer,
-			bool hardwareIndex, scene::IIndexBuffer* indexBuffer, u32 primitiveCount)
-		{
-			drawVertexPrimitiveList(hardwareVertex, vertexBuffer, hardwareIndex, indexBuffer, primitiveCount, scene::EPT_TRIANGLES);
-		}
-
-		//! Draws an indexed triangle fan.
-		void drawIndexedTriangleFan(bool hardwareVertex, scene::IVertexBuffer* vertexBuffer,
-			bool hardwareIndex, scene::IIndexBuffer* indexBuffer, u32 primitiveCount)
-		{
-			drawVertexPrimitiveList(hardwareVertex, vertexBuffer, hardwareIndex, indexBuffer, primitiveCount, scene::EPT_TRIANGLE_FAN);
-		}
 
 		//! Draws a 3d line.
 		/** For some implementations, this method simply calls

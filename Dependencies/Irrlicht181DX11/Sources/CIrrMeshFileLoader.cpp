@@ -194,19 +194,19 @@ IMeshBuffer* CIrrMeshFileLoader::readMeshBuffer(io::IXMLReader* reader)
 				if (vertexTypeName1 == vertexType)
 				{
 					buffer = new CMeshBuffer<video::S3DVertex>(SceneManager->getVideoDriver()->getVertexDescriptor(0), itype);
-					((CMeshBuffer<video::S3DVertex>*)buffer)->Material = material;
+					((CMeshBuffer<video::S3DVertex>*)buffer)->getMaterial() = material;
 				}
 				else
 				if (vertexTypeName2 == vertexType)
 				{
 					buffer = new CMeshBuffer<video::S3DVertex2TCoords>(SceneManager->getVideoDriver()->getVertexDescriptor(1), itype);
-					((CMeshBuffer<video::S3DVertex2TCoords>*)buffer)->Material = material;
+					((CMeshBuffer<video::S3DVertex2TCoords>*)buffer)->getMaterial() = material;
 				}
 				else
 				if (vertexTypeName3 == vertexType)
 				{
 					buffer = new CMeshBuffer<video::S3DVertexTangents>(SceneManager->getVideoDriver()->getVertexDescriptor(2), itype);
-					((CMeshBuffer<video::S3DVertexTangents>*)buffer)->Material = material;
+					((CMeshBuffer<video::S3DVertexTangents>*)buffer)->getMaterial() = material;
 				}
 				buffer->getVertexBuffer()->reallocate(vertexCount);
 			}

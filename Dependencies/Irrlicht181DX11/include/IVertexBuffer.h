@@ -7,8 +7,7 @@
 
 #include "IReferenceCounted.h"
 #include "irrArray.h"
-#include "IVertexDescriptor.h"
-#include "EHardwareBufferFlags.h"
+#include "IHardwareBuffer.h"
 
 namespace irr
 {
@@ -17,6 +16,16 @@ namespace scene
 	class IVertexBuffer : public virtual IReferenceCounted
 	{
 	public:
+		IVertexBuffer() : HardwareBuffer(0)
+		{
+		}
+
+		virtual ~IVertexBuffer()
+		{
+			if (HardwareBuffer)
+				HardwareBuffer->drop();
+		}
+
 		virtual void clear() = 0;
 
 		virtual void set_used(u32 used) = 0;
@@ -28,10 +37,6 @@ namespace scene
 		virtual s32 linear_reverse_search(const void* element) const = 0;
 
 		virtual void fill(u32 used) = 0;
-
-		virtual video::IVertexDescriptor* getVertexDescriptor() const = 0;
-
-		virtual bool setVertexDescriptor(video::IVertexDescriptor* vertexDescriptor) = 0;
 
 		virtual E_HARDWARE_MAPPING getHardwareMappingHint() const = 0;
 
@@ -45,8 +50,6 @@ namespace scene
 
 		virtual u32 getVertexCount() const = 0;
 
-		virtual video::E_VERTEX_TYPE getVertexType() const = 0;
-
 		virtual u32 getVertexSize() const = 0;
 
 		virtual void setVertex(u32 id, const void* vertex) = 0;
@@ -54,6 +57,26 @@ namespace scene
 		virtual void setDirty() = 0;
 
 		virtual u32 getChangedID() const = 0;
+
+		video::IHardwareBuffer* getHardwareBuffer() const
+		{
+			return HardwareBuffer;
+		}
+
+		// externalMemoryHandler parameter is used only by hardware buffers.
+		void setHardwareBuffer(video::IHardwareBuffer* hardwareBuffer, bool externalMemoryHandler = false)
+		{
+			if (!externalMemoryHandler && HardwareBuffer)
+				HardwareBuffer->drop();
+
+			HardwareBuffer = hardwareBuffer;
+
+			if (!externalMemoryHandler && HardwareBuffer)
+				HardwareBuffer->grab();
+		}
+
+	protected:
+		video::IHardwareBuffer* HardwareBuffer;
 	};
 }
 }

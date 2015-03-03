@@ -34,7 +34,7 @@ CTerrainTriangleSelector::~CTerrainTriangleSelector()
 //! Clears and sets triangle data
 void CTerrainTriangleSelector::setTriangleData(ITerrainSceneNode* node, s32 LOD)
 {
-	video::IVertexAttribute* attribute = node->getRenderBuffer()->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
+	video::IVertexAttribute* attribute = node->getRenderBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
 
 	if(!attribute)
 		return;

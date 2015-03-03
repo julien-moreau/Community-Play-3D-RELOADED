@@ -260,7 +260,7 @@ void CShadowVolumeSceneNode::updateShadowVolumes()
 	{
 		const IMeshBuffer* buf = mesh->getMeshBuffer(i);
 
-		video::IVertexAttribute* attribute = buf->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
+		video::IVertexAttribute* attribute = buf->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
 
 		if(!attribute)
 			continue;

@@ -25,7 +25,7 @@ CParticleBoxEmitter::CParticleBoxEmitter(
 	MaxParticlesPerSecond(maxParticlesPerSecond),
 	MinStartColor(minStartColor), MaxStartColor(maxStartColor),
 	MinLifeTime(lifeTimeMin), MaxLifeTime(lifeTimeMax),
-	Time(0), Emitted(0), MaxAngleDegrees(maxAngleDegrees)
+	Time(0), MaxAngleDegrees(maxAngleDegrees)
 {
 	#ifdef _DEBUG
 	setDebugName("CParticleBoxEmitter");
@@ -112,7 +112,7 @@ void CParticleBoxEmitter::serializeAttributes(io::IAttributes* out, io::SAttribu
 	out->addFloat("MinStartSizeWidth", MinStartSize.Width);
 	out->addFloat("MinStartSizeHeight", MinStartSize.Height);
 	out->addFloat("MaxStartSizeWidth", MaxStartSize.Width);
-	out->addFloat("MaxStartSizeHeight", MaxStartSize.Height); 
+	out->addFloat("MaxStartSizeHeight", MaxStartSize.Height);
 	out->addInt("MinParticlesPerSecond", MinParticlesPerSecond);
 	out->addInt("MaxParticlesPerSecond", MaxParticlesPerSecond);
 	out->addColor("MinStartColor", MinStartColor);
@@ -160,7 +160,7 @@ void CParticleBoxEmitter::deserializeAttributes(io::IAttributes* in, io::SAttrib
 		MaxStartSize.Width = in->getAttributeAsFloat(idx);
 	idx = in->findAttribute("MaxStartSizeHeight");
 	if ( idx >= 0 )
-		MaxStartSize.Height = in->getAttributeAsFloat(idx); 
+		MaxStartSize.Height = in->getAttributeAsFloat(idx);
 
 	MinParticlesPerSecond = in->getAttributeAsInt("MinParticlesPerSecond");
 	MaxParticlesPerSecond = in->getAttributeAsInt("MaxParticlesPerSecond");

@@ -36,9 +36,6 @@ public:
 		const irr::u16 indices[6] = { 0, 1, 2, 0, 2, 3 };
 		for (irr::u32 i = 0; i < 6; i++)
 			Buffer->getIndexBuffer()->addIndex(indices[i]);
-
-		VertexBuffer = Buffer->getVertexBuffer(0);
-		IndexBuffer = Buffer->getIndexBuffer();
 	}
 	#endif
 
@@ -48,7 +45,7 @@ public:
 		driver->setTransform(irr::video::ETS_WORLD, irr::core::matrix4());
 
 		#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
-		driver->drawIndexedTriangleList(false, VertexBuffer, false, IndexBuffer, 2);
+		driver->drawMeshBuffer(Buffer);
 		#else
 		const irr::u16 indices[6] = { 0, 1, 2, 0, 2, 3 };
 		driver->drawIndexedTriangleList(&Vertices[0], 4, &indices[0], 2);
@@ -68,8 +65,6 @@ private:
 
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
 	irr::scene::CMeshBuffer<irr::video::S3DVertex> *Buffer;
-	irr::scene::IVertexBuffer *VertexBuffer;
-	irr::scene::IIndexBuffer *IndexBuffer;
 	#endif
 
 };

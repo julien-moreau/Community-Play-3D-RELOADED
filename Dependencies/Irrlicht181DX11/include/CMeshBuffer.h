@@ -18,17 +18,19 @@ namespace scene
 	{
 	public:
 		//! Constructor
-		CMeshBuffer(video::IVertexDescriptor* vertexDescriptor, video::E_INDEX_TYPE type = video::EIT_16BIT) : BoundingBoxNeedsRecalculated(true)
+		CMeshBuffer(video::IVertexDescriptor* vertexDescriptor, video::E_INDEX_TYPE type = video::EIT_16BIT) : IMeshBuffer(vertexDescriptor)
 		{
 			#ifdef _DEBUG
 			setDebugName("CMeshBuffer");
 			#endif
 
-			if (vertexDescriptor)
+			if (VertexDescriptor)
 			{
-				VertexBuffer.push_back(new CVertexBuffer<T>(vertexDescriptor));
+				VertexDescriptor->grab();
 
-				if (vertexDescriptor->getVertexSize(0) != VertexBuffer[0]->getVertexSize())
+				VertexBuffer.push_back(new CVertexBuffer<T>());
+
+				if (VertexDescriptor->getVertexSize(0) != VertexBuffer[0]->getVertexSize())
 					VertexBufferCompatible = false;
 			}
 			else
@@ -39,10 +41,41 @@ namespace scene
 			IndexBuffer = new CIndexBuffer(type);
 		}
 
+		// Copy constructor (due to problems with detect types a vertex and index buffers aren't duplicated, they are assigned like in assignment operator)
+		CMeshBuffer(const CMeshBuffer& meshBuffer) : IMeshBuffer(meshBuffer.VertexDescriptor)
+		{
+			if (VertexDescriptor)
+				VertexDescriptor->grab();
+
+			Material = meshBuffer.Material;
+
+			const u32 vbCount = meshBuffer.VertexBuffer.size();
+
+			for (u32 i = 0; i < vbCount; ++i)
+			{
+				VertexBuffer.push_back(meshBuffer.VertexBuffer[i]);
+
+				if (VertexBuffer[i])
+					VertexBuffer[i]->grab();
+			}
+
+			IndexBuffer = meshBuffer.IndexBuffer;
+
+			if (IndexBuffer)
+				IndexBuffer->grab();
+
+			BoundingBox = meshBuffer.BoundingBox;
+			Transformation = meshBuffer.Transformation;
+			BoundingBoxNeedsRecalculated = meshBuffer.BoundingBoxNeedsRecalculated;
+			VertexBufferCompatible = meshBuffer.VertexBufferCompatible;
+		}
+
 		//! Destructor
 		virtual ~CMeshBuffer()
 		{
-			for (u32 i = 0; i < VertexBuffer.size(); ++i)
+			const u32 vbCount = VertexBuffer.size();
+
+			for (u32 i = 0; i < vbCount; ++i)
 			{
 				if (VertexBuffer[i])
 					VertexBuffer[i]->drop();
@@ -50,17 +83,52 @@ namespace scene
 
 			if (IndexBuffer)
 				IndexBuffer->drop();
+
+			if (VertexDescriptor)
+				VertexDescriptor->drop();
+		}
+
+		virtual video::IVertexDescriptor* getVertexDescriptor() const
+		{
+			return VertexDescriptor;
+		}
+
+		virtual bool setVertexDescriptor(video::IVertexDescriptor* vertexDescriptor)
+		{
+			if (vertexDescriptor && vertexDescriptor != VertexDescriptor)
+			{
+				if (VertexDescriptor)
+					VertexDescriptor->drop();
+
+				VertexDescriptor = vertexDescriptor;
+				VertexDescriptor->grab();
+
+				bool vertexBufferCompatible = true;
+
+				for (u32 i = 0; i < VertexBuffer.size(); ++i)
+				{
+					if (VertexDescriptor->getVertexSize(i) != VertexBuffer[i]->getVertexSize())
+					{
+						vertexBufferCompatible = false;
+						break;
+					}
+				}
+
+				VertexBufferCompatible = vertexBufferCompatible;
+
+				return true;
+			}
+
+			return false;
 		}
 
 		virtual bool addVertexBuffer(IVertexBuffer* vertexBuffer)
 		{
 			bool status = false;
 
-			if (vertexBuffer && vertexBuffer->getVertexDescriptor())
+			if (vertexBuffer && VertexDescriptor)
 			{
-				const video::IVertexDescriptor* vd = vertexBuffer->getVertexDescriptor();
-
-				if (vd->getVertexSize(VertexBuffer.size()) != VertexBuffer[0]->getVertexSize())
+				if (VertexDescriptor->getVertexSize(VertexBuffer.size()) != vertexBuffer->getVertexSize())
 					VertexBufferCompatible = false;
 
 				vertexBuffer->grab();
@@ -94,19 +162,22 @@ namespace scene
 				VertexBuffer[id]->drop();
 				VertexBuffer.erase(id);
 
-				const u32 vertexSize = VertexBuffer[0]->getVertexSize();
-
 				bool vertexBufferCompatible = true;
 
-				for (u32 i = 0; i < VertexBuffer.size(); ++i)
+				if (VertexDescriptor)
 				{
-					const video::IVertexDescriptor* vd = VertexBuffer[i]->getVertexDescriptor();
-
-					if (!vd || (vd && vd->getVertexSize(i) != vertexSize))
+					for (u32 i = 0; i < VertexBuffer.size(); ++i)
 					{
-						vertexBufferCompatible = false;
-						break;
+						if (VertexDescriptor->getVertexSize(i) != VertexBuffer[i]->getVertexSize())
+						{
+							vertexBufferCompatible = false;
+							break;
+						}
 					}
+				}
+				else
+				{
+					vertexBufferCompatible = false;
 				}
 
 				VertexBufferCompatible = vertexBufferCompatible;
@@ -115,7 +186,7 @@ namespace scene
 
 		virtual bool setVertexBuffer(IVertexBuffer* vertexBuffer, u32 id = 0)
 		{
-			if (id >= VertexBuffer.size() || !vertexBuffer || !vertexBuffer->getVertexDescriptor() || VertexBuffer[id] == vertexBuffer)
+			if (id >= VertexBuffer.size() || !vertexBuffer || VertexBuffer[id] == vertexBuffer)
 				return false;
 
 			VertexBuffer[id]->drop();
@@ -123,19 +194,22 @@ namespace scene
 
 			VertexBuffer[id] = vertexBuffer;
 
-			const u32 vertexSize = VertexBuffer[0]->getVertexSize();
-
 			bool vertexBufferCompatible = true;
 
-			for (u32 i = 0; i < VertexBuffer.size(); ++i)
+			if (VertexDescriptor)
 			{
-				const video::IVertexDescriptor* vd = VertexBuffer[i]->getVertexDescriptor();
-
-				if (vd->getVertexSize(i) != vertexSize)
+				for (u32 i = 0; i < VertexBuffer.size(); ++i)
 				{
-					vertexBufferCompatible = false;
-					break;
+					if (VertexDescriptor->getVertexSize(i) != VertexBuffer[i]->getVertexSize())
+					{
+						vertexBufferCompatible = false;
+						break;
+					}
 				}
+			}
+			else
+			{
+				vertexBufferCompatible = false;
 			}
 
 			VertexBufferCompatible = vertexBufferCompatible;
@@ -150,7 +224,7 @@ namespace scene
 
 		virtual bool setIndexBuffer(IIndexBuffer* indexBuffer)
 		{
-			if(!indexBuffer || IndexBuffer == indexBuffer)
+			if (!indexBuffer || IndexBuffer == indexBuffer)
 				return false;
 
 			IndexBuffer->drop();
@@ -182,12 +256,11 @@ namespace scene
 			return BoundingBox;
 		}
 
-		//! Set the axis aligned bounding box
-		/** \param box New axis aligned bounding box for this buffer. */
-		//! set user axis aligned bounding box
-		virtual void setBoundingBox(const core::aabbox3df& boundingBox)
+		//! Get the axis aligned bounding box
+		/** \return Axis aligned bounding box of this buffer. */
+		virtual core::aabbox3d<f32>& getBoundingBox()
 		{
-			BoundingBox = boundingBox;
+			return BoundingBox;
 		}
 
 		//! Call this after changing the positions of any vertex.
@@ -205,20 +278,12 @@ namespace scene
 
 			BoundingBoxNeedsRecalculated = false;
 
-			const video::IVertexDescriptor* vd = VertexBuffer[0]->getVertexDescriptor();
+			const video::IVertexAttribute* attribute = (VertexDescriptor && VertexBufferCompatible) ? VertexDescriptor->getAttributeBySemantic(video::EVAS_POSITION) : 0;
 
-			if (!VertexBuffer[0]->getVertexCount() || !vd || !VertexBufferCompatible)
+			if (!attribute || attribute->getBufferID() >= VertexBuffer.size() || VertexBuffer[attribute->getBufferID()]->getVertexCount() == 0)
 				BoundingBox.reset(0,0,0);
 			else
 			{
-				video::IVertexAttribute* attribute = vd->getAttributeBySemantic(video::EVAS_POSITION);
-
-				if (!attribute)
-				{
-					BoundingBox.reset(0,0,0);
-					return;
-				}
-
 				const u32 bufferID = attribute->getBufferID();
 
 				u8* offset = static_cast<u8*>(VertexBuffer[bufferID]->getVertices());
@@ -247,37 +312,38 @@ namespace scene
 		or the main buffer is of standard type. Otherwise, behavior is
 		undefined.
 		*/
-		virtual void append(IVertexBuffer* vertexBuffer, IIndexBuffer* indexBuffer, u32 id = 0)
+		virtual void append(IVertexBuffer* vertexBuffer, u32 vertexBufferID, IIndexBuffer* indexBuffer)
 		{
-			if (id >= VertexBuffer.size() || !vertexBuffer || vertexBuffer->getVertexDescriptor() != VertexBuffer[id]->getVertexDescriptor() ||
-				vertexBuffer->getVertexSize() != VertexBuffer[id]->getVertexSize())
-				return;
-
-			const u32 vertexCount = vertexBuffer->getVertexCount();
-			const u32 vertexSize = vertexBuffer->getVertexSize();
-
-			VertexBuffer[id]->reallocate(VertexBuffer[id]->getVertexCount() + vertexCount);
-
-			video::IVertexAttribute* attribute = vertexBuffer->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_POSITION);
-
-			u8* offset = static_cast<u8*>(vertexBuffer->getVertices());
-
-			const u32 attributeOffset = attribute ? attribute->getOffset() : 0;
-
-			for (u32 i = 0; i < vertexCount; ++i)
+			if (vertexBufferID < VertexBuffer.size() && VertexDescriptor && vertexBuffer &&
+				vertexBuffer->getVertexSize() == VertexDescriptor->getVertexSize(vertexBufferID) &&
+				vertexBuffer->getVertexSize() == VertexBuffer[vertexBufferID]->getVertexSize())
 			{
-				VertexBuffer[id]->addVertex(offset);
+				const u32 vertexCount = vertexBuffer->getVertexCount();
+				const u32 vertexSize = vertexBuffer->getVertexSize();
 
-				if (attribute)
+				VertexBuffer[vertexBufferID]->reallocate(VertexBuffer[vertexBufferID]->getVertexCount() + vertexCount);
+
+				video::IVertexAttribute* attribute = VertexDescriptor->getAttributeBySemantic(video::EVAS_POSITION);
+
+				u8* offset = static_cast<u8*>(vertexBuffer->getVertices());
+
+				const u32 attributeOffset = attribute ? attribute->getOffset() : 0;
+
+				for (u32 i = 0; i < vertexCount; ++i)
 				{
-					u8* positionBuffer = offset + attributeOffset;
+					VertexBuffer[vertexBufferID]->addVertex(offset);
 
-					core::vector3df position(0.0f);
-					memcpy(&position, positionBuffer, sizeof(core::vector3df));
-					BoundingBox.addInternalPoint(position);
+					if (attribute)
+					{
+						u8* positionBuffer = offset + attributeOffset;
+
+						core::vector3df position(0.0f);
+						memcpy(&position, positionBuffer, sizeof(core::vector3df));
+						BoundingBox.addInternalPoint(position);
+					}
+
+					offset += vertexSize;
 				}
-
-				offset += vertexSize;
 			}
 
 			if (indexBuffer)
@@ -299,15 +365,15 @@ namespace scene
 		*/
 		virtual void append(IMeshBuffer* meshBuffer)
 		{
-			if (this == meshBuffer)
+			if (!meshBuffer || meshBuffer == this)
 				return;
 
-			append(meshBuffer->getVertexBuffer(0), meshBuffer->getIndexBuffer());
+			append(meshBuffer->getVertexBuffer(0), 0, meshBuffer->getIndexBuffer());
 
 			const u32 bufferCount = meshBuffer->getVertexBufferCount();
 
 			for (u32 i = 1; i < bufferCount && i < VertexBuffer.size(); ++i)
-				append(meshBuffer->getVertexBuffer(i), 0, i);
+				append(meshBuffer->getVertexBuffer(i), i, 0);
 		}
 
 		//! get the current hardware mapping hint
@@ -360,19 +426,6 @@ namespace scene
 		{
 			return Transformation;
 		}
-
-		//! Material for this meshbuffer.
-		video::SMaterial Material;
-		//! Vertices of this buffer
-		core::array<scene::IVertexBuffer*> VertexBuffer;
-		//! Indices into the vertices of this buffer.
-		scene::IIndexBuffer* IndexBuffer;
-		//! Bounding box of this meshbuffer.
-		core::aabbox3d<f32> BoundingBox;
-
-		core::matrix4 Transformation;
-
-		bool BoundingBoxNeedsRecalculated;
 	};
 } // end namespace scene
 } // end namespace irr

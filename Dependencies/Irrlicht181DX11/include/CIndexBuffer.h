@@ -14,38 +14,38 @@ namespace scene
 	class CIndexBuffer : public IIndexBuffer
 	{
 	public:
-		CIndexBuffer(video::E_INDEX_TYPE type = video::EIT_16BIT) : Type(type), HardwareMappingHint(EHM_NEVER), ChangedID(1)
+		CIndexBuffer(video::E_INDEX_TYPE type = video::EIT_16BIT) : Type(type), HardwareMappingHint(EHM_NEVER), ChangedID(1), Indices(0)
 		{
 #ifdef _DEBUG
 			setDebugName("CIndexBuffer");
 #endif
-
 			if(Type == video::EIT_32BIT)
 				Indices = new CIndexList<u32>();
 			else // EIT_16BIT
 				Indices = new CIndexList<u16>();
 		}
 
-		CIndexBuffer(const CIndexBuffer &indexBuffer) : Indices(0), ChangedID(1)
+		CIndexBuffer(const CIndexBuffer &indexBuffer) : Type(video::EIT_16BIT), HardwareMappingHint(EHM_NEVER), ChangedID(1), Indices(0)
 		{
-			Type = indexBuffer.getType();
+			Type = indexBuffer.Type;
 
-			HardwareMappingHint = indexBuffer.getHardwareMappingHint();
+			HardwareMappingHint = indexBuffer.HardwareMappingHint;
 
-			if(Type == video::EIT_32BIT)
+			if (Type == video::EIT_32BIT)
 				Indices = new CIndexList<u32>();
 			else // EIT_16BIT
 				Indices = new CIndexList<u16>();
 
-			Indices->reallocate(indexBuffer.getIndexCount());
+			const u32 ibCount = indexBuffer.Indices->size();
 
-			for(u32 i = 0; i < indexBuffer.getIndexCount(); ++i)
+			Indices->reallocate(ibCount);
+
+			for (u32 i = 0; i < ibCount; ++i)
 				addIndex(indexBuffer.getIndex(i));
 		}
 
 		virtual ~CIndexBuffer()
 		{
-			Indices->clear();
 			delete Indices;
 		}
 
@@ -86,14 +86,14 @@ namespace scene
 
 		virtual void setType(video::E_INDEX_TYPE type)
 		{
-			if(Type == type)
+			if (Type == type)
 				return;
 
 			Type = type;
 
 			IIndexList* IndicesList = 0;
 
-			switch(Type)
+			switch (Type)
 			{
 				case video::EIT_16BIT:
 				{
@@ -107,7 +107,7 @@ namespace scene
 				}
 			}
 
-			if(Indices)
+			if (Indices)
 			{
 				IndicesList->reallocate(Indices->size());
 
@@ -127,7 +127,7 @@ namespace scene
 
 		virtual void setHardwareMappingHint(E_HARDWARE_MAPPING hardwareMappingHint)
 		{
-			if(HardwareMappingHint != hardwareMappingHint)
+			if (HardwareMappingHint != hardwareMappingHint)
 				setDirty();
 
 			HardwareMappingHint = hardwareMappingHint;
@@ -168,6 +168,9 @@ namespace scene
 
 		virtual void setDirty()
 		{
+			if (HardwareBuffer)
+				HardwareBuffer->requestUpdate();
+
 			++ChangedID;
 		}
 
@@ -204,15 +207,16 @@ namespace scene
 
 			CIndexList(const CIndexList &indexList) : Data(0)
 			{
-				Data.reallocate(indexList.Data.size());
+				const u32 ilCount = indexList.Data.size();
 
-				for (u32 i = 0; i < indexList.Data.size(); ++i)
+				Data.reallocate(ilCount);
+
+				for (u32 i = 0; i < ilCount; ++i)
 					Data.push_back(indexList.Data[i]);
 			}
 
 			~CIndexList()
 			{
-				Data.clear();
 			}
 
 			virtual void clear()
@@ -278,13 +282,13 @@ namespace scene
 			core::array<T> Data;
 		};
 
-		IIndexList* Indices;
-
 		video::E_INDEX_TYPE Type;
 
 		E_HARDWARE_MAPPING HardwareMappingHint;
 
 		u32 ChangedID;
+
+		IIndexList* Indices;
 	};
 
 	//typedef CIndexList<u16> SIndexBuffer16;

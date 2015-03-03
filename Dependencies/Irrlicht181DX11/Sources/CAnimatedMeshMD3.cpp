@@ -244,9 +244,9 @@ IMeshBuffer * CAnimatedMeshMD3::createMeshBuffer(const SMD3MeshBuffer* source,
 	u32 pos = 0;
 	quake3::tTexArray textureArray;
 	quake3::getTextures(textureArray, source->Shader, pos, fs, driver);
-	dest->Material.MaterialType = video::EMT_SOLID;
-	dest->Material.setTexture(0, textureArray[0]);
-	dest->Material.Lighting = false;
+	dest->getMaterial().MaterialType = video::EMT_SOLID;
+	dest->getMaterial().setTexture(0, textureArray[0]);
+	dest->getMaterial().Lighting = false;
 
 	return dest;
 }

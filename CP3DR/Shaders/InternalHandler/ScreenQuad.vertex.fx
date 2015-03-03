@@ -36,13 +36,18 @@ struct VS_OUTPUT
 	float2 ScreenSize	: TEXCOORD3;
 };
 
-VS_OUTPUT vertexMain(float3 Position : POSITION, float4 TexCoords : TEXTURE0)
+struct VS_INPUT {
+	float3 Position  : POSITION0;
+	float4 TexCoords : TEXTURE0;
+};
+
+VS_OUTPUT vertexMain(VS_INPUT input)
 {
-	VS_OUTPUT OUT;
+	VS_OUTPUT OUT = (VS_OUTPUT)0;
 	
-	OUT.Position = float4(Position.x, Position.y, Position.z, 1.0);
-	OUT.TexCoords.x = 0.5 * (1.0 + Position.x + (1.0 / screenX));
-	OUT.TexCoords.y = 1.0 - 0.5 * (1.0 + Position.y - (1.0 / screenY));
+	OUT.Position = float4(input.Position.x, input.Position.y, input.Position.z, 1.0);
+	OUT.TexCoords.x = 0.5 * (1.0 + input.Position.x + (1.0 / screenX));
+	OUT.TexCoords.y = 1.0 - 0.5 * (1.0 + input.Position.y - (1.0 / screenY));
 
 	float3 tLStart = lerp(LineStarts0, LineStarts1, OUT.TexCoords.x);
 	float3 bLStart = lerp(LineStarts2, LineStarts3, OUT.TexCoords.x);

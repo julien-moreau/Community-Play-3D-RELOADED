@@ -22,12 +22,6 @@ public:
 		const core::vector3df& position = core::vector3df(0,0,0))
 			: ISceneNode(parent, mgr, id, position) {}
 
-	//! gets the text string
-	virtual const wchar_t *getText() = 0;
-
-	//! gets the text color
-	virtual const video::SColor getTextColor() = 0;
-
 	//! sets the text string
 	virtual void setText(const wchar_t* text) = 0;
 

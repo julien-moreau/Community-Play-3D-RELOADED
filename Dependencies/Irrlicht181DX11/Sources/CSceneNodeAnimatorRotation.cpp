@@ -12,11 +12,13 @@ namespace scene
 
 //! constructor
 CSceneNodeAnimatorRotation::CSceneNodeAnimatorRotation(u32 time, const core::vector3df& rotation)
-: Rotation(rotation), StartTime(time)
+: Rotation(rotation)
 {
 	#ifdef _DEBUG
 	setDebugName("CSceneNodeAnimatorRotation");
 	#endif
+
+	StartTime = time;
 }
 
 
@@ -39,7 +41,7 @@ void CSceneNodeAnimatorRotation::animateNode(ISceneNode* node, u32 timeMs)
 			if (rot.Z>360.f)
 				rot.Z=fmodf(rot.Z, 360.f);
 			node->setRotation(rot);
-			StartTime=timeMs; 
+			StartTime=timeMs;
 		}
 	}
 }
@@ -48,6 +50,8 @@ void CSceneNodeAnimatorRotation::animateNode(ISceneNode* node, u32 timeMs)
 //! Writes attributes of the scene node animator.
 void CSceneNodeAnimatorRotation::serializeAttributes(io::IAttributes* out, io::SAttributeReadWriteOptions* options) const
 {
+	ISceneNodeAnimator::serializeAttributes(out, options);
+
 	out->addVector3d("Rotation", Rotation);
 }
 
@@ -55,14 +59,17 @@ void CSceneNodeAnimatorRotation::serializeAttributes(io::IAttributes* out, io::S
 //! Reads attributes of the scene node animator.
 void CSceneNodeAnimatorRotation::deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options)
 {
+	ISceneNodeAnimator::deserializeAttributes(in, options);
+
 	Rotation = in->getAttributeAsVector3d("Rotation");
 }
 
 
 ISceneNodeAnimator* CSceneNodeAnimatorRotation::createClone(ISceneNode* node, ISceneManager* newManager)
 {
-	CSceneNodeAnimatorRotation * newAnimator = 
+	CSceneNodeAnimatorRotation * newAnimator =
 		new CSceneNodeAnimatorRotation(StartTime, Rotation);
+	newAnimator->cloneMembers(this);
 
 	return newAnimator;
 }

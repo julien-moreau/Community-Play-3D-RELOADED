@@ -488,7 +488,8 @@ void CBurningVideoDriver::setCurrentShader()
 
 	bool zMaterialTest =	Material.org.ZBuffer != ECFN_DISABLED &&
 							Material.org.ZWriteEnable &&
-							( AllowZWriteOnTransparent || !Material.org.isTransparent() );
+							( AllowZWriteOnTransparent || (!Material.org.isTransparent() &&
+							!MaterialRenderers[Material.org.MaterialType].Renderer->isTransparent()) );
 
 	EBurningFFShader shader = zMaterialTest ? ETR_TEXTURE_GOURAUD : ETR_TEXTURE_GOURAUD_NOZ;
 
@@ -545,7 +546,8 @@ void CBurningVideoDriver::setCurrentShader()
 			break;
 
 		case EMT_DETAIL_MAP:
-			shader = ETR_TEXTURE_GOURAUD_DETAIL_MAP;
+			if ( texture1 )
+				shader = ETR_TEXTURE_GOURAUD_DETAIL_MAP;
 			break;
 
 		case EMT_SPHERE_MAP:
@@ -714,7 +716,7 @@ bool CBurningVideoDriver::endScene()
 
 //! sets a render target
 bool CBurningVideoDriver::setRenderTarget(video::ITexture* texture, bool clearBackBuffer,
-								 bool clearZBuffer, SColor color)
+	bool clearZBuffer, SColor color, video::ITexture* depthStencil)
 {
 	if (texture && texture->getDriverType() != EDT_BURNINGSVIDEO)
 	{
@@ -1712,18 +1714,6 @@ void CBurningVideoDriver::VertexCache_reset ( const void* vertices, u32 vertexCo
 			VertexCache.indexCount = primitiveCount + 2;
 			VertexCache.primitivePitch = 1;
 			break;
-		case scene::EPT_QUAD_STRIP:
-			VertexCache.indexCount = 2*primitiveCount + 2;
-			VertexCache.primitivePitch = 2;
-			break;
-		case scene::EPT_QUADS:
-			VertexCache.indexCount = 4*primitiveCount;
-			VertexCache.primitivePitch = 4;
-			break;
-		case scene::EPT_POLYGON:
-			VertexCache.indexCount = primitiveCount+1;
-			VertexCache.primitivePitch = 1;
-			break;
 		case scene::EPT_POINT_SPRITES:
 			VertexCache.indexCount = primitiveCount;
 			VertexCache.primitivePitch = 1;
@@ -1734,29 +1724,44 @@ void CBurningVideoDriver::VertexCache_reset ( const void* vertices, u32 vertexCo
 }
 
 
-void CBurningVideoDriver::drawVertexPrimitiveList(bool hardwareVertex, scene::IVertexBuffer* vertexBuffer,
-			bool hardwareIndex, scene::IIndexBuffer* indexBuffer, u32 primitiveCount, scene::E_PRIMITIVE_TYPE pType)
-
+void CBurningVideoDriver::drawMeshBuffer(const scene::IMeshBuffer* mb)
 {
-	E_VERTEX_TYPE vType = EVT_STANDARD;
+	if (!mb || !mb->isVertexBufferCompatible())
+		return;
+
+	if (!checkPrimitiveCount(mb->getPrimitiveCount()))
+		return;
+
+	if (mb->getVertexBufferCount() > 1)
+	{
+		os::Printer::log("Software driver can not handle more than one vertex buffer per mesh buffer", ELL_ERROR);
+		return;
+	}
+
+	scene::IVertexBuffer* vertexBuffer = mb->getVertexBuffer(0);
+	E_VERTEX_TYPE vertexType = EVT_STANDARD;
+
+	scene::IIndexBuffer* indexBuffer = mb->getIndexBuffer();
+	const u32 primitiveCount = mb->getPrimitiveCount();
+	const scene::E_PRIMITIVE_TYPE primitiveType = mb->getPrimitiveType();
 
 	// Supported are only built-in Irrlicht vertex formats.
 	switch(vertexBuffer->getVertexSize())
 	{
 	case sizeof(S3DVertex):
-		vType = EVT_STANDARD;
+		vertexType = EVT_STANDARD;
 		break;
 	case sizeof(S3DVertex2TCoords):
-		vType = EVT_2TCOORDS;
+		vertexType = EVT_2TCOORDS;
 		break;
 	case sizeof(S3DVertexTangents):
-		vType = EVT_TANGENTS;
+		vertexType = EVT_TANGENTS;
 		break;
 	default:
 		return;
 	}
 
-	drawVertexPrimitiveList(vertexBuffer->getVertices(), vertexBuffer->getVertexCount(), indexBuffer->getIndices(), primitiveCount, vType, pType, indexBuffer->getType());
+	drawVertexPrimitiveList(vertexBuffer->getVertices(), vertexBuffer->getVertexCount(), indexBuffer->getIndices(), primitiveCount, vertexType, primitiveType, indexBuffer->getType());
 }
 
 
@@ -1776,7 +1781,7 @@ void CBurningVideoDriver::drawVertexPrimitiveList(const void* vertices, u32 vert
 	// The vertex cache needs to be rewritten for these primitives.
 	if (pType==scene::EPT_POINTS || pType==scene::EPT_LINE_STRIP ||
 		pType==scene::EPT_LINE_LOOP || pType==scene::EPT_LINES ||
-		pType==scene::EPT_TRIANGLE_FAN || pType==scene::EPT_POLYGON ||
+		pType==scene::EPT_TRIANGLE_FAN ||
 		pType==scene::EPT_POINT_SPRITES)
 		return;
 

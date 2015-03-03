@@ -42,6 +42,7 @@ namespace video
 {
 
 class COpenGLDriver;
+class COpenGLMaterialRenderer;
 class IShaderConstantSetCallBack;
 
 class COpenGLCgUniformSampler2D : public CCgUniform
@@ -65,16 +66,18 @@ public:
 		scene::E_PRIMITIVE_TYPE inType = scene::EPT_TRIANGLES,
 		scene::E_PRIMITIVE_TYPE outType = scene::EPT_TRIANGLE_STRIP,
 		u32 vertices = 0, IShaderConstantSetCallBack* callback = 0,
-		IMaterialRenderer* baseMaterial = 0, s32 userData = 0);
+		E_MATERIAL_TYPE baseMaterial = EMT_SOLID, s32 userData = 0);
 
 	virtual ~COpenGLCgMaterialRenderer();
 
-	virtual void OnSetMaterial(const SMaterial& material, const SMaterial& lastMaterial, bool resetAllRenderstates, IMaterialRendererServices* services);
-	virtual bool OnRender(IMaterialRendererServices* services, E_VERTEX_TYPE vtxtype);
-	virtual void OnUnsetMaterial();
+	virtual bool isTransparent() const _IRR_OVERRIDE_;
 
-	virtual void setBasicRenderStates(const SMaterial& material, const SMaterial& lastMaterial, bool resetAllRenderstates);
-	virtual IVideoDriver* getVideoDriver();
+	virtual void OnSetMaterial(const SMaterial& material, const SMaterial& lastMaterial, bool resetAllRenderstates, IMaterialRendererServices* services) _IRR_OVERRIDE_;
+	virtual bool OnRender(IMaterialRendererServices* services, E_VERTEX_TYPE vtxtype) _IRR_OVERRIDE_;
+	virtual void OnUnsetMaterial() _IRR_OVERRIDE_;
+
+	virtual void setBasicRenderStates(const SMaterial& material, const SMaterial& lastMaterial, bool resetAllRenderstates) _IRR_OVERRIDE_;
+	virtual IVideoDriver* getVideoDriver() _IRR_OVERRIDE_;
 
 protected:
 	void init(s32& materialType,
@@ -87,6 +90,8 @@ protected:
 		scene::E_PRIMITIVE_TYPE inType = scene::EPT_TRIANGLES,
 		scene::E_PRIMITIVE_TYPE outType = scene::EPT_TRIANGLE_STRIP,
 		u32 vertices = 0);
+
+	COpenGLMaterialRenderer* BaseMaterial;
 
 	COpenGLDriver* Driver;
 };

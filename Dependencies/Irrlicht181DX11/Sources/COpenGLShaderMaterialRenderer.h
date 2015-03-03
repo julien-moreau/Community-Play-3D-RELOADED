@@ -35,7 +35,6 @@ namespace video
 {
 
 class COpenGLDriver;
-class COpenGLMaterialRenderer;
 class IShaderConstantSetCallBack;
 
 //! Class for using vertex and pixel shaders with OpenGL
@@ -52,14 +51,14 @@ public:
 	virtual ~COpenGLShaderMaterialRenderer();
 
 	virtual void OnSetMaterial(const SMaterial& material, const SMaterial& lastMaterial,
-		bool resetAllRenderstates, IMaterialRendererServices* services);
+		bool resetAllRenderstates, IMaterialRendererServices* services) _IRR_OVERRIDE_;
 
-	virtual bool OnRender(IMaterialRendererServices* service, E_VERTEX_TYPE vtxtype);
+	virtual bool OnRender(IMaterialRendererServices* service, E_VERTEX_TYPE vtxtype) _IRR_OVERRIDE_;
 
-	virtual void OnUnsetMaterial();
+	virtual void OnUnsetMaterial() _IRR_OVERRIDE_;
 
 	//! Returns if the material is transparent.
-	virtual bool isTransparent() const;
+	virtual bool isTransparent() const _IRR_OVERRIDE_;
 
 protected:
 
@@ -79,7 +78,11 @@ protected:
 
 	COpenGLDriver* Driver;
 	IShaderConstantSetCallBack* CallBack;
-	COpenGLMaterialRenderer* BaseMaterial;
+
+	bool Alpha;
+	bool Blending;
+	bool FixedBlending;
+	bool AlphaTest;
 
 	GLuint VertexShader;
 	// We have 4 values here, [0] is the non-fog version, the other three are

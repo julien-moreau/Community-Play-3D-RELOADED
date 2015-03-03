@@ -31,32 +31,34 @@ void CHardwareSkinningMaterial::setupNode() {
 	ISceneManager* smgr = Handler->getActiveSceneManager();
 	IVideoDriver* driver = Handler->getVideoDriver();
 
+	#ifndef _IRR_COMPILE_WITH_DIRECT3D_11_
 	for (u32 i = 0; i < Mesh->getMeshBuffers().size(); i++) {
-		for (u32 g = 0; g < Mesh->getMeshBuffers()[i]->getVertexCount(); g++) {
-			Mesh->getMeshBuffers()[i]->getVertex(g)->Color = SColor(0, 0, 0, 0);
+		for (u32 j = 0; j < Mesh->getMeshBuffers()[i]->getVertexCount(); j++) {
+			Mesh->getMeshBuffers()[i]->getVertex(j)->Color = SColor(0, 0, 0, 0);
 		}
 	}
 
-	for (u32 z = 0; z < Mesh->getAllJoints().size(); ++z) {
-		for (u32 j = 0; j < Mesh->getAllJoints()[z]->Weights.size(); ++j) {
-			int buffId = Mesh->getAllJoints()[z]->Weights[j].buffer_id;
+	for (u32 i = 0; i < Mesh->getAllJoints().size(); i++) {
+		for (u32 j = 0; j < Mesh->getAllJoints()[i]->Weights.size(); j++) {
+			int buffId = Mesh->getAllJoints()[i]->Weights[j].buffer_id;
 
-			int vertexId = Mesh->getAllJoints()[z]->Weights[j].vertex_id;
+			int vertexId = Mesh->getAllJoints()[i]->Weights[j].vertex_id;
 			SColor* vColor = &Mesh->getMeshBuffers()[buffId]->getVertex(vertexId)->Color;
 
 			if (vColor->getRed() == 0)
-				vColor->setRed(z + 1);
+				vColor->setRed(i + 1);
 			else if (vColor->getGreen() == 0)
-				vColor->setGreen(z + 1);
+				vColor->setGreen(i + 1);
 			else if (vColor->getBlue() == 0)
-				vColor->setBlue(z + 1);
+				vColor->setBlue(i + 1);
 			else if (vColor->getAlpha() == 0)
-				vColor->setAlpha(z + 1);
+				vColor->setAlpha(i + 1);
 		}
 	}
+	#endif
 
 	#ifdef _DEBUG
-	printf("Joint Num: %d, current limit is 55 joints\n", Mesh->getAllJoints().size());
+	printf("Joint Num: %d, current limit is 57 joints\n", Mesh->getAllJoints().size());
 	#endif
 
 	CMaterialCreator cm(driver);
@@ -75,6 +77,10 @@ void CHardwareSkinningMaterial::copyMat(f32* pointer, matrix4 &mat) {
 		*pointer++ = mat[i];
 }
 
+void CHardwareSkinningMaterial::OnSetMaterial(const SMaterial &material) {
+
+}
+
 void CHardwareSkinningMaterial::OnSetConstants(video::IMaterialRendererServices* services, s32 userData)
 {
 	if (services->getVideoDriver()->getDriverType() == EDT_DIRECT3D9) {
@@ -83,10 +89,7 @@ void CHardwareSkinningMaterial::OnSetConstants(video::IMaterialRendererServices*
 		worldViewProj *= services->getVideoDriver()->getTransform(video::ETS_VIEW);
 		worldViewProj *= services->getVideoDriver()->getTransform(video::ETS_WORLD);
 
-		core::matrix4 world;
-		world = services->getVideoDriver()->getTransform(video::ETS_WORLD)[0];
 		services->setVertexShaderConstant("mWorldViewProj", worldViewProj.pointer(), 16);
-		services->setVertexShaderConstant("mWorld", world.pointer(), 16);
 	}
 
 	u32 timer = Handler->getIrrlichtDevice()->getTimer()->getRealTime();
@@ -108,8 +111,8 @@ void CHardwareSkinningMaterial::OnSetConstants(video::IMaterialRendererServices*
 				copyIncrement += 16;
 			}
 
-			bool success = services->setVertexShaderConstant("JointTransform", JointArray, Mesh->getAllJoints().size() * 16);
-			delete[] JointArray;
+			bool success = services->setVertexShaderConstant("JointTransform", JointArray, copyIncrement);
+			delete(JointArray);
 		}
 	}
 

@@ -27,6 +27,8 @@ CUIAddMesh::CUIAddMesh(CCP3DEditorCore *editorCore, const bool animated)
 	ViewPortMgr = EditorCore->getRenderingEngine()->getSceneManager()->createNewSceneManager(false);
 	ViewPortMgr->addCameraSceneNodeMaya();
 	UIInstance->Viewport->setSceneManager(ViewPortMgr);
+	UIInstance->Viewport->setOverrideColor(SColor(255, 0, 0, 0));
+	UIInstance->Viewport->enableOverrideColor(true);
 }
 
 CUIAddMesh::~CUIAddMesh() {

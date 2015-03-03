@@ -13,6 +13,8 @@
 #include "IMeshManipulator.h"
 #include "os.h"
 #include "CShadowVolumeSceneNode.h"
+#include "EProfileIDs.h"
+#include "IProfiler.h"
 
 namespace irr
 {
@@ -30,6 +32,17 @@ COctreeSceneNode::COctreeSceneNode(const core::array<scene::IMeshBuffer*>& meshe
 #ifdef _DEBUG
 	setDebugName("COctreeSceneNode");
 #endif
+
+	IRR_PROFILE(
+		static bool initProfile = false;
+		if (!initProfile )
+		{
+			initProfile = true;
+			getProfiler().add(EPID_OC_RENDER, L"render octnode", L"Irrlicht scene");
+			getProfiler().add(EPID_OC_CALCPOLYS, L"calc octnode", L"Irrlicht scene");
+		}
+ 	)
+	
 	StdMeshes = meshes;
 }
 
@@ -69,7 +82,7 @@ void COctreeSceneNode::OnRegisterSceneNode()
 			const video::IMaterialRenderer* const rnd =
 				driver->getMaterialRenderer(Materials[i].MaterialType);
 
-			if (rnd && rnd->isTransparent())
+			if ((rnd && rnd->isTransparent()) || Materials[i].isTransparent())
 				++transparentCount;
 			else
 				++solidCount;
@@ -94,6 +107,7 @@ void COctreeSceneNode::OnRegisterSceneNode()
 //! renders the node.
 void COctreeSceneNode::render()
 {
+	IRR_PROFILE(CProfileScope psRender(EPID_OC_RENDER);)
 	video::IVideoDriver* driver = SceneManager->getVideoDriver();
 
 	if (!driver)
@@ -123,10 +137,14 @@ void COctreeSceneNode::render()
 
 	const core::aabbox3d<float> &box = frust.getBoundingBox();
 
+	IRR_PROFILE(getProfiler().start(EPID_OC_CALCPOLYS));
+	
 	if (BoxBased)
 		StdOctree->calculatePolys(box);
 	else
 		StdOctree->calculatePolys(frust);
+		
+	IRR_PROFILE(getProfiler().stop(EPID_OC_CALCPOLYS));
 
 	const Octree::SIndexData* d = StdOctree->getIndexData();
 
@@ -144,28 +162,25 @@ void COctreeSceneNode::render()
 		{
 			driver->setMaterial(Materials[i]);
 
-			if (UseVBOs)
+			if (!UseVBOs || (UseVBOs && UseVisibilityAndVBOs))
 			{
-				if (UseVisibilityAndVBOs)
-				{
-					scene::IIndexBuffer* oldBuffer = StdMeshes[i]->getIndexBuffer();
-					oldBuffer->grab();
+				scene::IIndexBuffer* oldBuffer = StdMeshes[i]->getIndexBuffer();
+				oldBuffer->grab();
 
-					StdMeshes[i]->setIndexBuffer(d[i].IndexBuffer);
-					StdMeshes[i]->setDirty(scene::EBT_INDEX);
+				StdMeshes[i]->setIndexBuffer(d[i].IndexBuffer);
+				StdMeshes[i]->setDirty(scene::EBT_INDEX);
 
-					driver->drawMeshBuffer ( StdMeshes[i] );
+				driver->drawMeshBuffer ( StdMeshes[i] );
 
-					StdMeshes[i]->setIndexBuffer(oldBuffer);
-					oldBuffer->drop();
+				StdMeshes[i]->setIndexBuffer(oldBuffer);
+				oldBuffer->drop();
 
-					StdMeshes[i]->setDirty(scene::EBT_INDEX);
-				}
-				else
-					driver->drawMeshBuffer ( StdMeshes[i] );
+				StdMeshes[i]->setDirty(scene::EBT_INDEX);
 			}
 			else
-				driver->drawIndexedTriangleList(false, StdMeshes[i]->getVertexBuffer(), false, d[i].IndexBuffer, d[i].CurrentSize / 3);
+			{
+				driver->drawMeshBuffer ( StdMeshes[i] );
+			}
 		}
 	}
 
@@ -264,15 +279,37 @@ bool COctreeSceneNode::createTree(IMesh* mesh)
 
 		for ( i=0; i < mesh->getMeshBufferCount(); ++i)
 		{
-			IMeshBuffer* b = mesh->getMeshBuffer(i);
+			const scene::IMeshManipulator* meshManipulator = SceneManager->getMeshManipulator();
 
-			if (b->getVertexBuffer()->getVertexCount() && b->getIndexBuffer()->getIndexCount())
+			IMeshBuffer* meshBuffer = mesh->getMeshBuffer(i);
+			IMeshBuffer* nchunk = StdMeshes[i];
+
+			// copy vertices
+
+			video::IVertexDescriptor* srcDescriptor = meshBuffer->getVertexDescriptor();
+			video::IVertexDescriptor* dstDescriptor = nchunk->getVertexDescriptor();
+			const u32 vbCount = meshBuffer->getVertexBufferCount();
+
+			for (u32 j = 0; j < vbCount; ++j)
+				meshManipulator->copyVertices(meshBuffer->getVertexBuffer(j), j, srcDescriptor, nchunk->getVertexBuffer(j), j, dstDescriptor, true);
+
+			// copy indices
+
+			scene::IIndexBuffer* srcIndexBuffer = meshBuffer->getIndexBuffer();
+			scene::IIndexBuffer* dstIndexBuffer = nchunk->getIndexBuffer();
+			meshManipulator->copyIndices(srcIndexBuffer, dstIndexBuffer);
+
+			// copy material
+
+			Materials.push_back(meshBuffer->getMaterial());
+			StdMeshesMatID.push_back(Materials.size() - 1);
+
+			// others
+
+			polyCount += dstIndexBuffer->getIndexCount();
+
+			if (UseVBOs)
 			{
-				Materials.push_back(b->getMaterial());
-
-				IMeshBuffer* nchunk = StdMeshes[i];
-				StdMeshesMatID.push_back(Materials.size() - 1);
-
 				if (UseVisibilityAndVBOs)
 				{
 					nchunk->setHardwareMappingHint(scene::EHM_STATIC, scene::EBT_VERTEX);
@@ -280,14 +317,10 @@ bool COctreeSceneNode::createTree(IMesh* mesh)
 				}
 				else
 					nchunk->setHardwareMappingHint(scene::EHM_STATIC);
-
-				SceneManager->getMeshManipulator()->copyVertices(b->getVertexBuffer(), nchunk->getVertexBuffer(), 0, 0, true);
-
-				polyCount += b->getIndexBuffer()->getIndexCount();
-				nchunk->getIndexBuffer()->reallocate(b->getIndexBuffer()->getIndexCount());
-
-				for (u32 v=0; v<b->getIndexBuffer()->getIndexCount(); ++v)
-					nchunk->getIndexBuffer()->addIndex(b->getIndexBuffer()->getIndex(v));
+			}
+			else
+			{
+				nchunk->setHardwareMappingHint(scene::EHM_NEVER);
 			}
 		}
 

@@ -2,7 +2,7 @@
 // This file is part of the "Irrlicht Engine".
 // For conditions of distribution and use, see copyright notice in irrlicht.h
 
-#include "IrrCompileConfig.h" 
+#include "IrrCompileConfig.h"
 
 #ifdef _IRR_COMPILE_WITH_PLY_WRITER_
 
@@ -48,9 +48,9 @@ bool CPLYMeshWriter::writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 fla
 	os::Printer::log("Writing mesh", file->getFileName());
 
 	// write PLY header
-	core::stringc header = 
+	core::stringc header =
         	"ply\n"
-		"format ascii 1.0\n" 
+		"format ascii 1.0\n"
 		"comment Irrlicht Engine ";
 	header +=  IRRLICHT_SDK_VERSION;
 
@@ -92,7 +92,7 @@ bool CPLYMeshWriter::writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 fla
 
 	header += "element face ";
 	header += TriangleCount;
-	header += "\n" 
+	header += "\n"
 		"property list uchar int vertex_indices\n"
 		"end_header\n";
 
@@ -143,11 +143,11 @@ bool CPLYMeshWriter::writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 fla
 //			video::SColor &col = ( (video::S3DVertex*)buf )->Color;
 
 			// x y z nx ny nz red green blue alpha u v [u1 v1 | tx ty tz]\n
-			snprintf(outLine, 1024, 
-				"%f %f %f %f %f %f\n",// %u %u %u %u %f %f\n", 
+			snprintf(outLine, 1024,
+				"%f %f %f %f %f %f\n",// %u %u %u %u %f %f\n",
 				pos.X, pos.Z, pos.Y, // Y and Z are flipped
-				n.X, n.Z, n.Y); 
-				/*col.getRed(), col.getGreen(), col.getBlue(), col.getAlpha(), 
+				n.X, n.Z, n.Y);
+				/*col.getRed(), col.getGreen(), col.getBlue(), col.getAlpha(),
 				tc.X, tc.Y);*/
 
 			// write the line
@@ -165,9 +165,9 @@ bool CPLYMeshWriter::writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 fla
 		for (u32 j=0; j < mb->getIndexBuffer()->getIndexCount(); j+=3)
 		{
 			// y and z are flipped so triangles are reversed
-			u32 a=StartOffset, 
-			    b=StartOffset, 
-			    c=StartOffset;
+			u32 a=StartOffset;
+			u32 b=StartOffset;
+			u32 c=StartOffset;
 
 			a += mb->getIndexBuffer()->getIndex(j+0);
 			c += mb->getIndexBuffer()->getIndex(j+1);
@@ -184,8 +184,6 @@ bool CPLYMeshWriter::writeMesh(io::IWriteFile* file, scene::IMesh* mesh, s32 fla
 	}
 
 	// all done!
-	
-
 	return true;
 }
 

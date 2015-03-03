@@ -9,6 +9,7 @@
 #ifdef _IRR_COMPILE_WITH_CSM_LOADER_
 
 #include "CCSMLoader.h"
+#include "CMeshTextureLoader.h"
 #include "os.h"
 #include "IFileSystem.h"
 #include "IReadFile.h"
@@ -359,10 +360,11 @@ namespace scene
 	CCSMLoader::CCSMLoader(scene::ISceneManager* manager, io::IFileSystem* fs)
 		: FileSystem(fs), SceneManager(manager)
 	{
-
 		#ifdef _DEBUG
 		setDebugName("CCSMLoader");
 		#endif
+
+		TextureLoader = new CMeshTextureLoader( FileSystem, SceneManager->getVideoDriver() );
 	}
 
 
@@ -377,6 +379,9 @@ namespace scene
 	//! creates/loads an animated mesh from the file.
 	IAnimatedMesh* CCSMLoader::createMesh(io::IReadFile* file)
 	{
+		if ( getMeshTextureLoader() )
+			getMeshTextureLoader()->setMeshFile(file);
+
 		scene::IMesh* m = createCSMMesh(file);
 
 		if (!m)
@@ -400,16 +405,20 @@ namespace scene
 		CSMFile csmFile;
 		csmFile.load(&reader);
 
-		return createIrrlichtMesh(&csmFile,
-			SceneManager->getParameters()->getAttributeAsString(CSM_TEXTURE_PATH),
-			file->getFileName());
+		return createIrrlichtMesh(&csmFile, file->getFileName());
 	}
 
 
-	scene::IMesh* CCSMLoader::createIrrlichtMesh(const CSMFile* csmFile,
-		const core::stringc& textureRoot, const io::path& lmprefix)
+	scene::IMesh* CCSMLoader::createIrrlichtMesh(const CSMFile* csmFile, const io::path& lmprefix)
 	{
+		if ( getMeshTextureLoader() )
+		{
+			if ( SceneManager->getParameters()->existsAttribute(CSM_TEXTURE_PATH) )
+				getMeshTextureLoader()->setTexturePath( SceneManager->getParameters()->getAttributeAsString(CSM_TEXTURE_PATH) );
+		}
+		
 		scene::SMesh *mesh = new scene::SMesh();
+
 		video::IVideoDriver* driver = SceneManager->getVideoDriver();
 
 		for(u32 l = 0; l<csmFile->getLightMapCount(); l++)
@@ -438,41 +447,20 @@ namespace scene
 			{
 				const Surface* surface = mshPtr->getSurfaceAt(s);
 
-				core::stringc texName;
-			       	if (textureRoot.size())
-				{
-					texName += textureRoot;
-					texName += "/";
-				}
-				texName+= surface->getTextureName();
+				video::ITexture* texture = getMeshTextureLoader() ? getMeshTextureLoader()->getTexture(surface->getTextureName()) : NULL;
 
-				video::ITexture* texture = 0;
-				if (texName.size())
-				{
-					if (FileSystem->existFile(texName))
-						texture = driver->getTexture(texName);
-					else if (FileSystem->existFile(surface->getTextureName()))
-						texture = driver->getTexture(surface->getTextureName());
-					else if (FileSystem->existFile(FileSystem->getFileBasename(surface->getTextureName())))
-						texture = driver->getTexture(FileSystem->getFileBasename(surface->getTextureName()));
-					else if (FileSystem->existFile(FileSystem->getFileDir(lmprefix)+"/"+surface->getTextureName()))
-						texture = driver->getTexture(FileSystem->getFileDir(lmprefix)+"/"+surface->getTextureName());
-					else
-						texture = driver->getTexture(FileSystem->getFileDir(lmprefix)+"/"+FileSystem->getFileBasename(surface->getTextureName()));
-				}
-
-				//material
+				// same lightmap name as above where they are created
 				io::path lmapName = lmprefix;
 				lmapName += "LMAP_";
 				lmapName += io::path(surface->getLightMapId());
 
 				CMeshBuffer<video::S3DVertex2TCoords>* buffer = new CMeshBuffer<video::S3DVertex2TCoords>(SceneManager->getVideoDriver()->getVertexDescriptor(1));
-				buffer->Material.setTexture(0, texture);
+				buffer->getMaterial().setTexture(0, texture);
 				if (surface->getLightMapId())
 				{
-					buffer->Material.setTexture(1, driver->getTexture(lmapName));
-					buffer->Material.Lighting = false;
-					buffer->Material.MaterialType = video::EMT_LIGHTMAP_ADD;
+					buffer->getMaterial().setTexture(1, driver->getTexture(lmapName));
+					buffer->getMaterial().Lighting = false;
+					buffer->getMaterial().MaterialType = video::EMT_LIGHTMAP_ADD;
 				}
 
 				buffer->getVertexBuffer()->reallocate(surface->getVertexCount());

@@ -665,7 +665,7 @@ void CColladaMeshWriter::writeNodeCameras(irr::scene::ISceneNode * node)
 			irr::f32 xmag = 2.f/projMat[0];
 			irr::f32 ymag = 2.f/projMat[5];
 
-			// Note that Irrlicht camera does not update near/far when setting the projection matrix, 
+			// Note that Irrlicht camera does not update near/far when setting the projection matrix,
 			// so we have to calculate that here (at least currently - maybe camera code will be updated at some time).
 			irr::f32 nearMinusFar = -1.f/projMat[10];
 			irr::f32 zNear = projMat[14]*nearMinusFar;
@@ -755,7 +755,7 @@ void CColladaMeshWriter::writeSceneNode(irr::scene::ISceneNode * node )
 		// node to do that.
 
 		// Note: We can't use rotations for the camera as Irrlicht does not regard the up-vector in rotations so far.
-		// We could maybe use projection matrices, but avoiding them might allow us to get rid of some DummyTransformationSceneNodes on 
+		// We could maybe use projection matrices, but avoiding them might allow us to get rid of some DummyTransformationSceneNodes on
 		// import in the future. So that's why we use the lookat element instead.
 
 		ICameraSceneNode * camNode = static_cast<ICameraSceneNode*>(node);
@@ -1466,11 +1466,11 @@ void CColladaMeshWriter::writeMeshGeometry(const irr::core::stringw& meshname, s
 	{
 		totalVertexCount += mesh->getMeshBuffer(i)->getVertexBuffer()->getVertexCount();
 
-		if (mesh->getMeshBuffer(i)->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_TEXCOORD1))
+		if (mesh->getMeshBuffer(i)->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_TEXCOORD1))
 			totalTCoords2Count += mesh->getMeshBuffer(i)->getVertexBuffer()->getVertexCount();
 
 		if (!needsTangents)
-			needsTangents = mesh->getMeshBuffer(i)->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_TANGENT) != 0;
+			needsTangents = mesh->getMeshBuffer(i)->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_TANGENT) != 0;
 	}
 
 	SComponentGlobalStartPos* globalIndices = new SComponentGlobalStartPos[mesh->getMeshBufferCount()];
@@ -1758,7 +1758,7 @@ void CColladaMeshWriter::writeMeshGeometry(const irr::core::stringw& meshname, s
 				scene::IMeshBuffer* buffer = mesh->getMeshBuffer(i);
 				u32 vertexCount = buffer->getVertexBuffer()->getVertexCount();
 
-				if (buffer->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_TEXCOORD1))
+				if (buffer->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_TEXCOORD1))
 				{
 					globalIndices[i].TCoord1StartIndex = 0;
 
@@ -1849,7 +1849,7 @@ void CColladaMeshWriter::writeMeshGeometry(const irr::core::stringw& meshname, s
 		Writer->writeElement(L"input", true, L"semantic", L"NORMAL", L"source", toRef(meshNormalId).c_str(), L"offset", L"2");
 		Writer->writeLineBreak();
 
-		bool has2ndTexCoords = buffer->getVertexBuffer()->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_TEXCOORD1) != 0;
+		bool has2ndTexCoords = buffer->getVertexDescriptor()->getAttributeBySemantic(video::EVAS_TEXCOORD1) != 0;
 		if (has2ndTexCoords)
 		{
 			// TODO: when working on second uv-set - my suspicion is that this one should be called "TEXCOORD2"

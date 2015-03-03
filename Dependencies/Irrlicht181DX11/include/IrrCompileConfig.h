@@ -6,12 +6,12 @@
 
 //! Irrlicht SDK Version
 #define IRRLICHT_VERSION_MAJOR 1
-#define IRRLICHT_VERSION_MINOR 8
+#define IRRLICHT_VERSION_MINOR 9
 #define IRRLICHT_VERSION_REVISION 0
 // This flag will be defined only in SVN, the official release code will have
 // it undefined
-//#define IRRLICHT_VERSION_SVN -alpha
-#define IRRLICHT_SDK_VERSION "1.8.0"
+#define IRRLICHT_VERSION_SVN alpha
+#define IRRLICHT_SDK_VERSION "1.9.0"
 
 #include <stdio.h> // TODO: Although included elsewhere this is required at least for mingw
 
@@ -96,6 +96,13 @@
 #define _IRR_COMPILE_WITH_OSX_DEVICE_
 #endif
 
+#if defined(__SVR4) && defined(__sun)
+#define _IRR_SOLARIS_PLATFORM_
+#if defined(__sparc)
+	#define __BIG_ENDIAN__
+#endif
+#endif
+
 #if !defined(_IRR_WINDOWS_API_) && !defined(_IRR_OSX_PLATFORM_)
 #ifndef _IRR_SOLARIS_PLATFORM_
 #define _IRR_LINUX_PLATFORM_
@@ -115,11 +122,6 @@
 //! Maximum number of texture an SMaterial can have, up to 8 are supported by Irrlicht.
 #define _IRR_MATERIAL_MAX_TEXTURES_ 8
 
-#define _IRR_COMPILE_WITH_MATERIAL_NAME_
-#ifdef NO_IRR_COMPILE_WITH_MATERIAL_NAME_
-#undef _IRR_COMPILE_WITH_MATERIAL_NAME_
-#endif
-
 //! Whether to support XML and XML-based formats (irrmesh, collada...)
 #define _IRR_COMPILE_WITH_XML_
 #ifdef NO_IRR_COMPILE_WITH_XML_
@@ -131,6 +133,15 @@
 //#define _IRR_COMPILE_WITH_LEAK_HUNTER_
 #ifdef NO_IRR_COMPILE_WITH_LEAK_HUNTER_
 #undef _IRR_COMPILE_WITH_LEAK_HUNTER_
+#endif
+
+//! Enable profiling information in the engine
+/** NOTE: The profiler itself always exists and can be used by applications.
+This define is about the engine creating profile data
+while it runs and enabling it will slow down the engine. */
+//#define _IRR_COMPILE_WITH_PROFILING_
+#ifdef NO_IRR_COMPILE_WITH_PROFILING_
+#undef _IRR_COMPILE_WITH_PROFILING_
 #endif
 
 //! Define _IRR_COMPILE_WITH_DIRECT3D_8_ and _IRR_COMPILE_WITH_DIRECT3D_9_ to
@@ -155,6 +166,10 @@ headers, e.g. Summer 2004.  This is a Microsoft issue, not an Irrlicht one.
 If not defined, Windows Multimedia library is used, which offers also broad support for joystick devices. */
 #define _IRR_COMPILE_WITH_DIRECTINPUT_JOYSTICK_
 #ifdef NO_IRR_COMPILE_WITH_DIRECTINPUT_JOYSTICK_
+#undef _IRR_COMPILE_WITH_DIRECTINPUT_JOYSTICK_
+#endif
+// can't get this to compile currently under borland, can be removed if someone has a better solution
+#if defined(__BORLANDC__)
 #undef _IRR_COMPILE_WITH_DIRECTINPUT_JOYSTICK_
 #endif
 
@@ -325,7 +340,6 @@ to provide the user with the proper DLL. That's why it's disabled by default. */
 //! Define _IRR_USE_NVIDIA_PERFHUD_ to opt-in to using the nVidia PerHUD tool
 /** Enable, by opting-in, to use the nVidia PerfHUD performance analysis driver
 tool <http://developer.nvidia.com/object/nvperfhud_home.html>. */
-//#define _IRR_USE_NVIDIA_PERFHUD_
 #undef _IRR_USE_NVIDIA_PERFHUD_
 
 //! Define one of the three setting for Burning's Video Software Rasterizer
@@ -390,7 +404,7 @@ B3D, MS3D or X meshes */
 #ifdef NO_IRR_COMPILE_WITH_OGRE_LOADER_
 #undef _IRR_COMPILE_WITH_OGRE_LOADER_
 #endif
-#endif	// _IRR_COMPILE_WITH_SKINNED_MESH_SUPPORT_
+#endif // _IRR_COMPILE_WITH_SKINNED_MESH_SUPPORT_
 
 //! Define _IRR_COMPILE_WITH_IRR_MESH_LOADER_ if you want to load Irrlicht Engine .irrmesh files
 #define _IRR_COMPILE_WITH_IRR_MESH_LOADER_
@@ -535,14 +549,24 @@ B3D, MS3D or X meshes */
 #ifdef NO_IRR_COMPILE_WITH_PSD_LOADER_
 #undef _IRR_COMPILE_WITH_PSD_LOADER_
 #endif
-//! Define _IRR_COMPILE_WITH_DDS_LOADER_ if you want to load .dds files
+//! Define _IRR_COMPILE_WITH_DDS_LOADER_ if you want to load compressed .dds files
+// Patent problem isn't related to this loader.
+#define _IRR_COMPILE_WITH_DDS_LOADER_
+#ifdef NO_IRR_COMPILE_WITH_DDS_LOADER_
+#undef _IRR_COMPILE_WITH_DDS_LOADER_
+#endif
+//! Define _IRR_COMPILE_WITH_DDS_DECODER_LOADER_ if you want to load .dds files
+//! loader will decompress these files and will send to the memory as uncompressed files.
 // Outcommented because
 // a) it doesn't compile on 64-bit currently
 // b) anyone enabling it should be aware that S3TC compression algorithm which might be used in that loader
 // is patented in the US by S3 and they do collect license fees when it's used in applications.
 // So if you are unfortunate enough to develop applications for US market and their broken patent system be careful.
-// #define _IRR_COMPILE_WITH_DDS_LOADER_
-#ifdef NO_IRR_COMPILE_WITH_DDS_LOADER_
+// #define _IRR_COMPILE_WITH_DDS_DECODER_LOADER_
+#ifdef NO_IRR_COMPILE_WITH_DDS_DECODER_LOADER_
+#undef _IRR_COMPILE_WITH_DDS_DECODER_LOADER_
+#endif
+#ifdef _IRR_COMPILE_WITH_DDS_DECODER_LOADER_
 #undef _IRR_COMPILE_WITH_DDS_LOADER_
 #endif
 //! Define _IRR_COMPILE_WITH_TGA_LOADER_ if you want to load .tga files
@@ -692,6 +716,27 @@ precision will be lower but speed higher. currently X86 only
 	#endif
 #endif
 
+//! Enable SSE optimisation for f32 matrices and f32 vectors.
+// #define _IRR_SSE
+#ifdef NO_IRR_SSE
+#undef _IRR_SSE
+#endif
+
+//! Align macros required for SSE.
+#ifdef _IRR_SSE
+	#ifdef _IRR_WINDOWS_API_
+		#if defined(__MINGW32__) || (defined (_MSC_VER) && _MSC_VER < 1300)
+			#define _IRR_ALIGN16(x) x
+		#else
+			#define _IRR_ALIGN16(x) __declspec(align(16)) x
+		#endif
+	#else
+		#define _IRR_ALIGN16(x) x __attribute__ ((aligned(16)))
+	#endif
+#else
+	#define _IRR_ALIGN16(x) x
+#endif
+
 // Some cleanup and standard stuff
 
 #ifdef _IRR_WINDOWS_API_
@@ -801,10 +846,6 @@ precision will be lower but speed higher. currently X86 only
 	#undef _IRR_WCHAR_FILESYSTEM
 #endif
 
-#if defined(__sparc__) || defined(__sun__)
-#define __BIG_ENDIAN__
-#endif
-
 #if defined(_IRR_SOLARIS_PLATFORM_)
 	#undef _IRR_COMPILE_WITH_JOYSTICK_EVENTS_
 #endif
@@ -821,6 +862,37 @@ precision will be lower but speed higher. currently X86 only
 	#undef _IRR_COMPILE_WITH_IRR_WRITER_
 	#undef _IRR_COMPILE_WITH_COLLADA_WRITER_
 	#undef _IRR_COMPILE_WITH_COLLADA_LOADER_
+#endif
+
+#if defined(__BORLANDC__)
+	#include <tchar.h>
+
+	// Borland 5.5.1 does not have _strcmpi defined
+	#if __BORLANDC__ == 0x551
+	//    #define _strcmpi strcmpi
+		#undef _tfinddata_t
+		#undef _tfindfirst
+		#undef _tfindnext
+
+		#define _tfinddata_t __tfinddata_t
+		#define _tfindfirst  __tfindfirst
+		#define _tfindnext   __tfindnext
+		typedef long intptr_t;
+	#endif
+#endif
+
+#ifdef _DEBUG
+	//! A few attributes are written in CSceneManager when _IRR_SCENEMANAGER_DEBUG is enabled
+	// NOTE: Those attributes were used always until 1.8.0 and became a global define for 1.8.1
+	// which is only enabled in debug because it had a large (sometimes >5%) impact on speed.
+	// A better solution in the long run is to break the interface and remove _all_ attribute
+	// access in functions like CSceneManager::drawAll and instead put that information in some
+	// own struct/class or in CSceneManager.
+	// See http://irrlicht.sourceforge.net/forum/viewtopic.php?f=2&t=48211 for the discussion.
+	#define _IRR_SCENEMANAGER_DEBUG
+	#ifdef NO_IRR_SCENEMANAGER_DEBUG
+		#undef _IRR_SCENEMANAGER_DEBUG
+	#endif
 #endif
 
 #endif // __IRR_COMPILE_CONFIG_H_INCLUDED__

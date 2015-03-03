@@ -16,36 +16,28 @@ namespace scene
 	class CVertexBuffer : public IVertexBuffer
 	{
 	public:
-		CVertexBuffer(video::IVertexDescriptor* vertexDescriptor) : Vertices(0), vertexDescriptor(vertexDescriptor), HardwareMappingHint(EHM_NEVER), ChangedID(1)
+		CVertexBuffer() : HardwareMappingHint(EHM_NEVER), ChangedID(1)
 		{
 #ifdef _DEBUG
 			setDebugName("CVertexBuffer");
 #endif
-			if (vertexDescriptor)
-				vertexDescriptor->grab();
 		}
 
-		CVertexBuffer(const CVertexBuffer& vertexBuffer) : Vertices(0), ChangedID(1)
+		CVertexBuffer(const CVertexBuffer& vertexBuffer) : HardwareMappingHint(EHM_NEVER), ChangedID(1)
 		{
-			vertexDescriptor = vertexBuffer.getVertexDescriptor();
+			HardwareMappingHint = vertexBuffer.HardwareMappingHint;
 
-			if (vertexDescriptor)
-				vertexDescriptor->grab();
+			const u32 vbCount = vertexBuffer.Vertices.size();
 
-			HardwareMappingHint = vertexBuffer.getHardwareMappingHint();
+			Vertices.reallocate(vbCount);
 
-			Vertices.reallocate(vertexBuffer.getVertexCount());
-
-			for (u32 i = 0; i < vertexBuffer.getVertexCount(); ++i)
+			for (u32 i = 0; i < vbCount; ++i)
 				Vertices.push_back(vertexBuffer.getVertex(i));
 		}
 
 		virtual ~CVertexBuffer()
 		{
 			Vertices.clear();
-
-			if (vertexDescriptor)
-				vertexDescriptor->drop();
 		}
 
 		virtual void clear()
@@ -95,27 +87,6 @@ namespace scene
 			}
 		}
 
-		virtual video::IVertexDescriptor* getVertexDescriptor() const
-		{
-			return vertexDescriptor;
-		}
-
-		virtual bool setVertexDescriptor(video::IVertexDescriptor* vtxDescriptor)
-		{
-			if (vtxDescriptor && vtxDescriptor != vertexDescriptor)
-			{
-				if (vertexDescriptor)
-					vertexDescriptor->drop();
-
-				vertexDescriptor = vtxDescriptor;
-				vertexDescriptor->grab();
-
-				return true;
-			}
-
-			return false;
-		}
-
 		virtual E_HARDWARE_MAPPING getHardwareMappingHint() const
 		{
 			return HardwareMappingHint;
@@ -158,11 +129,6 @@ namespace scene
 			return Vertices.size();
 		}
 
-		virtual video::E_VERTEX_TYPE getVertexType() const
-		{
-			return vertexDescriptor ? (video::E_VERTEX_TYPE)vertexDescriptor->getID() : (video::E_VERTEX_TYPE) - 1;
-		}
-
 		virtual u32 getVertexSize() const
 		{
 			return sizeof(T);
@@ -179,6 +145,9 @@ namespace scene
 
 		virtual void setDirty()
 		{
+			if (HardwareBuffer)
+				HardwareBuffer->requestUpdate();
+
 			++ChangedID;
 		}
 
@@ -188,13 +157,11 @@ namespace scene
 		}
 
 	protected:
-		core::array<T> Vertices;
-
-		video::IVertexDescriptor* vertexDescriptor;
-
 		E_HARDWARE_MAPPING HardwareMappingHint;
 
 		u32 ChangedID;
+
+		core::array<T> Vertices;
 	};
 
 	typedef CVertexBuffer<video::S3DVertex> SVertexBuffer;

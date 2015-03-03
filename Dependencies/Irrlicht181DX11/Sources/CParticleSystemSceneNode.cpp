@@ -34,13 +34,17 @@ CParticleSystemSceneNode::CParticleSystemSceneNode(bool createDefaultEmitter,
 	const core::vector3df& scale)
 	: IParticleSystemSceneNode(parent, mgr, id, position, rotation, scale),
 	Emitter(0), ParticleSize(core::dimension2d<f32>(5.0f, 5.0f)), LastEmitTime(0),
-	MaxParticles(0xffff), Buffer(0), ParticlesAreGlobal(true)
+	MeshBuffer(0), VertexBuffer(0), IndexBuffer(0), ParticlesAreGlobal(true)
 {
 	#ifdef _DEBUG
 	setDebugName("CParticleSystemSceneNode");
 	#endif
 
-	Buffer = new CMeshBuffer<video::S3DVertex>(mgr->getVideoDriver()->getVertexDescriptor(0));
+	MeshBuffer = new CMeshBuffer<video::S3DVertex>(mgr->getVideoDriver()->getVertexDescriptor(0));
+
+	VertexBuffer = MeshBuffer->getVertexBuffer(0);
+	IndexBuffer = MeshBuffer->getIndexBuffer();
+
 	if (createDefaultEmitter)
 	{
 		IParticleEmitter* e = createBoxEmitter();
@@ -55,8 +59,9 @@ CParticleSystemSceneNode::~CParticleSystemSceneNode()
 {
 	if (Emitter)
 		Emitter->drop();
-	if (Buffer)
-		Buffer->drop();
+
+	if (MeshBuffer)
+		MeshBuffer->drop();
 
 	removeAllAffectors();
 }
@@ -112,7 +117,7 @@ void CParticleSystemSceneNode::removeAllAffectors()
 //! Returns the material based on the zero based index i.
 video::SMaterial& CParticleSystemSceneNode::getMaterial(u32 i)
 {
-	return Buffer->Material;
+	return MeshBuffer->getMaterial();
 }
 
 
@@ -332,7 +337,7 @@ void CParticleSystemSceneNode::render()
 	reallocateBuffers();
 
 	// create particle vertex data
-	video::S3DVertex* Vertices = static_cast<video::S3DVertex*>(Buffer->getVertexBuffer()->getVertices());
+	video::S3DVertex* vertices = static_cast<video::S3DVertex*>(VertexBuffer->getVertices());
 
 	s32 idx = 0;
 	for (u32 i=0; i<Particles.size(); ++i)
@@ -358,24 +363,26 @@ void CParticleSystemSceneNode::render()
 			const core::vector3df vertical ( m[1] * f, m[5] * f, m[9] * f );
 		#endif
 
-		Vertices[0+idx].Pos = particle.pos + horizontal + vertical;
-		Vertices[0+idx].Color = particle.color;
-		Vertices[0+idx].Normal = view;
+		vertices[0+idx].Pos = particle.pos + horizontal + vertical;
+		vertices[0+idx].Color = particle.color;
+		vertices[0+idx].Normal = view;
 
-		Vertices[1+idx].Pos = particle.pos + horizontal - vertical;
-		Vertices[1+idx].Color = particle.color;
-		Vertices[1+idx].Normal = view;
+		vertices[1+idx].Pos = particle.pos + horizontal - vertical;
+		vertices[1+idx].Color = particle.color;
+		vertices[1+idx].Normal = view;
 
-		Vertices[2+idx].Pos = particle.pos - horizontal - vertical;
-		Vertices[2+idx].Color = particle.color;
-		Vertices[2+idx].Normal = view;
+		vertices[2+idx].Pos = particle.pos - horizontal - vertical;
+		vertices[2+idx].Color = particle.color;
+		vertices[2+idx].Normal = view;
 
-		Vertices[3+idx].Pos = particle.pos - horizontal + vertical;
-		Vertices[3+idx].Color = particle.color;
-		Vertices[3+idx].Normal = view;
+		vertices[3+idx].Pos = particle.pos - horizontal + vertical;
+		vertices[3+idx].Color = particle.color;
+		vertices[3+idx].Normal = view;
 
 		idx +=4;
 	}
+
+	VertexBuffer->setDirty();
 
 	// render all
 	core::matrix4 mat;
@@ -383,9 +390,8 @@ void CParticleSystemSceneNode::render()
 		mat.setTranslation(AbsoluteTransformation.getTranslation());
 	driver->setTransform(video::ETS_WORLD, mat);
 
-	driver->setMaterial(Buffer->Material);
-
-	driver->drawVertexPrimitiveList(false, Buffer->getVertexBuffer(), false, Buffer->getIndexBuffer(), Particles.size()*2, EPT_TRIANGLES);
+	driver->setMaterial(MeshBuffer->getMaterial());
+	driver->drawMeshBuffer(MeshBuffer);
 
 
 	// for debug purposes only:
@@ -395,7 +401,7 @@ void CParticleSystemSceneNode::render()
 		video::SMaterial deb_m;
 		deb_m.Lighting = false;
 		driver->setMaterial(deb_m);
-		driver->draw3DBox(Buffer->BoundingBox, video::SColor(0,255,255,255));
+		driver->draw3DBox(MeshBuffer->getBoundingBox(), video::SColor(0,255,255,255));
 	}
 }
 
@@ -403,7 +409,7 @@ void CParticleSystemSceneNode::render()
 //! returns the axis aligned bounding box of this node
 const core::aabbox3d<f32>& CParticleSystemSceneNode::getBoundingBox() const
 {
-	return Buffer->getBoundingBox();
+	return MeshBuffer->getBoundingBox();
 }
 
 
@@ -412,6 +418,7 @@ void CParticleSystemSceneNode::doParticleSystem(u32 time)
 	if (LastEmitTime==0)
 	{
 		LastEmitTime = time;
+		LastAbsoluteTransformation = AbsoluteTransformation;
 		return;
 	}
 
@@ -419,9 +426,12 @@ void CParticleSystemSceneNode::doParticleSystem(u32 time)
 	u32 timediff = time - LastEmitTime;
 	LastEmitTime = time;
 
+
+	bool visible = isVisible();
+	int behavior = getParticleBehavior();
 	// run emitter
 
-	if (Emitter && IsVisible)
+	if (Emitter && (visible || behavior & EPB_INVISIBLE_EMITTING) )
 	{
 		SParticle* array = 0;
 		s32 newParticles = Emitter->emitt(now, timediff, array);
@@ -429,66 +439,115 @@ void CParticleSystemSceneNode::doParticleSystem(u32 time)
 		if (newParticles && array)
 		{
 			s32 j=Particles.size();
-			if (newParticles > 16250-j)
+			if (newParticles > 16250-j)	// avoid having more than 64k vertices in the scenenode
 				newParticles=16250-j;
 			Particles.set_used(j+newParticles);
 			for (s32 i=j; i<j+newParticles; ++i)
 			{
 				Particles[i]=array[i-j];
-				AbsoluteTransformation.rotateVect(Particles[i].startVector);
-				if (ParticlesAreGlobal)
-					AbsoluteTransformation.transformVect(Particles[i].pos);
+
+				if ( ParticlesAreGlobal && behavior & EPB_EMITTER_FRAME_INTERPOLATION )
+				{
+					// Interpolate between current node transformations and last ones.
+					// (Lazy solution - calculating twice and interpolating results)
+					f32 randInterpolate = (f32)(os::Randomizer::rand() % 101) / 100.f;	// 0 to 1
+					core::vector3df posNow(Particles[i].pos);
+					core::vector3df posLast(Particles[i].pos);
+
+					AbsoluteTransformation.transformVect(posNow);
+					LastAbsoluteTransformation.transformVect(posLast);
+					Particles[i].pos = posNow.getInterpolated(posLast, randInterpolate);
+
+					if ( !(behavior & EPB_EMITTER_VECTOR_IGNORE_ROTATION) )
+					{
+						core::vector3df vecNow(Particles[i].startVector);
+						core::vector3df vecOld(Particles[i].startVector);
+						AbsoluteTransformation.rotateVect(vecNow);
+						LastAbsoluteTransformation.rotateVect(vecOld);
+						Particles[i].startVector = vecNow.getInterpolated(vecOld, randInterpolate);
+
+						vecNow = Particles[i].vector;
+						vecOld = Particles[i].vector;
+						AbsoluteTransformation.rotateVect(vecNow);
+						LastAbsoluteTransformation.rotateVect(vecOld);
+						Particles[i].vector = vecNow.getInterpolated(vecOld, randInterpolate);
+					}
+				}
+				else
+				{
+					if (ParticlesAreGlobal)
+						AbsoluteTransformation.transformVect(Particles[i].pos);
+
+					if ( !(behavior & EPB_EMITTER_VECTOR_IGNORE_ROTATION) )
+					{
+						if (!ParticlesAreGlobal)
+							AbsoluteTransformation.rotateVect(Particles[i].pos);
+
+						AbsoluteTransformation.rotateVect(Particles[i].startVector);
+						AbsoluteTransformation.rotateVect(Particles[i].vector);
+					}
+				}
 			}
 		}
 	}
 
 	// run affectors
-	core::list<IParticleAffector*>::Iterator ait = AffectorList.begin();
-	for (; ait != AffectorList.end(); ++ait)
-		(*ait)->affect(now, Particles.pointer(), Particles.size());
+	if ( visible || behavior & EPB_INVISIBLE_AFFECTING )
+	{
+		core::list<IParticleAffector*>::Iterator ait = AffectorList.begin();
+		for (; ait != AffectorList.end(); ++ait)
+			(*ait)->affect(now, Particles.pointer(), Particles.size());
+	}
+
+	core::aabbox3d<f32>& boundingBox = MeshBuffer->getBoundingBox();
 
 	if (ParticlesAreGlobal)
-		Buffer->BoundingBox.reset(AbsoluteTransformation.getTranslation());
+		boundingBox.reset(AbsoluteTransformation.getTranslation());
 	else
-		Buffer->BoundingBox.reset(core::vector3df(0,0,0));
+		boundingBox.reset(core::vector3df(0, 0, 0));
 
 	// animate all particles
-	f32 scale = (f32)timediff;
-
-	for (u32 i=0; i<Particles.size();)
+	if ( visible || behavior & EPB_INVISIBLE_ANIMATING )
 	{
-		// erase is pretty expensive!
-		if (now > Particles[i].endTime)
+		f32 scale = (f32)timediff;
+
+		for (u32 i=0; i<Particles.size();)
 		{
-			// Particle order does not seem to matter.
-			// So we can delete by switching with last particle and deleting that one.
-			// This is a lot faster and speed is very important here as the erase otherwise
-			// can cause noticable freezes.
-			Particles[i] = Particles[Particles.size()-1];
-			Particles.erase( Particles.size()-1 );
-		}
-		else
-		{
-			Particles[i].pos += (Particles[i].vector * scale);
-			Buffer->BoundingBox.addInternalPoint(Particles[i].pos);
-			++i;
+			// erase is pretty expensive!
+			if (now > Particles[i].endTime)
+			{
+				// Particle order does not seem to matter.
+				// So we can delete by switching with last particle and deleting that one.
+				// This is a lot faster and speed is very important here as the erase otherwise
+				// can cause noticable freezes.
+				Particles[i] = Particles[Particles.size()-1];
+				Particles.erase( Particles.size()-1 );
+			}
+			else
+			{
+				Particles[i].pos += (Particles[i].vector * scale);
+				boundingBox.addInternalPoint(Particles[i].pos);
+				++i;
+			}
 		}
 	}
 
 	const f32 m = (ParticleSize.Width > ParticleSize.Height ? ParticleSize.Width : ParticleSize.Height) * 0.5f;
-	Buffer->BoundingBox.MaxEdge.X += m;
-	Buffer->BoundingBox.MaxEdge.Y += m;
-	Buffer->BoundingBox.MaxEdge.Z += m;
+	boundingBox.MaxEdge.X += m;
+	boundingBox.MaxEdge.Y += m;
+	boundingBox.MaxEdge.Z += m;
 
-	Buffer->BoundingBox.MinEdge.X -= m;
-	Buffer->BoundingBox.MinEdge.Y -= m;
-	Buffer->BoundingBox.MinEdge.Z -= m;
+	boundingBox.MinEdge.X -= m;
+	boundingBox.MinEdge.Y -= m;
+	boundingBox.MinEdge.Z -= m;
 
 	if (ParticlesAreGlobal)
 	{
 		core::matrix4 absinv( AbsoluteTransformation, core::matrix4::EM4CONST_INVERSE );
-		absinv.transformBoxEx(Buffer->BoundingBox);
+		absinv.transformBoxEx(boundingBox);
 	}
+
+	LastAbsoluteTransformation = AbsoluteTransformation;
 }
 
 
@@ -504,6 +563,17 @@ void CParticleSystemSceneNode::setParticlesAreGlobal(bool global)
 void CParticleSystemSceneNode::clearParticles()
 {
 	Particles.set_used(0);
+}
+
+//! Sets if the node should be visible or not.
+void CParticleSystemSceneNode::setVisible(bool isVisible)
+{
+	IParticleSystemSceneNode::setVisible(isVisible);
+	if ( !isVisible && getParticleBehavior() & EPB_CLEAR_ON_INVISIBLE )
+	{
+		clearParticles();
+		LastEmitTime = 0;
+	}
 }
 
 //! Sets the size of all particles.
@@ -522,41 +592,45 @@ void CParticleSystemSceneNode::setParticleSize(const core::dimension2d<f32> &siz
 
 void CParticleSystemSceneNode::reallocateBuffers()
 {
-	if (Particles.size() * 4 > Buffer->getVertexBuffer()->getVertexCount() ||
-			Particles.size() * 6 > Buffer->getIndexBuffer()->getIndexCount())
+	const u32 vertexCount = VertexBuffer->getVertexCount();
+	const u32 indexCount = IndexBuffer->getIndexCount();
+
+	const u32 particleVertexCount = Particles.size() * 4;
+	const u32 particleIndexCount = Particles.size() * 6;
+
+	if (particleVertexCount != vertexCount || particleIndexCount != indexCount)
 	{
-		u32 oldSize = Buffer->getVertexBuffer()->getVertexCount();
+		VertexBuffer->set_used(particleVertexCount);
 
-		Buffer->getVertexBuffer()->set_used(Particles.size() * 4);
-
-		video::S3DVertex* Vertices = static_cast<video::S3DVertex*>(Buffer->getVertexBuffer()->getVertices());
-
-		u32 i;
+		video::S3DVertex* vertices = static_cast<video::S3DVertex*>(VertexBuffer->getVertices());
 
 		// fill remaining vertices
-		for (i=oldSize; i<Buffer->getVertexBuffer()->getVertexCount(); i+=4)
+		for (u32 i = vertexCount; i < particleVertexCount; i+=4)
 		{
-			Vertices[0+i].TCoords.set(0.0f, 0.0f);
-			Vertices[1+i].TCoords.set(0.0f, 1.0f);
-			Vertices[2+i].TCoords.set(1.0f, 1.0f);
-			Vertices[3+i].TCoords.set(1.0f, 0.0f);
+			vertices[0+i].TCoords.set(0.0f, 0.0f);
+			vertices[1+i].TCoords.set(0.0f, 1.0f);
+			vertices[2+i].TCoords.set(1.0f, 1.0f);
+			vertices[3+i].TCoords.set(1.0f, 0.0f);
 		}
+
+		IndexBuffer->set_used(particleIndexCount);
 
 		// fill remaining indices
-		u32 oldIdxSize = Buffer->getIndexBuffer()->getIndexCount();
-		u32 oldvertices = oldSize;
-		Buffer->getIndexBuffer()->set_used(Particles.size() * 6);
+		u32 currentVertex = vertexCount;
 
-		for (i=oldIdxSize; i<Buffer->getIndexBuffer()->getIndexCount(); i+=6)
+		for (u32 i = indexCount; i < particleIndexCount; i+=6)
 		{
-			Buffer->getIndexBuffer()->setIndex(0+i, 0+oldvertices);
-			Buffer->getIndexBuffer()->setIndex(1+i, 2+oldvertices);
-			Buffer->getIndexBuffer()->setIndex(2+i, 1+oldvertices);
-			Buffer->getIndexBuffer()->setIndex(3+i, 0+oldvertices);
-			Buffer->getIndexBuffer()->setIndex(4+i, 3+oldvertices);
-			Buffer->getIndexBuffer()->setIndex(5+i, 2+oldvertices);
-			oldvertices += 4;
+			IndexBuffer->setIndex(0+i, 0+currentVertex);
+			IndexBuffer->setIndex(1+i, 2+currentVertex);
+			IndexBuffer->setIndex(2+i, 1+currentVertex);
+			IndexBuffer->setIndex(3+i, 0+currentVertex);
+			IndexBuffer->setIndex(4+i, 3+currentVertex);
+			IndexBuffer->setIndex(5+i, 2+currentVertex);
+
+			currentVertex += 4;
 		}
+
+		IndexBuffer->setDirty();
 	}
 }
 

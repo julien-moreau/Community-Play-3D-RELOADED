@@ -17,7 +17,7 @@ namespace scene
 	public:
 
 		//! constructor
-		CWaterSurfaceSceneNode(f32 waveHeight, f32 waveSpeed, f32 waveLength, 
+		CWaterSurfaceSceneNode(f32 waveHeight, f32 waveSpeed, f32 waveLength,
 			IMesh* mesh, ISceneNode* parent, ISceneManager* mgr,	s32 id,
 			const core::vector3df& position = core::vector3df(0,0,0),
 			const core::vector3df& rotation = core::vector3df(0,0,0),
@@ -27,22 +27,22 @@ namespace scene
 		virtual ~CWaterSurfaceSceneNode();
 
 		//! frame registration
-		virtual void OnRegisterSceneNode();
+		virtual void OnRegisterSceneNode() _IRR_OVERRIDE_;
 
 		//! animated update
-		virtual void OnAnimate(u32 timeMs);
+		virtual void OnAnimate(u32 timeMs) _IRR_OVERRIDE_;
 
 		//! Update mesh
-		virtual void setMesh(IMesh* mesh);
+		virtual void setMesh(IMesh* mesh) _IRR_OVERRIDE_;
 
 		//! Returns type of the scene node
-		virtual ESCENE_NODE_TYPE getType() const { return ESNT_WATER_SURFACE; }
+		virtual ESCENE_NODE_TYPE getType() const _IRR_OVERRIDE_ { return ESNT_WATER_SURFACE; }
 
 		//! Writes attributes of the scene node.
-		virtual void serializeAttributes(io::IAttributes* out, io::SAttributeReadWriteOptions* options) const;
+		virtual void serializeAttributes(io::IAttributes* out, io::SAttributeReadWriteOptions* options) const _IRR_OVERRIDE_;
 
 		//! Reads attributes of the scene node.
-		virtual void deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options);
+		virtual void deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options) _IRR_OVERRIDE_;
 
 	private:
 

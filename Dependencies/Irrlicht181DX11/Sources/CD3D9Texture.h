@@ -42,38 +42,17 @@ public:
 	virtual ~CD3D9Texture();
 
 	//! lock function
-	virtual void* lock(E_TEXTURE_LOCK_MODE mode=ETLM_READ_WRITE, u32 mipmapLevel=0);
+	virtual void* lock(E_TEXTURE_LOCK_MODE mode=ETLM_READ_WRITE, u32 mipmapLevel=0) _IRR_OVERRIDE_;
 
 	//! unlock function
-	virtual void unlock();
-
-	//! Returns original size of the texture.
-	virtual const core::dimension2d<u32>& getOriginalSize() const;
-
-	//! Returns (=size) of the texture.
-	virtual const core::dimension2d<u32>& getSize() const;
-
-	//! returns driver type of texture (=the driver, who created the texture)
-	virtual E_DRIVER_TYPE getDriverType() const;
-
-	//! returns color format of texture
-	virtual ECOLOR_FORMAT getColorFormat() const;
-
-	//! returns pitch of texture (in bytes)
-	virtual u32 getPitch() const;
-
-	//! returns the DIRECT3D9 Texture
-	IDirect3DBaseTexture9* getDX9Texture() const;
-
-	//! returns if texture has mipmap levels
-	bool hasMipMaps() const;
+	virtual void unlock() _IRR_OVERRIDE_;
 
 	//! Regenerates the mip map levels of the texture. Useful after locking and
 	//! modifying the texture
-	virtual void regenerateMipMapLevels(void* mipmapData=0);
+	virtual void regenerateMipMapLevels(void* mipmapData = 0) _IRR_OVERRIDE_;
 
-	//! returns if it is a render target
-	virtual bool isRenderTarget() const;
+	//! returns the DIRECT3D9 Texture
+	IDirect3DBaseTexture9* getDX9Texture() const;
 
 	//! Returns pointer to the render target surface
 	IDirect3DSurface9* getRenderTargetSurface();
@@ -94,11 +73,15 @@ private:
 
 	//! Helper function for mipmap generation.
 	void copy16BitMipMap(char* src, char* tgt,
-		s32 width, s32 height,  s32 pitchsrc, s32 pitchtgt) const;
+			const s32 srcWidth, const s32 srcHeight,
+			const s32 width, const s32 height,
+			const s32 pitchsrc, const s32 pitchtgt) const;
 
 	//! Helper function for mipmap generation.
 	void copy32BitMipMap(char* src, char* tgt,
-		s32 width, s32 height,  s32 pitchsrc, s32 pitchtgt) const;
+			const s32 srcWidth, const s32 srcHeight,
+			const s32 width, const s32 height,
+			const s32 pitchsrc, const s32 pitchtgt) const;
 
 	//! set Pitch based on the d3d format
 	void setPitch(D3DFORMAT d3dformat);
@@ -108,15 +91,10 @@ private:
 	IDirect3DSurface9* RTTSurface;
 	CD3D9Driver* Driver;
 	SDepthSurface* DepthSurface;
-	core::dimension2d<u32> TextureSize;
-	core::dimension2d<u32> ImageSize;
-	s32 Pitch;
 	u32 MipLevelLocked;
-	ECOLOR_FORMAT ColorFormat;
 
-	bool HasMipMaps;
 	bool HardwareMipMaps;
-	bool IsRenderTarget;
+	bool IsCompressed;
 };
 
 

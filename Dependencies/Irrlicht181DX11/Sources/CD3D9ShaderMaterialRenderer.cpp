@@ -130,16 +130,15 @@ void CD3D9ShaderMaterialRenderer::OnSetMaterial(const video::SMaterial& material
 			if (FAILED(pID3DDevice->SetPixelShader(PixelShader)))
 				os::Printer::log("Could not set pixel shader.", ELL_WARNING);
 		}
-
-		if (BaseMaterial)
-			BaseMaterial->OnSetMaterial(material, material, true, services);
 	}
 
-	//let callback know used material
+	services->setBasicRenderStates(material, lastMaterial, resetAllRenderstates);
+
+	if (BaseMaterial)
+        BaseMaterial->OnSetMaterial(material, lastMaterial, resetAllRenderstates, services);
+
 	if (CallBack)
 		CallBack->OnSetMaterial(material);
-
-	services->setBasicRenderStates(material, lastMaterial, resetAllRenderstates);
 }
 
 

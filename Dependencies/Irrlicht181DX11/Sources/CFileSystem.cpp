@@ -19,8 +19,10 @@
 #include "stdio.h"
 #include "os.h"
 #include "CAttributes.h"
+#include "CReadFile.h"
 #include "CMemoryFile.h"
 #include "CLimitReadFile.h"
+#include "CWriteFile.h"
 #include "irrList.h"
 
 #if defined (_IRR_WINDOWS_API_)
@@ -117,19 +119,19 @@ IReadFile* CFileSystem::createAndOpenFile(const io::path& filename)
 
 	// Create the file using an absolute path so that it matches
 	// the scheme used by CNullDriver::getTexture().
-	return createReadFile(getAbsolutePath(filename));
+	return CReadFile::createReadFile(getAbsolutePath(filename));
 }
 
 
 //! Creates an IReadFile interface for treating memory like a file.
-IReadFile* CFileSystem::createMemoryReadFile(void* memory, s32 len,
+IReadFile* CFileSystem::createMemoryReadFile(const void* memory, s32 len,
 		const io::path& fileName, bool deleteMemoryWhenDropped)
 {
 	if (!memory)
 		return 0;
 	else
-		return new CMemoryFile(memory, len, fileName, deleteMemoryWhenDropped);
-			}
+		return new CMemoryReadFile(memory, len, fileName, deleteMemoryWhenDropped);
+}
 
 
 //! Creates an IReadFile interface for reading files inside files
@@ -150,14 +152,14 @@ IWriteFile* CFileSystem::createMemoryWriteFile(void* memory, s32 len,
 	if (!memory)
 		return 0;
 	else
-		return new CMemoryFile(memory, len, fileName, deleteMemoryWhenDropped);
+		return new CMemoryWriteFile(memory, len, fileName, deleteMemoryWhenDropped);
 }
 
 
 //! Opens a file for write access.
 IWriteFile* CFileSystem::createAndWriteFile(const io::path& filename, bool append)
 {
-	return createWriteFile(filename, append);
+	return CWriteFile::createWriteFile(filename, append);
 }
 
 
@@ -593,11 +595,11 @@ bool CFileSystem::changeWorkingDirectoryTo(const io::path& newDirectory)
 		success = (_chdir(newDirectory.c_str()) == 0);
 	#endif
 #else
-    #if defined(_IRR_WCHAR_FILESYSTEM)
+	#if defined(_IRR_WCHAR_FILESYSTEM)
 		success = (_wchdir(newDirectory.c_str()) == 0);
-    #else
-        success = (chdir(newDirectory.c_str()) == 0);
-    #endif
+	#else
+		success = (chdir(newDirectory.c_str()) == 0);
+	#endif
 #endif
 	}
 
@@ -973,19 +975,19 @@ bool CFileSystem::existFile(const io::path& filename) const
 #else
 	_IRR_IMPLEMENT_MANAGED_MARSHALLING_BUGFIX;
 #if defined(_MSC_VER)
-    #if defined(_IRR_WCHAR_FILESYSTEM)
-        return (_waccess(filename.c_str(), 0) != -1);
-    #else
-        return (_access(filename.c_str(), 0) != -1);
-    #endif
+	#if defined(_IRR_WCHAR_FILESYSTEM)
+		return (_waccess(filename.c_str(), 0) != -1);
+	#else
+		return (_access(filename.c_str(), 0) != -1);
+	#endif
 #elif defined(F_OK)
-    #if defined(_IRR_WCHAR_FILESYSTEM)
-        return (_waccess(filename.c_str(), F_OK) != -1);
-    #else
-        return (access(filename.c_str(), F_OK) != -1);
+	#if defined(_IRR_WCHAR_FILESYSTEM)
+		return (_waccess(filename.c_str(), F_OK) != -1);
+	#else
+		return (access(filename.c_str(), F_OK) != -1);
 	#endif
 #else
-    return (access(filename.c_str(), 0) != -1);
+	return (access(filename.c_str(), 0) != -1);
 #endif
 #endif
 }

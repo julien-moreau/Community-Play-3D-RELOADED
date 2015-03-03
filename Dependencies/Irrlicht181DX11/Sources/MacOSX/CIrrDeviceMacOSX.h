@@ -10,6 +10,10 @@
 
 #ifdef _IRR_COMPILE_WITH_OSX_DEVICE_
 
+#import <AppKit/NSWindow.h>
+#import <AppKit/NSOpenGL.h>
+#import <AppKit/NSBitmapImageRep.h>
+
 #include "CIrrDeviceStub.h"
 #include "IrrlichtDevice.h"
 #include "IImagePresenter.h"
@@ -18,10 +22,6 @@
 
 #include <OpenGL/OpenGL.h>
 #include <map>
-
-@class NSWindow;
-@class NSOpenGLContext;
-@class NSBitmapImageRep;
 
 namespace irr
 {
@@ -78,6 +78,9 @@ namespace irr
 		//! Restore the window to normal size if possible.
 		virtual void restoreWindow();
 
+        //! Get the position of this window on screen
+        virtual core::position2di getWindowPosition();
+        
 		//! Activate any joysticks, and generate events for them.
 		virtual bool activateJoysticks(core::array<SJoystickInfo> & joystickInfo);
 
@@ -107,7 +110,7 @@ namespace irr
 		public:
 
 			CCursorControl(const core::dimension2d<u32>& wsize, CIrrDeviceMacOSX *device)
-				: WindowSize(wsize), IsVisible(true), InvWindowSize(0.0f, 0.0f), Device(device), UseReferenceRect(false)
+				: WindowSize(wsize), InvWindowSize(0.0f, 0.0f), Device(device), IsVisible(true), UseReferenceRect(false)
 			{
 				CursorPos.X = CursorPos.Y = 0;
 				if (WindowSize.Width!=0)
