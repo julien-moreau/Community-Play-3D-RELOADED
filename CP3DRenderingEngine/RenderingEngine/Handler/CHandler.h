@@ -18,6 +18,8 @@ class DepthShaderCB;
 class ShadowShaderCB;
 class ScreenQuadCB;
 
+class CHDRManager;
+
 class CCP3DHandler : public ICP3DHandler {
 public:
 
@@ -119,6 +121,7 @@ public:
 	void setViewPort(const irr::core::rect<irr::s32> viewPort) { ViewPort = viewPort; }
 	irr::core::rect<irr::s32> getViewPort() { return ViewPort; }
 	irr::video::IVideoDriver *getVideoDriver() { return driver; }
+	irr::core::dimension2du getScreenRTTSize() { return ScreenRTTSize; }
 
 	/// Custom Passes
 	void addCustomPass(ICP3DCustomPass *pass) {
@@ -187,6 +190,9 @@ private:
 
 	/// Default custom passes
 	CCustomGeneralPass *CustomGeneralPass;
+
+	/// Effects
+	CHDRManager *HDRManager;
 	
 	/// Depth Pass
 	CCustomDepthPass *CustomDepthPassMgr;

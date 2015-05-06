@@ -11,6 +11,8 @@
 #include "ICP3DMonitor.h"
 #include "ICP3DPlugin.h"
 
+#include "ICP3DExporter.h"
+
 // Default monitor
 #if defined(_DEBUG)
 #define DEFAULT_MONITOR_PATH "CP3DDefaultMonitor_d.dll"

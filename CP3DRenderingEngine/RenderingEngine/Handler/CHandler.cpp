@@ -4,6 +4,8 @@
 #include "CHandlerCB.h"
 #include "HandlerShaders.h"
 
+#include "../HDR/CCP3DHDRManager.h"
+
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -21,7 +23,7 @@ CCP3DHandler::CCP3DHandler(IrrlichtDevice* dev, const irr::core::dimension2du& s
 : device(dev), smgr(dev->getSceneManager()), driver(dev->getVideoDriver()),
 ScreenRTTSize(screenRTTSize.getArea() == 0 ? dev->getVideoDriver()->getScreenSize() : screenRTTSize),
 ClearColour(0x0), shadowsUnsupported(false), DepthMC(0), ShadowMC(0),
-AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows), renderShadows(true)
+AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows), renderShadows(true), HDRManager(0)
 {
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
 	ScreenQuad.initializeD3D11(driver);
@@ -176,6 +178,9 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows), 
 		CustomGeneralPass = new CCustomGeneralPass(driver, "CustomGeneralPass");
 		CustomGeneralPass->setEnabled(true);
 		addCustomPass(CustomGeneralPass);
+
+		// Create effects
+		HDRManager = new CHDRManager(this);
 	}
 	else {
 		Depth = EMT_SOLID;
@@ -545,8 +550,8 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 	driver->setRenderTarget(0, false, false);
 	driver->setViewPort(ViewPort);
 	
+	bool Alter = false;
 	if(PostProcessingRoutinesSize) {
-		bool Alter = false;
 
 		for(u32 i = 0; i < PostProcessingRoutinesSize; i++) {
 			if (!PostProcessingRoutines[i].activated) {
@@ -558,9 +563,9 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 			Alter = !Alter;
 			ScreenQuad.getMaterial().setTexture(0, i == 0 ? ScreenRTT : ScreenQuad.rt[int(!Alter)]);
 
-			if (i >= PostProcessingRoutinesSize - 1) {
+			if (i == PostProcessingRoutinesSize - 1) {
 				driver->setViewPort(ViewPort);
-				driver->setRenderTarget(outputTarget, true, true, ClearColour);
+				driver->setRenderTarget(outputTarget);
 			}
 			else
 				driver->setRenderTarget(ScreenQuad.rt[int(Alter)], true, true, ClearColour);
@@ -571,6 +576,9 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 		}
 
 	}
+
+	//if (HDRManager)
+	//	HDRManager->render(ScreenQuad.rt[int(Alter)], 0);
 }
 
 irr::video::ITexture* CCP3DHandler::getShadowMapTexture(const irr::u32 resolution, const bool secondary) {

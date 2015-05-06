@@ -11,5 +11,6 @@
 #include "ICP3DLightSceneNode.h"
 #include "ICP3DMaterialCreator.h"
 #include "ICP3DHardwareSkinningManager.h"
+#include "ICP3DEffectsManager.h"
 
 #endif

@@ -34,12 +34,8 @@ void CCP3DHandler::setPostProcessingRenderCallback(const irr::s32 &materialType,
 void CCP3DHandler::setPostProcessingRenderCallback(s32 materialType, IPostProcessingRenderCallback* callback) {
 	s32 i = getPostProcessID(materialType);
 
-	if (i != -1) {
-		if (PostProcessingRoutines[i].renderCallback)
-			delete PostProcessingRoutines[i].renderCallback;
-
+	if (i != -1)
 		PostProcessingRoutines[i].renderCallback = callback;
-	}
 }
 
 // Returns the custom callback

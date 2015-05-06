@@ -45,6 +45,9 @@
     <Filter Include="Engine\Core\Plugins">
       <UniqueIdentifier>{af77522b-61b7-4a5e-a385-afae397bd337}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\IO">
+      <UniqueIdentifier>{08ddd7cf-f37a-42e6-a66c-490203ecc7ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\CP3DCompileConfig.h">
@@ -188,6 +191,15 @@
     <ClInclude Include="..\include\ICP3DHardwareSkinningManager.h">
       <Filter>include\rendering</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\ICP3DExporter.h">
+      <Filter>include\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ICP3DEffectsManager.h">
+      <Filter>include\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\IO\CCP3DExporter.h">
+      <Filter>Engine\IO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DEngine.cpp">
@@ -225,6 +237,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Core\Plugins\CCP3DPluginManager.cpp">
       <Filter>Engine\Core\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\IO\CCP3DExporter.cpp">
+      <Filter>Engine\IO</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

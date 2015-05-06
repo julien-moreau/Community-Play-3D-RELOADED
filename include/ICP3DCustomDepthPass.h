@@ -26,6 +26,14 @@ namespace rendering {
 		//! \param farLink: the depth to set
 		virtual void setDepth(const irr::core::stringc name, const irr::f32 farLink) = 0;
 
+		//! Returns the number of passes
+		//! \return: the numver of passes
+		virtual irr::u32 getPassCount() = 0;
+
+		//! Removes the given depth pass
+		//! \param name: the name of the depth pass
+		virtual bool removePass(irr::core::stringc name) = 0;
+
 	};
 
 } /// End rendering namespace

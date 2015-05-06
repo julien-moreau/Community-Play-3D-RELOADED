@@ -110,13 +110,13 @@ float3 normal_from_depth(float depth, float2 texcoords) {
 
 float4 pixelMain(VS_OUTPUT In) : COLOR0
 {
-	const float total_strength = 1.0;
+	const float total_strength = 2.0;
 	const float base = 0.2;
 
 	const float area = 0.0075;
 	const float falloff = 0.000001;
 
-	const float radius = 0.0002;
+	const float radius = 0.002;
 
 	const int samples = 16;
 	float3 sample_sphere[16] = {

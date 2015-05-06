@@ -22,8 +22,13 @@ public:
 
 	void addPass(const irr::core::stringc name);
 	void setDepth(const irr::core::stringc name, const irr::f32 farLink);
+	irr::u32 getPassCount();
+	bool removePass(irr::core::stringc name);
 
 private:
+	/// Methods
+	void createMaterial();
+
 	irr::core::array<irr::video::IRenderTarget> RenderTargets;
 	irr::core::array<irr::f32> FarLinks;
 

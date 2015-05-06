@@ -139,13 +139,13 @@ inline float4 computeDepthPixel(float4 p, CP3DTexture t, float2 tc, SamplerState
 inline float4 computeDepthPixel(float4 p) {
 #endif
 	float depth = p.z / p.x;
-	float alpha = 0.0;
+	float alpha = 1.0;
 
 	#ifdef DEPTH_PIXEL_ALPHA_ENABLED
 	alpha = CP3DTex2D(t, tc.xy, st).a;
 	#endif
 
-	return float4(depth, depth * depth, 0.0, 0.0);
+	return float4(depth, depth * depth, 0.0, alpha);
 }
 #endif
 

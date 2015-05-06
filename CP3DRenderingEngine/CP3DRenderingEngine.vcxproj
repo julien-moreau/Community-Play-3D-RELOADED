@@ -171,11 +171,15 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClInclude Include="CP3DRenderingEngine.h" />
     <ClInclude Include="RenderingEngine\CustomPasses\CCustomDepthPass.h" />
     <ClInclude Include="RenderingEngine\CustomPasses\CCustomGeneralPass.h" />
+    <ClInclude Include="RenderingEngine\Effects\CEffectsManager.h" />
+    <ClInclude Include="RenderingEngine\Effects\CSSAOEffect.h" />
     <ClInclude Include="RenderingEngine\Handler\CShaderPre.h" />
     <ClInclude Include="RenderingEngine\Handler\CHandlerCB.h" />
     <ClInclude Include="RenderingEngine\Handler\CHandler.h" />
     <ClInclude Include="RenderingEngine\Handler\HandlerShaders.h" />
     <ClInclude Include="RenderingEngine\Handler\CP3DHandler.h" />
+    <ClInclude Include="RenderingEngine\HDR\CHDRBrightPass.h" />
+    <ClInclude Include="RenderingEngine\HDR\CCP3DHDRManager.h" />
     <ClInclude Include="RenderingEngine\Managers\CHardwareSkinningManager.h" />
     <ClInclude Include="RenderingEngine\Materials\CHardwareSkinningMaterial.h" />
     <ClInclude Include="RenderingEngine\Materials\CMaterialCreator.h" />
@@ -189,9 +193,13 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClCompile Include="CP3DRenderingEngine.cpp" />
     <ClCompile Include="RenderingEngine\CustomPasses\CCustomDepthPass.cpp" />
     <ClCompile Include="RenderingEngine\CustomPasses\CCustomGeneralPass.cpp" />
+    <ClCompile Include="RenderingEngine\Effects\CEffectsManager.cpp" />
+    <ClCompile Include="RenderingEngine\Effects\CSSAOEffect.cpp" />
     <ClCompile Include="RenderingEngine\Handler\CHandlerPostProcesses.cpp" />
     <ClCompile Include="RenderingEngine\Handler\CShaderPre.cpp" />
     <ClCompile Include="RenderingEngine\Handler\CHandler.cpp" />
+    <ClCompile Include="RenderingEngine\HDR\CHDRBrightPass.cpp" />
+    <ClCompile Include="RenderingEngine\HDR\CCP3DHDRManager.cpp" />
     <ClCompile Include="RenderingEngine\Managers\CHardwareSkinningManager.cpp" />
     <ClCompile Include="RenderingEngine\Materials\CHardwareSkinningMaterial.cpp" />
     <ClCompile Include="RenderingEngine\Materials\CMaterialCreator.cpp" />
@@ -448,6 +456,22 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
       <FileType>Document</FileType>
     </None>
     <None Include="..\CP3DR\Shaders\Materials\HardwareSkinning.vertex.fx">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CP3DR\Shaders\PostProcesses\Bloom.fragment.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</ExcludedFromBuild>
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\CP3DR\Shaders\PostProcesses\BrightPass.fragment.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</ExcludedFromBuild>
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CP3DR\Shaders\HDR\BrightPass.fragment.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</ExcludedFromBuild>
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

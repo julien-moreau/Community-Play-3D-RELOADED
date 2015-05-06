@@ -36,6 +36,15 @@
     <Filter Include="RenderingEngine\Managers">
       <UniqueIdentifier>{a31464ae-a3b2-405b-8d37-097201a07c55}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RenderingEngine\Effects">
+      <UniqueIdentifier>{d354c149-27eb-4be1-bcc8-d0d9fb07a224}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\HDR">
+      <UniqueIdentifier>{73992cb9-d031-4414-a59c-b24408c6634d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RenderingEngine\HDR">
+      <UniqueIdentifier>{14a2b4a1-8cbd-4955-a1dd-0b1a997d59a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RenderingEngine\Handler\CP3DHandler.h">
@@ -83,6 +92,18 @@
     <ClInclude Include="RenderingEngine\Managers\CHardwareSkinningManager.h">
       <Filter>RenderingEngine\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="RenderingEngine\Effects\CSSAOEffect.h">
+      <Filter>RenderingEngine\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderingEngine\Effects\CEffectsManager.h">
+      <Filter>RenderingEngine\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderingEngine\HDR\CCP3DHDRManager.h">
+      <Filter>RenderingEngine\HDR</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderingEngine\HDR\CHDRBrightPass.h">
+      <Filter>RenderingEngine\HDR</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DRenderingEngine.cpp">
@@ -123,6 +144,18 @@
     </ClCompile>
     <ClCompile Include="RenderingEngine\Managers\CHardwareSkinningManager.cpp">
       <Filter>RenderingEngine\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderingEngine\Effects\CSSAOEffect.cpp">
+      <Filter>RenderingEngine\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderingEngine\Effects\CEffectsManager.cpp">
+      <Filter>RenderingEngine\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderingEngine\HDR\CCP3DHDRManager.cpp">
+      <Filter>RenderingEngine\HDR</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderingEngine\HDR\CHDRBrightPass.cpp">
+      <Filter>RenderingEngine\HDR</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -220,5 +253,16 @@
     <None Include="..\CP3DR\Shaders\Materials\HardwareSkinning.fragment.fx">
       <Filter>Shaders\Materials</Filter>
     </None>
+    <None Include="..\CP3DR\Shaders\PostProcesses\BrightPass.fragment.fx">
+      <Filter>Shaders\PostProcesses</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\PostProcesses\Bloom.fragment.fx">
+      <Filter>Shaders\PostProcesses</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\CP3DR\Shaders\HDR\BrightPass.fragment.fx">
+      <Filter>Shaders\HDR</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

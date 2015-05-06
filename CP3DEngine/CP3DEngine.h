@@ -14,6 +14,8 @@
 #include "Engine/Scene/CCP3DSceneNodeCreator.h"
 #include "Engine/Scene/CCP3DGeometryCreator.h"
 
+#include "Engine/IO/CCP3DExporter.h"
+
 namespace cp3d {
 namespace engine {
 
@@ -44,6 +46,8 @@ public:
 	/// Scene manager
 	void addSceneManager(irr::scene::ISceneManager *smgr);
 	void removeSceneManager(irr::scene::ISceneManager *smgr);
+
+	CCP3DExporter *createExporter();
 
 private:
 	/// Irrlicht

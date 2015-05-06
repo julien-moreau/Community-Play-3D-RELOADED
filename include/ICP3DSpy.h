@@ -50,6 +50,9 @@ public:
 	ISpyFileList checkFiles(ISpyFileList &files) {
 		irr::core::list<irr::core::stringc> f;
 
+		irr::core::stringc currentDirectory = FileSystem->getWorkingDirectory();
+		FileSystem->changeWorkingDirectoryTo(WorkingDirectory);
+
 		// For each file, verify if it exists and if changed time changed
 		ISpyFileList::ConstIterator it = files.begin();
 		for (; it != files.end(); ++it) {
@@ -71,6 +74,8 @@ public:
 				Changes[*it] = time;
 			}
 		}
+
+		FileSystem->changeWorkingDirectoryTo(currentDirectory);
 
 		return f;
 	}

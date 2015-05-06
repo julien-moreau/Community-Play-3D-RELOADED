@@ -15,6 +15,7 @@ class ICP3DEventReceiver;
 class ICP3DCustomUpdater;
 class ICP3DSceneNodeCreator;
 class ICP3DGeometryCreator;
+class ICP3DExporter;
 
 class ICP3DEngine {
 public:
@@ -64,6 +65,10 @@ public:
 	//! Sets if the engine should draw the GUI
 	//! \param draw: true if the engine should draw the GUI
 	virtual void setDrawGUI(const bool draw) = 0;
+
+	//! Creates an exporter instance
+	//! \return: a new exporter instance
+	virtual ICP3DExporter *createExporter() = 0;
 
 };
 

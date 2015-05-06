@@ -109,6 +109,10 @@ CCP3DGeometryCreator *CCP3DEngine::getGeometryCreator() {
 	return GeometryCreator;
 }
 
+CCP3DExporter *CCP3DEngine::createExporter() {
+	return new CCP3DExporter(this);
+}
+
 /// Rendering
 rendering::ICP3DRenderingEngine *CCP3DEngine::getRenderingEngine() {
 	return Rengine;

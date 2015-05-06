@@ -5,9 +5,11 @@
 #include <ICP3DRenderingEngine.h>
 #include <ICP3DLightSceneNode.h>
 #include <ICP3DHardwareSkinningManager.h>
+#include <ICP3DEffectsManager.h>
 
 #include "RenderingEngine/Handler/CP3DHandler.h"
 #include "RenderingEngine/Managers/CHardwareSkinningManager.h"
+#include "RenderingEngine/Effects/CEffectsManager.h"
 
 namespace cp3d {
 namespace rendering {
@@ -41,6 +43,9 @@ public:
 
 	CHardwareSkinningManager *getHWSkinningManager();
 
+	/// Effects
+	CEffectsManager *getEffectsManager();
+
 	/// Lights
 	ICP3DLightSceneNode *createLightSceneNode(const bool computeNormalMapping = false, const bool computeShadows = false);
 	irr::u32 getLightCount() {
@@ -65,6 +70,9 @@ private:
 	CSolidMaterial *SolidMaterialType;
 	CNormalMappingMaterial *NormalMapMaterialType;
 	CHardwareSkinningManager *HWSkinningManager;
+
+	/// Effects
+	CEffectsManager *EffectsManager;
 
 	/// Datas
 	irr::core::array<ICP3DLightSceneNode *> Lights;

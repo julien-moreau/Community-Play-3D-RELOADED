@@ -160,6 +160,8 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClInclude Include="..\include\ICP3DColorDialog.h" />
     <ClInclude Include="..\include\ICP3DCustomView.h" />
     <ClInclude Include="..\include\ICP3DEditionTool.h" />
+    <ClInclude Include="..\include\ICP3DEffectsManager.h" />
+    <ClInclude Include="..\include\ICP3DExporter.h" />
     <ClInclude Include="..\include\ICP3DFileSelector.h" />
     <ClInclude Include="..\include\ICP3DGeometryCreator.h" />
     <ClInclude Include="..\include\ICP3DGUIManager.h" />
@@ -192,6 +194,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClInclude Include="Engine\Core\CCP3DEventReceiver.h" />
     <ClInclude Include="Engine\Core\Plugins\CCP3DMonitorPlugin.h" />
     <ClInclude Include="Engine\Core\Plugins\CCP3DPluginManager.h" />
+    <ClInclude Include="Engine\IO\CCP3DExporter.h" />
     <ClInclude Include="Engine\Scene\CCP3DGeometryCreator.h" />
     <ClInclude Include="Engine\Scene\CCP3DSceneNodeCreator.h" />
     <ClInclude Include="Engine\Scene\Clouds\CCloudSceneNode.h" />
@@ -207,6 +210,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClCompile Include="Engine\Core\CCP3DEventReceiver.cpp" />
     <ClCompile Include="Engine\Core\Plugins\CCP3DMonitorPlugin.cpp" />
     <ClCompile Include="Engine\Core\Plugins\CCP3DPluginManager.cpp" />
+    <ClCompile Include="Engine\IO\CCP3DExporter.cpp" />
     <ClCompile Include="Engine\Scene\CCP3DGeometryCreator.cpp" />
     <ClCompile Include="Engine\Scene\CCP3DSceneNodeCreator.cpp" />
     <ClCompile Include="Engine\Scene\Clouds\CCloudSceneNode.cpp" />

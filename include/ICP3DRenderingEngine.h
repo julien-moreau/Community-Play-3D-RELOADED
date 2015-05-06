@@ -9,6 +9,7 @@ namespace rendering {
 class ICP3DHandler;
 class ICP3DMaterialCreator;
 class ICP3DHardwareSkinningManager;
+class ICP3DEffectsManager;
 struct ICP3DLightSceneNode;
 
 /*
@@ -89,6 +90,9 @@ public:
 
 	//! Returns the hardware skinning manager
 	virtual ICP3DHardwareSkinningManager *getHWSkinningManager() = 0;
+
+	//! Returns the effects manager
+	virtual ICP3DEffectsManager *getEffectsManager() = 0;
 
 };
 

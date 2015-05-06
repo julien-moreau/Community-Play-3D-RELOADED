@@ -1,11 +1,16 @@
 #include "stdafx.h"
 #include "CP3DRenderingEngine.h"
 
+/// Rendering
 #include "RenderingEngine/Handler/CP3DHandler.h"
 #include "RenderingEngine/Materials/CMaterialCreator.h"
 
+/// Materials
 #include "RenderingEngine/Materials/CSolidMaterial.h"
 #include "RenderingEngine/Materials/CNormalMappingMaterial.h"
+
+/// Effects
+
 
 using namespace irr;
 using namespace video;
@@ -38,6 +43,7 @@ CCP3DRenderingEngine::CCP3DRenderingEngine(IrrlichtDevice *device) : NormalMapMa
 	/// Materials
 	SolidMaterialType = new CSolidMaterial(this);
 	HWSkinningManager = new CHardwareSkinningManager(Handler);
+	EffectsManager = new CEffectsManager(Handler);
 }
 
 CCP3DRenderingEngine::~CCP3DRenderingEngine() {
@@ -158,6 +164,11 @@ void CCP3DRenderingEngine::destroyNormalMappingMaterial() {
 
 CHardwareSkinningManager *CCP3DRenderingEngine::getHWSkinningManager() {
 	return HWSkinningManager;
+}
+
+/// Effects
+CEffectsManager *CCP3DRenderingEngine::getEffectsManager() {
+	return EffectsManager;
 }
 
 } /// End namespace rendering
