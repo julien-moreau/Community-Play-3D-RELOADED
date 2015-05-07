@@ -9,7 +9,7 @@
 
 #include "RenderingEngine/Handler/CP3DHandler.h"
 #include "RenderingEngine/Managers/CHardwareSkinningManager.h"
-#include "RenderingEngine/Effects/CEffectsManager.h"
+#include "RenderingEngine/Effects/CCP3DEffectsManager.h"
 
 namespace cp3d {
 namespace rendering {
@@ -44,7 +44,7 @@ public:
 	CHardwareSkinningManager *getHWSkinningManager();
 
 	/// Effects
-	CEffectsManager *getEffectsManager();
+	CCP3DEffectsManager *getEffectsManager();
 
 	/// Lights
 	ICP3DLightSceneNode *createLightSceneNode(const bool computeNormalMapping = false, const bool computeShadows = false);
@@ -72,7 +72,7 @@ private:
 	CHardwareSkinningManager *HWSkinningManager;
 
 	/// Effects
-	CEffectsManager *EffectsManager;
+	CCP3DEffectsManager *EffectsManager;
 
 	/// Datas
 	irr::core::array<ICP3DLightSceneNode *> Lights;

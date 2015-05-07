@@ -81,6 +81,7 @@ bool CUIAddMesh::OnEvent(const SEvent& event) {
 					EditorCore->getEngine()->getSceneNodeCreator()->configureSceneNode(Node);
 
 					EditorCore->getRenderingEngine()->getHandler()->getDepthPassManager()->addNodeToPass(Node);
+					EditorCore->getRenderingEngine()->getHandler()->getGeneralPassManager()->addNodeToPass(Node);
 
 					SEvent ev;
 					ev.EventType = EET_USER_EVENT;

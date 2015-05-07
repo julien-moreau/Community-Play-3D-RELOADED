@@ -25,7 +25,7 @@ vec3 normalFromDepth(float depth, vec2 coords) {
 
 void main()
 {
-	const float totalStrength = 1.0;
+	const float totalStrength = 2.0;
 	const float base = 0.2;
 
 	const float area = 0.0075;
@@ -110,14 +110,13 @@ float3 normal_from_depth(float depth, float2 texcoords) {
 
 float4 pixelMain(VS_OUTPUT In) : COLOR0
 {
-	const float total_strength = 2.0;
-	const float base = 0.2;
+	const float total_strength = 1.5; // 1.0
+	const float base = 0.2; // 0.2
 
-	const float area = 0.0075;
-	const float falloff = 0.000001;
+	const float area = 0.75; //0.0075
+	const float falloff = 0.000001; //0.000001
 
-	const float radius = 0.002;
-
+	const float radius = 0.006; //0.0002
 	const int samples = 16;
 	float3 sample_sphere[16] = {
 		float3(0.5381, 0.1856, -0.4319), float3(0.1379, 0.2486, 0.4430),

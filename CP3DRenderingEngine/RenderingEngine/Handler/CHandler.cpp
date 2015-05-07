@@ -530,7 +530,7 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 				for(u32 g = 0;g < CustomPasses[i]->getSceneNodes()[j]->getMaterialCount(); ++g)
 					BufferMaterialList.push_back(CustomPasses[i]->getSceneNodes()[j]->getMaterial(g).MaterialType);
 
-				CustomPasses[i]->CurrentSceneNode = i;
+				CustomPasses[i]->CurrentSceneNode = j;
 
 				CustomPasses[i]->onPreRender(CustomPasses[i]->getSceneNodes()[j]);
 				CustomPasses[i]->getSceneNodes()[j]->setMaterialType((E_MATERIAL_TYPE)CustomPasses[i]->getMaterialType());

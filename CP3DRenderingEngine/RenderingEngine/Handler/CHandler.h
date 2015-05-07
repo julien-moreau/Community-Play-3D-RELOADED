@@ -70,9 +70,6 @@ public:
 
 	void setRenderShadows(const bool render) { renderShadows = render; }
 	const bool isRenderingShadows() { return renderShadows; }
-
-	/// Depth pass
-	CCustomDepthPass *getDepthPassManager() { return CustomDepthPassMgr; }
 	
 	/// Post processes
 	void addPostProcessingEffect(irr::s32 MaterialType, IPostProcessingRenderCallback* callback = 0);
@@ -142,7 +139,11 @@ public:
 		return CustomPasses[index];
 	}
 
-	ICP3DCustomPass *getGeneralPassManager() {
+	CCustomDepthPass *getDepthPassManager() {
+		return CustomDepthPassMgr;
+	}
+
+	CCustomGeneralPass *getGeneralPassManager() {
 		return CustomGeneralPass;
 	}
 

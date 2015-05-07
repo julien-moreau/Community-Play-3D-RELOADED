@@ -11,11 +11,20 @@ public:
 
 	//! Creates the SSAO pipeline effect
 	//! \param create: true to create effect, false to destroy effect
-	virtual void createSSAOEffect(bool create) = 0;
+	virtual void createSSAOEffect(const bool create) = 0;
 
 	//! Returns if the SSAO pipeline effect was created
 	//! \return if the SSAO pipeline effect was created
-	virtual bool isSSAOCreated() = 0;
+	virtual const bool isSSAOCreated() = 0;
+
+	//! Creates the Volumetric Light Scattering effect
+	//! \param create: true to create effect, false to destroy effect
+	//! \param node: the scene node to use as light
+	virtual void createVolumetricLightScatteringEffect(const bool create, irr::scene::ISceneNode *node) = 0;
+
+	//! Returns if the Volumetric Light Scattering effect was created
+	//! \return: if the Volumetric Light Scattering effect was created
+	virtual const bool isVolumetricLightScatteringCreated() = 0;
 
 };
 

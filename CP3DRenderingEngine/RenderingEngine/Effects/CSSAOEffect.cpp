@@ -20,12 +20,12 @@ CSSAOEffect::CSSAOEffect(CCP3DHandler *handler) : Handler(handler) {
 	}
 
 	DepthRTT = driver->getTexture("SSAODepthRTT");
-	RandomTex = handler->generateRandomVectorTexture(driver->getScreenSize(), "SSAORandomTex");
+	RandomTex = handler->generateRandomVectorTexture(dimension2du(512, 512), "SSAORandomTex");
 
 	// Create post-processes
 	SSAOMaterial = handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/SSAO.fragment.fx", this);
 	BlurHMaterial = handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/BlurHP.fragment.fx");
-	BlurVMaterial = handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/BlurHP.fragment.fx");
+	BlurVMaterial = handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/BlurVP.fragment.fx");
 	SSAOCombineMaterial = handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/SSAOCombine.fragment.fx");
 }
 

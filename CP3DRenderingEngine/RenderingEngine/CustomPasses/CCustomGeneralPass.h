@@ -21,12 +21,18 @@ public:
 	bool setRenderTarget();
 	void OnSetConstants(irr::video::IMaterialRendererServices* services, irr::s32 userData);
 
+	void setVolumetricLightScatteringNode(irr::scene::ISceneNode *node) { VolumetricLightScatteringNode = node; }
+	irr::scene::ISceneNode *getVolumetricLightScatteringNode() { return VolumetricLightScatteringNode; }
+
 private:
 	irr::core::array<irr::video::IRenderTarget> RenderTargets;
 
 	/// Shader pre-processor Vertex & Pixel
 	CMaterialCreator *MaterialCreator;
 	irr::core::stringc VertexShader, PixelShader;
+
+	/// Light scattering
+	irr::scene::ISceneNode *VolumetricLightScatteringNode;
 
 };
 

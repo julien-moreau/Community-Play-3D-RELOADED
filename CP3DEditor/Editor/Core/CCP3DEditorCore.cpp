@@ -170,6 +170,20 @@ bool CCP3DEditorCore::OnEvent(const SEvent &event) {
 	return false;
 }
 
+struct CustomCallback : public rendering::IPostProcessingRenderCallback {
+public:
+	CustomCallback(irr::video::IVideoDriver *driver) {
+		tex = driver->getTexture("CP3DLightScattering");
+	}
+
+	void OnPreRender(rendering::ICP3DHandler *handler) {
+		handler->setPostProcessingTextureAtIndex(3, tex);
+	}
+
+private:
+	irr::video::ITexture *tex;
+};
+
 void CCP3DEditorCore::createTestScene() {
 	ISceneManager *smgr = Device->getSceneManager();
 	IVideoDriver *driver = Device->getVideoDriver();
@@ -232,12 +246,12 @@ void CCP3DEditorCore::createTestScene() {
 	skyboxNode->setMaterialType((E_MATERIAL_TYPE)Rengine->Materials[EMT_SOLID]);
 	Engine->getSceneNodeCreator()->configureSceneNode(skyboxNode);
 
-	IBillboardSceneNode * bill = smgr->addBillboardSceneNode(0, dimension2df(2.f, 2.f), vector3df(0.f, 100.f, 0.f));
+	IBillboardSceneNode * bill = smgr->addBillboardSceneNode(0, dimension2df(600.f, 600.f), vector3df(1000.f, 400.f, 0.f));
 	Engine->getSceneNodeCreator()->configureSceneNode(bill);
 	Handler->addShadowToNode(bill, rendering::EFT_NONE, rendering::ESM_EXCLUDE);
-	bill->setMaterialType(EMT_SOLID);
+	bill->setMaterialType(EMT_TRANSPARENT_ADD_COLOR);
 	bill->setName("BillBoard");
-	bill->setColor(SColor(255, 255, 0, 0), SColor(255, 0, 255, 0));
+	bill->setMaterialTexture(0, driver->getTexture("Textures/Clouds/sun.png"));
 
 	u32 count = 0;
 	auto callback = [&](ISceneNode *node) {
@@ -254,7 +268,13 @@ void CCP3DEditorCore::createTestScene() {
 	Handler->getDepthPassManager()->addNodeToPass(planeNode);
 	Handler->getDepthPassManager()->addNodeToPass(cubeNode);
 
+	Handler->getGeneralPassManager()->addNodeToPass(planeNode);
+	Handler->getGeneralPassManager()->addNodeToPass(cubeNode);
+	Handler->getGeneralPassManager()->addNodeToPass(bill);
+
 	Rengine->getEffectsManager()->createSSAOEffect(true);
+	//Rengine->getEffectsManager()->createVolumetricLightScatteringEffect(true, bill);
+	//Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/Custom.fragment.fx", new CustomCallback(Driver));
 
 	SpiesManager->addSpy(new CCP3DPostProcessSpy(this));
 }

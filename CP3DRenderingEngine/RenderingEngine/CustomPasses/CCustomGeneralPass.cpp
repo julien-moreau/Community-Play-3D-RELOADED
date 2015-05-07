@@ -14,7 +14,7 @@ namespace cp3d {
 namespace rendering {
 
 CCustomGeneralPass::CCustomGeneralPass(IVideoDriver *driver, stringc name)
-	: cp3d::rendering::ICP3DCustomPass(driver, name)
+	: cp3d::rendering::ICP3DCustomPass(driver, name), VolumetricLightScatteringNode(0)
 {
 	/// Configure shaders pre-processors
 	MaterialCreator = new CMaterialCreator(driver);
@@ -60,9 +60,8 @@ void CCustomGeneralPass::OnSetConstants(IMaterialRendererServices* services, s32
 	services->setPixelShaderConstant("FarDistance", &farDistance, 1);
 	
 	/// Light Scattering
-	ESCENE_NODE_TYPE type = SceneNodes[CurrentSceneNode]->getType();
 	bool renderNormal = false;
-	if (type == ESNT_BILLBOARD)
+	if (SceneNodes[CurrentSceneNode] == VolumetricLightScatteringNode)
 		renderNormal = true;
 
 	s32 renderNormals32 = (s32)renderNormal;

@@ -95,14 +95,17 @@
     <ClInclude Include="RenderingEngine\Effects\CSSAOEffect.h">
       <Filter>RenderingEngine\Effects</Filter>
     </ClInclude>
-    <ClInclude Include="RenderingEngine\Effects\CEffectsManager.h">
-      <Filter>RenderingEngine\Effects</Filter>
-    </ClInclude>
     <ClInclude Include="RenderingEngine\HDR\CCP3DHDRManager.h">
       <Filter>RenderingEngine\HDR</Filter>
     </ClInclude>
     <ClInclude Include="RenderingEngine\HDR\CHDRBrightPass.h">
       <Filter>RenderingEngine\HDR</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderingEngine\Effects\CVolumetricLightScattering.h">
+      <Filter>RenderingEngine\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderingEngine\Effects\CCP3DEffectsManager.h">
+      <Filter>RenderingEngine\Effects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -148,14 +151,17 @@
     <ClCompile Include="RenderingEngine\Effects\CSSAOEffect.cpp">
       <Filter>RenderingEngine\Effects</Filter>
     </ClCompile>
-    <ClCompile Include="RenderingEngine\Effects\CEffectsManager.cpp">
-      <Filter>RenderingEngine\Effects</Filter>
-    </ClCompile>
     <ClCompile Include="RenderingEngine\HDR\CCP3DHDRManager.cpp">
       <Filter>RenderingEngine\HDR</Filter>
     </ClCompile>
     <ClCompile Include="RenderingEngine\HDR\CHDRBrightPass.cpp">
       <Filter>RenderingEngine\HDR</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderingEngine\Effects\CVolumetricLightScattering.cpp">
+      <Filter>RenderingEngine\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderingEngine\Effects\CCP3DEffectsManager.cpp">
+      <Filter>RenderingEngine\Effects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -259,10 +265,16 @@
     <None Include="..\CP3DR\Shaders\PostProcesses\Bloom.fragment.fx">
       <Filter>Shaders\PostProcesses</Filter>
     </None>
+    <None Include="..\CP3DR\Shaders\HDR\BrightPass.fragment.fx">
+      <Filter>Shaders\PostProcesses</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\PostProcesses\Custom.fragment.fx">
+      <Filter>Shaders\PostProcesses</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\CP3DR\Shaders\HDR\BrightPass.fragment.fx">
-      <Filter>Shaders\HDR</Filter>
+    <FxCompile Include="..\CP3DR\Shaders\PostProcesses\VolumetricLightScattering.fragment.fx">
+      <Filter>Shaders\PostProcesses</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

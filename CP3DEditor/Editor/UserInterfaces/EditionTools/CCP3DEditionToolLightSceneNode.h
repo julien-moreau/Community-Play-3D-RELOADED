@@ -49,6 +49,9 @@ private:
 	/// GUI
 	irr::gui::IGUITab *LightTab;
 
+	/// Light
+	SCP3DInterfaceData LightRadius;
+
 	/// Shadow light
 	SCP3DInterfaceData ComputeShadows;
 	SCP3DInterfaceData ComputeRoundedSpot;

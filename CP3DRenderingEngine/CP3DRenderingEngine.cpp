@@ -43,7 +43,7 @@ CCP3DRenderingEngine::CCP3DRenderingEngine(IrrlichtDevice *device) : NormalMapMa
 	/// Materials
 	SolidMaterialType = new CSolidMaterial(this);
 	HWSkinningManager = new CHardwareSkinningManager(Handler);
-	EffectsManager = new CEffectsManager(Handler);
+	EffectsManager = new CCP3DEffectsManager(Handler);
 }
 
 CCP3DRenderingEngine::~CCP3DRenderingEngine() {
@@ -167,7 +167,7 @@ CHardwareSkinningManager *CCP3DRenderingEngine::getHWSkinningManager() {
 }
 
 /// Effects
-CEffectsManager *CCP3DRenderingEngine::getEffectsManager() {
+CCP3DEffectsManager *CCP3DRenderingEngine::getEffectsManager() {
 	return EffectsManager;
 }
 

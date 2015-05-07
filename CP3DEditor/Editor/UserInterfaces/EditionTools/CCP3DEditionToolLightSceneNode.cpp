@@ -43,6 +43,10 @@ void CCP3DEditionToolLightSceneNode::createInterface() {
 	/// Tabs
 	LightTab = EditionTool->addTab("Light");
 	
+	/// Light
+	EditionTool->setNewZone(LightTab, "Light");
+	LightRadius = EditionTool->addField(LightTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Radius"));
+
 	/// Shadow light
 	EditionTool->setNewZone(LightTab, "Shadow Light");
 	ComputeShadows = EditionTool->addField(LightTab, EGUIET_CHECK_BOX, DefaultEditionToolCallback("Compute Shadows"));
@@ -75,6 +79,9 @@ void CCP3DEditionToolLightSceneNode::createInterface() {
 }
 
 void CCP3DEditionToolLightSceneNode::configure() {
+	/// Light
+	LightRadius.TextBox->setText(stringw(LightSceneNode->getLightData().Radius).c_str());
+
 	/// Shadow light
 	ShadowMapTexture.TextureData.BrowseButton->setText(L"View higher");
 	ShadowMapTexture.TextureData.RemoveButton->setVisible(false);
@@ -123,6 +130,9 @@ void CCP3DEditionToolLightSceneNode::configure() {
 }
 
 void CCP3DEditionToolLightSceneNode::apply() {
+	/// Light
+	LightSceneNode->getLightData().Radius = core::fast_atof(stringc(LightRadius.TextBox->getText()).c_str());
+
 	/// Shadow light
 	Rengine->setLightSceneNodeComputeShadows(LightSceneNode, ComputeShadows.CheckBox->isChecked());
 	if (LightSceneNode->isComputingShadows()) {
