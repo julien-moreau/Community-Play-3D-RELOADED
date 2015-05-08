@@ -464,7 +464,7 @@ bool CCP3DEditionTool::OnEvent(const SEvent &event) {
 			if (focus == panel || focus == TabCtrl || focus == TabCtrl->getTab(tabIndex)
 				|| (focus && focus->getParent() == panel) || focus == Window)
 			{
-				panel->getScrollBar()->setPos(panel->getScrollBar()->getPos() - s32(event.MouseInput.Wheel * 4.0));
+				panel->getScrollBar()->setPos(panel->getScrollBar()->getPos() - s32(event.MouseInput.Wheel * 40.0));
 
 				SEvent ev;
 				ev.EventType = EET_GUI_EVENT;

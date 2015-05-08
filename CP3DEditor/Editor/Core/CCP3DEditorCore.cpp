@@ -273,7 +273,7 @@ void CCP3DEditorCore::createTestScene() {
 	Handler->getGeneralPassManager()->addNodeToPass(bill);
 
 	Rengine->getEffectsManager()->createSSAOEffect(true);
-	//Rengine->getEffectsManager()->createVolumetricLightScatteringEffect(true, bill);
+	Rengine->getEffectsManager()->createVolumetricLightScatteringEffect(true, bill);
 	//Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/Custom.fragment.fx", new CustomCallback(Driver));
 
 	SpiesManager->addSpy(new CCP3DPostProcessSpy(this));

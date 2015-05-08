@@ -64,6 +64,11 @@ private:
 	/// Materials
 	SCP3DInterfaceData MaterialName;
 	SCP3DInterfaceData MaterialSelector;
+
+	SCP3DInterfaceData MaterialDiffuseColor; /// Colors
+	SCP3DInterfaceData MaterialEmissiveColor;
+	SCP3DInterfaceData MaterialSpecularColor;
+
 	SCP3DInterfaceData MaterialTextures[irr::video::MATERIAL_MAX_TEXTURES];
 	SCP3DInterfaceData MaterialMatType;
 	SCP3DInterfaceData MaterialShininess;

@@ -54,6 +54,8 @@ void CVolumetricLightScatteringEffect::OnPreRender(ICP3DHandler* handler) {
 	LightPositionOnScreen.X = f32(pos.X) / ViewPort.getWidth();
 
 	handler->setPostProcessingEffectConstant(MaterialID, "lightPositionOnScreen", &LightPositionOnScreen.X, 2);
+
+	LightColor = SColorf(Node->getMaterial(0).DiffuseColor);
 	handler->setPostProcessingEffectConstant(MaterialID, "lightColor", &LightColor.r, 4);
 }
 

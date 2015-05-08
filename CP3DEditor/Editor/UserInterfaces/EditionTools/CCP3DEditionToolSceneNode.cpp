@@ -84,6 +84,12 @@ void CCP3DEditionToolSceneNode::createInterface() {
 		MaterialName = EditionTool->addField(MaterialTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Name :"));
 		MaterialSelector = EditionTool->addField(MaterialTab, EGUIET_COMBO_BOX, DefaultEditionToolCallback("Material :"));
 
+		/// Colors
+		EditionTool->setNewZone(MaterialTab, "Colors");
+		MaterialDiffuseColor = EditionTool->addField(MaterialTab, EGUIET_COLOR_SELECT_DIALOG, DefaultEditionToolCallback("Diffuse Color :"));
+		MaterialEmissiveColor = EditionTool->addField(MaterialTab, EGUIET_COLOR_SELECT_DIALOG, DefaultEditionToolCallback("Emissive Color :"));
+		MaterialSpecularColor = EditionTool->addField(MaterialTab, EGUIET_COLOR_SELECT_DIALOG, DefaultEditionToolCallback("Specular Color :"));
+
 		/// Parameters
 		EditionTool->setNewZone(MaterialTab, "Parameters");
 		MaterialMatType = EditionTool->addField(MaterialTab, EGUIET_COMBO_BOX, DefaultEditionToolCallback("Material Type :"));
@@ -189,6 +195,11 @@ void CCP3DEditionToolSceneNode::configure() {
 		}
 		MaterialSelector.ComboBox->setSelected(CurrentMaterialID);
 
+		/// Colors
+		MaterialDiffuseColor.ColorData.ColorElement->setColor(SceneNode->getMaterial(CurrentMaterialID).DiffuseColor);
+		MaterialEmissiveColor.ColorData.ColorElement->setColor(SceneNode->getMaterial(CurrentMaterialID).EmissiveColor);
+		MaterialSpecularColor.ColorData.ColorElement->setColor(SceneNode->getMaterial(CurrentMaterialID).SpecularColor);
+
 		/// Textures
 		for (u32 i=0; i < irr::video::MATERIAL_MAX_TEXTURES; i++) {
 			MaterialTextures[i].TextureData.Image->setImage(SceneNode->getMaterial(CurrentMaterialID).TextureLayer[i].Texture);
@@ -277,6 +288,12 @@ void CCP3DEditionToolSceneNode::apply() {
 		SceneNode->getMaterial(CurrentMaterialID).Name = MaterialName.TextBox->getText();
 		SceneNode->getMaterial(CurrentMaterialID).MaterialType = EditorCore->getRenderingEngine()->Materials[(E_MATERIAL_TYPE)MaterialMatType.ComboBox->getSelected()];
 		SceneNode->getMaterial(CurrentMaterialID).Shininess = core::fast_atof(stringc(MaterialShininess.TextBox->getText()).c_str());
+
+		/// Colors
+		SceneNode->getMaterial(CurrentMaterialID).DiffuseColor = MaterialDiffuseColor.ColorData.ColorElement->getColor().toSColor();
+		SceneNode->getMaterial(CurrentMaterialID).EmissiveColor = MaterialEmissiveColor.ColorData.ColorElement->getColor().toSColor();
+		SceneNode->getMaterial(CurrentMaterialID).SpecularColor = MaterialSpecularColor.ColorData.ColorElement->getColor().toSColor();
+
 		{
 			/// Flags
 			SceneNode->getMaterial(CurrentMaterialID).NormalizeNormals = MaterialNormalizeNormals.CheckBox->isChecked();
