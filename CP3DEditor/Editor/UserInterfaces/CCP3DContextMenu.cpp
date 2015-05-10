@@ -19,6 +19,9 @@ namespace cp3d {
 
 CCP3DContextMenu::CCP3DContextMenu(CCP3DEditorCore *editorCore) : EditorCore(editorCore)
 {
+	/// Datas
+	rendering::ICP3DRenderingEngine *rengine = EditorCore->getRenderingEngine();
+
 	/// Configure
 	editorCore->getEngine()->getEventReceiver()->addEventReceiver(this);
 	Gui = editorCore->getRenderingEngine()->getGUIEnvironment();
@@ -30,6 +33,7 @@ CCP3DContextMenu::CCP3DContextMenu(CCP3DEditorCore *editorCore) : EditorCore(edi
 	EditContextMenu = ContextMenu->getSubMenu(ContextMenu->addItem(L"Edit", -1, true, true));
 	ViewContextMenu = ContextMenu->getSubMenu(ContextMenu->addItem(L"View", -1, true, true));
 	SceneContextMenu = ContextMenu->getSubMenu(ContextMenu->addItem(L"Scene", -1, true, true));
+	RenderingContextMenu = ContextMenu->getSubMenu(ContextMenu->addItem(L"Rendering", -1, true, true));
 	SpiesContextMenu = ContextMenu->getSubMenu(ContextMenu->addItem(L"Spies", -1, true, true));
 
 	/// --------------------------------------------------
@@ -108,8 +112,14 @@ CCP3DContextMenu::CCP3DContextMenu(CCP3DEditorCore *editorCore) : EditorCore(edi
 	SceneContextMenu->addItem(L"Paint terrain... (TO DO)", -1);
 
 	/// Fille "scene->add light"
-	SceneContextMenuLight->addItem(L"Shadow light... (TO DO)", -1);
-	SceneContextMenuLight->addItem(L"Standard light... (TO DO)", -1);
+	SceneContextMenuLight->addItem(L"Shadow light", ESCML_SHADOW);
+	SceneContextMenuLight->addItem(L"Standard light", ESCML_STANDARD);
+	/// --------------------------------------------------
+
+	/// --------------------------------------------------
+	/// Fill Rendering
+	RenderingContextMenu->addItem(L"SSAO Effect", ERCM_SSAO, true, false, rengine->getEffectsManager()->isSSAOCreated(), true);
+	RenderingContextMenu->addItem(L"Volumetric Light Scattering Effect", ERCM_VLS, true, false, rengine->getEffectsManager()->isVolumetricLightScatteringCreated(), true);
 	/// --------------------------------------------------
 
 	/// --------------------------------------------------
@@ -132,7 +142,7 @@ CCP3DContextMenu::~CCP3DContextMenu() {
 
 }
 
-void CCP3DContextMenu::setProjectName(irr::core::stringc name) {
+void CCP3DContextMenu::setProjectName(stringc name) {
 	FileContextMenu->setItemText(FileContextMenuSaveID, stringw(stringc("Save ") + name + stringc(" CTRL+S")).c_str());
 	FileContextMenu->setItemText(FileContextMenuSaveAsID, stringw(stringc("Save ") + name + stringc(" as...")).c_str());
 }
@@ -147,19 +157,28 @@ bool CCP3DContextMenu::OnEvent(const SEvent &event) {
 				checkSceneContextMenu(SceneContextMenu->getItemCommandId(SceneContextMenu->getSelectedItem()));
 				return true;
 			}
+			/// Light context menu
+			else if (event.GUIEvent.Caller == SceneContextMenuLight) {
+				checkSceneLightContextMenu(SceneContextMenuLight->getItemCommandId(SceneContextMenuLight->getSelectedItem()));
+				return true;
+			}
 			/// View context menu
 			else if (event.GUIEvent.Caller == ViewContextMenu) {
 				checkViewContextMenu(ViewContextMenu->getItemCommandId(ViewContextMenu->getSelectedItem()));
 				return true;
 			}
-
+			/// Rendering context menu
+			else if (event.GUIEvent.Caller == RenderingContextMenu) {
+				checkRenderingContextMenu(RenderingContextMenu->getItemCommandId(RenderingContextMenu->getSelectedItem()));
+				return true;
+			}
 		}
 	}
 
 	return false;
 }
 
-void CCP3DContextMenu::checkViewContextMenu(irr::s32 id) {
+void CCP3DContextMenu::checkViewContextMenu(s32 id) {
 
 	CCP3DEditionTool *editionTool = EditorCore->getEditionTool();
 
@@ -174,7 +193,7 @@ void CCP3DContextMenu::checkViewContextMenu(irr::s32 id) {
 	}
 }
 
-void CCP3DContextMenu::checkSceneContextMenu(irr::s32 id) {
+void CCP3DContextMenu::checkSceneContextMenu(s32 id) {
 	using namespace ui;
 
 	switch (id)
@@ -183,12 +202,42 @@ void CCP3DContextMenu::checkSceneContextMenu(irr::s32 id) {
 		{ CUIAddMesh *addMesh = new CUIAddMesh(EditorCore, false); }
 		break;
 	case ESCM_ADD_ANIMATED_MESH:
-	{ CUIAddMesh *addMesh = new CUIAddMesh(EditorCore, true); }
+		{ CUIAddMesh *addMesh = new CUIAddMesh(EditorCore, true); }
 		break;
 	default:
 		break;
 	}
+}
 
+void CCP3DContextMenu::checkSceneLightContextMenu(s32 id) {
+	if (id == ESCML_SHADOW || id == ESCML_STANDARD) {
+		rendering::ICP3DLightSceneNode *light = EditorCore->getRenderingEngine()->createLightSceneNode(true, id == ESCML_SHADOW ? true : false);
+		ILightSceneNode *node = *light;
+
+		SEvent ev;
+		ev.EventType = EET_USER_EVENT;
+		ev.UserEvent.UserData1 = EIE_NODE_ADDED;
+		ev.UserEvent.UserData2 = (s32)node;
+		EditorCore->getEngine()->getEventReceiver()->OnEvent(ev);
+	}
+}
+
+void CCP3DContextMenu::checkRenderingContextMenu(s32 id) {
+	using namespace rendering;
+	ICP3DRenderingEngine *rengine = EditorCore->getRenderingEngine();
+	ICP3DEffectsManager *effectsMgr = rengine->getEffectsManager();
+
+	switch (id)
+	{
+	case ERCM_SSAO:
+		effectsMgr->createSSAOEffect(!effectsMgr->isSSAOCreated());
+		break;
+	case ERCM_VLS:
+		effectsMgr->createVolumetricLightScatteringEffect(!effectsMgr->isVolumetricLightScatteringCreated(), 0);
+		break;
+	default:
+		break;
+	}
 }
 
 } /// End namespace cp3d

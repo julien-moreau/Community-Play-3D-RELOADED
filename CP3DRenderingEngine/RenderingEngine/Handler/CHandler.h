@@ -165,17 +165,16 @@ private:
 
 	struct SPostProcessingPair {
 		SPostProcessingPair(const irr::s32 materialTypeIn, ScreenQuadCB* callbackIn, IPostProcessingRenderCallback* renderCallbackIn = 0)
-			: materialType(materialTypeIn), callback(callbackIn), renderCallback(renderCallbackIn), activated(true)
+			: materialType(materialTypeIn), callback(callbackIn), renderCallback(renderCallbackIn)
 		{ }
 
 		bool operator < (const SPostProcessingPair& other) const {
 			return materialType < other.materialType;
 		}
 
-		ScreenQuadCB* callback;
-		IPostProcessingRenderCallback* renderCallback;
 		irr::s32 materialType;
-		bool activated;
+		IPostProcessingRenderCallback* renderCallback;
+		ScreenQuadCB* callback;
 		irr::core::stringc path;
 	};
 

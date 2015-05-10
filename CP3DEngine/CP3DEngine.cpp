@@ -10,6 +10,7 @@
 using namespace irr;
 using namespace video;
 using namespace core;
+using namespace scene;
 
 namespace cp3d {
 	CP3DR_LIB_API engine::ICP3DEngine *createEngine(IrrlichtDevice *device) {
@@ -20,7 +21,7 @@ namespace cp3d {
 namespace cp3d {
 namespace engine {
 
-CCP3DEngine::CCP3DEngine(irr::IrrlichtDevice *device) : Device(device), DrawGUI(false)
+CCP3DEngine::CCP3DEngine(IrrlichtDevice *device) : Device(device), DrawGUI(false)
 {
 	/// Configure rendering
 	Rengine = createRenderingEngine(device);
@@ -118,17 +119,22 @@ rendering::ICP3DRenderingEngine *CCP3DEngine::getRenderingEngine() {
 	return Rengine;
 }
 
-void CCP3DEngine::addSceneManager(irr::scene::ISceneManager *smgr) {
+void CCP3DEngine::addSceneManager(ISceneManager *smgr) {
 	if (!smgr)
 		return;
 
 	CustomSceneManagers.push_back(smgr);
 }
-
-void CCP3DEngine::removeSceneManager(irr::scene::ISceneManager *smgr) {
+void CCP3DEngine::removeSceneManager(ISceneManager *smgr) {
 	s32 index = CustomSceneManagers.binary_search(smgr);
 	if (index != -1)
 		CustomSceneManagers.erase(index);
+}
+ISceneManager *CCP3DEngine::getSceneManager(u32 indice) {
+	return CustomSceneManagers[indice];
+}
+irr::u32 CCP3DEngine::getSceneManagerCount() {
+	return CustomSceneManagers.size();
 }
 
 } /// End namespace engine

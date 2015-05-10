@@ -156,6 +156,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClInclude Include="..\include\CP3DRenderingEngine.h" />
     <ClInclude Include="..\include\CScreenQuad.h" />
     <ClInclude Include="..\include\ECP3DGUIEvents.h" />
+    <ClInclude Include="..\include\ECP3DSceneNodeTypes.h" />
     <ClInclude Include="..\include\ICP3DCollaborativeEngine.h" />
     <ClInclude Include="..\include\ICP3DColorDialog.h" />
     <ClInclude Include="..\include\ICP3DCustomView.h" />

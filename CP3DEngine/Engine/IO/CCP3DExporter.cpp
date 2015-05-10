@@ -8,6 +8,7 @@ using namespace irr;
 using namespace core;
 using namespace io;
 using namespace video;
+using namespace scene;
 
 namespace cp3d {
 namespace engine {
@@ -63,8 +64,9 @@ stringw CCP3DExporter::getValue(IAttributes *attributes, u32 indice) {
 		case EAT_FLOAT:
 			return stringw(attributes->getAttributeAsFloat(indice));
 			break;
-		case EAT_STRING:
+		case EAT_STRING: {
 			return attributes->getAttributeAsStringW(indice);
+		}
 			break;
 		case EAT_BOOL: {
 			bool value = attributes->getAttributeAsBool(indice);
@@ -158,36 +160,73 @@ stringw CCP3DExporter::getValue(IAttributes *attributes, u32 indice) {
 	return L"";
 }
 
+void CCP3DExporter::writeAttributes(SAttribute attributes) {
+	IAttributes *attr = attributes.Attributes;
+	stringw name = attributes.Name;
+
+	Writer->writeElement(name.c_str());
+	Writer->writeLineBreak();
+
+	for (u32 i = 0; i < attr->getAttributeCount(); i++) {
+		stringw attrName = attr->getAttributeName(i);
+
+		Writer->writeElement(attrName.c_str(), true, L"type", attr->getAttributeTypeString(i), L"value", getValue(attr, i).c_str());
+		Writer->writeLineBreak();
+	}
+
+	Writer->writeClosingTag(name.c_str());
+	Writer->writeLineBreak();
+}
+
 bool CCP3DExporter::exportProject(stringc filename) {
 	IrrlichtDevice *device = Engine->getRenderingEngine()->getDevice();
-	IXMLWriter *writer = device->getFileSystem()->createXMLWriter(filename);
+	Writer = device->getFileSystem()->createXMLWriter(filename);
 
 	/// Write header
-	writer->writeXMLHeader();
+	Writer->writeXMLHeader();
+
+	/// Write scene
+	exportScene();
 
 	/// Write external attributes
 	for (u32 i = 0; i < Attributes.size(); i++) {
-		IAttributes *attr = Attributes[i].Attributes;
-		stringw name = Attributes[i].Name;
-
-		writer->writeElement(name.c_str());
-		writer->writeLineBreak();
-
-		for (u32 j = 0; j < attr->getAttributeCount(); j++) {
-			stringw attrName = attr->getAttributeName(i);
-
-			writer->writeElement(attrName.c_str(), true, L"type", attr->getAttributeTypeString(j), L"value", getValue(attr, j).c_str());
-			writer->writeLineBreak();
-		}
-
-		writer->writeClosingTag(name.c_str());
-		writer->writeLineBreak();
+		writeAttributes(Attributes[i]);
 	}
 
 	/// Close XML writer
-	writer->drop();
+	Writer->drop();
 
 	return true;
+}
+
+void CCP3DExporter::exportScene() {
+	IrrlichtDevice *device = Engine->getRenderingEngine()->getDevice();
+	IVideoDriver *driver = device->getVideoDriver();
+	ISceneManager *smgr = Engine->getRenderingEngine()->getSceneManager();
+	IAttributes *attr = device->getFileSystem()->createEmptyAttributes(driver);
+
+	Writer->writeElement(L"SceneManager");
+	Writer->writeLineBreak();
+
+	array<ISceneNode *> nodes;
+	smgr->getSceneNodesFromType(ESNT_ANY, nodes);
+
+	for (u32 i = 0; i < nodes.size(); i++) {
+		if (nodes[i]->getType() == ESNT_SCENE_MANAGER)
+			continue;
+
+		stringc name = nodes[i]->getName();
+		ISceneNode *node = nodes[i];
+
+		attr->addInt("Type", s32(nodes[i]->getType()));
+		nodes[i]->serializeAttributes(attr);
+		writeAttributes({ "SceneNode", attr });
+
+		attr->clear();
+	}
+
+	Writer->writeClosingTag(L"SceneManager");
+	Writer->writeLineBreak();
 }
 
 } /// End namespace engine

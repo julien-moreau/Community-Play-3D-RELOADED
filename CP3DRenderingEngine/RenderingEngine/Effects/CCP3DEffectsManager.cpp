@@ -15,7 +15,7 @@ namespace cp3d {
 namespace rendering {
 
 CCP3DEffectsManager::CCP3DEffectsManager(CCP3DHandler *handler)
-	: Handler(handler), SSAO(0)
+	: Handler(handler), SSAO(0), VLS(0)
 { }
 
 CCP3DEffectsManager::~CCP3DEffectsManager() {

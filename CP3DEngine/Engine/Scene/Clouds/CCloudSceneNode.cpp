@@ -2,6 +2,7 @@
 #include "stdafx.h"
 
 #include "CCloudSceneNode.h"
+#include <ECP3DSceneNodeTypes.h>
 
 using namespace irr;
 using namespace scene;
@@ -246,7 +247,7 @@ const aabbox3d<f32>& CCloudSceneNode::getBoundingBox() const {
 }
 
 ESCENE_NODE_TYPE CCloudSceneNode::getType() const {
-	return ESNT_UNKNOWN;
+	return (ESCENE_NODE_TYPE)ECSNT_CLOUD;
 }
 
 u32 CCloudSceneNode::getMaterialCount() const {

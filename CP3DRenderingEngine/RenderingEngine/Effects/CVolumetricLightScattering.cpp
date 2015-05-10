@@ -34,10 +34,11 @@ CVolumetricLightScatteringEffect::CVolumetricLightScatteringEffect(CCP3DHandler 
 CVolumetricLightScatteringEffect::~CVolumetricLightScatteringEffect() {
 	/// Set callback to 0 to keep "this" instance in memory
 	/// removePostprocessingEffect deletes the callback instance
-	Handler->setPostProcessingRenderCallback(Material, 0);
-	Handler->removePostProcessingEffect(Material);
+	Handler->setPostProcessingRenderCallback(MaterialID, 0);
+	Handler->removePostProcessingEffect(MaterialID);
 
 	Handler->getGeneralPassManager()->setVolumetricLightScatteringNode(0);
+	Handler->setPostProcessingTextureAtIndex(3, 0);
 }
 
 void CVolumetricLightScatteringEffect::OnPreRender(ICP3DHandler* handler) {

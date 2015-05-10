@@ -42,6 +42,7 @@ private:
 	irr::gui::IGUIContextMenu *EditContextMenu;
 	irr::gui::IGUIContextMenu *ViewContextMenu;
 	irr::gui::IGUIContextMenu *SceneContextMenu;
+	irr::gui::IGUIContextMenu *RenderingContextMenu;
 	irr::gui::IGUIContextMenu *SpiesContextMenu;
 
 	/// File
@@ -57,7 +58,11 @@ private:
 
 	/// Methods
 	void checkViewContextMenu(irr::s32 id);
+
 	void checkSceneContextMenu(irr::s32 id);
+	void checkSceneLightContextMenu(irr::s32 id);
+
+	void checkRenderingContextMenu(irr::s32 id);
 
 	/// --------------------------------------------------
 	/// ENUMS
@@ -66,6 +71,10 @@ private:
 		ESCM_ADD_NEW_TERRAIN = 0,
 		ESCM_ADD_STATIC_MESH,
 		ESCM_ADD_ANIMATED_MESH
+	};
+	enum ESCENE_CONTEXT_MENU_LIGHT {
+		ESCML_SHADOW = 0,
+		ESCML_STANDARD
 	};
 
 	/// View
@@ -81,6 +90,12 @@ private:
 		EVCM_POST_PROCESSES_MANAGER,
 		EVCM_ANIMATORS_MANAGER,
 		EVCM_SCENARIOS_MANAGER
+	};
+
+	/// Rendering
+	enum ERENDERING_CONTEXT_MENU {
+		ERCM_SSAO = 0,
+		ERCM_VLS
 	};
 
 	/// --------------------------------------------------

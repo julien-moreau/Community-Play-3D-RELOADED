@@ -554,9 +554,6 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 	if(PostProcessingRoutinesSize) {
 
 		for(u32 i = 0; i < PostProcessingRoutinesSize; i++) {
-			if (!PostProcessingRoutines[i].activated) {
-				continue;
-			}
 
 			ScreenQuad.getMaterial().setTexture(1, ScreenRTT);
 			ScreenQuad.getMaterial().MaterialType = (E_MATERIAL_TYPE)PostProcessingRoutines[i].materialType;

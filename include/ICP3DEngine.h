@@ -58,6 +58,15 @@ public:
 	//! \param smgr: the scene manager to remove
 	virtual void removeSceneManager(irr::scene::ISceneManager *smgr) = 0;
 
+	//! Returns a custom scene manager at index "indice"
+	//! \param indice: the indice of the custom scene manager
+	//! \return: the wanted custom scene manager
+	virtual irr::scene::ISceneManager *getSceneManager(irr::u32 indice) = 0;
+
+	//! Returns the amount of custom scene managers
+	//! \return: returns amound of custom scene managers
+	virtual irr::u32 getSceneManagerCount() = 0;
+
 	//! Returns if the engine draws the GUI
 	//! return: true if the engine draws the GUI
 	virtual const bool isDrawingGUI() const = 0;

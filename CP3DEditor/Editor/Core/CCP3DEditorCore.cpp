@@ -21,6 +21,8 @@
 
 #include "../GUIElements/GUIFileSelector/CGUIFileSelector.h"
 
+#include <ICP3DExporter.h>
+
 using namespace irr;
 using namespace scene;
 using namespace video;
@@ -277,6 +279,10 @@ void CCP3DEditorCore::createTestScene() {
 	//Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/Custom.fragment.fx", new CustomCallback(Driver));
 
 	SpiesManager->addSpy(new CCP3DPostProcessSpy(this));
+
+	//engine::ICP3DExporter *exporter = Engine->createExporter();
+	//exporter->exportProject("test.cp3d");
+	//exit(0);
 }
 
 } /// End namespace cp3d

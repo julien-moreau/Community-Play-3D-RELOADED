@@ -35,12 +35,15 @@ CSSAOEffect::~CSSAOEffect() {
 	Handler->setPostProcessingRenderCallback(SSAOMaterial, 0);
 
 	Handler->removePostProcessingEffect(SSAOMaterial);
-	Handler->removePostProcessingEffect(BlurHMaterial);
-	Handler->removePostProcessingEffect(BlurVMaterial);
-	Handler->removePostProcessingEffect(SSAOCombineMaterial);
+	Handler->removePostProcessingEffect(BlurHMaterial - 1);
+	Handler->removePostProcessingEffect(BlurVMaterial - 2);
+	Handler->removePostProcessingEffect(SSAOCombineMaterial - 3);
 
 	Handler->getDepthPassManager()->removePass("SSAODepthRTT");
 	Handler->getVideoDriver()->removeTexture(RandomTex);
+
+	Handler->setPostProcessingTextureAtIndex(2, 0);
+	Handler->setPostProcessingTextureAtIndex(3, 0);
 }
 
 void CSSAOEffect::OnPreRender(ICP3DHandler* handler) {

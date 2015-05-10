@@ -24,17 +24,22 @@ public:
 
 private:
 
-	/// Methods
-	irr::core::stringw getValue(irr::io::IAttributes *attributes, irr::u32 indice);
-
-	/// Datas
-	CCP3DEngine *Engine;
-
+	/// Structs
 	struct SAttribute {
 		irr::core::stringc Name;
 		irr::io::IAttributes *Attributes;
 	};
 	irr::core::array<SAttribute> Attributes;
+
+	/// Methods
+	irr::core::stringw getValue(irr::io::IAttributes *attributes, irr::u32 indice);
+	void writeAttributes(SAttribute attributes);
+
+	void exportScene();
+
+	/// Datas
+	CCP3DEngine *Engine;
+	irr::io::IXMLWriter *Writer;
 
 };
 

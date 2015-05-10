@@ -46,6 +46,8 @@ public:
 	/// Scene manager
 	void addSceneManager(irr::scene::ISceneManager *smgr);
 	void removeSceneManager(irr::scene::ISceneManager *smgr);
+	irr::scene::ISceneManager *getSceneManager(irr::u32 indice);
+	irr::u32 getSceneManagerCount();
 
 	CCP3DExporter *createExporter();
 

@@ -136,14 +136,16 @@ const s32 CCP3DHandler::getPostProcessIDByName(const stringc &name) {
 void CCP3DHandler::setPostProcessActivated(const s32 &id, const bool activated) {
 	s32 matIndex = getPostProcessID(id);
 
-	if (matIndex != -1)
-		PostProcessingRoutines[matIndex].activated = activated;
+	// To implement
+	//if (matIndex != -1)
+	//	PostProcessingRoutines[matIndex].activated = activated;
 }
 bool CCP3DHandler::isPostProcessActivated(const irr::s32 &id) {
 	s32 matIndex = getPostProcessID(id);
 
-	if (matIndex != -1)
-		return PostProcessingRoutines[matIndex].activated;
+	// To implement
+	//if (matIndex != -1)
+	//	return PostProcessingRoutines[matIndex].activated;
 
 	return false;
 }
@@ -166,7 +168,8 @@ s32 CCP3DHandler::addPostProcessingEffectFromString(const irr::core::stringc &sh
 
 	PostProcessingRoutines.push_back(pPair);
 
-	return pPair.materialType;
+	return PostProcessingRoutines.size() - 1;
+	//return pPair.materialType;
 }
 
 s32 CCP3DHandler::addPostProcessingEffectFromFile(const irr::core::stringc& filename, IPostProcessingRenderCallback* callback) {
@@ -179,7 +182,8 @@ s32 CCP3DHandler::addPostProcessingEffectFromFile(const irr::core::stringc& file
 
 	PostProcessingRoutines.push_back(pPair);
 
-	return pPair.materialType;
+	return PostProcessingRoutines.size() - 1;
+	//return pPair.materialType;
 }
 
 s32 CCP3DHandler::replacePostProcessAtIndex(s32 index, const stringc &filename, IPostProcessingRenderCallback *callback) {
@@ -203,7 +207,8 @@ s32 CCP3DHandler::replacePostProcessAtIndex(s32 index, const stringc &filename, 
 
 	PostProcessingRoutines[index] = pPair;
 
-	return pPair.materialType;
+	return PostProcessingRoutines.size() - 1;
+	//return pPair.materialType;
 }
 
 bool CCP3DHandler::removePostProcessingEffect(s32 materialType, const bool deleteCallback) {

@@ -50,7 +50,7 @@ public:
 	virtual irr::s32 createCustomShadowsMaterialFromFile(const irr::core::stringc &vertexFilename,
 														 irr::video::E_MATERIAL_TYPE baseMaterial = irr::video::EMT_SOLID,
 														 irr::video::IShaderConstantSetCallBack *callback = 0) = 0;
-														 
+
 	//! Creates a custom shadows material from string (vertex)
 	//! \param vertexShader: the string containing the vertex shader code
 	//! \param baseMaterial: the base material of the created material
