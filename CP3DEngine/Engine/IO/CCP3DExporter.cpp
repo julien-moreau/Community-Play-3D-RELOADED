@@ -14,7 +14,7 @@ namespace cp3d {
 namespace engine {
 
 CCP3DExporter::CCP3DExporter(CCP3DEngine *engine) : Engine(engine) {
-
+	Device = Engine->getRenderingEngine()->getDevice();
 }
 
 CCP3DExporter::~CCP3DExporter() {
@@ -77,12 +77,12 @@ stringw CCP3DExporter::getValue(IAttributes *attributes, u32 indice) {
 			break;
 		case EAT_COLOR: {
 			SColor color = attributes->getAttributeAsColor(indice);
-			return stringw(color.getRed()) + "," + stringw(color.getGreen()) + "," + stringw(color.getBlue());
+			return stringw(color.getAlpha()) + ", " + stringw(color.getRed()) + ", " + stringw(color.getGreen()) + ", " + stringw(color.getBlue());
 		}
 			break;
 		case EAT_COLORF: {
 			SColorf colorf = attributes->getAttributeAsColorf(indice);
-			return stringw(colorf.r) + ", " + stringw(colorf.g) + ", " + stringw(colorf.b);
+			return stringw(colorf.r) + ", " + stringw(colorf.g) + ", " + stringw(colorf.b) + ", " + stringw(colorf.a);
 		}
 			break;
 		case EAT_VECTOR3D: {
@@ -179,8 +179,10 @@ void CCP3DExporter::writeAttributes(SAttribute attributes) {
 }
 
 bool CCP3DExporter::exportProject(stringc filename) {
-	IrrlichtDevice *device = Engine->getRenderingEngine()->getDevice();
-	Writer = device->getFileSystem()->createXMLWriter(filename);
+	Writer = Device->getFileSystem()->createXMLWriter(filename);
+
+	if (!Writer)
+		return false;
 
 	/// Write header
 	Writer->writeXMLHeader();
@@ -195,15 +197,15 @@ bool CCP3DExporter::exportProject(stringc filename) {
 
 	/// Close XML writer
 	Writer->drop();
+	Writer = 0;
 
 	return true;
 }
 
 void CCP3DExporter::exportScene() {
-	IrrlichtDevice *device = Engine->getRenderingEngine()->getDevice();
-	IVideoDriver *driver = device->getVideoDriver();
+	IVideoDriver *driver = Device->getVideoDriver();
 	ISceneManager *smgr = Engine->getRenderingEngine()->getSceneManager();
-	IAttributes *attr = device->getFileSystem()->createEmptyAttributes(driver);
+	IAttributes *attr = Device->getFileSystem()->createEmptyAttributes(driver);
 
 	Writer->writeElement(L"SceneManager");
 	Writer->writeLineBreak();

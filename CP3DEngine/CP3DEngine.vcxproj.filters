@@ -244,6 +244,9 @@
     <ClCompile Include="Engine\IO\CCP3DExporter.cpp">
       <Filter>Engine\IO</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\IO\CCP3DImporter.cpp">
+      <Filter>Engine\IO</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc">

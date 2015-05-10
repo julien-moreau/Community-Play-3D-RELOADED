@@ -212,6 +212,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClCompile Include="Engine\Core\Plugins\CCP3DMonitorPlugin.cpp" />
     <ClCompile Include="Engine\Core\Plugins\CCP3DPluginManager.cpp" />
     <ClCompile Include="Engine\IO\CCP3DExporter.cpp" />
+    <ClCompile Include="Engine\IO\CCP3DImporter.cpp" />
     <ClCompile Include="Engine\Scene\CCP3DGeometryCreator.cpp" />
     <ClCompile Include="Engine\Scene\CCP3DSceneNodeCreator.cpp" />
     <ClCompile Include="Engine\Scene\Clouds\CCloudSceneNode.cpp" />

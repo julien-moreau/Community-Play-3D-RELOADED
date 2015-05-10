@@ -94,6 +94,9 @@ public:
 	//! Returns the effects manager
 	virtual ICP3DEffectsManager *getEffectsManager() = 0;
 
+	//! Clears the scene (handler + lights + scene)
+	virtual void clear() = 0;
+
 };
 
 } /// End rendering namespace

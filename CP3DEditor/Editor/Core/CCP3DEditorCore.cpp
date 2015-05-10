@@ -280,9 +280,16 @@ void CCP3DEditorCore::createTestScene() {
 
 	SpiesManager->addSpy(new CCP3DPostProcessSpy(this));
 
-	//engine::ICP3DExporter *exporter = Engine->createExporter();
-	//exporter->exportProject("test.cp3d");
-	//exit(0);
+	return;
+	engine::ICP3DExporter *exporter = Engine->createExporter();
+	exporter->exportProject("test.cp3d");
+
+	Rengine->clear();
+	createComponents();
+	SceneGraph->fillGraph();
+
+	exporter->importProject("test.cp3d");
+	SceneGraph->fillGraph();
 }
 
 } /// End namespace cp3d

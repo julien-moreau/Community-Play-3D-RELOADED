@@ -74,7 +74,7 @@ public:
 
 	//! Sets the light's color
 	//! \param color: the new color of the light
-	void setLightColor(const irr::video::SColorf &color) {
+	inline void setLightColor(const irr::video::SColorf &color) {
 		Node->getLightData().DiffuseColor = color;
 
 		if (ShadowLight)
@@ -131,7 +131,6 @@ private:
 	//! Private destructor
 	~ICP3DLightSceneNode() {
 		Node->remove();
-		delete ShadowLight;
 	}
 };
 

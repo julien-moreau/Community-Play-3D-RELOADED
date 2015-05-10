@@ -304,6 +304,15 @@ bool CCP3DHandler::removeShadowLight(const irr::u32 index) {
 	return true;
 }
 
+void CCP3DHandler::clear() {
+	ShadowNodeArray.clear();
+	LightList.clear();
+
+	for (u32 i = 0; i < CustomPasses.size(); i++)
+		CustomPasses[i]->SceneNodes.clear();
+	CustomGeneralPass->setVolumetricLightScatteringNode(0);
+}
+
 void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 	if(shadowsUnsupported || smgr->getActiveCamera() == 0)
 		return;

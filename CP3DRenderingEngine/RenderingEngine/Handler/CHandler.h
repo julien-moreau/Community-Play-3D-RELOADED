@@ -119,6 +119,7 @@ public:
 	irr::core::rect<irr::s32> getViewPort() { return ViewPort; }
 	irr::video::IVideoDriver *getVideoDriver() { return driver; }
 	irr::core::dimension2du getScreenRTTSize() { return ScreenRTTSize; }
+	void clear();
 
 	/// Custom Passes
 	void addCustomPass(ICP3DCustomPass *pass) {
@@ -219,7 +220,6 @@ private:
 	irr::core::array<SPostProcessingPair> PostProcessingRoutines;
 	irr::core::array<SShadowLight> LightList;
 	irr::core::array<SShadowNode> ShadowNodeArray;
-	irr::core::array<irr::scene::ISceneNode*> DepthPassArray;
 
 	irr::core::dimension2du ScreenRTTSize;
 	irr::video::SColor ClearColour;

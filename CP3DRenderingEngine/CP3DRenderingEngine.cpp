@@ -171,5 +171,17 @@ CCP3DEffectsManager *CCP3DRenderingEngine::getEffectsManager() {
 	return EffectsManager;
 }
 
+/// Scene
+void CCP3DRenderingEngine::clear() {
+	for (u32 i = 0; i < Lights.size(); i++)
+		delete Lights[i];
+
+	Handler->getIrrlichtDevice()->getSceneManager()->clear();
+	Handler->clear();
+
+	EffectsManager->createVolumetricLightScatteringEffect(false, 0);
+	EffectsManager->createSSAOEffect(false);
+}
+
 } /// End namespace rendering
 } /// End namespace cp3d

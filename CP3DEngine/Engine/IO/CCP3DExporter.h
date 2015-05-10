@@ -18,6 +18,8 @@ public:
 
 	/// ICP3DExporter
 	bool exportProject(irr::core::stringc filename);
+	bool importProject(irr::core::stringc filename);
+
 	bool addAttributes(irr::core::stringc name, irr::io::IAttributes *attributes);
 	bool removeAttributes(irr::io::IAttributes *attributes);
 	bool removeAttributes(irr::core::stringc name);
@@ -33,14 +35,19 @@ private:
 
 	/// Methods
 	irr::core::stringw getValue(irr::io::IAttributes *attributes, irr::u32 indice);
-	void writeAttributes(SAttribute attributes);
+	void setAttribute(irr::io::IAttributes *attributes, irr::core::stringw type);
 
+	void writeAttributes(SAttribute attributes);
 	void exportScene();
+
+	void importNode();
+	void importScene();
 
 	/// Datas
 	CCP3DEngine *Engine;
+	irr::IrrlichtDevice *Device;
 	irr::io::IXMLWriter *Writer;
-
+	irr::io::IXMLReader *Reader;
 };
 
 } /// End namespace engine

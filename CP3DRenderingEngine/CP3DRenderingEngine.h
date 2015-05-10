@@ -62,6 +62,9 @@ public:
 	irr::s32 setLightSceneNodeComputeShadows(ICP3DLightSceneNode *node, const bool compute);
 	irr::s32 setLightSceneNodeComputeShadows(const irr::u32 index, const bool compute);
 
+	/// Scene
+	void clear();
+
 private:
 	/// Rendering
 	CCP3DHandler *Handler;

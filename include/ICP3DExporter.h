@@ -9,10 +9,14 @@ namespace engine {
 	class ICP3DExporter {
 	public:
 
-		//! Exports the given scene into
+		//! Exports the project into a file
 		//! \param smgr: the scene to export
 		//! \return: if the export succeded or not
 		virtual bool exportProject(irr::core::stringc filename) = 0;
+
+		//! Imports the given file
+		//! \param filename: the file to import
+		virtual bool importProject(irr::core::stringc filename) = 0;
 
 		//! Adds a IAttributes object to export
 		//! \param attributes: attributes to add and to export

@@ -119,7 +119,7 @@ bool CCP3DSceneGraph::OnEvent(const SEvent &event) {
 
 				ISceneNode *sceneNode = (ISceneNode*)node->getData();
 				sceneNode = dynamic_cast<ISceneNode *>(sceneNode);
-				if (!SceneNode)
+				if (!sceneNode)
 					return true;
 
 				engine::ICP3DSceneNodeCreator *snCreator = EditorCore->getEngine()->getSceneNodeCreator();
@@ -229,6 +229,8 @@ bool CCP3DSceneGraph::OnEvent(const SEvent &event) {
 }
 
 void CCP3DSceneGraph::fillGraph(irr::scene::ISceneNode *start) {
+	SceneNode->clearChildren();
+
 	if (start == 0)
 		start = Smgr->getRootSceneNode();
 
