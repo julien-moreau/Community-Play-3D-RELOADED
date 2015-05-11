@@ -33,12 +33,15 @@ CCP3DEditionToolLightSceneNode::~CCP3DEditionToolLightSceneNode() {
 }
 
 void CCP3DEditionToolLightSceneNode::createInterface() {
+	/*
 	for (u32 i=0; i < Rengine->getLightSceneNodeCount(); i++) {
 		if (*Rengine->getLightSceneNode(i) == SceneNode) {
 			LightSceneNode = Rengine->getLightSceneNode(i);
 			break;
 		}
 	}
+	*/
+	LightSceneNode = Rengine->getLightSceneNode((ILightSceneNode *)SceneNode);
 
 	/// Tabs
 	LightTab = EditionTool->addTab("Light");

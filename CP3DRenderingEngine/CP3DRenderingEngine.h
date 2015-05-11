@@ -54,6 +54,7 @@ public:
 	ICP3DLightSceneNode *getLightSceneNode(const irr::u32 &index) {
 		return Lights[index];
 	}
+	ICP3DLightSceneNode *getLightSceneNode(irr::scene::ILightSceneNode *node);
 	const irr::u32 getLightSceneNodeCount() const {
 		return Lights.size();
 	}

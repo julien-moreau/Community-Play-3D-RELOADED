@@ -61,6 +61,10 @@ public:
 	//! \param index: the index of the light
 	virtual ICP3DLightSceneNode *getLightSceneNode(const irr::u32 &index) = 0;
 
+	//! Returns the light containing the given scene node
+	//! \param: node: the irrlicht light scene node
+	virtual ICP3DLightSceneNode *getLightSceneNode(irr::scene::ILightSceneNode *node) = 0;
+
 	//! Removes a light scene node from its pointer
 	//! \param node: the light scene node to remove
 	virtual void removeLightSceneNode(ICP3DLightSceneNode *node) = 0;

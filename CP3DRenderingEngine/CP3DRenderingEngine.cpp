@@ -107,6 +107,16 @@ void CCP3DRenderingEngine::removeLightSceneNode(ILightSceneNode *node) {
 	}
 }
 
+ICP3DLightSceneNode *CCP3DRenderingEngine::getLightSceneNode(ILightSceneNode *node) {
+	for (u32 i = 0; i < Lights.size(); i++) {
+		if (*Lights[i] == node) {
+			return Lights[i];
+		}
+	}
+
+	return 0;
+}
+
 irr::s32 CCP3DRenderingEngine::setLightSceneNodeComputeShadows(const irr::u32 index, const bool compute) {
 	if (index < 0 || index >= Lights.size())
 		return -1;

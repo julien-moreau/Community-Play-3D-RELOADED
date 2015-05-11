@@ -37,8 +37,11 @@ private:
 	irr::core::stringw getValue(irr::io::IAttributes *attributes, irr::u32 indice);
 	void setAttribute(irr::io::IAttributes *attributes, irr::core::stringw type);
 
-	void writeAttributes(SAttribute attributes);
+	void writeAttributes(SAttribute attributes, irr::scene::ISceneNode *node);
+	void writeAttributes(irr::io::IAttributes *attributes);
 	void exportScene();
+	void serializeNode(irr::scene::ISceneNode *node, irr::io::IAttributes *attributes);
+	void exportMaterial(irr::video::SMaterial &material);
 
 	void importNode();
 	void importScene();

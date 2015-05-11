@@ -74,42 +74,43 @@ stringw CCP3DExporter::getValue(IAttributes *attributes, u32 indice) {
 		}
 			break;
 		case EAT_ENUM:
+			return stringw(attributes->getAttributeAsEnumeration(indice));
 			break;
 		case EAT_COLOR: {
 			SColor color = attributes->getAttributeAsColor(indice);
-			return stringw(color.getAlpha()) + ", " + stringw(color.getRed()) + ", " + stringw(color.getGreen()) + ", " + stringw(color.getBlue());
+			return stringw(color.getAlpha()) + "," + stringw(color.getRed()) + "," + stringw(color.getGreen()) + "," + stringw(color.getBlue());
 		}
 			break;
 		case EAT_COLORF: {
 			SColorf colorf = attributes->getAttributeAsColorf(indice);
-			return stringw(colorf.r) + ", " + stringw(colorf.g) + ", " + stringw(colorf.b) + ", " + stringw(colorf.a);
+			return stringw(colorf.r) + "," + stringw(colorf.g) + "," + stringw(colorf.b) + "," + stringw(colorf.a);
 		}
 			break;
 		case EAT_VECTOR3D: {
 			vector3df v3d = attributes->getAttributeAsVector3d(indice);
-			return stringw(v3d.X) + ", " + stringw(v3d.Y) + ", " + stringw(v3d.Z);
+			return stringw(v3d.X) + "," + stringw(v3d.Y) + "," + stringw(v3d.Z);
 		}
 			break;
 		case EAT_POSITION2D: {
 			position2di p2d = attributes->getAttributeAsPosition2d(indice);
-			return stringw(p2d.X) + ", " + stringw(p2d.Y);
+			return stringw(p2d.X) + "," + stringw(p2d.Y);
 		}
 			break;
 		case EAT_VECTOR2D: {
 			vector2df v2d = attributes->getAttributeAsVector2d(indice);
-			return stringw(v2d.X) + ", " + stringw(v2d.Y);
+			return stringw(v2d.X) + "," + stringw(v2d.Y);
 		}
 			break;
 		case EAT_RECT: {
 			rect<s32> r = attributes->getAttributeAsRect(indice);
-			return stringw(r.UpperLeftCorner.X) + ", " + stringw(r.UpperLeftCorner.Y) + ", " + stringw(r.LowerRightCorner.X) + ", " + stringw(r.LowerRightCorner.Y);
+			return stringw(r.UpperLeftCorner.X) + "," + stringw(r.UpperLeftCorner.Y) + "," + stringw(r.LowerRightCorner.X) + "," + stringw(r.LowerRightCorner.Y);
 		}
 			break;
 		case EAT_MATRIX: {
 			matrix4 mat = attributes->getAttributeAsMatrix(indice);
 			stringw matW = "";
 			for (u32 i = 0; i < 16; i++) {
-				matW += stringw(mat.pointer()[i]) + ", ";
+				matW += stringw(mat.pointer()[i]) + ",";
 			}
 			return matW;
 		}
@@ -160,18 +161,106 @@ stringw CCP3DExporter::getValue(IAttributes *attributes, u32 indice) {
 	return L"";
 }
 
-void CCP3DExporter::writeAttributes(SAttribute attributes) {
+void CCP3DExporter::serializeNode(ISceneNode *node, IAttributes *attributes) {
+	using namespace rendering;
+
+	node->serializeAttributes(attributes);
+
+	if (node->getType() == ESNT_LIGHT) {
+		ICP3DLightSceneNode *light = Engine->getRenderingEngine()->getLightSceneNode((ILightSceneNode *)node);
+		attributes->addBool("ComputeNormalMapping", light->isComputingNormalMapping());
+		attributes->addBool("ComputeShadows", light->isComputingShadows());
+		attributes->addFloat("LightStrength", light->getLightStrength());
+
+		if (light->isComputingShadows()) {
+			SShadowLight *slight = light->getShadowLight();
+			attributes->addFloat("FarValue", slight->getFarValue());
+			attributes->addFloat("FrontOfView", slight->getFrontOfView());
+			attributes->addFloat("NearValue", slight->getNearValue());
+			attributes->addBool("IsDirectional", slight->isDirectional());
+			attributes->addBool("IsSpotLight", slight->usingRoundSpotLight());
+			attributes->addInt("MapResolution", slight->getShadowMapResolution());
+			attributes->addVector3d("Target", slight->getTarget());
+			attributes->addBool("AutoRecalculate", slight->mustAutoRecalculate());
+		}
+
+	}
+}
+
+void CCP3DExporter::exportMaterial(SMaterial &material) {
+	IAttributes *attr = Device->getFileSystem()->createEmptyAttributes(Device->getVideoDriver());
+
+	/// Material
+	attr->addInt("MaterialType", material.MaterialType);
+	attr->addColor("AmbiantColor", material.AmbientColor);
+	attr->addColor("DiffuseColor", material.DiffuseColor);
+	attr->addColor("EmissiveColor", material.EmissiveColor);
+	attr->addColor("SpecularColor", material.SpecularColor);
+	attr->addFloat("Shininess", material.Shininess);
+	attr->addFloat("Thickness", material.Thickness);
+	attr->addInt("ZBuffer", material.ZBuffer);
+	attr->addInt("AntiAliasing", material.AntiAliasing);
+	attr->addInt("ColorMask", material.ColorMask);
+	attr->addInt("ColorMaterial", material.ColorMaterial);
+	attr->addInt("BlendOperation", material.BlendOperation);
+	attr->addInt("PolygonOffsetFactor", material.PolygonOffsetFactor);
+	attr->addBool("Wireframe", material.Wireframe);
+	attr->addBool("PointCloud", material.PointCloud);
+	attr->addBool("Lighting", material.Lighting);
+	attr->addBool("BackFaceCulling", material.BackfaceCulling);
+	attr->addBool("FrontFaceCulling", material.FrontfaceCulling);
+	attr->addBool("FogEnable", material.FogEnable);
+	attr->addBool("NormalizeNormals", material.NormalizeNormals);
+	attr->addBool("UseMipMaps", material.UseMipMaps);
+
+	Writer->writeElement(L"Material");
+	Writer->writeLineBreak();
+	writeAttributes(attr);
+
+	/// TextureLayer
+	for (u32 i = 0; i < video::MATERIAL_MAX_TEXTURES; i++) {
+		attr->clear();
+		Writer->writeElement(L"TextureLayer");
+		Writer->writeLineBreak();
+
+		ITexture *texture = material.TextureLayer[i].Texture;
+		if (texture)
+			attr->addString("TexturePath", texture->getName().getPath().c_str());
+
+		writeAttributes(attr);
+
+		Writer->writeClosingTag(L"TextureLayer");
+		Writer->writeLineBreak();
+	}
+
+	/// Finish
+	Writer->writeClosingTag(L"Material");
+	Writer->writeLineBreak();
+
+	attr->drop();
+}
+
+void CCP3DExporter::writeAttributes(IAttributes *attributes) {
+	for (u32 i = 0; i < attributes->getAttributeCount(); i++) {
+		stringw attrName = attributes->getAttributeName(i);
+
+		Writer->writeElement(attrName.c_str(), true, L"type", attributes->getAttributeTypeString(i), L"value", getValue(attributes, i).c_str());
+		Writer->writeLineBreak();
+	}
+}
+
+void CCP3DExporter::writeAttributes(SAttribute attributes, ISceneNode *node) {
 	IAttributes *attr = attributes.Attributes;
 	stringw name = attributes.Name;
 
 	Writer->writeElement(name.c_str());
 	Writer->writeLineBreak();
 
-	for (u32 i = 0; i < attr->getAttributeCount(); i++) {
-		stringw attrName = attr->getAttributeName(i);
+	writeAttributes(attr);
 
-		Writer->writeElement(attrName.c_str(), true, L"type", attr->getAttributeTypeString(i), L"value", getValue(attr, i).c_str());
-		Writer->writeLineBreak();
+	if (node && node->getType() != ESNT_LIGHT) {
+		for (u32 i = 0; i < node->getMaterialCount(); i++)
+			exportMaterial(node->getMaterial(i));
 	}
 
 	Writer->writeClosingTag(name.c_str());
@@ -192,7 +281,7 @@ bool CCP3DExporter::exportProject(stringc filename) {
 
 	/// Write external attributes
 	for (u32 i = 0; i < Attributes.size(); i++) {
-		writeAttributes(Attributes[i]);
+		writeAttributes(Attributes[i], 0);
 	}
 
 	/// Close XML writer
@@ -221,8 +310,8 @@ void CCP3DExporter::exportScene() {
 		ISceneNode *node = nodes[i];
 
 		attr->addInt("Type", s32(nodes[i]->getType()));
-		nodes[i]->serializeAttributes(attr);
-		writeAttributes({ "SceneNode", attr });
+		serializeNode(nodes[i], attr);
+		writeAttributes({ "SceneNode", attr }, nodes[i]);
 
 		attr->clear();
 	}
