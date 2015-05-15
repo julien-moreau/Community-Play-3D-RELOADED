@@ -44,8 +44,8 @@ void Direct3D9Debug(irr::IrrlichtDevice *device) {
 	/// Create a test scene
 	//ICameraSceneNode *camera = smgr->addCameraSceneNodeFPS(0, 200.f, 0.09f);
 	device->getCursorControl()->setVisible(true);
-	ICameraSceneNode *camera = smgr->addCameraSceneNodeMaya();
-	camera->setPosition(vector3df(30.f, 30.f, 0.f));
+	ICameraSceneNode *camera = smgr->addCameraSceneNodeFPS(0, 200.f, 0.09f);
+	camera->setPosition(vector3df(10.f, 10.f, 0.f));
 	device->getCursorControl()->setVisible(false);
 	camera->setFOV(90.f * core::DEGTORAD);
 
@@ -56,6 +56,9 @@ void Direct3D9Debug(irr::IrrlichtDevice *device) {
 		driver->getTexture("Textures/Skybox/glacier_rt.png"),
 		driver->getTexture("Textures/Skybox/glacier_ft.png"),
 		driver->getTexture("Textures/Skybox/glacier_bk.png"));
+
+	rengine->createNormalMappingMaterial();
+	rengine->getEffectsManager()->createSSAOEffect(true);
 
 	for (s32 i = 0; i < 6; ++i)
 	{
@@ -69,7 +72,8 @@ void Direct3D9Debug(irr::IrrlichtDevice *device) {
 				cube->getMaterial(0).setTexture(0, driver->getTexture("Textures/diffuse.tga"));
 				cube->getMaterial(0).setTexture(1, driver->getTexture("Textures/normal.tga"));
 				cube->getMaterial(0).setFlag(EMF_LIGHTING, false);
-				cube->getMaterial(0).MaterialType = EMT_SOLID;
+				cube->getMaterial(0).MaterialType = rengine->Materials[EMT_NORMAL_MAP_SOLID];
+				handler->getDepthPassManager()->addNodeToPass(cube);
 			}
 		}
 	}
@@ -80,9 +84,9 @@ void Direct3D9Debug(irr::IrrlichtDevice *device) {
 
 	while (device->run()) {
 		driver->beginScene(true, true, SColor(0x0));
-		//handler->update();
+		handler->update();
 		//driver->draw2DImage(driver->getTexture("CP3DNormalPass"), vector2di(0, 0));
-		smgr->drawAll();
+		//smgr->drawAll();
 		driver->endScene();
 	}
 }

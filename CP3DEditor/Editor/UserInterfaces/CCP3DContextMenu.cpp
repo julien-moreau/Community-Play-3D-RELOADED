@@ -187,6 +187,9 @@ void CCP3DContextMenu::checkViewContextMenu(s32 id) {
 	case EVCM_POST_PROCESSES_MANAGER:
 		editionTool->applyForControllerType((ESCENE_NODE_TYPE)ESNT2_POST_PROCESS, 0);
 		break;
+	case EVCM_TEXTURES_MANAGER:
+		editionTool->applyForControllerType((ESCENE_NODE_TYPE)ESNT2_TEXTURES, 0);
+		break;
 
 	default:
 		break;

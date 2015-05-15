@@ -179,8 +179,13 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClInclude Include="RenderingEngine\Handler\CHandler.h" />
     <ClInclude Include="RenderingEngine\Handler\HandlerShaders.h" />
     <ClInclude Include="RenderingEngine\Handler\CP3DHandler.h" />
+    <ClInclude Include="RenderingEngine\HDR\CHDRBloom.h" />
     <ClInclude Include="RenderingEngine\HDR\CHDRBrightPass.h" />
     <ClInclude Include="RenderingEngine\HDR\CCP3DHDRManager.h" />
+    <ClInclude Include="RenderingEngine\HDR\CHDRDownSample.h" />
+    <ClInclude Include="RenderingEngine\HDR\CHDRGaussianBlur.h" />
+    <ClInclude Include="RenderingEngine\HDR\CHDRLuminance.h" />
+    <ClInclude Include="RenderingEngine\HDR\CHDRTextureAdder.h" />
     <ClInclude Include="RenderingEngine\Managers\CHardwareSkinningManager.h" />
     <ClInclude Include="RenderingEngine\Materials\CHardwareSkinningMaterial.h" />
     <ClInclude Include="RenderingEngine\Materials\CMaterialCreator.h" />
@@ -200,8 +205,13 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClCompile Include="RenderingEngine\Handler\CHandlerPostProcesses.cpp" />
     <ClCompile Include="RenderingEngine\Handler\CShaderPre.cpp" />
     <ClCompile Include="RenderingEngine\Handler\CHandler.cpp" />
+    <ClCompile Include="RenderingEngine\HDR\CHDRBloom.cpp" />
     <ClCompile Include="RenderingEngine\HDR\CHDRBrightPass.cpp" />
     <ClCompile Include="RenderingEngine\HDR\CCP3DHDRManager.cpp" />
+    <ClCompile Include="RenderingEngine\HDR\CHDRDownSample.cpp" />
+    <ClCompile Include="RenderingEngine\HDR\CHDRGaussianBlur.cpp" />
+    <ClCompile Include="RenderingEngine\HDR\CHDRLuminance.cpp" />
+    <ClCompile Include="RenderingEngine\HDR\CHDRTextureAdder.cpp" />
     <ClCompile Include="RenderingEngine\Managers\CHardwareSkinningManager.cpp" />
     <ClCompile Include="RenderingEngine\Materials\CHardwareSkinningMaterial.cpp" />
     <ClCompile Include="RenderingEngine\Materials\CMaterialCreator.cpp" />
@@ -472,12 +482,6 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\CP3DR\Shaders\HDR\BrightPass.fragment.fx">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</ExcludedFromBuild>
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\CP3DR\Shaders\PostProcesses\Custom.fragment.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</ExcludedFromBuild>
       <FileType>Document</FileType>
@@ -485,6 +489,58 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
   </ItemGroup>
   <ItemGroup>
     <None Include="..\CP3DR\Shaders\PostProcesses\VolumetricLightScattering.fragment.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</ExcludedFromBuild>
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CP3DR\Shaders\Materials\water.fragment.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</ExcludedFromBuild>
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\CP3DR\Shaders\Materials\water.vertex.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</ExcludedFromBuild>
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CP3DR\Shaders\HDR\BrightPass.fragment.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</ExcludedFromBuild>
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CP3DR\Shaders\HDR\DownSample.fragment.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</ExcludedFromBuild>
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CP3DR\Shaders\HDR\GaussianBlurH.fragment.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">false</ExcludedFromBuild>
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CP3DR\Shaders\HDR\TextureAdder.fragment.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</ExcludedFromBuild>
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CP3DR\Shaders\HDR\Luminance.fragment.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</ExcludedFromBuild>
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CP3DR\Shaders\HDR\LuminanceDownSample.fragment.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</ExcludedFromBuild>
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CP3DR\Shaders\HDR\HDR.fragment.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</ExcludedFromBuild>
       <FileType>Document</FileType>
     </None>

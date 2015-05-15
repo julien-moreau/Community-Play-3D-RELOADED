@@ -169,6 +169,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolSceneManager.h" />
     <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolSceneNode.h" />
     <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolTextSceneNode.h" />
+    <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolTextures.h" />
     <ClInclude Include="Editor\UserInterfaces\EditionTools\SceneNodeEditionTools\CCP3DSceneNodeAnimators.h" />
     <ClInclude Include="Editor\UserInterfaces\Tools\AddMesh\AddMeshUI.h" />
     <ClInclude Include="Editor\UserInterfaces\Tools\AddMesh\CUIAddMesh.h" />
@@ -200,6 +201,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolSceneManager.cpp" />
     <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolSceneNode.cpp" />
     <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolTextSceneNode.cpp" />
+    <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolTextures.cpp" />
     <ClCompile Include="Editor\UserInterfaces\EditionTools\SceneNodeEditionTools\CCP3DSceneNodeAnimators.cpp" />
     <ClCompile Include="Editor\UserInterfaces\Tools\AddMesh\CUIAddMesh.cpp" />
     <ClCompile Include="Stdafx.cpp">

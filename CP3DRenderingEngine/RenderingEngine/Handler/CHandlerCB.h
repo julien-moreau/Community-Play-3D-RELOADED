@@ -83,11 +83,11 @@ private:
 
 };
 
-class ScreenQuadCB : public irr::video::IShaderConstantSetCallBack {
+class CScreenQuadCB : public irr::video::IShaderConstantSetCallBack {
 
 public:
 
-	ScreenQuadCB(CCP3DHandler* effectIn, bool defaultV = true) 
+	CScreenQuadCB(CCP3DHandler* effectIn, bool defaultV = true)
 		: effect(effectIn), defaultVertexShader(defaultV)
 	{ }
 

@@ -16,7 +16,7 @@ namespace rendering {
 
 class DepthShaderCB;
 class ShadowShaderCB;
-class ScreenQuadCB;
+class CScreenQuadCB;
 
 class CHDRManager;
 
@@ -165,7 +165,7 @@ private:
 	};
 
 	struct SPostProcessingPair {
-		SPostProcessingPair(const irr::s32 materialTypeIn, ScreenQuadCB* callbackIn, IPostProcessingRenderCallback* renderCallbackIn = 0)
+		SPostProcessingPair(const irr::s32 materialTypeIn, CScreenQuadCB* callbackIn, IPostProcessingRenderCallback* renderCallbackIn = 0)
 			: materialType(materialTypeIn), callback(callbackIn), renderCallback(renderCallbackIn)
 		{ }
 
@@ -175,7 +175,7 @@ private:
 
 		irr::s32 materialType;
 		IPostProcessingRenderCallback* renderCallback;
-		ScreenQuadCB* callback;
+		CScreenQuadCB* callback;
 		irr::core::stringc path;
 	};
 

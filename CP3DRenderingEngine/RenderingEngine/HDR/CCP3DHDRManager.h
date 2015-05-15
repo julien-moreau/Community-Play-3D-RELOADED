@@ -8,8 +8,11 @@ namespace cp3d {
 namespace rendering {
 
 class CCP3DHandler;
+class CScreenQuadCB;
 
-class CHDRBrightPass;
+class CHDRBloom;
+class CHDRTextureAdder;
+class CHDRLuminance;
 
 class CHDRManager {
 public:
@@ -23,14 +26,32 @@ private:
 
 	/// Datas
 	irr::video::IVideoDriver *Driver;
-	irr::video::ITexture *TempTexture;
+	irr::ITimer *Timer;
 
 	CCP3DHandler *Handler;
 	CScreenQuad ScreenQuad;
 
-	/// Pipeline
-	CHDRBrightPass *BrightPass;
+	irr::video::ITexture *TextureAdderRTT;
 
+	/// Pipeline
+	CHDRBloom *Bloom;
+	CHDRTextureAdder *TextureAdder;
+	CHDRLuminance *Luminance;
+
+	/// Material
+	CScreenQuadCB *Callback;
+	irr::s32 MaterialType;
+
+	/// HDR
+	irr::f32 Exposure;
+
+	irr::u32 LastTime;
+	irr::f32 CurrentLuminance;
+	irr::f32 MinLuminance;
+	irr::f32 MaxLuminance;
+	irr::f32 OutputLuminance;
+	irr::f32 IncreaseRate;
+	irr::f32 DecreaseRate;
 };
 
 } /// End namespace rendering

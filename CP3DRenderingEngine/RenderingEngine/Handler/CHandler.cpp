@@ -143,7 +143,7 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows), 
 		sPP.addShaderDefine("SCREENY", core::stringc(ScreenRTTSize.Height));
 
 		// Create screen quad shader callback.
-		ScreenQuadCB* SQCB = new ScreenQuadCB(this, true);
+		CScreenQuadCB* SQCB = new CScreenQuadCB(this, true);
 
 		// Light modulate.
 		LightModulate = gpu->addHighLevelShaderMaterial(
@@ -517,13 +517,13 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 	const u32 PostProcessingRoutinesSize = PostProcessingRoutines.size();
 	const u32 CustomPassesSize = CustomPasses.size();
 
-	driver->setRenderTarget(PostProcessingRoutinesSize  ? ScreenRTT : outputTarget, true, true, SColor(0x0));
+	driver->setRenderTarget(PostProcessingRoutinesSize || HDRManager ? ScreenRTT : outputTarget, true, true, SColor(0x0));
 
 	ScreenQuad.getMaterial().setTexture(0, ScreenQuad.rt[1]);
 	ScreenQuad.getMaterial().setTexture(1, ScreenQuad.rt[0]);
 
 	ScreenQuad.getMaterial().MaterialType = (E_MATERIAL_TYPE)LightModulate;
-	if (!PostProcessingRoutinesSize)
+	if (!PostProcessingRoutinesSize && !HDRManager)
 		driver->setViewPort(ViewPort);
 	ScreenQuad.render(driver);
 
@@ -569,7 +569,7 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 			Alter = !Alter;
 			ScreenQuad.getMaterial().setTexture(0, i == 0 ? ScreenRTT : ScreenQuad.rt[int(!Alter)]);
 
-			if (i == PostProcessingRoutinesSize - 1) {
+			if (i == PostProcessingRoutinesSize - 1 && !HDRManager) {
 				driver->setViewPort(ViewPort);
 				driver->setRenderTarget(outputTarget);
 			}
@@ -583,8 +583,8 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 
 	}
 
-	//if (HDRManager)
-	//	HDRManager->render(ScreenQuad.rt[int(Alter)], 0);
+	if (HDRManager)
+		HDRManager->render(PostProcessingRoutinesSize == 0 ? ScreenRTT : ScreenQuad.rt[int(Alter)], outputTarget);
 }
 
 irr::video::ITexture* CCP3DHandler::getShadowMapTexture(const irr::u32 resolution, const bool secondary) {

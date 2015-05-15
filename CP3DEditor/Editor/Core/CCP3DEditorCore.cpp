@@ -175,7 +175,7 @@ bool CCP3DEditorCore::OnEvent(const SEvent &event) {
 struct CustomCallback : public rendering::IPostProcessingRenderCallback {
 public:
 	CustomCallback(irr::video::IVideoDriver *driver) {
-		tex = driver->getTexture("CP3DLightScattering");
+		tex = driver->getTexture("CP3DHDRTextureAdder");
 	}
 
 	void OnPreRender(rendering::ICP3DHandler *handler) {
@@ -274,16 +274,19 @@ void CCP3DEditorCore::createTestScene() {
 	Handler->getGeneralPassManager()->addNodeToPass(cubeNode);
 	Handler->getGeneralPassManager()->addNodeToPass(bill);
 
-	Rengine->getEffectsManager()->createSSAOEffect(true);
+	//Rengine->getEffectsManager()->createSSAOEffect(true);
+	/*
 	Rengine->getEffectsManager()->createVolumetricLightScatteringEffect(true, bill);
 	//Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/Custom.fragment.fx", new CustomCallback(Driver));
+	*/
 
 	SpiesManager->addSpy(new CCP3DPostProcessSpy(this));
+	return;
 
 	engine::ICP3DExporter *exporter = Engine->createExporter();
 	exporter->exportProject("test.cp3d");
 	exit(0);
-	return;
+
 	Rengine->clear();
 	createComponents();
 	SceneGraph->fillGraph();

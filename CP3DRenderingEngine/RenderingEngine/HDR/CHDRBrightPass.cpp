@@ -19,15 +19,30 @@ CHDRBrightPass::CHDRBrightPass(CCP3DHandler *handler) : Handler(handler) {
 
 	CMaterialCreator cmat(handler->getVideoDriver());
 	
-	Callback = new ScreenQuadCB(Handler, true);
+	Callback = new CScreenQuadCB(Handler, true);
 	MaterialType = cmat.createMaterialFromFiles("Shaders/InternalHandler/ScreenQuad.vertex.fx", "Shaders/HDR/BrightPass.fragment.fx", EMT_SOLID, Callback);
+
+	f32 sU = (1.f / f32(Driver->getScreenSize().Width / 2));
+	f32 sV = (1.f / f32(Driver->getScreenSize().Height / 2));
+	DsOffsets[0] = -0.5f * sU;
+	DsOffsets[1] = 0.5f  * sV;
+	DsOffsets[2] = 0.5f  * sU;
+	DsOffsets[3] = 0.5f  * sV;
+	DsOffsets[4] = -0.5f * sU;
+	DsOffsets[5] = -0.5f * sV;
+	DsOffsets[6] = 0.5f  * sU;
+	DsOffsets[7] = -0.5f * sV;
+	BrightThreshold = 0.8f;
+
+	Callback->uniformDescriptors["dsOffsets"] = CScreenQuadCB::SUniformDescriptor(DsOffsets, 8);
+	Callback->uniformDescriptors["brightThreshold"] = CScreenQuadCB::SUniformDescriptor(&BrightThreshold, 1);
 }
 
 CHDRBrightPass::~CHDRBrightPass() {
 
 }
 
-void CHDRBrightPass::render(irr::video::ITexture *source, CScreenQuad &screenQuad) {
+void CHDRBrightPass::render(ITexture *source, CScreenQuad &screenQuad) {
 	screenQuad.getMaterial().setTexture(0, source);
 	screenQuad.getMaterial().MaterialType = (E_MATERIAL_TYPE)MaterialType;
 	screenQuad.render(Driver);

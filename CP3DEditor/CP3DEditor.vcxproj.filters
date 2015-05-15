@@ -131,6 +131,9 @@
     <ClInclude Include="Editor\GUIElements\CGUIManager.h">
       <Filter>Editor\GUIElements</Filter>
     </ClInclude>
+    <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolTextures.h">
+      <Filter>Editor\UserInterfaces\EditionTools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DEditor.cpp">
@@ -213,6 +216,9 @@
     </ClCompile>
     <ClCompile Include="Editor\GUIElements\CGUIManager.cpp">
       <Filter>Editor\GUIElements</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolTextures.cpp">
+      <Filter>Editor\UserInterfaces\EditionTools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

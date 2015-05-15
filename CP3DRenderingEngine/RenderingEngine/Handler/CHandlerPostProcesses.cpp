@@ -89,7 +89,7 @@ CCP3DHandler::SPostProcessingPair CCP3DHandler::obtainScreenQuadMaterial(const s
 	else
 		shaderString = sPP.ppShaderDF(data.c_str());
 
-	ScreenQuadCB* SQCB = new ScreenQuadCB(this, true);
+	CScreenQuadCB* SQCB = new CScreenQuadCB(this, true);
 	const stringc path = WorkingPath + "Shaders/InternalHandler/ScreenQuad.vertex.fx";
 
 	s32 PostMat = gpu->addHighLevelShaderMaterial(
@@ -110,7 +110,7 @@ void CCP3DHandler::setPostProcessingEffectConstant(const irr::s32 materialType, 
 	s32 matIndex = getPostProcessID(materialType);
 	
 	if(matIndex != -1)
-		PostProcessingRoutines[matIndex].callback->uniformDescriptors[name] = ScreenQuadCB::SUniformDescriptor(data, count);
+		PostProcessingRoutines[matIndex].callback->uniformDescriptors[name] = CScreenQuadCB::SUniformDescriptor(data, count);
 }
 
 const s32 CCP3DHandler::getPostProcessID(const s32 &id) {

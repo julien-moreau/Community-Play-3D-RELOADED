@@ -69,9 +69,9 @@ int main(int argc, char* argv[]) {
 
 	device->setEventReceiver(new CEventReceiver(device));
 
-	cp3d::test::GlobalTest(device);
+	//cp3d::test::GlobalTest(device);
 	//cp3d::test::Direct3D11Test(device);
-	//cp3d::test::Direct3D9Debug(device);
+	cp3d::test::Direct3D9Debug(device);
 
 	return EXIT_SUCCESS;
 }

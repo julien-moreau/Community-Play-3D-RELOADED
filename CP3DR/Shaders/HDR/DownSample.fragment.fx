@@ -15,23 +15,16 @@ void main()
 CP3DTexture ColorMapSampler : registerTexture(t0);
 SamplerState ColorMapSamplerST : register(s0);
 
-float2 dsOffsets[4];
-float brightThreshold;
+float2 dsOffsets[16];
 
-float4 pixelMain(VS_OUTPUT In) : COLOR0 {
+float4 pixelMain(VS_OUTPUT In) : COLOR0{
 	float4 average = float4(0.0, 0.0, 0.0, 0.0);
 
-	for (int i = 0; i < 4; i++) {
-		average += CP3DTex2D(ColorMapSampler, In.TexCoords.xy + float2(dsOffsets[i].x, dsOffsets[i].y), ColorMapSamplerST);
+	for (int i = 0; i < 16; i++) {
+		average += CP3DTex2D(ColorMapSampler, In.TexCoords.xy + dsOffsets[i], ColorMapSamplerST);
 	}
 
-	average *= 0.25;
-
-	float luminance = length(average.rgb);
-
-	if (luminance < brightThreshold) {
-		average = float4(0.0, 0.0, 0.0, 1.0);
-	}
+	average /= 16.0;
 
 	return average;
 }
