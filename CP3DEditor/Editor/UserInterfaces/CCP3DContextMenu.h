@@ -95,7 +95,9 @@ private:
 	/// Rendering
 	enum ERENDERING_CONTEXT_MENU {
 		ERCM_SSAO = 0,
-		ERCM_VLS
+		ERCM_VLS,
+
+		ERCM_HDR
 	};
 
 	/// --------------------------------------------------

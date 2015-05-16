@@ -120,6 +120,8 @@ CCP3DContextMenu::CCP3DContextMenu(CCP3DEditorCore *editorCore) : EditorCore(edi
 	/// Fill Rendering
 	RenderingContextMenu->addItem(L"SSAO Effect", ERCM_SSAO, true, false, rengine->getEffectsManager()->isSSAOCreated(), true);
 	RenderingContextMenu->addItem(L"Volumetric Light Scattering Effect", ERCM_VLS, true, false, rengine->getEffectsManager()->isVolumetricLightScatteringCreated(), true);
+	RenderingContextMenu->addSeparator();
+	RenderingContextMenu->addItem(L"HDR...", ERCM_HDR, true, false);
 	/// --------------------------------------------------
 
 	/// --------------------------------------------------
@@ -179,7 +181,6 @@ bool CCP3DContextMenu::OnEvent(const SEvent &event) {
 }
 
 void CCP3DContextMenu::checkViewContextMenu(s32 id) {
-
 	CCP3DEditionTool *editionTool = EditorCore->getEditionTool();
 
 	switch (id) {
@@ -229,6 +230,7 @@ void CCP3DContextMenu::checkRenderingContextMenu(s32 id) {
 	using namespace rendering;
 	ICP3DRenderingEngine *rengine = EditorCore->getRenderingEngine();
 	ICP3DEffectsManager *effectsMgr = rengine->getEffectsManager();
+	CCP3DEditionTool *editionTool = EditorCore->getEditionTool();
 
 	switch (id)
 	{
@@ -237,6 +239,9 @@ void CCP3DContextMenu::checkRenderingContextMenu(s32 id) {
 		break;
 	case ERCM_VLS:
 		effectsMgr->createVolumetricLightScatteringEffect(!effectsMgr->isVolumetricLightScatteringCreated(), 0);
+		break;
+	case ERCM_HDR:
+		editionTool->applyForControllerType((ESCENE_NODE_TYPE)ESNT2_HDR, 0);
 		break;
 	default:
 		break;

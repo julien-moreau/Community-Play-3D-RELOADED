@@ -169,6 +169,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClInclude Include="..\include\ICP3DHandlerCallbacks.h" />
     <ClInclude Include="..\include\ICP3DHandlerPostProcesses.h" />
     <ClInclude Include="..\include\ICP3DHardwareSkinningManager.h" />
+    <ClInclude Include="..\include\ICP3DHDRManager.h" />
     <ClInclude Include="..\include\ICP3DInterface.h" />
     <ClInclude Include="..\include\ICP3DCustomDepthPass.h" />
     <ClInclude Include="..\include\ICP3DCustomPass.h" />

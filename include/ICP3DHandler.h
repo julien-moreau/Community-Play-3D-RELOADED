@@ -50,6 +50,7 @@ const irr::c8* const FilterTypeNames[] = {
 
 class ICP3DCustomPass;
 class ICP3DCustomDepthPass;
+class ICP3DHDRManager;
 
 //! ICP3DHandler class interface
 class ICP3DHandler : public ICP3DHandlerPostProcesses {
@@ -192,6 +193,9 @@ public:
 	//! \param: the node to modify
 	//! \param filterType: the filter type to set
 	virtual void setFilterTypeForNode(irr::scene::ISceneNode *node, E_FILTER_TYPE filterType) = 0;
+
+	//! Returns the HDR manager
+	virtual ICP3DHDRManager *getHDRManager() = 0;
 };
 
 } /// End rendering namespace

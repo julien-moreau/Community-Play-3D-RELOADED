@@ -4,8 +4,6 @@
 #include "CHandlerCB.h"
 #include "HandlerShaders.h"
 
-#include "../HDR/CCP3DHDRManager.h"
-
 #include <string>
 #include <iostream>
 #include <fstream>

@@ -8,6 +8,8 @@
 #include "../CustomPasses/CCustomDepthPass.h"
 #include "../CustomPasses/CCustomGeneralPass.h"
 
+#include "../HDR/CCP3DHDRManager.h"
+
 #include <ICP3DHandler.h>
 #include <ICP3DHandlerCallbacks.h>
 
@@ -17,8 +19,6 @@ namespace rendering {
 class DepthShaderCB;
 class ShadowShaderCB;
 class CScreenQuadCB;
-
-class CHDRManager;
 
 class CCP3DHandler : public ICP3DHandler {
 public:
@@ -104,6 +104,11 @@ public:
 	}
 	const irr::core::stringc getPostProcessingRoutineName(const irr::s32 &materialType);
 	IPostProcessingRenderCallback *getPostProcessingCallback(irr::s32 materialType);
+
+	/// Rendering
+	CHDRManager *getHDRManager() {
+		return HDRManager;
+	}
 
 	/// Utils
 	void setAmbientColor(irr::video::SColor ambientColour) { AmbientColour = ambientColour; }

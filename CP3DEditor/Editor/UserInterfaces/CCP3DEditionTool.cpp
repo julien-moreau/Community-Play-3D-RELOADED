@@ -13,6 +13,7 @@
 
 #include "EditionTools/CCP3DEditionToolPostProcess.h"
 #include "EditionTools/CCP3DEditionToolTextures.h"
+#include "EditionTools/CCP3DEditionToolHDR.h"
 
 #include "CCP3DEditionTool.h"
 
@@ -217,6 +218,7 @@ void CCP3DEditionTool::createDefaultControllers() {
 	CCP3DEditionToolTextSceneNode *EditionToolTextSceneNode = new CCP3DEditionToolTextSceneNode(EditorCore);
 	CCP3DEditionToolPostProcess *EditionToolPostProcess = new CCP3DEditionToolPostProcess(EditorCore);
 	CCP3DEditionToolTextures *EditionToolTextures = new CCP3DEditionToolTextures(EditorCore);
+	CCP3DEditionToolHDR *EditionToolHDR = new CCP3DEditionToolHDR(EditorCore);
 
 	//! No cameras for the moment ! =D
 	addController(ESNT_MESH, EditionToolSceneNode);
@@ -244,6 +246,7 @@ void CCP3DEditionTool::createDefaultControllers() {
 
 	addController((ESCENE_NODE_TYPE)ESNT2_POST_PROCESS, EditionToolPostProcess);
 	addController((ESCENE_NODE_TYPE)ESNT2_TEXTURES, EditionToolTextures);
+	addController((ESCENE_NODE_TYPE)ESNT2_HDR, EditionToolHDR);
 }
 
 bool CCP3DEditionTool::addController(ESCENE_NODE_TYPE type, ICP3DEditionToolController *controller) {

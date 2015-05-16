@@ -7,6 +7,8 @@
 #include "CHDRBloom.h"
 #include "CHDRTextureAdder.h"
 #include "CHDRLuminance.h"
+#include "CHDRBrightPass.h"
+#include "CHDRGaussianBlur.h"
 
 #include "../Materials/CMaterialCreator.h"
 
@@ -95,6 +97,41 @@ void CHDRManager::render(ITexture *source, ITexture *output) {
 	ScreenQuad.getMaterial().setTexture(0, TextureAdderRTT);
 	ScreenQuad.getMaterial().MaterialType = (E_MATERIAL_TYPE)MaterialType;
 	ScreenQuad.render(Driver);
+}
+
+void CHDRManager::setGaussianCoefficient(const irr::f32 coeff) {
+	Bloom->GaussianBlur->GaussCoeff = coeff;
+	Bloom->GaussianBlur->calculateWeights();
+}
+
+f32 CHDRManager::getGaussianCoefficient() const {
+	return Bloom->GaussianBlur->GaussCoeff;
+}
+
+void CHDRManager::setGaussianMean(const f32 mean) {
+	Bloom->GaussianBlur->GaussMean = mean;
+	Bloom->GaussianBlur->calculateWeights();
+}
+
+f32 CHDRManager::getGaussianMean() const {
+	return Bloom->GaussianBlur->GaussMean;
+}
+
+void CHDRManager::setGaussianStandardDerivation(const f32 standDev) {
+	Bloom->GaussianBlur->GaussStandDev = standDev;
+	Bloom->GaussianBlur->calculateWeights();
+}
+
+f32 CHDRManager::getGaussianStandardDerivation() const {
+	return Bloom->GaussianBlur->GaussStandDev;
+}
+
+void CHDRManager::setBrightnessThreshold(const f32 threshold) {
+	Bloom->BrightPass->BrightThreshold = threshold;
+}
+
+f32 CHDRManager::getBrightnessThreshold() const {
+	return Bloom->BrightPass->BrightThreshold;
 }
 
 } /// End namespace rendering

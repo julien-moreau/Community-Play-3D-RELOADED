@@ -11,6 +11,7 @@ class CCP3DHandler;
 class CScreenQuadCB;
 
 class CHDRBrightPass {
+	friend class CHDRManager;
 public:
 	/// ctor & dtor
 	CHDRBrightPass(CCP3DHandler *handler);

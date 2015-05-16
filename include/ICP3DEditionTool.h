@@ -34,7 +34,8 @@ enum E_INTERFACE_EVENT {
 //! Custom Scene node types (extension)
 enum E_SCENE_NODE_TYPE_2 {
 	ESNT2_POST_PROCESS = MAKE_IRR_ID('p', 'p', 'r', 'o'),
-	ESNT2_TEXTURES = MAKE_IRR_ID('t', 'e', 'x', 'r')
+	ESNT2_TEXTURES = MAKE_IRR_ID('t', 'e', 'x', 'r'),
+	ESNT2_HDR = MAKE_IRR_ID('h', 'd', 'r', 'r')
 };
 
 //! Custom GUI elements types for CP3D

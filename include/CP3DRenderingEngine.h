@@ -12,5 +12,6 @@
 #include "ICP3DMaterialCreator.h"
 #include "ICP3DHardwareSkinningManager.h"
 #include "ICP3DEffectsManager.h"
+#include "ICP3DHDRManager.h"
 
 #endif

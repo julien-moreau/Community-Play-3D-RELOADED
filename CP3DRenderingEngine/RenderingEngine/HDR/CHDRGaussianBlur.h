@@ -11,6 +11,7 @@ class CCP3DHandler;
 class CScreenQuadCB;
 
 class CHDRGaussianBlur {
+	friend class CHDRManager;
 public:
 	/// ctor & dtor
 	CHDRGaussianBlur(CCP3DHandler *handler);

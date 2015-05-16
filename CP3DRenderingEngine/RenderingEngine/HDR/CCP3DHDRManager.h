@@ -3,6 +3,7 @@
 
 #include <irrlicht.h>
 #include <CScreenQuad.h>
+#include <ICP3DHDRManager.h>
 
 namespace cp3d {
 namespace rendering {
@@ -14,13 +15,31 @@ class CHDRBloom;
 class CHDRTextureAdder;
 class CHDRLuminance;
 
-class CHDRManager {
+class CHDRManager : public ICP3DHDRManager {
 public:
 	/// ctor & dtor
 	CHDRManager(CCP3DHandler *handler);
 	~CHDRManager();
 
 	void render(irr::video::ITexture *source, irr::video::ITexture *output);
+
+	void setGaussianCoefficient(const irr::f32 coeff);
+	irr::f32 getGaussianCoefficient() const;
+	void setGaussianMean(const irr::f32 mean);
+	irr::f32 getGaussianMean() const;
+	void setGaussianStandardDerivation(const irr::f32 standDev);
+	irr::f32 getGaussianStandardDerivation() const;
+	void setBrightnessThreshold(const irr::f32 threshold);
+	irr::f32 getBrightnessThreshold() const;
+
+	void setExposure(const irr::f32 exposure) { Exposure = exposure; }
+	irr::f32 getExposure() const { return Exposure; }
+	void setMinimumLuminance(const irr::f32 min) { MinLuminance = min; }
+	irr::f32 getMinimumLuminance() const { return MinLuminance; }
+	void setIncreaseRate(const irr::f32 rate) { IncreaseRate = rate; }
+	irr::f32 getIncreaseRate() const { return IncreaseRate; }
+	void setDecreaseRate(const irr::f32 rate) { DecreaseRate = rate; }
+	irr::f32 getDecreaseRate() const { return DecreaseRate; }
 
 private:
 
