@@ -239,12 +239,12 @@ void CCP3DEditorCore::createTestScene() {
 		driver->getTexture("Textures/Skybox/glacier_ft.png"),
 		driver->getTexture("Textures/Skybox/glacier_bk.png"));
 	skyboxNode->setName("Skybox");
-	skyboxNode->getMaterial(0).Name = "Up";
-	skyboxNode->getMaterial(1).Name = "Down";
-	skyboxNode->getMaterial(2).Name = "Left";
+	skyboxNode->getMaterial(0).Name = "Front";
+	skyboxNode->getMaterial(1).Name = "Left";
+	skyboxNode->getMaterial(2).Name = "Back";
 	skyboxNode->getMaterial(3).Name = "Right";
-	skyboxNode->getMaterial(4).Name = "Front";
-	skyboxNode->getMaterial(5).Name = "Back";
+	skyboxNode->getMaterial(4).Name = "Up";
+	skyboxNode->getMaterial(5).Name = "Down";
 	skyboxNode->setMaterialType((E_MATERIAL_TYPE)Rengine->Materials[EMT_SOLID]);
 	Engine->getSceneNodeCreator()->configureSceneNode(skyboxNode);
 
@@ -274,18 +274,16 @@ void CCP3DEditorCore::createTestScene() {
 	Handler->getGeneralPassManager()->addNodeToPass(cubeNode);
 	Handler->getGeneralPassManager()->addNodeToPass(bill);
 
-	//Rengine->getEffectsManager()->createSSAOEffect(true);
-	/*
+	Rengine->getEffectsManager()->createSSAOEffect(true);
 	Rengine->getEffectsManager()->createVolumetricLightScatteringEffect(true, bill);
+	/*
 	//Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/Custom.fragment.fx", new CustomCallback(Driver));
 	*/
 
 	SpiesManager->addSpy(new CCP3DPostProcessSpy(this));
-	return;
 
 	engine::ICP3DExporter *exporter = Engine->createExporter();
 	exporter->exportProject("test.cp3d");
-	exit(0);
 
 	Rengine->clear();
 	createComponents();

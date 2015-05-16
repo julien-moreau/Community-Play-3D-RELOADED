@@ -27,6 +27,7 @@ const irr::c8* const ShadowModeNames[] = {
 	"Cast",
 	"Both (Cast & Receive)",
 	"Exclude",
+	"No Shadows",
 	0
 };
 

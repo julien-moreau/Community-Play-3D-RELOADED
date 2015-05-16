@@ -64,7 +64,7 @@ bool CCP3DEditionToolTextures::OnEvent(const SEvent &event) {
 		if (event.GUIEvent.EventType == EGET_LISTBOX_CHANGED) {
 			if (event.GUIEvent.Caller == TexturesList.ListData.List) {
 				s32 selected = TexturesList.ListData.List->getSelected();
-				if (selected < 0 || selected > TexturesList.ListData.List->getItemCount())
+				if (selected < 0 || selected > s32(TexturesList.ListData.List->getItemCount()))
 					return true;
 
 				Texture.TextureData.Image->setImage(Driver->getTextureByIndex(selected));

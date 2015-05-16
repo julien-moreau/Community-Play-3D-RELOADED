@@ -43,6 +43,8 @@ private:
 	void serializeNode(irr::scene::ISceneNode *node, irr::io::IAttributes *attributes);
 	void exportMaterial(irr::video::SMaterial &material);
 
+	irr::video::SMaterial importMaterial();
+	irr::video::SMaterialLayer importMaterialLayer();
 	void importNode();
 	void importScene();
 

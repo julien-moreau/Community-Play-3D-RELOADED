@@ -166,6 +166,9 @@ void CCP3DExporter::serializeNode(ISceneNode *node, IAttributes *attributes) {
 
 	node->serializeAttributes(attributes);
 
+	rendering::ICP3DHandler *handler = Engine->getRenderingEngine()->getHandler();
+	ESCENE_NODE_TYPE type = node->getType();
+
 	if (node->getType() == ESNT_LIGHT) {
 		ICP3DLightSceneNode *light = Engine->getRenderingEngine()->getLightSceneNode((ILightSceneNode *)node);
 		attributes->addBool("ComputeNormalMapping", light->isComputingNormalMapping());
@@ -184,6 +187,10 @@ void CCP3DExporter::serializeNode(ISceneNode *node, IAttributes *attributes) {
 			attributes->addBool("AutoRecalculate", slight->mustAutoRecalculate());
 		}
 
+	}
+	else {
+		attributes->addBool("Shadowed", handler->isNodeShadowed(node));
+		attributes->addInt("ShadowMode", handler->getShadowModeForNode(node));
 	}
 }
 
