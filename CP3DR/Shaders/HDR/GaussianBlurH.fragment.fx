@@ -1,10 +1,23 @@
 #ifdef OPENGL_DRIVER
 
 uniform sampler2D ColorMapSampler;
+uniform float blurOffsets[9];
+uniform float blurWeights[9];
 
 void main()
 {
-	gl_FragColor = texture2D(ColorMapSampler, gl_TexCoord[0].xy);
+	vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
+
+	for (int i = 0; i < 9; i++) {
+		#ifdef GAUSSIAN_BLUR_H
+		color += texture2D(ColorMapSampler, gl_TexCoord[0].xy + vec2(blurOffsets[i], 0.0)) * blurWeights[i];
+		#else
+		color += texture2D(ColorMapSampler, gl_TexCoord[0].xy + vec2(0.0, blurOffsets[i])) * blurWeights[i];
+		#endif
+	}
+
+	color.a = 1.0;
+	gl_FragColor = color;
 }
 
 #else

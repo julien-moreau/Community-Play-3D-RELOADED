@@ -39,6 +39,7 @@ private:
 
 	CScreenQuadCB *CallbackDownSample;
 	irr::s32 MaterialTypeDownSample;
+	irr::s32 MaterialTypeDownSampleFinal;
 	irr::f32 DownSampleOffsets[18];
 	irr::f32 HalfDestPixelSize;
 };

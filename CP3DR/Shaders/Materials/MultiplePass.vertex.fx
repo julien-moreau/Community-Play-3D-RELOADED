@@ -1,7 +1,18 @@
 
 #ifdef OPENGL_DRIVER
 
+uniform mat4 WorldView;
 
+void main()
+{
+	gl_Position = ftransform();
+	gl_TexCoord[0] = gl_MultiTexCoord0;
+
+	gl_TexCoord[1] = WorldView * vec4(gl_Normal.xyz, 0.0); // Normal
+	gl_TexCoord[2] = WorldView * vec4(gl_MultiTexCoord1.xyz, 0.0); // Tangent
+	gl_TexCoord[3].xyz = cross(gl_TexCoord[1].xyz, gl_TexCoord[2].xyz); // BiNormal
+	gl_TexCoord[4] = WorldView * gl_Position; /// View Pos
+}
 
 #else
 

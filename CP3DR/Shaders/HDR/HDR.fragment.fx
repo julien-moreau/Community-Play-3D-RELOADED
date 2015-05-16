@@ -1,5 +1,20 @@
 #ifdef OPENGL_DRIVER
 
+uniform sampler2D ColorMapSampler;
+
+uniform float exposure;
+uniform float averageLuminance;
+
+void main()
+{
+	vec4 color = texture2D(ColorMapSampler, gl_TexCoord[0].xy);
+	vec4 adjustedColor = color / averageLuminance * exposure;
+
+	color = adjustedColor;
+	color.a = 1.0;
+	gl_FragColor = color;
+}
+
 #else
 
 #define POST_PROCESS

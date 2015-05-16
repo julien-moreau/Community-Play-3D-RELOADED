@@ -37,11 +37,13 @@ CHDRGaussianBlur::CHDRGaussianBlur(CCP3DHandler *handler) : Handler(handler) {
 		BlurOffsetsV[i] = (f32(i) - 4.f) * (1.f / f32(Driver->getScreenSize().Height / 8));
 	}
 
-	CallbackH->uniformDescriptors["blurOffsets"] = CScreenQuadCB::SUniformDescriptor(BlurOffsetsH, 9);
-	CallbackH->uniformDescriptors["blurWeights"] = CScreenQuadCB::SUniformDescriptor(BlurWeights, 9);
+	E_DRIVER_TYPE type = Driver->getDriverType();
 
-	CallbackV->uniformDescriptors["blurOffsets"] = CScreenQuadCB::SUniformDescriptor(BlurOffsetsV, 9);
-	CallbackV->uniformDescriptors["blurWeights"] = CScreenQuadCB::SUniformDescriptor(BlurWeights, 9);
+	CallbackH->uniformDescriptors[type == EDT_OPENGL ? "blurOffsets[0]" : "blurOffsets"] = CScreenQuadCB::SUniformDescriptor(BlurOffsetsH, 9);
+	CallbackH->uniformDescriptors[type == EDT_OPENGL ? "blurWeights[0]" : "blurWeights"] = CScreenQuadCB::SUniformDescriptor(BlurWeights, 9);
+
+	CallbackV->uniformDescriptors[type == EDT_OPENGL ? "blurOffsets[0]" : "blurOffsets"] = CScreenQuadCB::SUniformDescriptor(BlurOffsetsV, 9);
+	CallbackV->uniformDescriptors[type == EDT_OPENGL ? "blurWeights[0]" : "blurWeights"] = CScreenQuadCB::SUniformDescriptor(BlurWeights, 9);
 }
 
 CHDRGaussianBlur::~CHDRGaussianBlur() {

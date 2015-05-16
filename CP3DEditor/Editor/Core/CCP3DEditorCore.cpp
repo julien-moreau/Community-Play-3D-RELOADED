@@ -281,7 +281,7 @@ void CCP3DEditorCore::createTestScene() {
 	*/
 
 	SpiesManager->addSpy(new CCP3DPostProcessSpy(this));
-
+	return;
 	engine::ICP3DExporter *exporter = Engine->createExporter();
 	exporter->exportProject("test.cp3d");
 

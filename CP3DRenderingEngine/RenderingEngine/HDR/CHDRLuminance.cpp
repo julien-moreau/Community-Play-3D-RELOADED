@@ -27,6 +27,8 @@ CHDRLuminance::CHDRLuminance(CCP3DHandler *handler) : Handler(handler) {
 	cmat.clearDefines();
 	MaterialTypeDownSample = cmat.createMaterialFromFiles("Shaders/InternalHandler/ScreenQuad.vertex.fx", "Shaders/HDR/LuminanceDownSample.fragment.fx", EMT_SOLID, CallbackDownSample);
 
+	MaterialTypeDownSampleFinal = cmat.createMaterialFromFiles("Shaders/InternalHandler/ScreenQuad.vertex.fx", "Shaders/HDR/LuminanceDownSample.fragment.fx", EMT_SOLID, CallbackDownSample);
+
 	for (u32 i = 0; i < LumStepsNum; i++) {
 		u32 len = u32(pow(3.f, i));
 		LuminanceRTTs[i] = Driver->addRenderTargetTexture(dimension2d<u32>(len, len), stringc("CP3DHDRLuminance") + stringc(i), ECF_G32R32F);
@@ -45,10 +47,11 @@ CHDRLuminance::CHDRLuminance(CCP3DHandler *handler) : Handler(handler) {
 	LuminanceOffsets[6] = 0.5f  * sU;
 	LuminanceOffsets[7] = -0.5f * sV;
 
-	CallbackLuminance->uniformDescriptors["lumOffsets"] = CScreenQuadCB::SUniformDescriptor(LuminanceOffsets, 8);
+	E_DRIVER_TYPE type = Driver->getDriverType();
+	CallbackLuminance->uniformDescriptors[type == EDT_OPENGL ? "lumOffsets[0]" : "lumOffsets"] = CScreenQuadCB::SUniformDescriptor(LuminanceOffsets, 8);
 
 	/// Down Sample
-	CallbackDownSample->uniformDescriptors["dsOffsets"] = CScreenQuadCB::SUniformDescriptor(DownSampleOffsets, 18);
+	CallbackDownSample->uniformDescriptors[type == EDT_OPENGL ? "dsOffsets[0]" : "dsOffsets"] = CScreenQuadCB::SUniformDescriptor(DownSampleOffsets, 18);
 	CallbackDownSample->uniformDescriptors["halfDestPixelSize"] = CScreenQuadCB::SUniformDescriptor(&HalfDestPixelSize, 1);
 }
 
@@ -82,6 +85,10 @@ void CHDRLuminance::renderDownSample(CScreenQuad &screenQuad) {
 
 		Driver->setRenderTarget(LuminanceRTTs[i - 1], true, true, SColor(0x0));
 		screenQuad.getMaterial().setTexture(0, LuminanceRTTs[i]);
+
+		if (i == 1)
+			screenQuad.getMaterial().MaterialType = (E_MATERIAL_TYPE)MaterialTypeDownSampleFinal;
+
 		screenQuad.render(Driver);
 	}
 }

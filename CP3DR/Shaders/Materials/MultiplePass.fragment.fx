@@ -1,7 +1,26 @@
 
 #ifdef OPENGL_DRIVER
 
+uniform int LSRenderNormal;
+uniform sampler2D BaseSampler;
 
+uniform float FarDistance;
+uniform sampler2D NormalSampler;
+
+void main() {
+	/// Light Scattering
+	if (LSRenderNormal == 1)
+		gl_FragData[1] = texture2D(BaseSampler, gl_TexCoord[0].xy);
+	else
+		gl_FragData[1] = vec4(0.0, 0.0, 0.0, 0.0);
+
+	/// Normal pass
+	vec4 texNormal = (texture2D(NormalSampler, gl_TexCoord[0].xy) - 0.5) * 2.0;
+	mat3 normalRotation = mat3(gl_TexCoord[2].xy, gl_TexCoord[2].z, gl_TexCoord[3].xy, gl_TexCoord[3].z, gl_TexCoord[1].xy, gl_TexCoord[1].z);
+
+	gl_FragData[0].rgb = normalize(texNormal.xyz * normalRotation);
+	gl_FragData[0].a = length(gl_TexCoord[4]) / FarDistance;
+}
 
 #else
 

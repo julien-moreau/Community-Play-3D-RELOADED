@@ -1,10 +1,19 @@
 #ifdef OPENGL_DRIVER
 
 uniform sampler2D ColorMapSampler;
+uniform vec2 dsOffsets[16];
 
 void main()
 {
-	gl_FragColor = texture2D(ColorMapSampler, gl_TexCoord[0].xy);
+	vec4 average = vec4(0.0, 0.0, 0.0, 0.0);
+
+	for (int i = 0; i < 16; i++) {
+		average += texture2D(ColorMapSampler, gl_TexCoord[0].xy + dsOffsets[i]);
+	}
+
+	average /= 16.0;
+
+	gl_FragColor = average;
 }
 
 #else

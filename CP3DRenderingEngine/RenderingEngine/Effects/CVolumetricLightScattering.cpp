@@ -24,7 +24,7 @@ CVolumetricLightScatteringEffect::CVolumetricLightScatteringEffect(CCP3DHandler 
 
 	Decay = 0.96815f;
 	Exposure = 0.3f;
-	Density = 0.926;
+	Density = 0.926f;
 	Weight = 0.58767f;
 	LightColor = SColorf(1.f, 0.5f, 0.f, 1.f);
 

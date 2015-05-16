@@ -2,9 +2,26 @@
 
 uniform sampler2D ColorMapSampler;
 
+uniform vec2 dsOffsets[4];
+uniform float brightThreshold;
+
 void main()
 {
-	gl_FragColor = texture2D(ColorMapSampler, gl_TexCoord[0].xy);
+	vec4 average = vec4(0.0, 0.0, 0.0, 0.0);
+
+	for (int i = 0; i < 4; i++) {
+		average += texture2D(ColorMapSampler, gl_TexCoord[0].xy + vec2(dsOffsets[i].x, dsOffsets[i].y));
+	}
+
+	average *= 0.25;
+
+	float luminance = length(average.rgb);
+
+	if (luminance < brightThreshold) {
+		average = vec4(0.0, 0.0, 0.0, 1.0);
+	}
+
+	gl_FragColor = average;
 }
 
 #else

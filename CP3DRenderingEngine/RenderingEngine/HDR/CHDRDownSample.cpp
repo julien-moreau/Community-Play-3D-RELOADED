@@ -31,7 +31,8 @@ CHDRDownSample::CHDRDownSample(CCP3DHandler *handler) : Handler(handler) {
 		}
 	}
 
-	Callback->uniformDescriptors["dsOffsets"] = CScreenQuadCB::SUniformDescriptor(DsOffsets, 32);
+	E_DRIVER_TYPE type = Driver->getDriverType();
+	Callback->uniformDescriptors[type == EDT_OPENGL ? "dsOffsets[0]" : "dsOffsets"] = CScreenQuadCB::SUniformDescriptor(DsOffsets, 32);
 }
 
 CHDRDownSample::~CHDRDownSample() {

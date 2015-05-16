@@ -71,6 +71,8 @@ void CHDRManager::render(ITexture *source, ITexture *output) {
 	/// Compute HDR
 	if (Driver->getDriverType() == EDT_DIRECT3D9)
 		CurrentLuminance = *static_cast<f32*>(Luminance->LuminanceRTTs[0]->lock());
+	else
+		CurrentLuminance = (static_cast<u8 *>(Luminance->LuminanceRTTs[0]->lock()))[1];
 
 	Luminance->LuminanceRTTs[0]->unlock();
 

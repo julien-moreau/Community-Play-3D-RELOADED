@@ -144,13 +144,17 @@ void CCP3DExporter::importNode() {
 				light->setLightStrength(attr->getAttributeAsFloat("LightStrength"));
 
 				rendering::SShadowLight *slight = light->getShadowLight();
+				ILightSceneNode *nlight = (ILightSceneNode *)node;
+
 				slight->setPosition(node->getPosition());
+				slight->setLightColor(nlight->getLightData().DiffuseColor);
+
 				slight->setFarValue(attr->getAttributeAsFloat("FarValue"));
 				slight->setFOV(attr->getAttributeAsFloat("FrontOfView"));
 				slight->setNearValue(attr->getAttributeAsFloat("NearValue"));
 				slight->setDirectionalLight(attr->getAttributeAsBool("IsDirectional"));
 				slight->setUseRoundSpotLight(attr->getAttributeAsBool("IsSpotLight"));
-				slight->setShadowMapResolution(attr->getAttributeAsFloat("MapResolution"));
+				slight->setShadowMapResolution(u32(attr->getAttributeAsFloat("MapResolution")));
 				slight->setTarget(attr->getAttributeAsVector3d("Target"));
 				slight->setMustAutoRecalculate(attr->getAttributeAsBool("AutoRecalculate"));
 			}

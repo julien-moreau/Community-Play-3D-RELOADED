@@ -34,7 +34,8 @@ CHDRBrightPass::CHDRBrightPass(CCP3DHandler *handler) : Handler(handler) {
 	DsOffsets[7] = -0.5f * sV;
 	BrightThreshold = 0.8f;
 
-	Callback->uniformDescriptors["dsOffsets"] = CScreenQuadCB::SUniformDescriptor(DsOffsets, 8);
+	E_DRIVER_TYPE type = Driver->getDriverType();
+	Callback->uniformDescriptors[type == EDT_OPENGL ? "dsOffsets[0]" : "dsOffsets"] = CScreenQuadCB::SUniformDescriptor(DsOffsets, 8);
 	Callback->uniformDescriptors["brightThreshold"] = CScreenQuadCB::SUniformDescriptor(&BrightThreshold, 1);
 }
 

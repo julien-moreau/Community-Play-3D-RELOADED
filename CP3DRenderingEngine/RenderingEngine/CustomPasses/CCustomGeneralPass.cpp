@@ -41,11 +41,21 @@ bool CCustomGeneralPass::setRenderTarget() {
 
 void CCustomGeneralPass::OnSetConstants(IMaterialRendererServices* services, s32 userData) {
 
-	core::matrix4 worldViewProj;
-	worldViewProj = Driver->getTransform(video::ETS_PROJECTION);			
-	worldViewProj *= Driver->getTransform(video::ETS_VIEW);
-	worldViewProj *= Driver->getTransform(video::ETS_WORLD);
-	services->setVertexShaderConstant("WorldViewProj", worldViewProj.pointer(), 16);
+	E_DRIVER_TYPE type = Driver->getDriverType();
+
+	if (type != EDT_OPENGL) {
+		core::matrix4 worldViewProj;
+		worldViewProj = Driver->getTransform(video::ETS_PROJECTION);
+		worldViewProj *= Driver->getTransform(video::ETS_VIEW);
+		worldViewProj *= Driver->getTransform(video::ETS_WORLD);
+		services->setVertexShaderConstant("WorldViewProj", worldViewProj.pointer(), 16);
+	}
+	else {
+		s32 texVar0 = 0;
+		s32 texVar1 = 1;
+		services->setPixelShaderConstant("BaseSampler", &texVar0, 1);
+		services->setPixelShaderConstant("NormalSampler", &texVar1, 1);
+	}
 
 	/// Normal pass
 	core::matrix4 worldView;

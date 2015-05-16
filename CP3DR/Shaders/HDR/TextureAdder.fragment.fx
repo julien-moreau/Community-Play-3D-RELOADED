@@ -8,7 +8,7 @@ void main()
 	vec4 sum = texture2D(ColorMapSampler, gl_TexCoord[0].xy) + texture2D(UserMapSampler, gl_TexCoord[0].xy);
 	sum.a = clamp(sum.a, 0.0, 1.0);
 
-	return sum;
+	gl_FragColor = sum;
 }
 
 #else

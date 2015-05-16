@@ -1,5 +1,47 @@
 #ifdef OPENGL_DRIVER
 
+uniform sampler2D ColorMapSampler;
+uniform vec2 lumOffsets[4];
+
+void main()
+{
+	float average = 0.0;
+	vec4 color = vec4(0.0);
+	float maximum = -1e20;
+	vec3 weight = vec3(0.299, 0.587, 0.114);
+
+	for (int i = 0; i < 4; i++) {
+		color = texture2D(ColorMapSampler, gl_TexCoord[0].xy + lumOffsets[i]);
+
+		#ifdef SIMPLE
+		float GreyValue = dot(color.rgb, vec3(0.33, 0.33, 0.33));
+		#endif
+
+		#ifdef WEIGHTED_AVERAGE
+		float GreyValue = dot(color.rgb, weight);
+		#endif
+
+		#ifdef BRIGHTNESS
+		float GreyValue = max(color.r, max(color.g, color.b));
+		#endif
+
+		#ifdef HSL_COMPONENT
+		float GreyValue = 0.5 * (max(color.r, max(color.g, color.b)) + min(color.r, min(color.g, color.b)));
+		#endif
+
+		#ifdef MAGNITUDE
+		float GreyValue = length(color.rgb);
+		#endif
+
+		maximum = max(maximum, GreyValue);
+		average += (0.25f * log(1e-5 + GreyValue));
+	}
+
+	average = exp(average);
+
+	gl_FragColor = vec4(average, maximum, 0.0, 1.0);
+}
+
 #else
 
 #define POST_PROCESS
