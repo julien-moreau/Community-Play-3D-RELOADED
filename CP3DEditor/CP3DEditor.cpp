@@ -57,6 +57,9 @@ namespace cp3d {
 		if (!device)
 			exit(EXIT_FAILURE);
 
+		/// Configure scene
+		device->getSceneManager()->getParameters()->addBool(irr::scene::IRR_SCENE_MANAGER_IS_EDITOR, true);
+
 		/// Return instance of editor core
 		return new CCP3DEditorCore(device);
 	}

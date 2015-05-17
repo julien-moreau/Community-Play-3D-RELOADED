@@ -166,10 +166,13 @@ void CCP3DExporter::serializeNode(ISceneNode *node, IAttributes *attributes) {
 
 	node->serializeAttributes(attributes);
 
-	rendering::ICP3DHandler *handler = Engine->getRenderingEngine()->getHandler();
+	ICP3DHandler *handler = Engine->getRenderingEngine()->getHandler();
 	ESCENE_NODE_TYPE type = node->getType();
 
-	if (node->getType() == ESNT_LIGHT) {
+	if (node->getParent())
+		attributes->addString("Parent", node->getParent()->getName());
+
+	if (type == ESNT_LIGHT) {
 		ICP3DLightSceneNode *light = Engine->getRenderingEngine()->getLightSceneNode((ILightSceneNode *)node);
 		attributes->addBool("ComputeNormalMapping", light->isComputingNormalMapping());
 		attributes->addBool("ComputeShadows", light->isComputingShadows());
@@ -191,6 +194,14 @@ void CCP3DExporter::serializeNode(ISceneNode *node, IAttributes *attributes) {
 	else {
 		attributes->addBool("Shadowed", handler->isNodeShadowed(node));
 		attributes->addInt("ShadowMode", handler->getShadowModeForNode(node));
+
+		if (type == ESNT_TEXT) {
+			IBillboardTextSceneNode *tnode = (IBillboardTextSceneNode *)node;
+			attributes->addString("Text", tnode->getText());
+			attributes->addColor("TextColor", tnode->getTextColor());
+			attributes->addFloat("SizeW", tnode->getSize().Width);
+			attributes->addFloat("SizeH", tnode->getSize().Height);
+		}
 	}
 }
 

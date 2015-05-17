@@ -39,8 +39,8 @@ CHDRManager::CHDRManager(CCP3DHandler *handler) : Handler(handler) {
 	LastTime = 0;
 	MinLuminance = 1.f;
 	MaxLuminance = 1e20f;
-	IncreaseRate = 1.f;
-	DecreaseRate = 2.f;
+	IncreaseRate = 0.2f;
+	DecreaseRate = 0.5f;
 	OutputLuminance = -1.f;
 
 	/// Create pipeline

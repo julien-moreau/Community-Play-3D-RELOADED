@@ -29,7 +29,7 @@ CHDRGaussianBlur::CHDRGaussianBlur(CCP3DHandler *handler) : Handler(handler) {
 
 	GaussCoeff = 0.3f;
 	GaussMean = 1.f;
-	GaussStandDev = 0.8f;
+	GaussStandDev = 3.f;
 	calculateWeights();
 
 	for (u32 i = 0; i < 9; i++) {

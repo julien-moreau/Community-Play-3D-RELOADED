@@ -53,6 +53,7 @@ private:
 	irr::IrrlichtDevice *Device;
 	irr::io::IXMLWriter *Writer;
 	irr::io::IXMLReader *Reader;
+	irr::core::map<irr::core::stringc, irr::core::stringc> Parenting;
 };
 
 } /// End namespace engine

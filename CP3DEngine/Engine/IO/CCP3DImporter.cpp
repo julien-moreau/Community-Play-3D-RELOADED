@@ -45,10 +45,14 @@ void CCP3DExporter::setAttribute(IAttributes *attributes, stringw type) {
 
 bool CCP3DExporter::importProject(irr::core::stringc filename) {
 	Reader = Device->getFileSystem()->createXMLReader(filename);
+	ISceneManager *smgr = Engine->getRenderingEngine()->getSceneManager();
+
+	Parenting.clear();
 
 	if (!Reader)
 		return false;
 
+	/// Import scene
 	while (Reader->read()) {
 		if (Reader->getNodeType() == EXN_ELEMENT) {
 			stringw current = Reader->getNodeName();
@@ -60,6 +64,19 @@ bool CCP3DExporter::importProject(irr::core::stringc filename) {
 				importNode();
 			}
 		}
+	}
+
+	/// Parenting
+	core::map<stringc, stringc>::Iterator iter = Parenting.getIterator();
+	for (; !iter.atEnd(); iter++) {
+		stringc nodeName = iter.getNode()->getKey();
+		stringc parentName = iter.getNode()->getValue();
+
+		ISceneNode *node = smgr->getSceneNodeFromName(nodeName.c_str());
+		ISceneNode *parent = smgr->getSceneNodeFromName(parentName.c_str());
+		
+		if (node && parent)
+			node->setParent(parent);
 	}
 
 	return true;
@@ -114,6 +131,10 @@ void CCP3DExporter::importNode() {
 		light = Engine->getRenderingEngine()->createLightSceneNode(false, false);
 		node = *light;
 	}
+	else if (type == ESNT_SKY_BOX)
+		node = smgr->addSkyBoxSceneNode(0, 0, 0, 0, 0, 0);
+	else if (type == ESNT_TEXT)
+		node = smgr->addBillboardTextSceneNode(smgr->getGUIEnvironment()->getSkin()->getFont(), L"Text", 0);
 
 	if (node) {
 		node->deserializeAttributes(attr);
@@ -126,11 +147,18 @@ void CCP3DExporter::importNode() {
 		}
 
 		/// Shadows
-		if (type == ESNT_ANIMATED_MESH || type == ESNT_MESH || type == ESNT_CUBE || type == ESNT_SPHERE || type == ESNT_OCTREE) {
+		if (type == ESNT_ANIMATED_MESH || type == ESNT_MESH || type == ESNT_CUBE || type == ESNT_SPHERE || type == ESNT_OCTREE || type == ESNT_TEXT) {
 			bool shadowed = attr->getAttributeAsBool("Shadowed");
 			if (shadowed) {
 				rendering::E_SHADOW_MODE mode = (rendering::E_SHADOW_MODE)attr->getAttributeAsInt("ShadowMode");
 				handler->addShadowToNode(node, rendering::EFT_NONE, mode);
+			}
+
+			if (type == ESNT_TEXT) {
+				IBillboardTextSceneNode *tnode = (IBillboardTextSceneNode *)node;
+				tnode->setText(attr->getAttributeAsStringW("Text").c_str());
+				tnode->setTextColor(attr->getAttributeAsColor("TextColor"));
+				tnode->setSize(dimension2df(attr->getAttributeAsFloat("SizeW"), attr->getAttributeAsFloat("SizeH")));
 			}
 		}
 		else if (type == ESNT_LIGHT) {
@@ -158,6 +186,11 @@ void CCP3DExporter::importNode() {
 				slight->setTarget(attr->getAttributeAsVector3d("Target"));
 				slight->setMustAutoRecalculate(attr->getAttributeAsBool("AutoRecalculate"));
 			}
+		}
+
+		/// Parenting
+		if (attr->existsAttribute("Parent")) {
+			Parenting[node->getName()] = attr->getAttributeAsString("Parent");
 		}
 	}
 }
