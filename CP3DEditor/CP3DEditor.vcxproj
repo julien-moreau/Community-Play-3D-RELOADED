@@ -155,6 +155,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClInclude Include="Editor\GUIElements\GUIFileSelector\CGUIFileSelector.h" />
     <ClInclude Include="Editor\GUIElements\GUIPanel\CGUIPanel.h" />
     <ClInclude Include="Editor\GUIElements\GUIViewPort\CGUIViewPort.h" />
+    <ClInclude Include="Editor\IO\CCP3DSaverOpener.h" />
     <ClInclude Include="Editor\Spies\CCP3DPostProcessSpy.h" />
     <ClInclude Include="Editor\Spies\CCP3DSpiesManager.h" />
     <ClInclude Include="Editor\UserInterfaces\CCP3DContextMenu.h" />
@@ -188,6 +189,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClCompile Include="Editor\GUIElements\GUIFileSelector\CGUIFileSelector.cpp" />
     <ClCompile Include="Editor\GUIElements\GUIPanel\CGUIPanel.cpp" />
     <ClCompile Include="Editor\GUIElements\GUIViewPort\CGUIViewPort.cpp" />
+    <ClCompile Include="Editor\IO\CCP3DSaverOpener.cpp" />
     <ClCompile Include="Editor\Spies\CCP3DPostProcessSpy.cpp" />
     <ClCompile Include="Editor\Spies\CCP3DSpiesManager.cpp" />
     <ClCompile Include="Editor\UserInterfaces\CCP3DContextMenu.cpp" />

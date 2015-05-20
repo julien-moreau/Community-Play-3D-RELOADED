@@ -17,6 +17,7 @@ class CCP3DInterfaceController;
 class CCP3DCustomView;
 class CCP3DEditorTransformer;
 class CCP3DSpiesManager;
+class CCP3DSaverOpener;
 
 namespace collaborative {
 	class ICP3DCollaborativeEngine;
@@ -48,7 +49,7 @@ public:
 	irr::core::stringc getProjectName() { return ProjectName; }
 	void setProjectName(irr::core::stringc name);
 	irr::core::stringc getProjectDirectory() { return ProjectDirectory; }
-	void setProjectDirectory(irr::core::stringc directory) { ProjectDirectory = directory; }
+	void setProjectDirectory(irr::core::stringc directory);
 
 	irr::core::stringc getWorkingDirectory() { return WorkingDirectory; }
 
@@ -77,6 +78,9 @@ private:
 
 	/// Gui
 	ui::CGUIManager * GuiManager;
+
+	/// Management
+	CCP3DSaverOpener *SaverOpener;
 
 	/// Datas
 	CCP3DInterfaceController *InterfaceController;

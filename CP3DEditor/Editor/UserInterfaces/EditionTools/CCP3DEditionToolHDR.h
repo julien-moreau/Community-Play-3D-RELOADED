@@ -17,7 +17,7 @@ class CCP3DEditorCore;
 Class that will manage the post-processes nodes.
 */
 class CCP3DEditionToolHDR : public irr::IEventReceiver,
-									public ICP3DEditionToolController
+							public ICP3DEditionToolController
 {
 public:
 

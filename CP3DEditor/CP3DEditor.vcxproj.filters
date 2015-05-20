@@ -48,6 +48,9 @@
     <Filter Include="Editor\GUIElements\GUIViewPort">
       <UniqueIdentifier>{5d59d68f-068a-4456-8e0e-e2a5839d950c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\IO">
+      <UniqueIdentifier>{6092c320-ce10-40bd-9996-41f91713b163}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Stdafx.h">
@@ -137,6 +140,9 @@
     <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolHDR.h">
       <Filter>Editor\UserInterfaces\EditionTools</Filter>
     </ClInclude>
+    <ClInclude Include="Editor\IO\CCP3DSaverOpener.h">
+      <Filter>Editor\IO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DEditor.cpp">
@@ -225,6 +231,9 @@
     </ClCompile>
     <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolHDR.cpp">
       <Filter>Editor\UserInterfaces\EditionTools</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\IO\CCP3DSaverOpener.cpp">
+      <Filter>Editor\IO</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

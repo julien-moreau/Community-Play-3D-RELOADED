@@ -21,6 +21,8 @@
 
 #include "../GUIElements/GUIFileSelector/CGUIFileSelector.h"
 
+#include "../IO/CCP3DSaverOpener.h"
+
 #include <ICP3DExporter.h>
 
 using namespace irr;
@@ -31,7 +33,8 @@ using namespace gui;
 
 namespace cp3d {
 
-CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), ProjectName("Untitled")
+CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), ProjectName("Untitled"),
+	ProjectDirectory("")
 {
 	/// Configure device
 	device->setResizable(true);
@@ -83,8 +86,11 @@ CCP3DEditorCore::CCP3DEditorCore(irr::IrrlichtDevice *device) : Device(device), 
 	/// Create transformers
 	EditorTransformer = new CCP3DEditorTransformer(this);
 
+	/// Management
+	SaverOpener = new CCP3DSaverOpener(this);
+
 	/// Finish
-	WorkingDirectory = ProjectDirectory = device->getFileSystem()->getWorkingDirectory() + "/";
+	WorkingDirectory = device->getFileSystem()->getWorkingDirectory() + "/";
 	Device->getFileSystem()->addFileArchive("GUI/", false, true, io::EFAT_FOLDER);
 	Device->getFileSystem()->addFileArchive(WorkingDirectory, false, true, io::EFAT_FOLDER);
 	setProjectName(ProjectName);
@@ -114,6 +120,10 @@ void CCP3DEditorCore::setProjectName(irr::core::stringc name) {
 	ProjectName = name;
 	Device->setWindowCaption(stringw(stringc(CP3DR_PROJECT_NAME) + stringc(" - ") + stringc(ProjectName)).c_str());
 	ContextMenu->setProjectName(name);
+}
+
+void CCP3DEditorCore::setProjectDirectory(stringc directory) {
+	ProjectDirectory = directory;
 }
 
 void CCP3DEditorCore::OnPreUpdate() {
@@ -167,11 +177,27 @@ bool CCP3DEditorCore::OnEvent(const SEvent &event) {
 			Device->closeDevice();
 		}
 		#endif
+
+		if (event.KeyInput.Control) {
+			if (event.KeyInput.Key == KEY_KEY_S) {
+				SaverOpener->save();
+				return true;
+			}
+			else if (event.KeyInput.Key == KEY_KEY_O) {
+				SaverOpener->open();
+				return true;
+			}
+		}
 	}
 
 	return false;
 }
 
+//-----------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------
+//---------------------------------------TESTS---------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------
 struct CustomCallback : public rendering::IPostProcessingRenderCallback {
 public:
 	CustomCallback(irr::video::IVideoDriver *driver) {
@@ -281,6 +307,7 @@ void CCP3DEditorCore::createTestScene() {
 	*/
 
 	SpiesManager->addSpy(new CCP3DPostProcessSpy(this));
+	return;
 
 	engine::ICP3DExporter *exporter = Engine->createExporter();
 	exporter->exportProject("test.cp3d");
