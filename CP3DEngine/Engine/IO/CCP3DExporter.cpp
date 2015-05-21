@@ -13,7 +13,8 @@ using namespace scene;
 namespace cp3d {
 namespace engine {
 
-CCP3DExporter::CCP3DExporter(CCP3DEngine *engine) : Engine(engine) {
+CCP3DExporter::CCP3DExporter(CCP3DEngine *engine) : Engine(engine), ProjectDirectory(""), ProjectDirectoryLow("")
+{
 	Device = Engine->getRenderingEngine()->getDevice();
 }
 
@@ -161,6 +162,13 @@ stringw CCP3DExporter::getValue(IAttributes *attributes, u32 indice) {
 	return L"";
 }
 
+stringc CCP3DExporter::removeProjectDirectory(stringc path) {
+	path.remove(ProjectDirectory);
+	path.remove(ProjectDirectoryLow);
+
+	return path;
+}
+
 void CCP3DExporter::serializeNode(ISceneNode *node, IAttributes *attributes) {
 	using namespace rendering;
 
@@ -242,8 +250,10 @@ void CCP3DExporter::exportMaterial(SMaterial &material) {
 		Writer->writeLineBreak();
 
 		ITexture *texture = material.TextureLayer[i].Texture;
-		if (texture)
-			attr->addString("TexturePath", texture->getName().getPath().c_str());
+		if (texture) {
+			stringc path = removeProjectDirectory(texture->getName().getPath().c_str());
+			attr->addString("TexturePath", path.c_str());
+		}
 
 		writeAttributes(attr);
 
@@ -286,6 +296,9 @@ void CCP3DExporter::writeAttributes(SAttribute attributes, ISceneNode *node) {
 }
 
 bool CCP3DExporter::exportProject(stringc filename) {
+	ProjectDirectory = Device->getFileSystem()->getFileDir(filename) + "/";
+	ProjectDirectoryLow = stringc(Device->getFileSystem()->getFileDir(filename) + "/").make_lower();
+
 	Writer = Device->getFileSystem()->createXMLWriter(filename);
 
 	if (!Writer)

@@ -70,14 +70,16 @@ void CCP3DSceneNodeCreator::configureSceneNode(irr::scene::ISceneNode *node) {
 
 	ESCENE_NODE_TYPE type = node->getType();
 	IMeshManipulator *manipulator = Smgr->getMeshManipulator();
+	IMeshCache *cache = Smgr->getMeshCache();
 	IMesh *m = 0;
 	
-	if (type == ESNT_MESH || type == ESNT_OCTREE || type == ESNT_CUBE ||
-		type == ESNT_SPHERE)
+	if ((type == ESNT_MESH || type == ESNT_OCTREE || type == ESNT_CUBE ||
+		type == ESNT_SPHERE) && !Smgr->getParameters()->getAttributeAsBool(scene::IRR_SCENE_MANAGER_IS_EDITOR))
 	{
 		IMeshSceneNode *n = (IMeshSceneNode *)node;
 		m = manipulator->createForsythOptimizedMesh(n->getMesh());
-		Smgr->getMeshCache()->removeMesh(n->getMesh());
+
+		cache->removeMesh(n->getMesh());
 		n->setMesh(m);
 	}
 	else if (type == ESNT_TERRAIN) {

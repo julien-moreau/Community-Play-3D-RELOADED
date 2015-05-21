@@ -33,6 +33,7 @@ public:
 
 	/// ICP3DEditor
 	void runEditor();
+	void createComponents();
 
 	/// Gui
 	ui::CGUIManager *getGUIManager() { return GuiManager; }
@@ -101,7 +102,6 @@ private:
 	irr::core::dimension2du ScreenSize;
 
 	/// Methods
-	void createComponents();
 	void createTestScene();
 };
 

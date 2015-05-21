@@ -48,12 +48,17 @@ private:
 	void importNode();
 	void importScene();
 
+	irr::core::stringc removeProjectDirectory(irr::core::stringc path);
+
 	/// Datas
 	CCP3DEngine *Engine;
 	irr::IrrlichtDevice *Device;
 	irr::io::IXMLWriter *Writer;
 	irr::io::IXMLReader *Reader;
 	irr::core::map<irr::core::stringc, irr::core::stringc> Parenting;
+
+	irr::core::stringc ProjectDirectory;
+	irr::core::stringc ProjectDirectoryLow;
 };
 
 } /// End namespace engine

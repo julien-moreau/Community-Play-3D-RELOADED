@@ -24,6 +24,8 @@ void CCP3DExporter::setAttribute(IAttributes *attributes, stringw type) {
 		attributes->addInt(name.c_str(), Reader->getAttributeValueAsInt(L"value"));
 	}
 	else if (type == "string") {
+		if (value == "Mesh")
+			value = removeProjectDirectory(value);
 		attributes->addString(name.c_str(), value.c_str());
 	}
 	else if (type == "bool") {
@@ -44,13 +46,16 @@ void CCP3DExporter::setAttribute(IAttributes *attributes, stringw type) {
 }
 
 bool CCP3DExporter::importProject(irr::core::stringc filename) {
-	Reader = Device->getFileSystem()->createXMLReader(filename);
-	ISceneManager *smgr = Engine->getRenderingEngine()->getSceneManager();
+	ProjectDirectory = Device->getFileSystem()->getFileDir(filename) + "/";
+	ProjectDirectoryLow = stringc(Device->getFileSystem()->getFileDir(filename) + "/").make_lower();
 
-	Parenting.clear();
+	Reader = Device->getFileSystem()->createXMLReader(filename);
 
 	if (!Reader)
 		return false;
+
+	ISceneManager *smgr = Engine->getRenderingEngine()->getSceneManager();
+	Parenting.clear();
 
 	/// Import scene
 	while (Reader->read()) {

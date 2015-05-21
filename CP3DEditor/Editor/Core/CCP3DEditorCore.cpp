@@ -178,7 +178,7 @@ bool CCP3DEditorCore::OnEvent(const SEvent &event) {
 		}
 		#endif
 
-		if (event.KeyInput.Control) {
+		if (event.KeyInput.Control && !event.KeyInput.PressedDown) {
 			if (event.KeyInput.Key == KEY_KEY_S) {
 				SaverOpener->save();
 				return true;

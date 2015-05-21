@@ -3,6 +3,7 @@
 #include "CCP3DSaverOpener.h"
 
 #include "../Core/CCP3DEditorCore.h"
+#include "../UserInterfaces/CCP3DSceneGraph.h"
 
 using namespace irr;
 using namespace scene;
@@ -59,6 +60,9 @@ void CCP3DSaverOpener::saveFile(stringc filename) {
 }
 
 void CCP3DSaverOpener::openFile(stringc filename) {
+	EditorCore->getRenderingEngine()->clear();
+	EditorCore->createComponents();
+
 	engine::ICP3DExporter *exporter = EditorCore->getEngine()->createExporter();
 	exporter->importProject(filename);
 
@@ -66,6 +70,8 @@ void CCP3DSaverOpener::openFile(stringc filename) {
 	Saved = true;
 	EditorCore->setProjectDirectory(filename);
 	delete exporter;
+
+	EditorCore->getSceneGraph()->fillGraph();
 }
 
 bool CCP3DSaverOpener::OnEvent(const SEvent &event) {
@@ -84,6 +90,7 @@ bool CCP3DSaverOpener::OnEvent(const SEvent &event) {
 		}
 		else if (event.GUIEvent.EventType == EGET_MESSAGEBOX_NO) {
 			if (event.GUIEvent.Caller == AskSaveWindow) {
+				Saved = true;
 				open();
 				return true;
 			}
