@@ -66,7 +66,9 @@ private:
 
 	// Enums
 	enum E_GRAPH_CTX_MENU {
-		EGCM_REMOVE = 0
+		EGCM_REMOVE = 0,
+
+		EGCM_PLANAR_MAPPING
 	};
 
 };

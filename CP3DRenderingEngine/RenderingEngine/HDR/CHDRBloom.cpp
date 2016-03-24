@@ -21,8 +21,8 @@ CHDRBloom::CHDRBloom(CCP3DHandler *handler) : Handler(handler) {
 
 	/// Rendering
 	BrightPassRT = Driver->addRenderTargetTexture(Driver->getScreenSize() / 2, "CP3DHDRBrightPassRT", ECF_A32B32G32R32F);
-	BlurRT1 = Driver->addRenderTargetTexture(Driver->getScreenSize() / 8, "CP3DHDRBlurRT1", ECF_A32B32G32R32F);
-	BlurRT2 = Driver->addRenderTargetTexture(Driver->getScreenSize() / 8, "CP3DHDRBlurRT2", ECF_A32B32G32R32F);
+	BlurRT1 = Driver->addRenderTargetTexture(Driver->getScreenSize() / 4, "CP3DHDRBlurRT1", ECF_A32B32G32R32F);
+	BlurRT2 = Driver->addRenderTargetTexture(Driver->getScreenSize() / 4, "CP3DHDRBlurRT2", ECF_A32B32G32R32F);
 
 	BrightPass = new CHDRBrightPass(handler);
 	DownSample = new CHDRDownSample(handler);

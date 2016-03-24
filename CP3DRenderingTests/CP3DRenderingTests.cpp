@@ -36,6 +36,23 @@ private:
 
 };
 
+class CShaderTest : public IShaderConstantSetCallBack {
+public:
+
+	CShaderTest() {
+		stringc vertex =
+			""
+			;
+
+		stringc pixel =
+			""
+			;
+
+
+	}
+
+};
+
 /// Main function
 int main(int argc, char* argv[]) {
 
@@ -71,7 +88,21 @@ int main(int argc, char* argv[]) {
 
 	//cp3d::test::GlobalTest(device);
 	//cp3d::test::Direct3D11Test(device);
-	cp3d::test::Direct3D9Debug(device);
+	//cp3d::test::Direct3D9Debug(device);
+
+	IVideoDriver *driver = device->getVideoDriver();
+	ISceneManager *smgr = device->getSceneManager();
+
+	ISceneNode *cube = smgr->addCubeSceneNode(1, 0, -1, vector3df(0.f), vector3df(0.f), vector3df(1.f));
+	cube->setMaterialFlag(EMF_LIGHTING, false);
+
+	ICameraSceneNode *camera = smgr->addCameraSceneNode(0, vector3df(10.f, 10.f, 10.f), vector3df(0.f), -1, true);
+
+	while (device->run()) {
+		driver->beginScene(true, true, SColor(0x0));
+		smgr->drawAll();
+		driver->endScene();
+	}
 
 	return EXIT_SUCCESS;
 }

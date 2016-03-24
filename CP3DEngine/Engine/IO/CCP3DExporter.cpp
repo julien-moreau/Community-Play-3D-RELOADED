@@ -172,7 +172,11 @@ stringc CCP3DExporter::removeProjectDirectory(stringc path) {
 void CCP3DExporter::serializeNode(ISceneNode *node, IAttributes *attributes) {
 	using namespace rendering;
 
-	node->serializeAttributes(attributes);
+	SAttributeReadWriteOptions options;
+	options.Flags = EARWF_USE_RELATIVE_PATHS;
+	options.Filename = ProjectDirectory.c_str();
+
+	node->serializeAttributes(attributes, &options);
 
 	ICP3DHandler *handler = Engine->getRenderingEngine()->getHandler();
 	ESCENE_NODE_TYPE type = node->getType();

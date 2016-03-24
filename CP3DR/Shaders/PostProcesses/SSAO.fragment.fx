@@ -110,13 +110,13 @@ float3 normal_from_depth(float depth, float2 texcoords) {
 
 float4 pixelMain(VS_OUTPUT In) : COLOR0
 {
-	const float total_strength = 1.5; // 1.0
-	const float base = 0.2; // 0.2
+	const float total_strength = 1; // 1.0
+	const float base = 0.0; // 0.2
 
-	const float area = 0.75; //0.0075
+	const float area = 0.0075; //0.0075
 	const float falloff = 0.000001; //0.000001
 
-	const float radius = 0.006; //0.0002
+	const float radius = 0.02; //0.0002
 	const int samples = 16;
 	float3 sample_sphere[16] = {
 		float3(0.5381, 0.1856, -0.4319), float3(0.1379, 0.2486, 0.4430),
@@ -136,11 +136,11 @@ float4 pixelMain(VS_OUTPUT In) : COLOR0
 	float3 position = float3(In.TexCoords.xy, depth);
 	float3 normal = normal_from_depth(depth, In.TexCoords.xy);
 
-	float radius_depth = radius / depth;
-	float occlusion = 0.0;
+	float radius_depth = radius * depth;
+	float occlusion = 1.0;
 	for (int i = 0; i < samples; i++) {
 
-		float3 ray = radius_depth * reflect(sample_sphere[i], random);
+		float3 ray = radius_depth * reflect(sample_sphere[i] * 16.0, random);
 		float3 hemi_ray = position + sign(dot(ray, normal)) * ray;
 
 		float occ_depth = CP3DTex2D(DepthTextureSampler, saturate(hemi_ray.xy), DepthTextureSamplerST).r;

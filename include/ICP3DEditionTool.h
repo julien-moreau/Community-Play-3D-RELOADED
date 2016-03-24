@@ -33,9 +33,13 @@ enum E_INTERFACE_EVENT {
 
 //! Custom Scene node types (extension)
 enum E_SCENE_NODE_TYPE_2 {
+
 	ESNT2_POST_PROCESS = MAKE_IRR_ID('p', 'p', 'r', 'o'),
 	ESNT2_TEXTURES = MAKE_IRR_ID('t', 'e', 'x', 'r'),
-	ESNT2_HDR = MAKE_IRR_ID('h', 'd', 'r', 'r')
+	ESNT2_HDR = MAKE_IRR_ID('h', 'd', 'r', 'r'),
+
+	ESNT2_ADD_MESH = MAKE_IRR_ID('a', 'd', 'm', 'h'),
+	ESNT2_ADD_ANIMATED_MESH = MAKE_IRR_ID('a', 'd', 'a', 'm')
 };
 
 //! Custom GUI elements types for CP3D
@@ -83,6 +87,13 @@ struct SCP3DInterfaceData {
 		ui::ICP3DColorDialog *ColorElement;
 	};
 
+	//! Structure that contains file open dialog elements
+	struct SFileOpenData {
+		irr::gui::IGUIEditBox *EditBox;
+		irr::gui::IGUIButton *OpenButton;
+		irr::gui::IGUIFileOpenDialog *FileOpenDialog;
+	};
+
 	union {
 		SListData ListData;
 		STextureData TextureData;
@@ -91,6 +102,8 @@ struct SCP3DInterfaceData {
 		irr::gui::IGUIComboBox *ComboBox;
 		irr::gui::IGUICheckBox *CheckBox;
 		cp3d::ui::ICP3DViewPort *ViewPort;
+		SFileOpenData FileOpenData;
+		irr::gui::IGUIButton *Button;
 	};
 
 };
@@ -105,6 +118,8 @@ static auto DefaultEditionToolCallback = [](irr::core::stringw text) -> ICP3DEdi
 	ICP3DEditionToolCallback c = [=](SCP3DInterfaceData data) {
 		if (data.Type == irr::gui::EGUIET_CHECK_BOX)
 			data.CheckBox->setText(text.c_str());
+		else if (data.Type == irr::gui::EGUIET_BUTTON)
+			data.Button->setText(text.c_str());
 		else
 			data.TextElement->setText(text.c_str());
 	};

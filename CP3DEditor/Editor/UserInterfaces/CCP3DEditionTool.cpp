@@ -15,6 +15,8 @@
 #include "EditionTools/CCP3DEditionToolTextures.h"
 #include "EditionTools/CCP3DEditionToolHDR.h"
 
+#include "EditionTools/AddObject/CCP3DEditionToolAddMesh.h"
+
 #include "CCP3DEditionTool.h"
 
 using namespace irr;
@@ -216,9 +218,13 @@ void CCP3DEditionTool::createDefaultControllers() {
 	CCP3DEditionToolSceneManager *EditionToolSceneManager = new CCP3DEditionToolSceneManager(EditorCore);
 	CCP3DEditionToolBillboardSceneNode *EditionToolBillboardSceneNode = new CCP3DEditionToolBillboardSceneNode(EditorCore);
 	CCP3DEditionToolTextSceneNode *EditionToolTextSceneNode = new CCP3DEditionToolTextSceneNode(EditorCore);
+
 	CCP3DEditionToolPostProcess *EditionToolPostProcess = new CCP3DEditionToolPostProcess(EditorCore);
 	CCP3DEditionToolTextures *EditionToolTextures = new CCP3DEditionToolTextures(EditorCore);
 	CCP3DEditionToolHDR *EditionToolHDR = new CCP3DEditionToolHDR(EditorCore);
+
+	CCP3DEditionToolAddMesh *EditionToolAddMesh = new CCP3DEditionToolAddMesh(EditorCore, false);
+	CCP3DEditionToolAddMesh *EditionToolAddAnimatedMesh = new CCP3DEditionToolAddMesh(EditorCore, true);
 
 	//! No cameras for the moment ! =D
 	addController(ESNT_MESH, EditionToolSceneNode);
@@ -247,6 +253,9 @@ void CCP3DEditionTool::createDefaultControllers() {
 	addController((ESCENE_NODE_TYPE)ESNT2_POST_PROCESS, EditionToolPostProcess);
 	addController((ESCENE_NODE_TYPE)ESNT2_TEXTURES, EditionToolTextures);
 	addController((ESCENE_NODE_TYPE)ESNT2_HDR, EditionToolHDR);
+
+	addController((ESCENE_NODE_TYPE)ESNT2_ADD_MESH, EditionToolAddMesh);
+	addController((ESCENE_NODE_TYPE)ESNT2_ADD_ANIMATED_MESH, EditionToolAddAnimatedMesh);
 }
 
 bool CCP3DEditionTool::addController(ESCENE_NODE_TYPE type, ICP3DEditionToolController *controller) {
@@ -352,7 +361,9 @@ SCP3DInterfaceData CCP3DEditionTool::addField(IGUITab *tab, EGUI_ELEMENT_TYPE ty
 	case EGUIET_IMAGE: e = createTextureField(tab, panel); break;
 	case EGUIET_CHECK_BOX: e = createCheckBoxField(tab, panel); break;
 	case EGUIET_COLOR_SELECT_DIALOG: e = createColorField(tab, panel); break;
-	case ECET_VIEW_PORT: e = createViewportField(tab, panel); break;
+	case EGUIET_MESH_VIEWER: e = createViewportField(tab, panel); break;
+	case EGUIET_FILE_OPEN_DIALOG: e = createFileOpenField(tab, panel); break;
+	case EGUIET_BUTTON: e = createButtonField(tab, panel); break;
 
 	default: break;
 	}
@@ -583,7 +594,31 @@ SCP3DInterfaceData CCP3DEditionTool::createViewportField(irr::gui::IGUITab *tab,
 	s32 width = getPanelWidth(panel);
 	s32 offset = getElementPositionOffset(tab, panel);
 
-	e.ViewPort = EditorCore->getGUIManager()->createViewPort(rect<s32>(5, offset, width - 25, offset + 20), panel, -1);
+	e.ViewPort = EditorCore->getGUIManager()->createViewPort(rect<s32>(5, offset, width - 5, offset + 200), panel, -1);
+
+	return e;
+}
+
+SCP3DInterfaceData CCP3DEditionTool::createFileOpenField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel) {
+	SCP3DInterfaceData e(EGUIET_FILE_OPEN_DIALOG);
+
+	s32 width = getPanelWidth(panel);
+	s32 offset = getElementPositionOffset(tab, panel);
+
+	e.FileOpenData.EditBox = Gui->addEditBox(L"", rect<s32>(5, offset, width - 80, offset + 20), false, panel, -1);
+	e.FileOpenData.OpenButton = Gui->addButton(rect<s32>(width - 80, offset, width - 5, offset + 20), panel, -1, L"Open...", L"Open File...");
+	e.FileOpenData.FileOpenDialog = 0;
+
+	return e;
+}
+
+SCP3DInterfaceData CCP3DEditionTool::createButtonField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel) {
+	SCP3DInterfaceData e(EGUIET_BUTTON);
+
+	s32 width = getPanelWidth(panel);
+	s32 offset = getElementPositionOffset(tab, panel);
+
+	e.Button = Gui->addButton(rect<s32>(5, offset, width - 5, offset + 20), panel, -1, L"Button", L"");
 
 	return e;
 }

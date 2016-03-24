@@ -199,14 +199,15 @@ void CCP3DContextMenu::checkViewContextMenu(s32 id) {
 
 void CCP3DContextMenu::checkSceneContextMenu(s32 id) {
 	using namespace ui;
+	CCP3DEditionTool *editionTool = EditorCore->getEditionTool();
 
 	switch (id)
 	{
 	case ESCM_ADD_STATIC_MESH:
-		{ CUIAddMesh *addMesh = new CUIAddMesh(EditorCore, false); }
+		editionTool->applyForControllerType((ESCENE_NODE_TYPE)ESNT2_ADD_MESH, 0);
 		break;
 	case ESCM_ADD_ANIMATED_MESH:
-		{ CUIAddMesh *addMesh = new CUIAddMesh(EditorCore, true); }
+		editionTool->applyForControllerType((ESCENE_NODE_TYPE)ESNT2_ADD_ANIMATED_MESH, 0);
 		break;
 	default:
 		break;

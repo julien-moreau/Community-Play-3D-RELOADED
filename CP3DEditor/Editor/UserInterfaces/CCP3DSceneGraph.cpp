@@ -103,6 +103,7 @@ bool CCP3DSceneGraph::OnEvent(const SEvent &event) {
 			if (Graph->getSelected() != 0 && focus == 0 && Graph->isPointInside(cpos)) {
 				ContextMenu = Gui->addContextMenu(rect<s32>(cpos.X, cpos.Y, cpos.X + 100, cpos.Y + 100), 0, -1);
 				ContextMenu->addItem(L"Remove...", EGCM_REMOVE, true, false, false, false);
+				ContextMenu->addItem(L"Planar Mapping", EGCM_PLANAR_MAPPING, true, false, false, false);
 
 				return false;
 			}
@@ -123,6 +124,7 @@ bool CCP3DSceneGraph::OnEvent(const SEvent &event) {
 					return true;
 
 				engine::ICP3DSceneNodeCreator *snCreator = EditorCore->getEngine()->getSceneNodeCreator();
+				ESCENE_NODE_TYPE type = sceneNode->getType();
 
 				// Remove
 				if (ContextMenu->getItemCommandId(ContextMenu->getSelectedItem()) == EGCM_REMOVE) {
@@ -132,6 +134,15 @@ bool CCP3DSceneGraph::OnEvent(const SEvent &event) {
 					node->getParent()->deleteChild(node);
 					SelectedSceneNode = 0;
 					EditorCore->getEditionTool()->clear();
+				}
+
+				// Planar mapping
+				if (ContextMenu->getItemCommandId(ContextMenu->getSelectedItem()) == EGCM_PLANAR_MAPPING) {
+					if (type == ESNT_MESH || type == ESNT_CUBE || type == ESNT_SPHERE) {
+						IMesh *mesh = ((IMeshSceneNode *)sceneNode)->getMesh();
+						Smgr->getMeshManipulator()->makePlanarTextureMapping(mesh, 0.02f);
+						mesh->setDirty();
+					}
 				}
 
 				ContextMenu = 0;

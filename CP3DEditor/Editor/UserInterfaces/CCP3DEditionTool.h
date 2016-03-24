@@ -90,6 +90,8 @@ private:
 	SCP3DInterfaceData createCheckBoxField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel);
 	SCP3DInterfaceData createColorField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel);
 	SCP3DInterfaceData createViewportField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel);
+	SCP3DInterfaceData createFileOpenField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel);
+	SCP3DInterfaceData createButtonField(irr::gui::IGUITab *tab, ui::CGUIPanel *panel);
 
 	irr::core::list<SCP3DInterfaceData> InterfaceDatas;
 

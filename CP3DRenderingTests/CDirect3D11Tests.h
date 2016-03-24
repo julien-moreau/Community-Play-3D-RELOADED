@@ -96,6 +96,7 @@ void Direct3D11Test(irr::IrrlichtDevice *device) {
 		"	float4 color = CP3DTex2D(ColorMapSampler, In.TexCoords.xy, ColorMapSamplerST);\n"
 		"	return color * power;\n"
 		"}\n";
+
 	s32 custom = handler->addPostProcessingEffectFromString(pixelProgram);
 	f32 power = 0.f;
 	handler->setPostProcessingRenderCallback(custom,

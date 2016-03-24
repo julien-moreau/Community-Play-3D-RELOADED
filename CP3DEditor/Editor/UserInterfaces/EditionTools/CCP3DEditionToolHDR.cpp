@@ -4,7 +4,6 @@
 #include "../../GUIElements/CGUIManager.h"
 #include "../CCP3DCustomView.h"
 #include "../CCP3DEditionTool.h"
-#include "SceneNodeEditionTools/CCP3DSceneNodeAnimators.h"
 #include "CCP3DEditionToolHDR.h"
 
 using namespace irr;
@@ -37,7 +36,7 @@ void CCP3DEditionToolHDR::createInterface() {
 	/// Tabs
 	HDRTab = EditionTool->addTab("Post-Processes");
 	
-	/// Parameters for IBillBoardTextSceneNode
+	/// Parameters
 	EditionTool->setNewZone(HDRTab, "HDR");
 	HDRExposure = EditionTool->addField(HDRTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Exposure"));
 	HDRIncrease = EditionTool->addField(HDRTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Increase Rate"));

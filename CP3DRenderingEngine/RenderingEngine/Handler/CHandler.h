@@ -171,7 +171,7 @@ private:
 
 	struct SPostProcessingPair {
 		SPostProcessingPair(const irr::s32 materialTypeIn, CScreenQuadCB* callbackIn, IPostProcessingRenderCallback* renderCallbackIn = 0)
-			: materialType(materialTypeIn), callback(callbackIn), renderCallback(renderCallbackIn)
+			: materialType(materialTypeIn), callback(callbackIn), renderCallback(renderCallbackIn), CustomRTT(0)
 		{ }
 
 		bool operator < (const SPostProcessingPair& other) const {
@@ -181,6 +181,7 @@ private:
 		irr::s32 materialType;
 		IPostProcessingRenderCallback* renderCallback;
 		CScreenQuadCB* callback;
+		irr::video::ITexture *CustomRTT;
 		irr::core::stringc path;
 	};
 

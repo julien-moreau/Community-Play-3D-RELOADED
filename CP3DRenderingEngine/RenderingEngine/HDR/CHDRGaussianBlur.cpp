@@ -54,7 +54,7 @@ void CHDRGaussianBlur::calculateWeights() {
 	f32 x;
 	for (u32 i = 0; i < 9; i++) {
 		x = (f32(i) - 4.f) / 4.f;
-		BlurWeights[i] = GaussCoeff * (1.0f / sqrt(2.0f * PI * GaussStandDev * GaussStandDev)) * expf((-((x - GaussMean) * (x - GaussMean))) / (2.f * GaussStandDev * GaussStandDev));
+		BlurWeights[i] = GaussCoeff * (1.0f / sqrt(2.0f * PI * GaussStandDev)) * expf((-((x - GaussMean) * (x - GaussMean))) / (2.f * GaussStandDev * GaussStandDev));
 	}
 }
 
