@@ -185,6 +185,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClInclude Include="RenderingEngine\HDR\CCP3DHDRManager.h" />
     <ClInclude Include="RenderingEngine\HDR\CHDRDownSample.h" />
     <ClInclude Include="RenderingEngine\HDR\CHDRGaussianBlur.h" />
+    <ClInclude Include="RenderingEngine\HDR\CHDRLensFlare.h" />
     <ClInclude Include="RenderingEngine\HDR\CHDRLuminance.h" />
     <ClInclude Include="RenderingEngine\HDR\CHDRTextureAdder.h" />
     <ClInclude Include="RenderingEngine\Managers\CHardwareSkinningManager.h" />
@@ -211,6 +212,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClCompile Include="RenderingEngine\HDR\CCP3DHDRManager.cpp" />
     <ClCompile Include="RenderingEngine\HDR\CHDRDownSample.cpp" />
     <ClCompile Include="RenderingEngine\HDR\CHDRGaussianBlur.cpp" />
+    <ClCompile Include="RenderingEngine\HDR\CHDRLensFlare.cpp" />
     <ClCompile Include="RenderingEngine\HDR\CHDRLuminance.cpp" />
     <ClCompile Include="RenderingEngine\HDR\CHDRTextureAdder.cpp" />
     <ClCompile Include="RenderingEngine\Managers\CHardwareSkinningManager.cpp" />
@@ -543,6 +545,22 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
   <ItemGroup>
     <None Include="..\CP3DR\Shaders\HDR\HDR.fragment.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</ExcludedFromBuild>
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CP3DR\Shaders\HDR\LensFlare.fragment.fx">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\CP3DR\Shaders\HDR\LensFlareFinal.fragment.fx">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

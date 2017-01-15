@@ -52,7 +52,8 @@ namespace cp3d {
 			ISceneManager *smgr = device->getSceneManager();
 			IGUIEnvironment *gui = device->getGUIEnvironment();
 
-			device->getLogger()->setLogLevel(ELL_NONE);
+			/// Logging
+			device->getLogger()->setLogLevel(ELL_INFORMATION);
 
 			/// Create rendering engine
 			cp3d::rendering::ICP3DRenderingEngine *cpre = cp3d::createRenderingEngine(device);
@@ -64,17 +65,17 @@ namespace cp3d {
 			device->getCursorControl()->setVisible(false);
 
 			/// Create a test scene
-			//IAnimatedMesh *planeMesh = smgr->addHillPlaneMesh("plane_mesh", dimension2d<f32>(100.f, 100.f), dimension2d<u32>(100, 100),
-			//	0, 0.f, dimension2d<f32>(0.f, 0.f), dimension2d<f32>(50.f, 50.f));
+			IAnimatedMesh *planeMesh = smgr->addHillPlaneMesh("plane_mesh", dimension2d<f32>(100.f, 100.f), dimension2d<u32>(100, 100),
+				0, 0.f, dimension2d<f32>(0.f, 0.f), dimension2d<f32>(50.f, 50.f));
 
-			//IMeshSceneNode *planeNode = smgr->addMeshSceneNode(planeMesh);
-			////ISceneNode *planeNode = smgr->addWaterSurfaceSceneNode(planeMesh, 20.f, 200.f, 0.05f);
-			//planeNode->setMaterialTexture(0, driver->getTexture("Textures/diffuse.tga"));
-			//planeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
-			//planeNode->setMaterialTexture(2, driver->getTexture("Textures/specular.tga"));
-			//planeNode->setMaterialFlag(EMF_LIGHTING, false);
-			//planeNode->getMaterial(0).Shininess = 0.f;
-			//handler->addShadowToNode(planeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_BOTH);
+			IMeshSceneNode *planeNode = smgr->addMeshSceneNode(planeMesh);
+			//ISceneNode *planeNode = smgr->addWaterSurfaceSceneNode(planeMesh, 20.f, 200.f, 0.05f);
+			planeNode->setMaterialTexture(0, driver->getTexture("data/textures/spnza_bricks_a_diff.tga"));
+			planeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
+			planeNode->setMaterialTexture(2, driver->getTexture("Textures/specular.tga"));
+			planeNode->setMaterialFlag(EMF_LIGHTING, false);
+			planeNode->getMaterial(0).Shininess = 0.f;
+			handler->addShadowToNode(planeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_BOTH);
 
 			//IMeshSceneNode *cubeNode = smgr->addCubeSceneNode(50.f, 0, -1, vector3df(0.f, 25.f, 0.f), vector3df(0.f, 45.f, 0.f));
 			//cubeNode->setMaterialTexture(0, driver->getTexture("Textures/diffuse.tga"));
@@ -86,8 +87,8 @@ namespace cp3d {
 
 			/// Create the normal mapping material
 			cpre->createNormalMappingMaterial();
-			/*cubeNode->setMaterialType(cpre->Materials[EMT_NORMAL_MAP_SOLID]);
-			planeNode->setMaterialType(cpre->Materials[EMT_NORMAL_MAP_SOLID]);*/
+			// cubenode->setmaterialtype(cpre->materials[emt_normal_map_solid]);
+			planeNode->setMaterialType(cpre->Materials[EMT_NORMAL_MAP_SOLID]);
 
 			cp3d::rendering::ICP3DLightSceneNode *light = cpre->createLightSceneNode(true, true);
 			light->setPosition(vector3df(0.f, 300.f, 0.f));
@@ -101,22 +102,27 @@ namespace cp3d {
 			ILightSceneNode *lightNode = *light;
 			lightNode->addAnimator(animator);
 
-			animator = new AnimatorTest(light, SColorf(0.f, 0.f, 0.f), SColorf(1.f, 1.f, 1.f), 5000);
-			lightNode->addAnimator(animator);
+			//animator = new AnimatorTest(light, SColorf(0.f, 0.f, 0.f), SColorf(1.f, 1.f, 1.f), 5000);
+			//lightNode->addAnimator(animator);
 
 			/// Skybox
-			/*ISceneNode* skyboxNode = smgr->addSkyBoxSceneNode(
+			ISceneNode* skyboxNode = smgr->addSkyBoxSceneNode(
 				driver->getTexture("Textures/Skybox/glacier_up.png"),
 				driver->getTexture("Textures/Skybox/glacier_dn.png"),
 				driver->getTexture("Textures/Skybox/glacier_lf.png"),
 				driver->getTexture("Textures/Skybox/glacier_rt.png"),
 				driver->getTexture("Textures/Skybox/glacier_ft.png"),
-				driver->getTexture("Textures/Skybox/glacier_bk.png"));*/
+				driver->getTexture("Textures/Skybox/glacier_bk.png"));
 
 			/// Sponza
-			IMeshSceneNode *sponza = smgr->addMeshSceneNode(smgr->getMesh("data/sponza.obj"), 0, -1, vector3df(0.f), vector3df(0.f), vector3df(0.1f));
+			IMesh *lvMesh = smgr->getMesh("data/lv/CAT_XMAS2015-N60040.obj");
+			IMeshSceneNode *lvSceneNode = smgr->addMeshSceneNode(lvMesh, 0, -1, vector3df(0.f, 50.f, 0.f), vector3df(0.f), vector3df(1.f));
+			lvSceneNode->setMaterialType(cpre->Materials[EMT_NORMAL_MAP_SOLID]);
+			handler->addShadowToNode(lvSceneNode, rendering::EFT_16PCF, rendering::ESM_BOTH);
+
+			/*IMeshSceneNode *sponza = smgr->addMeshSceneNode(smgr->getMesh("data/sponza.obj"), 0, -1, vector3df(0.f), vector3df(0.f), vector3df(0.1f));
 			sponza->setMaterialType(cpre->Materials[EMT_NORMAL_MAP_SOLID]);
-			handler->addShadowToNode(sponza, rendering::EFT_16PCF, rendering::ESM_BOTH);
+			handler->addShadowToNode(sponza, rendering::EFT_16PCF, rendering::ESM_BOTH);*/
 
 			/// Billboard
 			/*IBillboardSceneNode * bill = smgr->addBillboardSceneNode(0, dimension2df(1500.f, 1500.f), vector3df(-1000.f, 650.f, 0.f));
@@ -124,8 +130,8 @@ namespace cp3d {
 			bill->setMaterialFlag(EMF_LIGHTING, false);
 			bill->setMaterialTexture(0, driver->getTexture("Textures/Clouds/sun.png"));*/
 
-			/// Logging
-			device->getLogger()->setLogLevel(ELL_INFORMATION);
+			handler->getDepthPassManager()->addNodeToPass(planeNode);
+			handler->getDepthPassManager()->addNodeToPass(lvSceneNode);
 
 			/// Finish
 			handler->setAmbientColor(SColor(255, 32, 32, 32));
@@ -133,7 +139,7 @@ namespace cp3d {
 			handler->getHDRManager()->setEnabled(true);
 			handler->getHDRManager()->setBrightnessThreshold(0.8f);
 			handler->getHDRManager()->setGaussWidth(2.f);
-			handler->getHDRManager()->setGaussianCoefficient(0.25f);
+			handler->getHDRManager()->setGaussianCoefficient(0.2f);
 			handler->getHDRManager()->setMinimumLuminance(0.5f);
 			handler->getHDRManager()->setMaximumLuminance(2.f);
 			handler->getHDRManager()->setDecreaseRate(0.5f);

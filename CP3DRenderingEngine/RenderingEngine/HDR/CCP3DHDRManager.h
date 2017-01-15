@@ -15,6 +15,8 @@ class CHDRBloom;
 class CHDRTextureAdder;
 class CHDRLuminance;
 
+class CHDRLensFlare;
+
 class CHDRManager : public ICP3DHDRManager {
 public:
 	/// ctor & dtor
@@ -61,6 +63,7 @@ private:
 	CScreenQuad ScreenQuad;
 
 	irr::video::ITexture *TextureAdderRTT;
+	irr::video::ITexture *HdrRTT;
 
 	bool Enabled;
 
@@ -68,6 +71,7 @@ private:
 	CHDRBloom *Bloom;
 	CHDRTextureAdder *TextureAdder;
 	CHDRLuminance *Luminance;
+	CHDRLensFlare *LensFlare;
 
 	/// Material
 	CScreenQuadCB *Callback;

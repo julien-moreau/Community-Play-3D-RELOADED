@@ -122,6 +122,9 @@
     <ClInclude Include="RenderingEngine\HDR\CHDRLuminance.h">
       <Filter>RenderingEngine\HDR</Filter>
     </ClInclude>
+    <ClInclude Include="RenderingEngine\HDR\CHDRLensFlare.h">
+      <Filter>RenderingEngine\HDR</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DRenderingEngine.cpp">
@@ -191,6 +194,9 @@
       <Filter>RenderingEngine\HDR</Filter>
     </ClCompile>
     <ClCompile Include="RenderingEngine\HDR\CHDRLuminance.cpp">
+      <Filter>RenderingEngine\HDR</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderingEngine\HDR\CHDRLensFlare.cpp">
       <Filter>RenderingEngine\HDR</Filter>
     </ClCompile>
   </ItemGroup>
@@ -326,6 +332,12 @@
       <Filter>Shaders\HDR</Filter>
     </None>
     <None Include="..\CP3DR\Shaders\HDR\BrightPass.fragment.fx">
+      <Filter>Shaders\HDR</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\HDR\LensFlare.fragment.fx">
+      <Filter>Shaders\HDR</Filter>
+    </None>
+    <None Include="..\CP3DR\Shaders\HDR\LensFlareFinal.fragment.fx">
       <Filter>Shaders\HDR</Filter>
     </None>
   </ItemGroup>

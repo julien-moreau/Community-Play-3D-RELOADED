@@ -21,9 +21,6 @@ public:
 
 private:
 
-	/// Textures
-	irr::video::ITexture *LensTexture;
-
 	/// Datas
 	CCP3DHandler *Handler;
 	irr::video::IVideoDriver *Driver;

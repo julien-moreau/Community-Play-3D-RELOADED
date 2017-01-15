@@ -9,6 +9,7 @@
 #include "CHDRLuminance.h"
 #include "CHDRBrightPass.h"
 #include "CHDRGaussianBlur.h"
+#include "CHDRLensFlare.h"
 
 #include "../Materials/CMaterialCreator.h"
 
@@ -25,6 +26,7 @@ CHDRManager::CHDRManager(CCP3DHandler *handler) : Handler(handler), Enabled(true
 	Driver = Handler->getVideoDriver();
 	Timer = Handler->getIrrlichtDevice()->getTimer();
 	TextureAdderRTT = Driver->addRenderTargetTexture(Driver->getScreenSize(), "CP3DHDRTextureAdder", ECF_A32B32G32R32F);
+	HdrRTT = Driver->addRenderTargetTexture(Driver->getScreenSize(), "CP3DHDR", ECF_A8R8G8B8);
 
 	/// Material
 	CMaterialCreator cmat(handler->getVideoDriver());
@@ -51,6 +53,16 @@ CHDRManager::CHDRManager(CCP3DHandler *handler) : Handler(handler), Enabled(true
 
 	TextureAdder = new CHDRTextureAdder(Handler, TextureAdderRTT);
 	Luminance = new CHDRLuminance(Handler);
+	
+	// Lens Flare and Depth sampler
+	if (handler->getDepthPassManager()->getPassCount() == 0) {
+		handler->getDepthPassManager()->addPass("HDRLensFlarePass");
+		handler->getDepthPassManager()->setDepth("HDRLensFlarePass", 1000.f);
+	}
+
+	LensFlare = new CHDRLensFlare(Handler);
+	LensFlare->LensTexture = Driver->getTexture("Textures/lenscolor.png");
+	LensFlare->LensStarTexture = Driver->getTexture("Textures/lensstar.png");
 }
 
 CHDRManager::~CHDRManager() {
@@ -101,10 +113,17 @@ void CHDRManager::render(ITexture *source, ITexture *output) {
 	OutputLuminance = clamp(OutputLuminance, MinLuminance, MaxLuminance);
 	LastTime = Timer->getTime();
 
-	Driver->setRenderTarget(output, true, true, SColor(0x0));
+	Driver->setRenderTarget(HdrRTT, true, true, SColor(0x0));
 	ScreenQuad.getMaterial().setTexture(0, TextureAdderRTT);
 	ScreenQuad.getMaterial().MaterialType = (E_MATERIAL_TYPE)MaterialType;
 	ScreenQuad.render(Driver);
+
+	// Lens flare
+	Driver->setRenderTarget(LensFlare->LensFlareRTT, true, true, SColor(0x0));
+	LensFlare->render(Bloom->BrightPassRT, ScreenQuad);
+
+	Driver->setRenderTarget(output, true, true, SColor(0x0));
+	LensFlare->renderFinal(HdrRTT, ScreenQuad);
 }
 
 void CHDRManager::setGaussianCoefficient(const irr::f32 coeff) {
@@ -151,11 +170,11 @@ f32 CHDRManager::getBrightnessThreshold() const {
 }
 
 void CHDRManager::setLensTexture(irr::video::ITexture *texture) {
-	TextureAdder->LensTexture = texture;
+	LensFlare->LensDirtTexture = texture;
 }
 
 const irr::video::ITexture *CHDRManager::getLensTexture() const {
-	return TextureAdder->LensTexture;
+	return LensFlare->LensDirtTexture;
 }
 
 } /// End namespace rendering
