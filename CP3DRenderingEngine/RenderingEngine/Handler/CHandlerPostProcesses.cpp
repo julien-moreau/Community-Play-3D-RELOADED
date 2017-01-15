@@ -186,7 +186,7 @@ s32 CCP3DHandler::addPostProcessingEffectFromFile(const irr::core::stringc& file
 	//return pPair.materialType;
 }
 
-s32 CCP3DHandler::replacePostProcessAtIndex(s32 index, const stringc &filename, IPostProcessingRenderCallback *callback) {
+s32 CCP3DHandler::replacePostProcessAtIndex(s32 index, const stringc &filename, IPostProcessingRenderCallback *callback, ITexture *customRTT) {
 	if (index < 0 || index >= (s32)PostProcessingRoutines.size())
 		return -1;
 
@@ -201,6 +201,7 @@ s32 CCP3DHandler::replacePostProcessAtIndex(s32 index, const stringc &filename, 
 	SPostProcessingPair pPair = obtainScreenQuadMaterial(filename, EMT_SOLID, true);
 	pPair.renderCallback = callback;
 	pPair.path = filename;
+	pPair.CustomRTT = customRTT;
 
 	if (callback)
 		callback->MaterialType = pPair.materialType;
@@ -222,6 +223,32 @@ bool CCP3DHandler::removePostProcessingEffect(s32 materialType, const bool delet
 		return true;
 	}
 	return false;
+}
+
+void CCP3DHandler::setPostProcessCustomRTT(const s32 &materialType, const dimension2du &size, const stringc &name, const ECOLOR_FORMAT format) {
+	s32 i = getPostProcessID(materialType);
+
+	if (i != -1) {
+		PostProcessingRoutines[i].CustomRTT = driver->addRenderTargetTexture(size, name, format);
+	}
+}
+
+void CCP3DHandler::removePostProcessCustomRTT(const s32 &materialType) {
+	s32 i = getPostProcessID(materialType);
+
+	if (i != -1) {
+		PostProcessingRoutines[i].CustomRTT = 0;
+	}
+}
+
+irr::video::ITexture *CCP3DHandler::getPostProcessCustomRTT(const irr::s32 &materialType) {
+	s32 i = getPostProcessID(materialType);
+
+	if (i != -1) {
+		return PostProcessingRoutines[i].CustomRTT;
+	}
+
+	return 0;
 }
 
 } /// End namespace rendering

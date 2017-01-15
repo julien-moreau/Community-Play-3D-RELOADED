@@ -48,11 +48,12 @@ void CCP3DPostProcessSpy::check() {
 		stringc path = *it;
 		u32 id = Handler->getPostProcessIDByName(*it);
 		rendering::IPostProcessingRenderCallback *callback = Handler->getPostProcessingCallback(id);
+		ITexture *rt = Handler->getPostProcessCustomRTT(id);
 
 		if (FileSystem->existFile(path))
-			Handler->replacePostProcessAtIndex(id, path, callback);
+			Handler->replacePostProcessAtIndex(id, path, callback, rt);
 		else
-			Handler->replacePostProcessAtIndex(id, WorkingDirectory + path, callback);
+			Handler->replacePostProcessAtIndex(id, WorkingDirectory + path, callback, rt);
 	}
 
 }

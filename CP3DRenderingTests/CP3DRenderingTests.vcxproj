@@ -18,6 +18,7 @@
     <ProjectGuid>{77CC893D-6971-4390-83E2-0EBABB41ABEB}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>CP3DRenderingTests</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -30,7 +31,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -144,6 +145,7 @@
     <ClInclude Include="CDirect3D11Tests.h" />
     <ClInclude Include="CDirect3D9Debug.h" />
     <ClInclude Include="CGlobalTests.h" />
+    <ClInclude Include="CHDRTests.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>

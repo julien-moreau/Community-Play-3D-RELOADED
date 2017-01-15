@@ -85,14 +85,15 @@ void main()
 #define POST_PROCESS
 #include "Shaders/InternalHandler/Utils.hlsl.fx"
 
+CP3DTexture NormalTextureSampler : registerTexture(t1);
 CP3DTexture DepthTextureSampler : registerTexture(t2);
 CP3DTexture RandomTextureSampler : registerTexture(t3);
 
+SamplerState NormalTextureSamplerST : register(s1);
 SamplerState DepthTextureSamplerST  : register(s2);
 SamplerState RandomTextureSamplerST : register(s3);
 
 float3 normal_from_depth(float depth, float2 texcoords) {
-
 	const float2 offset1 = float2(0.0, 0.001);
 	const float2 offset2 = float2(0.001, 0.0);
 
@@ -106,17 +107,24 @@ float3 normal_from_depth(float depth, float2 texcoords) {
 	normal.z = -normal.z;
 
 	return normalize(normal);
+
+	/*
+	float3 normal = CP3DTex2D(NormalTextureSampler, texcoords, NormalTextureSamplerST).rgb;
+	normal.z = -normal.z;
+
+	return normalize(normal);
+	*/
 }
 
 float4 pixelMain(VS_OUTPUT In) : COLOR0
 {
-	const float total_strength = 1; // 1.0
-	const float base = 0.0; // 0.2
+	const float total_strength = 1.0; // 1.0
+	const float base = 0.2; // 0.2
 
 	const float area = 0.0075; //0.0075
 	const float falloff = 0.000001; //0.000001
 
-	const float radius = 0.02; //0.0002
+	const float radius = 0.002; //0.0002
 	const int samples = 16;
 	float3 sample_sphere[16] = {
 		float3(0.5381, 0.1856, -0.4319), float3(0.1379, 0.2486, 0.4430),
@@ -137,7 +145,7 @@ float4 pixelMain(VS_OUTPUT In) : COLOR0
 	float3 normal = normal_from_depth(depth, In.TexCoords.xy);
 
 	float radius_depth = radius * depth;
-	float occlusion = 1.0;
+	float occlusion = 0.0;
 	for (int i = 0; i < samples; i++) {
 
 		float3 ray = radius_depth * reflect(sample_sphere[i] * 16.0, random);
@@ -151,6 +159,7 @@ float4 pixelMain(VS_OUTPUT In) : COLOR0
 
 	float ao = 1.0 - total_strength * occlusion * (1.0 / samples);
 	float4 Output = saturate(ao + base);
+	Output.a = 1.0;
 
 	return Output;
 }

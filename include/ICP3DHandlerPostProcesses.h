@@ -59,7 +59,7 @@ public:
 	//! \param index: the index of the post-process to replace (can be the materialType)
 	//! \param filename: the name of the post-process file
 	//! \param callback: the callback pointer of the post-process
-	virtual irr::s32 replacePostProcessAtIndex(irr::s32 index, const irr::core::stringc &filename, IPostProcessingRenderCallback *callback = 0) = 0;
+	virtual irr::s32 replacePostProcessAtIndex(irr::s32 index, const irr::core::stringc &filename, IPostProcessingRenderCallback *callback = 0, irr::video::ITexture *customRtt = 0) = 0;
 
 	//! Sets a post processing effect constant (OnSetConstant)
 	//! \param materialType: the material to configure
@@ -87,6 +87,22 @@ public:
 	//! \param index: the index of the texture layer (0 to MATERIAL_MAX_TEXTURES)
 	//! \param texture: the texture to set
 	virtual void setPostProcessingTextureAtIndex(const irr::u32 &index, irr::video::ITexture *texture) = 0;
+
+	//! Sets the custom RTT of the post-process
+	//! Then, it can be used anywhere else as buffers are saved
+	//! \param materialType: the material type
+	//! \param size: the RTT size
+	//! \param name: the RTT name
+	//! \param format: the RTT color format
+	virtual void setPostProcessCustomRTT(const irr::s32 &materialType, const irr::core::dimension2du &size, const irr::core::stringc& name, const irr::video::ECOLOR_FORMAT format = irr::video::ECF_A8R8G8B8) = 0;
+
+	//! Removes the custom RTT of the given post-process
+	//! \param materialType: the material type
+	virtual void removePostProcessCustomRTT(const irr::s32 &materialType) = 0;
+
+	//! Returns the custom RTT of the given post-process
+	//! \param materialType: the material type
+	virtual irr::video::ITexture *getPostProcessCustomRTT(const irr::s32 &materialType) = 0;
 
 };
 

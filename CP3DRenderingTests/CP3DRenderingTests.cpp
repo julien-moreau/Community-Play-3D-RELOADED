@@ -8,6 +8,7 @@
 #include "CGlobalTests.h"
 #include "CDirect3D11Tests.h"
 #include "CDirect3D9Debug.h"
+#include "CHDRTests.h"
 
 /// Irrlicht namespaces
 using namespace irr;
@@ -33,23 +34,6 @@ public:
 
 private:
 	irr::IrrlichtDevice *device;
-
-};
-
-class CShaderTest : public IShaderConstantSetCallBack {
-public:
-
-	CShaderTest() {
-		stringc vertex =
-			""
-			;
-
-		stringc pixel =
-			""
-			;
-
-
-	}
 
 };
 
@@ -89,7 +73,9 @@ int main(int argc, char* argv[]) {
 	//cp3d::test::GlobalTest(device);
 	//cp3d::test::Direct3D11Test(device);
 	//cp3d::test::Direct3D9Debug(device);
+	cp3d::test::HDRTest(device);
 
+	/*
 	IVideoDriver *driver = device->getVideoDriver();
 	ISceneManager *smgr = device->getSceneManager();
 
@@ -103,6 +89,7 @@ int main(int argc, char* argv[]) {
 		smgr->drawAll();
 		driver->endScene();
 	}
+	*/
 
 	return EXIT_SUCCESS;
 }

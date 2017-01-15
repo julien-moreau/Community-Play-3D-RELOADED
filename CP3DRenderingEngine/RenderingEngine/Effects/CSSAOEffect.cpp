@@ -19,6 +19,7 @@ CSSAOEffect::CSSAOEffect(CCP3DHandler *handler) : Handler(handler) {
 		handler->getDepthPassManager()->setDepth("SSAODepthRTT", 1000.f);
 	}
 
+	NormalRTT = driver->getTexture("CP3DNormalPass");
 	DepthRTT = driver->getTexture("SSAODepthRTT");
 	RandomTex = handler->generateRandomVectorTexture(dimension2du(512, 512), "SSAORandomTex");
 
@@ -27,6 +28,12 @@ CSSAOEffect::CSSAOEffect(CCP3DHandler *handler) : Handler(handler) {
 	BlurHMaterial = handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/BlurHP.fragment.fx");
 	BlurVMaterial = handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/BlurVP.fragment.fx");
 	SSAOCombineMaterial = handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/SSAOCombine.fragment.fx");
+
+	// Set custom RTT
+	dimension2du size = driver->getScreenSize() / 2;
+	handler->setPostProcessCustomRTT(SSAOMaterial, size, "SSAOMaterial");
+	handler->setPostProcessCustomRTT(BlurHMaterial, size, "BlurHMaterial");
+	handler->setPostProcessCustomRTT(BlurVMaterial, size, "BlurVMaterial");
 }
 
 CSSAOEffect::~CSSAOEffect() {
@@ -47,6 +54,7 @@ CSSAOEffect::~CSSAOEffect() {
 }
 
 void CSSAOEffect::OnPreRender(ICP3DHandler* handler) {
+	handler->setPostProcessingTextureAtIndex(1, NormalRTT);
 	handler->setPostProcessingTextureAtIndex(2, DepthRTT);
 	handler->setPostProcessingTextureAtIndex(3, RandomTex);
 }

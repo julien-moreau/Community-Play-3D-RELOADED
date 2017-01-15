@@ -23,19 +23,29 @@ public:
 
 	void render(irr::video::ITexture *source, irr::video::ITexture *output);
 
+	void setEnabled(const bool enabled) { Enabled = enabled;  }
+	bool isEnabled() const { return Enabled; }
+
 	void setGaussianCoefficient(const irr::f32 coeff);
 	irr::f32 getGaussianCoefficient() const;
 	void setGaussianMean(const irr::f32 mean);
 	irr::f32 getGaussianMean() const;
 	void setGaussianStandardDerivation(const irr::f32 standDev);
 	irr::f32 getGaussianStandardDerivation() const;
+	void setGaussWidth(const irr::f32 width);
+	irr::f32 getGaussianWidth() const;
 	void setBrightnessThreshold(const irr::f32 threshold);
 	irr::f32 getBrightnessThreshold() const;
+
+	void setLensTexture(irr::video::ITexture *texture);
+	const irr::video::ITexture *getLensTexture() const;
 
 	void setExposure(const irr::f32 exposure) { Exposure = exposure; }
 	irr::f32 getExposure() const { return Exposure; }
 	void setMinimumLuminance(const irr::f32 min) { MinLuminance = min; }
 	irr::f32 getMinimumLuminance() const { return MinLuminance; }
+	void setMaximumLuminance(const irr::f32 max) { MaxLuminance = max; }
+	irr::f32 getMaximumLuminance() const { return MaxLuminance; }
 	void setIncreaseRate(const irr::f32 rate) { IncreaseRate = rate; }
 	irr::f32 getIncreaseRate() const { return IncreaseRate; }
 	void setDecreaseRate(const irr::f32 rate) { DecreaseRate = rate; }
@@ -51,6 +61,8 @@ private:
 	CScreenQuad ScreenQuad;
 
 	irr::video::ITexture *TextureAdderRTT;
+
+	bool Enabled;
 
 	/// Pipeline
 	CHDRBloom *Bloom;

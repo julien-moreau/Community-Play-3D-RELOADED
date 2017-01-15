@@ -9,6 +9,14 @@ namespace rendering {
 class ICP3DHDRManager {
 public:
 
+	//! Sets the HDR pipeline enabled
+	//! \param enabled: if the pipeline is enabled
+	virtual void setEnabled(const bool enabled) = 0;
+
+	//! Returns if the pipeline is enabled
+	//! \return: returns if the pipeline is enabled
+	virtual bool isEnabled() const = 0;
+
 	//! Sets the bloom / gaussian coefficient
 	//! \param coeff: coefficient to set
 	virtual void setGaussianCoefficient(const irr::f32 coeff) = 0;
@@ -29,6 +37,13 @@ public:
 
 	//! Returns the bloom / gaussian standard derivation
 	virtual irr::f32 getGaussianStandardDerivation() const = 0;
+
+	//! Sets the bloom / gaussian width
+	//! \param mean: the gaussian width
+	virtual void setGaussWidth(const irr::f32 width) = 0;
+
+	//! Returns the bloom / gaussian width
+	virtual irr::f32 getGaussianWidth() const = 0;
 
 	//! Sets the brightness threshold
 	//! \param threshold: the brightness threshold
@@ -51,6 +66,13 @@ public:
 	//! Returns the minimum luminance
 	virtual irr::f32 getMinimumLuminance() const = 0;
 
+	//! Sets the maximum luminance
+	//! \param min: the minimum luminance to set
+	virtual void setMaximumLuminance(const irr::f32 max) = 0;
+
+	//! Returns the maximum luminance
+	virtual irr::f32 getMaximumLuminance() const = 0;
+
 	//! Sets the increase rate
 	//! \param rate: the increase rate
 	virtual void setIncreaseRate(const irr::f32 rate) = 0;
@@ -64,6 +86,13 @@ public:
 
 	//! Returns the decrease rate
 	virtual irr::f32 getDecreaseRate() const = 0;
+
+	//! Sets the lens texture
+	//! \param texture: the lens texture
+	virtual void setLensTexture(irr::video::ITexture *texture) = 0;
+
+	//! Returns the lens texture
+	virtual const irr::video::ITexture *getLensTexture() const = 0;
 };
 
 } /// End namespace engine

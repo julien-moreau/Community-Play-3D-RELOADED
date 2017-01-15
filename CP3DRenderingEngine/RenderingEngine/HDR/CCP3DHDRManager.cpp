@@ -20,7 +20,7 @@ using namespace core;
 namespace cp3d {
 namespace rendering {
 
-CHDRManager::CHDRManager(CCP3DHandler *handler) : Handler(handler) {
+CHDRManager::CHDRManager(CCP3DHandler *handler) : Handler(handler), Enabled(true) {
 	/// Configure
 	Driver = Handler->getVideoDriver();
 	Timer = Handler->getIrrlichtDevice()->getTimer();
@@ -45,11 +45,12 @@ CHDRManager::CHDRManager(CCP3DHandler *handler) : Handler(handler) {
 
 	/// Create pipeline
 	Bloom = new CHDRBloom(Handler);
+	Bloom->addBlurConfiguration(Driver->getScreenSize() / 4);
+	Bloom->addBlurConfiguration(Driver->getScreenSize() / 8);
+	Bloom->addBlurConfiguration(Driver->getScreenSize() / 16);
+
 	TextureAdder = new CHDRTextureAdder(Handler, TextureAdderRTT);
 	Luminance = new CHDRLuminance(Handler);
-
-	/// Configure Pipeline
-	TextureAdder->OtherRTT = Bloom->BlurRT1;
 }
 
 CHDRManager::~CHDRManager() {
@@ -57,11 +58,14 @@ CHDRManager::~CHDRManager() {
 }
 
 void CHDRManager::render(ITexture *source, ITexture *output) {
+	if (!Enabled)
+		return;
+
 	/// Render pipeline
 	Bloom->render(source, ScreenQuad);
 
 	Driver->setRenderTarget(TextureAdderRTT, true, true, SColor(0x0));
-	TextureAdder->OtherRTT = Bloom->BlurRT1;
+	TextureAdder->OtherRTT = Bloom->LastRT;
 	TextureAdder->render(source, ScreenQuad);
 
 	Driver->setRenderTarget(Luminance->LuminanceRTTs[CHDRLuminance::LumStepsNum - 1], true, true, SColor(0x0));
@@ -71,8 +75,10 @@ void CHDRManager::render(ITexture *source, ITexture *output) {
 	/// Compute HDR
 	if (Driver->getDriverType() == EDT_DIRECT3D9)
 		CurrentLuminance = *static_cast<f32*>(Luminance->LuminanceRTTs[0]->lock());
-	else
-		CurrentLuminance = (static_cast<u8 *>(Luminance->LuminanceRTTs[0]->lock()))[1];
+	else {
+		CurrentLuminance = (static_cast<u8*>(Luminance->LuminanceRTTs[0]->lock()))[1];
+		CurrentLuminance = CurrentLuminance / 255.f;
+	}
 
 	Luminance->LuminanceRTTs[0]->unlock();
 
@@ -128,12 +134,28 @@ f32 CHDRManager::getGaussianStandardDerivation() const {
 	return Bloom->GaussianBlur->GaussStandDev;
 }
 
+void CHDRManager::setGaussWidth(const f32 width) {
+	Bloom->GaussianBlur->GaussWidth = width;
+}
+
+f32 CHDRManager::getGaussianWidth() const {
+	return Bloom->GaussianBlur->GaussWidth;
+}
+
 void CHDRManager::setBrightnessThreshold(const f32 threshold) {
 	Bloom->BrightPass->BrightThreshold = threshold;
 }
 
 f32 CHDRManager::getBrightnessThreshold() const {
 	return Bloom->BrightPass->BrightThreshold;
+}
+
+void CHDRManager::setLensTexture(irr::video::ITexture *texture) {
+	TextureAdder->LensTexture = texture;
+}
+
+const irr::video::ITexture *CHDRManager::getLensTexture() const {
+	return TextureAdder->LensTexture;
 }
 
 } /// End namespace rendering

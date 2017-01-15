@@ -16,9 +16,10 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C17F9620-2790-4A97-B4C3-72B217665BE5}</ProjectGuid>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <Keyword>ManagedCProj</Keyword>
     <RootNamespace>CP3DEditor</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -31,7 +32,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CLRSupport>false</CLRSupport>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -164,6 +165,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClInclude Include="Editor\UserInterfaces\CCP3DMainToolbar.h" />
     <ClInclude Include="Editor\UserInterfaces\CCP3DSceneGraph.h" />
     <ClInclude Include="Editor\UserInterfaces\CCP3DToolsToolbar.h" />
+    <ClInclude Include="Editor\UserInterfaces\EditionTools\AddObject\CCP3DEditionToolAddMesh.h" />
     <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolBillboardSceneNode.h" />
     <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolHDR.h" />
     <ClInclude Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolLightSceneNode.h" />
@@ -198,6 +200,7 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClCompile Include="Editor\UserInterfaces\CCP3DMainToolbar.cpp" />
     <ClCompile Include="Editor\UserInterfaces\CCP3DSceneGraph.cpp" />
     <ClCompile Include="Editor\UserInterfaces\CCP3DToolsToolbar.cpp" />
+    <ClCompile Include="Editor\UserInterfaces\EditionTools\AddObject\CCP3DEditionToolAddMesh.cpp" />
     <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolBillboardSceneNode.cpp" />
     <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolHDR.cpp" />
     <ClCompile Include="Editor\UserInterfaces\EditionTools\CCP3DEditionToolLightSceneNode.cpp" />

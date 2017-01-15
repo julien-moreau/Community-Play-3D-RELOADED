@@ -20,6 +20,8 @@ public:
 	void renderH(irr::video::ITexture *source, CScreenQuad &screenQuad);
 	void renderV(irr::video::ITexture *source, CScreenQuad &screenQuad);
 
+	void updateOffsets(const irr::core::dimension2du &size);
+
 private:
 	/// Methods
 	void calculateWeights();
@@ -41,6 +43,7 @@ private:
 	irr::f32 GaussCoeff;
 	irr::f32 GaussMean;
 	irr::f32 GaussStandDev;
+	irr::f32 GaussWidth;
 	irr::f32 BlurWeights[9];
 
 };

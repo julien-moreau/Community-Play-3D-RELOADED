@@ -31,6 +31,7 @@ CCustomDepthPass::~CCustomDepthPass() {
 	for (u32 i=0; i < RenderTargets.size(); i++) {
 		Driver->removeTexture(RenderTargets[i].RenderTexture);
 	}
+
 	RenderTargets.clear();
 	delete SppV, SppP;
 }

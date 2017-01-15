@@ -300,8 +300,15 @@ void CCP3DEditorCore::createTestScene() {
 	Handler->getGeneralPassManager()->addNodeToPass(cubeNode);
 	Handler->getGeneralPassManager()->addNodeToPass(bill);
 
-	Rengine->getEffectsManager()->createSSAOEffect(true);
-	Rengine->getEffectsManager()->createVolumetricLightScatteringEffect(true, bill);
+	Handler->getHDRManager()->setBrightnessThreshold(0.8);
+	Handler->getHDRManager()->setGaussWidth(2.f);
+	Handler->getHDRManager()->setMinimumLuminance(0.8f);
+	Handler->getHDRManager()->setDecreaseRate(1.f);
+	Handler->getHDRManager()->setIncreaseRate(1.f);
+	Handler->getHDRManager()->setLensTexture(driver->getTexture("Textures/lensdirt.jpg"));
+
+	//Rengine->getEffectsManager()->createSSAOEffect(true);
+	//Rengine->getEffectsManager()->createVolumetricLightScatteringEffect(true, bill);
 	/*
 	//Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/Custom.fragment.fx", new CustomCallback(Driver));
 	*/

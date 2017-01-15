@@ -13,5 +13,6 @@
 #include "ICP3DHardwareSkinningManager.h"
 #include "ICP3DEffectsManager.h"
 #include "ICP3DHDRManager.h"
+#include "ICP3DAnimator.h"
 
 #endif

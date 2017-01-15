@@ -23,6 +23,8 @@ public:
 
 	void render(irr::video::ITexture *source, CScreenQuad &screenQuad);
 
+	void addBlurConfiguration(const irr::core::dimension2du &size);
+
 private:
 
 	/// Datas
@@ -31,12 +33,22 @@ private:
 
 	/// Rendering
 	irr::video::ITexture *BrightPassRT;
-	irr::video::ITexture *BlurRT1;
-	irr::video::ITexture *BlurRT2;
+	irr::video::ITexture *DownSamplerRT;
 
 	CHDRBrightPass *BrightPass;
 	CHDRDownSample *DownSample;
 	CHDRGaussianBlur *GaussianBlur;
+
+	/// Blur struct
+	struct SBlurConfiguration {
+	public:
+		irr::core::dimension2du Size;
+		irr::video::ITexture *BlurRT1;
+		irr::video::ITexture *BlurRT2;
+	};
+
+	irr::core::array<SBlurConfiguration> BlurConfigurations;
+	irr::video::ITexture *LastRT;
 };
 
 } /// End namespace rendering

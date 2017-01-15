@@ -20,7 +20,7 @@ CHDRLuminance::CHDRLuminance(CCP3DHandler *handler) : Handler(handler) {
 	CMaterialCreator cmat(handler->getVideoDriver());
 	
 	CallbackLuminance = new CScreenQuadCB(Handler, true);
-	cmat.addDefine("MAGNITUDE", "");
+	cmat.addDefine("HSL_COMPONENT", "");
 	MaterialTypeLuminance = cmat.createMaterialFromFiles("Shaders/InternalHandler/ScreenQuad.vertex.fx", "Shaders/HDR/Luminance.fragment.fx", EMT_SOLID, CallbackLuminance);
 
 	CallbackDownSample = new CScreenQuadCB(Handler, true);

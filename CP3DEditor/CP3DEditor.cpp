@@ -25,7 +25,7 @@ namespace cp3d {
 		params.AntiAlias = true;
 		params.Bits = 32;
 		params.Fullscreen = false;
-		params.LoggingLevel = irr::ELL_INFORMATION;
+		params.LoggingLevel = irr::ELL_DEBUG;
 		params.WindowSize = desktopSize;
 		params.WithAlphaChannel = false;
 		params.DriverType = irr::video::EDT_DIRECT3D9;

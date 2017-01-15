@@ -22,7 +22,8 @@ CVolumetricLightScatteringEffect::CVolumetricLightScatteringEffect(CCP3DHandler 
 	Material = handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/VolumetricLightScattering.fragment.fx", this);
 	MaterialID = handler->getPostProcessID(Material);
 
-	Decay = 0.96815f;
+	//Decay = 0.96815f;
+	Decay = 0.98f;
 	Exposure = 0.3f;
 	Density = 0.926f;
 	Weight = 0.58767f;

@@ -30,9 +30,9 @@ private:
 	irr::s32 SSAOCombineMaterial;
 
 	/// Textures
+	irr::video::ITexture *NormalRTT;
 	irr::video::ITexture *DepthRTT;
 	irr::video::ITexture *RandomTex;
-
 };
 
 } /// End namespace rendering

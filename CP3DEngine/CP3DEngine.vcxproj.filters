@@ -206,6 +206,9 @@
     <ClInclude Include="..\include\ICP3DHDRManager.h">
       <Filter>include\rendering</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\ICP3DAnimator.h">
+      <Filter>include\rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DEngine.cpp">

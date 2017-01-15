@@ -515,13 +515,13 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 	const u32 PostProcessingRoutinesSize = PostProcessingRoutines.size();
 	const u32 CustomPassesSize = CustomPasses.size();
 
-	driver->setRenderTarget(PostProcessingRoutinesSize || HDRManager ? ScreenRTT : outputTarget, true, true, SColor(0x0));
+	driver->setRenderTarget(PostProcessingRoutinesSize || HDRManager->isEnabled() ? ScreenRTT : outputTarget, true, true, SColor(0x0));
 
 	ScreenQuad.getMaterial().setTexture(0, ScreenQuad.rt[1]);
 	ScreenQuad.getMaterial().setTexture(1, ScreenQuad.rt[0]);
 
 	ScreenQuad.getMaterial().MaterialType = (E_MATERIAL_TYPE)LightModulate;
-	if (!PostProcessingRoutinesSize && !HDRManager)
+	if (!PostProcessingRoutinesSize && !HDRManager->isEnabled())
 		driver->setViewPort(ViewPort);
 	ScreenQuad.render(driver);
 
@@ -550,39 +550,55 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 			}
 
 			CustomPasses[i]->CurrentSceneNode = 0;
-
 		}
 	}
 
 	driver->setRenderTarget(0, false, false);
 	driver->setViewPort(ViewPort);
 	
-	bool Alter = false;
+	bool alter = false;
+	ITexture *lastRtt = 0;
+
 	if(PostProcessingRoutinesSize) {
 
 		for(u32 i = 0; i < PostProcessingRoutinesSize; i++) {
+			const SPostProcessingPair &pair = PostProcessingRoutines[i];
 
 			ScreenQuad.getMaterial().setTexture(1, ScreenRTT);
-			ScreenQuad.getMaterial().MaterialType = (E_MATERIAL_TYPE)PostProcessingRoutines[i].materialType;
-			Alter = !Alter;
-			ScreenQuad.getMaterial().setTexture(0, i == 0 ? ScreenRTT : ScreenQuad.rt[int(!Alter)]);
+			ScreenQuad.getMaterial().MaterialType = (E_MATERIAL_TYPE)pair.materialType;
 
-			if (i == PostProcessingRoutinesSize - 1 && !HDRManager) {
+			if (i == 0 || lastRtt == 0) {
+				alter = !alter;
+				ScreenQuad.getMaterial().setTexture(0, i == 0 ? ScreenRTT : ScreenQuad.rt[int(!alter)]);
+			}
+			else if (lastRtt != 0) {
+				ScreenQuad.getMaterial().setTexture(0, lastRtt);
+			}
+
+			lastRtt = 0;
+
+			if (i == PostProcessingRoutinesSize - 1 && !HDRManager->isEnabled()) {
 				driver->setViewPort(ViewPort);
 				driver->setRenderTarget(outputTarget);
 			}
-			else
-				driver->setRenderTarget(ScreenQuad.rt[int(Alter)], true, true, ClearColour);
+			else {
+				ITexture *rt = ScreenQuad.rt[int(alter)];
+				if (pair.CustomRTT) {
+					rt = pair.CustomRTT;
+					lastRtt = rt;
+				}
 
-			if(PostProcessingRoutines[i].renderCallback) PostProcessingRoutines[i].renderCallback->OnPreRender(this);
+				driver->setRenderTarget(rt, true, true, ClearColour);
+			}
+
+			if (pair.renderCallback) pair.renderCallback->OnPreRender(this);
 			ScreenQuad.render(driver);
-			if(PostProcessingRoutines[i].renderCallback) PostProcessingRoutines[i].renderCallback->OnPostRender(this);
+			if (pair.renderCallback) pair.renderCallback->OnPostRender(this);
 		}
 
 	}
 
-	if (HDRManager)
-		HDRManager->render(PostProcessingRoutinesSize == 0 ? ScreenRTT : ScreenQuad.rt[int(Alter)], outputTarget);
+	HDRManager->render(PostProcessingRoutinesSize == 0 ? ScreenRTT : ScreenQuad.rt[int(alter)], outputTarget);
 }
 
 irr::video::ITexture* CCP3DHandler::getShadowMapTexture(const irr::u32 resolution, const bool secondary) {

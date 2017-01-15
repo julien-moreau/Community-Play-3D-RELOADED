@@ -14,7 +14,7 @@ using namespace core;
 namespace cp3d {
 namespace rendering {
 
-CHDRTextureAdder::CHDRTextureAdder(CCP3DHandler *handler, ITexture *other) : Handler(handler), OtherRTT(other) {
+CHDRTextureAdder::CHDRTextureAdder(CCP3DHandler *handler, ITexture *other) : Handler(handler), OtherRTT(other), LensTexture(0) {
 	Driver = Handler->getVideoDriver();
 
 	CMaterialCreator cmat(handler->getVideoDriver());
@@ -29,6 +29,7 @@ CHDRTextureAdder::~CHDRTextureAdder() {
 
 void CHDRTextureAdder::render(ITexture *source, CScreenQuad &screenQuad) {
 	screenQuad.getMaterial().setTexture(0, source);
+	screenQuad.getMaterial().setTexture(1, LensTexture);
 	screenQuad.getMaterial().setTexture(3, OtherRTT);
 	screenQuad.getMaterial().MaterialType = (E_MATERIAL_TYPE)MaterialType;
 	screenQuad.render(Driver);
