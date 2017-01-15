@@ -17,7 +17,7 @@ namespace rendering {
 CHDRLensFlare::CHDRLensFlare(CCP3DHandler *handler) : Handler(handler), LensTexture(0), FirstUpdate(true) {
 	Driver = Handler->getVideoDriver();
 
-	LensFlareRTT = Driver->addRenderTargetTexture(Driver->getScreenSize() / 4, "CP3DHDRLensFlare", ECF_A8R8G8B8);
+	LensFlareRTT = Driver->addRenderTargetTexture(Driver->getScreenSize() / 8, "CP3DHDRLensFlare", ECF_A8R8G8B8);
 
 	CMaterialCreator cmat(handler->getVideoDriver());
 	cmat.addDefine("SAMPLES", "8");

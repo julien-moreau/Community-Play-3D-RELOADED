@@ -47,13 +47,12 @@ int main(int argc, char* argv[]) {
 	driverType = EDT_DIRECT3D11;
 	#endif
 
-	//IrrlichtDevice *device = createDevice(driverType, dimension2du(1280, 800), 32, false, false, false, 0);
 	SIrrlichtCreationParameters params;
 	params.DriverType = driverType;
 	params.WindowSize = dimension2du(1280, 800);
 	params.Bits = 32;
-	params.Fullscreen = false;
-	params.Vsync = true;
+	params.Fullscreen = true;
+	// params.Vsync = true;
 	params.DriverMultithreaded = true;
 	params.Doublebuffer = true;
 	IrrlichtDevice *device = createDeviceEx(params);
@@ -75,22 +74,6 @@ int main(int argc, char* argv[]) {
 	//cp3d::test::Direct3D11Test(device);
 	//cp3d::test::Direct3D9Debug(device);
 	cp3d::test::HDRTest(device);
-
-	/*
-	IVideoDriver *driver = device->getVideoDriver();
-	ISceneManager *smgr = device->getSceneManager();
-
-	ISceneNode *cube = smgr->addCubeSceneNode(1, 0, -1, vector3df(0.f), vector3df(0.f), vector3df(1.f));
-	cube->setMaterialFlag(EMF_LIGHTING, false);
-
-	ICameraSceneNode *camera = smgr->addCameraSceneNode(0, vector3df(10.f, 10.f, 10.f), vector3df(0.f), -1, true);
-
-	while (device->run()) {
-		driver->beginScene(true, true, SColor(0x0));
-		smgr->drawAll();
-		driver->endScene();
-	}
-	*/
 
 	return EXIT_SUCCESS;
 }

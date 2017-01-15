@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CP3DRLauncher", "CP3DLauncher\CP3DRLauncher_VS2012.vcxproj", "{E5D13F8D-3FC1-40C7-8182-61191702ABEA}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -24,7 +24,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CP3DEngine", "CP3DEngine\CP3DEngine.vcxproj", "{E3ACF751-9166-4E27-90C7-9827A6E32C9D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E08E042A-6C45-411B-92BE-3CC31331019F} = {E08E042A-6C45-411B-92BE-3CC31331019F}
-		{B7F74BB1-1FCE-4615-A8EC-B2BDC179D071} = {B7F74BB1-1FCE-4615-A8EC-B2BDC179D071}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CP3DEditor", "CP3DEditor\CP3DEditor.vcxproj", "{C17F9620-2790-4A97-B4C3-72B217665BE5}"
@@ -37,6 +36,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CP3DEditor", "CP3DEditor\CP
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CP3DRenderingTests", "CP3DRenderingTests\CP3DRenderingTests.vcxproj", "{77CC893D-6971-4390-83E2-0EBABB41ABEB}"
 	ProjectSection(ProjectDependencies) = postProject
+		{E3ACF751-9166-4E27-90C7-9827A6E32C9D} = {E3ACF751-9166-4E27-90C7-9827A6E32C9D}
 		{ADFC5B97-4AD0-4BB4-A57D-BAF0DEF8134B} = {ADFC5B97-4AD0-4BB4-A57D-BAF0DEF8134B}
 		{B7F74BB1-1FCE-4615-A8EC-B2BDC179D071} = {B7F74BB1-1FCE-4615-A8EC-B2BDC179D071}
 	EndProjectSection

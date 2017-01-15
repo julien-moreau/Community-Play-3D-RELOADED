@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <tchar.h>
 
-
+#define CP3DR_COMPILE_ENGINE
+#define CP3DR_COMPILE_COLLABORATIVE
 
 // TODO: faites référence ici aux en-têtes supplémentaires nécessaires au programme
