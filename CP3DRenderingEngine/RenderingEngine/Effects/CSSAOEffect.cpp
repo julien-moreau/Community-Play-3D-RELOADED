@@ -14,10 +14,8 @@ namespace rendering {
 CSSAOEffect::CSSAOEffect(CCP3DHandler *handler) : Handler(handler) {
 	IVideoDriver *driver = handler->getVideoDriver();
 
-	if (handler->getDepthPassManager()->getPassCount() == 0) {
-		handler->getDepthPassManager()->addPass("SSAODepthRTT");
-		handler->getDepthPassManager()->setDepth("SSAODepthRTT", 1000.f);
-	}
+	handler->getDepthPassManager()->addPass("SSAODepthRTT");
+	handler->getDepthPassManager()->setDepth("SSAODepthRTT", 1000.f);
 
 	NormalRTT = driver->getTexture("CP3DNormalPass");
 	DepthRTT = driver->getTexture("SSAODepthRTT");

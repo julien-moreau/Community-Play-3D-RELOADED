@@ -17,14 +17,15 @@ uniform float motionScale;
 
 uniform float4x4 inverseViewProjection;
 uniform float4x4 prevViewProjection;
+uniform float4x4 lensStarMatrix;
 
 inline float4 motionBlur(float2 texCoord, float2 screenSize) {
 	float depth = CP3DTex2D(DepthMapSampler, texCoord, DepthMapSamplerST).r;
 
 	float4 cpos = float4(texCoord * 2.0 - 1.0, depth, 1.0);
-	cpos = mul(cpos, inverseViewProjection);
+	cpos = mul(inverseViewProjection, cpos);
 
-	float4 ppos = mul(cpos, prevViewProjection);
+	float4 ppos = mul(prevViewProjection, cpos);
 	ppos.xyz /= ppos.w;
 	ppos.xy = ppos.xy * 0.5 + 0.5;
 
@@ -44,15 +45,13 @@ inline float4 motionBlur(float2 texCoord, float2 screenSize) {
 }
 
 float4 pixelMain(VS_OUTPUT In) : COLOR0 {
-	float4 lensMod = CP3DTex2D(LensStarSampler, In.TexCoords.xy, LensStarSamplerST);
-	float4 sceneColor = CP3DTex2D(ScreenMapSampler, In.TexCoords.xy, ScreenMapSamplerST);
-	float4 lensColor = CP3DTex2D(ColorMapSampler, In.TexCoords.xy, ColorMapSamplerST);
-	float4 dirtColor = CP3DTex2D(LensDirtSampler, In.TexCoords.xy, LensDirtSamplerST);
-	float4 depthColor = CP3DTex2D(DepthMapSampler, In.TexCoords.xy, DepthMapSamplerST);
+	
+	float4 lensMod = CP3DTex2D(LensDirtSampler, In.TexCoords.xy, LensDirtSamplerST);
 
-	return motionBlur(In.TexCoords.xy, In.ScreenSize);
-	//return sceneColor + lensColor * (lensMod + dirtColor);
-	//return CP3DTex2D(ScreenMapSampler, In.TexCoords.xy, ScreenMapSamplerST);
-	//return CP3DTex2D(ColorMapSampler, In.TexCoords.xy, ColorMapSamplerST);
-	//return lensMod;
+	float2 lensStarTexcoord = mul(lensStarMatrix, float4(In.TexCoords.xy, 1.0, 1.0)).xy;
+	lensMod += CP3DTex2D(LensStarSampler, lensStarTexcoord, LensStarSamplerST);
+
+	float4 lensColor = CP3DTex2D(ColorMapSampler, In.TexCoords.xy, ColorMapSamplerST);
+
+	return motionBlur(In.TexCoords.xy, In.ScreenSize) + lensColor * lensMod;
 }

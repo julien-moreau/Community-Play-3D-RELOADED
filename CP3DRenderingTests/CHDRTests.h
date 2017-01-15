@@ -75,19 +75,19 @@ namespace cp3d {
 			planeNode->setMaterialTexture(2, driver->getTexture("Textures/specular.tga"));
 			planeNode->setMaterialFlag(EMF_LIGHTING, false);
 			planeNode->getMaterial(0).Shininess = 0.f;
-			handler->addShadowToNode(planeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_BOTH);
+			handler->addShadowToNode(planeNode, cp3d::rendering::EFT_16PCF, cp3d::rendering::ESM_BOTH);
 
-			//IMeshSceneNode *cubeNode = smgr->addCubeSceneNode(50.f, 0, -1, vector3df(0.f, 25.f, 0.f), vector3df(0.f, 45.f, 0.f));
-			//cubeNode->setMaterialTexture(0, driver->getTexture("Textures/diffuse.tga"));
-			//cubeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
-			//cubeNode->setMaterialTexture(2, driver->getTexture("Textures/specular.tga"));
-			//cubeNode->setMaterialFlag(EMF_LIGHTING, false);
-			//cubeNode->getMaterial(0).Shininess = 0.f;
-			//handler->addShadowToNode(cubeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_BOTH);
+			/*IMeshSceneNode *cubeNode = smgr->addCubeSceneNode(50.f, 0, -1, vector3df(0.f, 25.f, 0.f), vector3df(0.f, 45.f, 0.f));
+			cubeNode->setMaterialTexture(0, driver->getTexture("Textures/diffuse.tga"));
+			cubeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
+			cubeNode->setMaterialTexture(2, driver->getTexture("Textures/specular.tga"));
+			cubeNode->setMaterialFlag(EMF_LIGHTING, false);
+			cubeNode->getMaterial(0).Shininess = 0.f;
+			handler->addShadowToNode(cubeNode, cp3d::rendering::EFT_16PCF, cp3d::rendering::ESM_BOTH);*/
 
 			/// Create the normal mapping material
 			cpre->createNormalMappingMaterial();
-			// cubenode->setmaterialtype(cpre->materials[emt_normal_map_solid]);
+			//cubeNode->setMaterialType(cpre->Materials[EMT_NORMAL_MAP_SOLID]);
 			planeNode->setMaterialType(cpre->Materials[EMT_NORMAL_MAP_SOLID]);
 
 			cp3d::rendering::ICP3DLightSceneNode *light = cpre->createLightSceneNode(true, true);
@@ -98,7 +98,7 @@ namespace cp3d {
 			light->getShadowLight()->setFarValue(1000.f);
 			light->getShadowLight()->setShadowMapResolution(4096);
 
-			ISceneNodeAnimator *animator = smgr->createFlyStraightAnimator(vector3df(-50.f, 300.f, -100.f), vector3df(50.f, 300.f, 100.f), 10000, true, true);
+			ISceneNodeAnimator *animator = smgr->createFlyStraightAnimator(vector3df(-500.f, 300.f, -100.f), vector3df(500.f, 300.f, 100.f), 10000, true, true);
 			ILightSceneNode *lightNode = *light;
 			lightNode->addAnimator(animator);
 
@@ -130,6 +130,9 @@ namespace cp3d {
 			bill->setMaterialFlag(EMF_LIGHTING, false);
 			bill->setMaterialTexture(0, driver->getTexture("Textures/Clouds/sun.png"));*/
 
+			cpre->getEffectsManager()->createSSAOEffect(true);
+
+			//handler->getDepthPassManager()->addNodeToPass(skyboxNode);
 			handler->getDepthPassManager()->addNodeToPass(planeNode);
 			handler->getDepthPassManager()->addNodeToPass(lvSceneNode);
 
@@ -141,14 +144,14 @@ namespace cp3d {
 			handler->getHDRManager()->setGaussWidth(2.f);
 			handler->getHDRManager()->setGaussianCoefficient(0.2f);
 			handler->getHDRManager()->setMinimumLuminance(0.5f);
-			handler->getHDRManager()->setMaximumLuminance(2.f);
+			handler->getHDRManager()->setMaximumLuminance(1e20f);
 			handler->getHDRManager()->setDecreaseRate(0.5f);
 			handler->getHDRManager()->setIncreaseRate(0.2f);
 			handler->getHDRManager()->setLensTexture(driver->getTexture("Textures/lensdirt.jpg"));
 
 			/// Get hdr texture
 			handler->update();
-			ITexture *hdrTexture = driver->getTexture("CP3DHandler_SM_4096");
+			ITexture *hdrTexture = driver->getTexture("BlurVMaterial");
 			IGUIImage *img = gui->addImage(rect<s32>(driver->getScreenSize().Width - 512, 0, driver->getScreenSize().Width, 512));
 			img->setScaleImage(true);
 			img->setImage(hdrTexture);
@@ -160,8 +163,6 @@ namespace cp3d {
 
 				driver->beginScene(true, true, SColor(0x0));
 				handler->update();
-
-				handler->setAmbientColor(light->getLightData().DiffuseColor.toSColor().getInterpolated(SColor(255, 32, 32, 32), 0.1f));
 
 				gui->drawAll();
 				driver->endScene();

@@ -121,10 +121,10 @@ float4 pixelMain(VS_OUTPUT In) : COLOR0
 	const float total_strength = 1.0; // 1.0
 	const float base = 0.2; // 0.2
 
-	const float area = 0.0075; //0.0075
-	const float falloff = 0.000001; //0.000001
+	const float area = 1.0; //0.0075
+	const float falloff = 0.00001; //0.000001
 
-	const float radius = 0.002; //0.0002
+	const float radius = 0.01; //0.0002
 	const int samples = 16;
 	float3 sample_sphere[16] = {
 		float3(0.5381, 0.1856, -0.4319), float3(0.1379, 0.2486, 0.4430),

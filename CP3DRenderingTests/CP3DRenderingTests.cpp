@@ -53,6 +53,7 @@ int main(int argc, char* argv[]) {
 	params.WindowSize = dimension2du(1280, 800);
 	params.Bits = 32;
 	params.Fullscreen = false;
+	params.Vsync = true;
 	params.DriverMultithreaded = true;
 	params.Doublebuffer = true;
 	IrrlichtDevice *device = createDeviceEx(params);
