@@ -25,15 +25,16 @@ vec3 normalFromDepth(float depth, vec2 coords) {
 
 void main()
 {
-	const float totalStrength = 2.0;
+	const float totalStrength = 1.0;
 	const float base = 0.2;
 
-	const float area = 0.0075;
+	const float area = 1.0;
 	const float fallOff = 0.000001;
 
-	const float radius = 0.0002;
+	const float radius = 0.0001;
 
 	const int samples = 16;
+
 	vec3 sampleSphere[samples];
 	sampleSphere[0] = vec3(0.5381, 0.1856, -0.4319);
 	sampleSphere[1] = vec3(0.1379, 0.2486, 0.4430);
@@ -62,7 +63,7 @@ void main()
 	float occlusion = 0.0;
 
 	for (int i = 0; i < samples; i++) {
-		vec3 ray = radiusDepth * reflect(sampleSphere[i], random);
+		vec3 ray = radiusDepth * reflect(sampleSphere[i] * 16.0, random);
 		vec3 hemiRay = position + sign(dot(ray, normal)) * ray;
 
 		float occlusionDepth = texture2D(DepthMapSampler, clamp(hemiRay.xy, 0.0, 1.0)).r;

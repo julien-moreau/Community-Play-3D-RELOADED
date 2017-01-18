@@ -20,8 +20,8 @@ CCP3DHandler::CCP3DHandler(IrrlichtDevice* dev, const irr::core::dimension2du& s
 	const bool useVSMShadows, const bool useRoundSpotLights, const bool use32BitDepthBuffers)
 : device(dev), smgr(dev->getSceneManager()), driver(dev->getVideoDriver()),
 ScreenRTTSize(screenRTTSize.getArea() == 0 ? dev->getVideoDriver()->getScreenSize() : screenRTTSize),
-ClearColour(0x0), shadowsUnsupported(false), DepthMC(0), ShadowMC(0),
-AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows), renderShadows(true), HDRManager(0)
+ClearColour(0x0), ShadowsUnsupported(false), DepthMC(0), ShadowMC(0),
+AmbientColour(0x0), Use32BitDepth(use32BitDepthBuffers), UseVSM(useVSMShadows), RenderShadows(true), HDRManager(0)
 {
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
 	ScreenQuad.initializeD3D11(driver);
@@ -193,12 +193,11 @@ AmbientColour(0x0), use32BitDepth(use32BitDepthBuffers), useVSM(useVSMShadows), 
 			Shadow[i] = EMT_SOLID;
 
 		device->getLogger()->log("CP3DHandler: Shader effects not supported on this system.");
-		shadowsUnsupported = true;
+		ShadowsUnsupported = true;
 	}
 
 	ViewPort = driver->getViewPort();
 }
-
 
 CCP3DHandler::~CCP3DHandler() {
 	if(ScreenRTT)
@@ -211,7 +210,7 @@ CCP3DHandler::~CCP3DHandler() {
 		driver->removeTexture(ScreenQuad.rt[1]);
 }
 
-void CCP3DHandler::setScreenRenderTargetResolution(const irr::core::dimension2du& resolution) {
+void CCP3DHandler::setScreenRenderTargetResolution(const dimension2du& resolution) {
 	driver->setRenderTarget(0, true, true);
 
 	bool tempTexFlagMipMaps = driver->getTextureCreationFlag(ETCF_CREATE_MIP_MAPS);
@@ -311,11 +310,98 @@ void CCP3DHandler::clear() {
 	CustomGeneralPass->setVolumetricLightScatteringNode(0);
 }
 
-void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
-	if(shadowsUnsupported || smgr->getActiveCamera() == 0)
+s32 CCP3DHandler::GetShadowMaterialType(const u32 &lightsCount, const E_FILTER_TYPE &filterType, const bool &useRoundedSpotLight) {
+	/*
+	irr::core::map<irr::core::stringc, SUniformDescriptor>::Iterator mapIter = uniformDescriptors.getIterator();
+
+	for(;!mapIter.atEnd();mapIter++) {
+	if(mapIter.getNode()->getValue().fPointer == 0)
+	continue;
+
+	services->setPixelShaderConstant(mapIter.getNode()->getKey().c_str(), mapIter.getNode()->getValue().fPointer,
+	mapIter.getNode()->getValue().paramCount);
+	}
+	*/
+	SShadowMapType *shadowType = 0;
+
+	map<u32, array<SShadowMapType>>::Node *lightsShadowMapNode = ShadowsMap.find(lightsCount);
+	if (lightsShadowMapNode) {
+		shadowType = &lightsShadowMapNode->getValue()[filterType];
+
+		if (shadowType->ShadowType && shadowType->ShadowRoundedSpotType)
+			return useRoundedSpotLight ? shadowType->ShadowRoundedSpotType : shadowType->ShadowType;
+	}
+
+	/// Doesn't exists, create it
+	CShaderPreprocessor sPP(driver);
+
+	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+	if (driver->getDriverType() == EDT_DIRECT3D11)
+		sPP.addShaderDefine("DIRECT3D_11");
+	else
+	#endif
+
+	if (driver->getDriverType() == EDT_DIRECT3D9)
+		sPP.addShaderDefine("DIRECT3D_9");
+	else
+		sPP.addShaderDefine("OPENGL_DRIVER");
+
+	if (UseVSM)
+		sPP.addShaderDefine("VSM");
+
+	E_VERTEX_SHADER_TYPE vertexProfile = driver->queryFeature(video::EVDF_VERTEX_SHADER_3_0) ? EVST_VS_3_0 : EVST_VS_2_0;
+	E_PIXEL_SHADER_TYPE pixelProfile = driver->queryFeature(video::EVDF_PIXEL_SHADER_3_0) ? EPST_PS_3_0 : EPST_PS_2_0;
+
+	sPP.addShaderDefine("SAMPLE_AMOUNT", stringc(filterType));
+	sPP.addShaderDefine("LIGHTS_COUNT", stringc(lightsCount));
+
+	for (u32 i = 1; i < 6; i++) {
+		if (i < lightsCount)
+			sPP.addShaderDefine(stringc("SHADOW_MAP_SAMPLER") + stringc(i), stringc("ADD_SAMPLER_2D(ShadowMapSampler") + stringc(i + 1) + ", " + stringc(i) + ")");
+		else
+			sPP.addShaderDefine(stringc("SHADOW_MAP_SAMPLER") + stringc(i), "");
+	}
+
+	#ifdef _DEBUG
+	stringc v = sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.vertex.fx").c_str()).c_str();
+	stringc p = sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.fragment.fx").c_str()).c_str();
+	#endif
+
+	IGPUProgrammingServices *gpu = driver->getGPUProgrammingServices();
+
+	s32 shadowMaterialType = gpu->addHighLevelShaderMaterial(
+		sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
+		sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile,
+		ShadowMC, video::EMT_SOLID);
+
+	sPP.addShaderDefine("ROUND_SPOTLIGHTS");
+
+	s32 shadowRoundedSpotMaterialType = gpu->addHighLevelShaderMaterial(
+		sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
+		sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile,
+		ShadowMC, video::EMT_SOLID);
+	sPP.removeShaderDefine("ROUND_SPOTLIGHTS");
+
+	/// Save it for cache purpose
+	if (lightsShadowMapNode)
+		lightsShadowMapNode->getValue().push_back(SShadowMapType(shadowMaterialType, shadowRoundedSpotMaterialType));
+	else {
+		array<SShadowMapType> newArray;
+		for (u32 i = 0; i < EFT_COUNT; i++)
+			newArray.push_back(SShadowMapType(-1, -1));
+
+		newArray[filterType] = SShadowMapType(shadowMaterialType, shadowRoundedSpotMaterialType);
+		ShadowsMap.insert(lightsCount, newArray);
+	}
+
+	return useRoundedSpotLight ? shadowRoundedSpotMaterialType : shadowMaterialType;
+}
+
+void CCP3DHandler::update(ITexture *outputTarget) {
+	if(ShadowsUnsupported || smgr->getActiveCamera() == 0)
 		return;
 	
-	if(!ShadowNodeArray.empty() && !LightList.empty() && renderShadows) {
+	if(!ShadowNodeArray.empty() && !LightList.empty() && RenderShadows) {
 		driver->setRenderTarget(ScreenQuad.rt[0], true, true, AmbientColour);
 
 		ICameraSceneNode* activeCam = smgr->getActiveCamera();
@@ -382,7 +468,7 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 				}
 
 				/// Blur the shadow map texture if we're using VSM filtering.
-				if(useVSM) {
+				if(UseVSM) {
 					ITexture* currentSecondaryShadowMap = getShadowMapTexture(LightList[l].getShadowMapResolution(), true);
 
 					driver->setRenderTarget(currentSecondaryShadowMap, true, true, SColor(0xffffffff));
@@ -434,18 +520,15 @@ void CCP3DHandler::update(irr::video::ITexture* outputTarget) {
 				const u32 CurrentMaterialCount = ShadowNodeArray[i].node->getMaterialCount();
 				core::array<irr::s32> BufferMaterialList(CurrentMaterialCount);
 				core::array<irr::video::ITexture*> BufferTextureList(CurrentMaterialCount);
+
+				const s32 shadowMaterialType = ShadowNodeArray[i].shadowsMaterial != -1 ? ShadowNodeArray[i].shadowsMaterial :
+					(LightList[l].UseRoundSpotLight) ? (E_MATERIAL_TYPE)ShadowRoundedSpot[ShadowNodeArray[i].filterType] : (E_MATERIAL_TYPE)Shadow[ShadowNodeArray[i].filterType];
 				
 				for(u32 m = 0;m < CurrentMaterialCount;++m) {
 					BufferMaterialList.push_back(ShadowNodeArray[i].node->getMaterial(m).MaterialType);
 					BufferTextureList.push_back(ShadowNodeArray[i].node->getMaterial(m).getTexture(0));
 				
-					if (ShadowNodeArray[i].shadowsMaterial != -1)
-						ShadowNodeArray[i].node->getMaterial(m).MaterialType = (E_MATERIAL_TYPE)ShadowNodeArray[i].shadowsMaterial;
-					else
-						ShadowNodeArray[i].node->getMaterial(m).MaterialType = (LightList[l].UseRoundSpotLight)
-						? (E_MATERIAL_TYPE)ShadowRoundedSpot[ShadowNodeArray[i].filterType]
-						: (E_MATERIAL_TYPE)Shadow[ShadowNodeArray[i].filterType];
-
+					ShadowNodeArray[i].node->getMaterial(m).MaterialType = (E_MATERIAL_TYPE)shadowMaterialType;
 					ShadowNodeArray[i].node->getMaterial(m).setTexture(0, currentShadowMapTexture);
 				}
 
@@ -613,7 +696,7 @@ irr::video::ITexture* CCP3DHandler::getShadowMapTexture(const irr::u32 resolutio
 		device->getLogger()->log("CP3DHandler: Please ignore previous warning, it is harmless.");
 
 		shadowMapTexture = driver->addRenderTargetTexture(dimension2du(resolution, resolution),
-			shadowMapName, use32BitDepth ? ECF_G32R32F : ECF_G16R16F);
+			shadowMapName, Use32BitDepth ? ECF_G32R32F : ECF_G16R16F);
 	}
 
 	return shadowMapTexture;

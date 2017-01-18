@@ -18,35 +18,35 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Engine\Scene">
-      <UniqueIdentifier>{7ed508a5-1600-4cf3-b26e-1d1c44e30cd7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Scene\Clouds">
-      <UniqueIdentifier>{0ea7a1b2-a81d-484f-ae88-a782b34fa8ce}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\rendering">
       <UniqueIdentifier>{756f921c-f0d5-4924-bcf6-f9ee3535df0c}</UniqueIdentifier>
     </Filter>
     <Filter Include="include\engine">
       <UniqueIdentifier>{7522dc35-df3c-425b-9d28-46a700813386}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\editor">
-      <UniqueIdentifier>{ce285ca4-fb69-4c38-abd1-f830896864e5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\collaborative">
       <UniqueIdentifier>{e375e567-4b9a-409a-a43c-64727eb13e67}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="include\editor\ui">
-      <UniqueIdentifier>{3f495270-f5f1-43de-98df-c9b4d7f2a445}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Scene\MeshSceneNodeInstances">
-      <UniqueIdentifier>{585db4e8-c199-423f-ab07-97d9ead79111}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Core\Plugins">
       <UniqueIdentifier>{af77522b-61b7-4a5e-a385-afae397bd337}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\IO">
       <UniqueIdentifier>{08ddd7cf-f37a-42e6-a66c-490203ecc7ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\IO\Scene">
+      <UniqueIdentifier>{7ed508a5-1600-4cf3-b26e-1d1c44e30cd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\IO\Scene\Clouds">
+      <UniqueIdentifier>{0ea7a1b2-a81d-484f-ae88-a782b34fa8ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\IO\Scene\MeshSceneNodeInstances">
+      <UniqueIdentifier>{585db4e8-c199-423f-ab07-97d9ead79111}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\collaborative\editor">
+      <UniqueIdentifier>{ce285ca4-fb69-4c38-abd1-f830896864e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\collaborative\editor\ui">
+      <UniqueIdentifier>{3f495270-f5f1-43de-98df-c9b4d7f2a445}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -78,10 +78,10 @@
       <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Scene\CCP3DSceneNodeCreator.h">
-      <Filter>Engine\Scene</Filter>
+      <Filter>Engine\IO\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Scene\Clouds\CCloudSceneNode.h">
-      <Filter>Engine\Scene\Clouds</Filter>
+      <Filter>Engine\IO\Scene\Clouds</Filter>
     </ClInclude>
     <ClInclude Include="..\include\SShadowLight.h">
       <Filter>include\rendering</Filter>
@@ -117,43 +117,43 @@
       <Filter>include\engine</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DEditor.h">
-      <Filter>include\editor</Filter>
+      <Filter>include\collaborative\editor</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DEditionTool.h">
-      <Filter>include\editor</Filter>
+      <Filter>include\collaborative\editor</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DFileSelector.h">
-      <Filter>include\editor</Filter>
+      <Filter>include\collaborative\editor</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DCollaborativeEngine.h">
       <Filter>include\collaborative</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DCustomView.h">
-      <Filter>include\editor</Filter>
+      <Filter>include\collaborative\editor</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DInterface.h">
-      <Filter>include\editor</Filter>
+      <Filter>include\collaborative\editor</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DColorDialog.h">
-      <Filter>include\editor\ui</Filter>
+      <Filter>include\collaborative\editor\ui</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ECP3DGUIEvents.h">
-      <Filter>include\editor\ui</Filter>
+      <Filter>include\collaborative\editor\ui</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DTransformer.h">
-      <Filter>include\editor</Filter>
+      <Filter>include\collaborative\editor</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DGeometryCreator.h">
       <Filter>include\engine</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Scene\CCP3DGeometryCreator.h">
-      <Filter>Engine\Scene</Filter>
+      <Filter>Engine\IO\Scene</Filter>
     </ClInclude>
     <ClInclude Include="..\include\CScreenQuad.h">
       <Filter>include\rendering</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Scene\MeshSceneNodeInstances\CMeshSceneNodeInstances.h">
-      <Filter>Engine\Scene\MeshSceneNodeInstances</Filter>
+      <Filter>Engine\IO\Scene\MeshSceneNodeInstances</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DHandlerCallbacks.h">
       <Filter>include\rendering</Filter>
@@ -177,16 +177,16 @@
       <Filter>include\engine</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DUIRegister.h">
-      <Filter>include\editor\ui</Filter>
+      <Filter>include\collaborative\editor\ui</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DSpy.h">
-      <Filter>include\editor</Filter>
+      <Filter>include\collaborative\editor</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DViewPort.h">
-      <Filter>include\editor\ui</Filter>
+      <Filter>include\collaborative\editor\ui</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DGUIManager.h">
-      <Filter>include\editor\ui</Filter>
+      <Filter>include\collaborative\editor\ui</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DHardwareSkinningManager.h">
       <Filter>include\rendering</Filter>
@@ -230,16 +230,16 @@
       <Filter>Engine\Core</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Scene\CCP3DSceneNodeCreator.cpp">
-      <Filter>Engine\Scene</Filter>
+      <Filter>Engine\IO\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Scene\Clouds\CCloudSceneNode.cpp">
-      <Filter>Engine\Scene\Clouds</Filter>
+      <Filter>Engine\IO\Scene\Clouds</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Scene\CCP3DGeometryCreator.cpp">
-      <Filter>Engine\Scene</Filter>
+      <Filter>Engine\IO\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Scene\MeshSceneNodeInstances\CMeshSceneNodeInstances.cpp">
-      <Filter>Engine\Scene\MeshSceneNodeInstances</Filter>
+      <Filter>Engine\IO\Scene\MeshSceneNodeInstances</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Core\Plugins\CCP3DMonitorPlugin.cpp">
       <Filter>Engine\Core\Plugins</Filter>

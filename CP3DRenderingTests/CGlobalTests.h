@@ -5,8 +5,6 @@
 #include <CP3DCompileConfig.h>
 #include <CP3DRenderingEngine.h>
 
-#define SHADOW_MAP_RESOL 1024
-
 namespace cp3d {
 namespace test {
 
@@ -190,8 +188,8 @@ void GlobalTest(irr::IrrlichtDevice *device) {
 	/// Create a test scene
 	IAnimatedMesh *planeMesh = smgr->addHillPlaneMesh("plane_mesh", dimension2d<f32>(100.f, 100.f), dimension2d<u32>(100, 100),
 		0, 0.f, dimension2d<f32>(0.f, 0.f), dimension2d<f32>(50.f, 50.f));
+
 	IMeshSceneNode *planeNode = smgr->addMeshSceneNode(planeMesh);
-	//ISceneNode *planeNode = smgr->addWaterSurfaceSceneNode(planeMesh, 20.f, 200.f, 0.05f);
 	planeNode->setMaterialTexture(0, driver->getTexture("Textures/diffuse.tga"));
 	planeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
 	planeNode->setMaterialTexture(2, driver->getTexture("Textures/specular.tga"));
@@ -212,28 +210,29 @@ void GlobalTest(irr::IrrlichtDevice *device) {
 	cubeNode->setMaterialType(cpre->Materials[EMT_SOLID]);
 	planeNode->setMaterialType((E_MATERIAL_TYPE)mat1);
 
+	/// Create a light
 	cp3d::rendering::ICP3DLightSceneNode *light = cpre->createLightSceneNode(true, true);
 	light->setPosition(vector3df(0.f, 100.f, 100.f));
 	light->setLightColor(SColorf(1.f, 1.f, 1.f, 1.f));
 	light->getLightData().SpecularColor = SColorf(1.f, 0.5f, 0.f, 1.f);
 	light->getShadowLight()->setUseRoundSpotLight(false);
 	light->getShadowLight()->setFarValue(600.f);
-	light->getShadowLight()->setShadowMapResolution(SHADOW_MAP_RESOL);
+	light->getShadowLight()->setShadowMapResolution(1024);
 
 	// Test hardware skinning
-	device->getLogger()->setLogLevel(ELL_NONE);
-	IAnimatedMesh *animatedMesh = smgr->getMesh("Tests/dwarf/dwarf.x");
+	/*
+	IAnimatedMesh *animatedMesh = smgr->getMesh("data/batman.x");
 
 	IAnimatedMeshSceneNode *animatedNode = smgr->addAnimatedMeshSceneNode(animatedMesh);
 	animatedNode->setScale(vector3df(1.0f));
 	animatedNode->setPosition(vector3df(120.f, 0.f, -150.f));
 	animatedNode->setMaterialFlag(video::EMF_LIGHTING, false);
-
-	device->getLogger()->setLogLevel(ELL_INFORMATION);
+	handler->addShadowToNode(animatedNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_BOTH);
 	cpre->getHWSkinningManager()->addNode(animatedNode);
 
 	cp3d::rendering::ICP3DHardwareSkinningMaterial *hwmat = cpre->getHWSkinningManager()->getHWMaterial(animatedNode);
 	//handler->addShadowToNode(animatedNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_BOTH, hwmat->getDepthMaterial(), hwmat->getShadowsMaterial(), (cp3d::rendering::ICP3DHandlerCustomCallback *)hwmat);
+	*/
 
 	/// Finish
 	handler->setAmbientColor(SColor(255, 32, 32, 32));
@@ -249,7 +248,7 @@ void GlobalTest(irr::IrrlichtDevice *device) {
 		driver->beginScene(true, true, SColor(0x0));
 		handler->update();
 
-		ITexture *sm = handler->getShadowMapTexture(SHADOW_MAP_RESOL, false);
+		ITexture *sm = handler->getShadowMapTexture(1024, false);
 		img->setImage(sm);
 
 		gui->drawAll();

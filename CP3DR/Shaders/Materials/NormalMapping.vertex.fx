@@ -18,7 +18,6 @@ float getLengthSQR (vec3 vec)
 
 void main( void )
 {
-    
 	mat4 LightTransform = gl_ModelViewMatrix;
     LightTransform = LightTransform*matWorldInverse;
     
@@ -47,7 +46,6 @@ void main( void )
     ViewDirection.x  = dot( fvTangent, fvViewDirection );
     ViewDirection.y  = dot( fvBinormal, fvViewDirection );
     ViewDirection.z  = dot( fvNormal, fvViewDirection );
-    
 }
 
 #else

@@ -26,6 +26,8 @@ namespace cp3d {
 			}
 
 			void animateNode(ISceneNode* node, u32 timeMs) {
+				rendering::ICP3DAnimator<rendering::ICP3DLightSceneNode *>::animateNode(node, timeMs);
+
 				if (StartTime == -1)
 					StartTime = timeMs;
 
@@ -40,8 +42,6 @@ namespace cp3d {
 					Data->setLightColor(To.getInterpolated(From, diff));
 				else
 					Data->setLightColor(From.getInterpolated(To, diff));
-
-				rendering::ICP3DAnimator<rendering::ICP3DLightSceneNode *>::animateNode(node, timeMs);
 			}
 
 		private:
@@ -50,13 +50,14 @@ namespace cp3d {
 			bool Inverse;
 		};*/
 
-		void HDRTest(irr::IrrlichtDevice *device) {
+		void HDRTest(irr::IrrlichtDevice *device, IEventReceiver *receiver) {
 			IVideoDriver *driver = device->getVideoDriver();
 			ISceneManager *smgr = device->getSceneManager();
 			IGUIEnvironment *gui = device->getGUIEnvironment();
 
 			/// Create rendering engine
 			cp3d::engine::ICP3DEngine *engine = cp3d::createEngine(device);
+			engine->getEventReceiver()->addEventReceiver(receiver);
 
 			cp3d::rendering::ICP3DRenderingEngine *cpre = engine->getRenderingEngine();
 			cpre->createNormalMappingMaterial();
@@ -75,7 +76,7 @@ namespace cp3d {
 			light->getLightData().SpecularColor = SColorf(1.f, 1.f, 1.f, 1.f);
 			light->getShadowLight()->setUseRoundSpotLight(false);
 			light->getShadowLight()->setFarValue(1000.f);
-			light->setLightStrength(2.5f);
+			light->setLightStrength(driver->getDriverType() == EDT_DIRECT3D9 ? 2.5f : 1.f);
 			light->getShadowLight()->setShadowMapResolution(4096);
 
 			ISceneNodeAnimator *animator = smgr->createFlyStraightAnimator(vector3df(-250.f, 200.f, -100.f), vector3df(250.f, 200.f, 100.f), 10000, true, true);
@@ -141,16 +142,8 @@ namespace cp3d {
 			img->setImage(hdrTexture);
 
 			/// Update the application
-			while (device->run()) {
-				if (!device->isWindowActive())
-					continue;
-
-				driver->beginScene(true, true, SColor(0x0));
-				handler->update();
-
-				gui->drawAll();
-				driver->endScene();
-			}
+			engine->setDrawGUI(false);
+			engine->runEngine();
 		}
 
 	} /// End namespace test

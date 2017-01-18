@@ -10,7 +10,8 @@ void main()
 	vec4 depthCol = texture2D(DepthMapSampler, gl_TexCoord[0].xy);
 	vec4 SSAOCol = texture2D(ColorMapSampler, gl_TexCoord[0].xy) * ((depthCol.r == 1.0) ? 1.0 : 5.0);
 
-	gl_FragColor = (screenCol * SSAOCol);
+	//gl_FragColor = (screenCol * SSAOCol);
+	gl_FragColor = screenCol * texture2D(ColorMapSampler, gl_TexCoord[0].xy);
 }
 
 #else

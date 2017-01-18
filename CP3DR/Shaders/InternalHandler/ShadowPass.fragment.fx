@@ -99,6 +99,14 @@ void main()
 CP3DTexture ShadowMapSampler : registerTexture(t0);
 SamplerState ShadowMapSamplerST : register(s0);
 
+/*
+SHADOW_MAP_SAMPLER1
+SHADOW_MAP_SAMPLER2
+SHADOW_MAP_SAMPLER3
+SHADOW_MAP_SAMPLER4
+SHADOW_MAP_SAMPLER5
+*/
+
 float4 LightColour;
 
 struct VS_OUTPUT
@@ -109,9 +117,9 @@ struct VS_OUTPUT
 };
 
 #ifdef VSM
-float calcShadow(float2 texCoords, float2 offset, float RealDist)
+float calcShadow(float2 texCoords, float2 offset, float RealDist, sampler2D shadowMapSampler, SamplerState shadowMapSamplerST)
 {
-	float4 shadTexCol = CP3DTex2D(ShadowMapSampler, texCoords + offset, ShadowMapSamplerST);
+	float4 shadTexCol = CP3DTex2D(shadowMapSampler, texCoords + offset, shadowMapSamplerST);
 
 	float lit_factor = (RealDist <= shadTexCol.r);
 
@@ -124,9 +132,9 @@ float calcShadow(float2 texCoords, float2 offset, float RealDist)
 	return (1.0 - max(lit_factor, p)) / SAMPLE_AMOUNT;
 }
 #else
-float calcShadow(float2 texCoords, float2 offset, float RealDist)
+float calcShadow(float2 texCoords, float2 offset, float RealDist, sampler2D shadowMapSampler, SamplerState shadowMapSamplerST)
 {
-	float4 shadTexCol = CP3DTex2D(ShadowMapSampler, texCoords + offset, ShadowMapSamplerST);
+	float4 shadTexCol = CP3DTex2D(shadowMapSampler, texCoords + offset, shadowMapSamplerST);
 
 	float extractedDistance = shadTexCol.r;
       
@@ -174,7 +182,7 @@ float4 pixelMain(VS_OUTPUT In) : COLOR0
 		float realDistance = In.MVar[0] / In.MVar[3] - 0.005;
 	
 		for(unsigned int i = 0; i < SAMPLE_AMOUNT; ++i)
-			lightFactor -= calcShadow(SMPos.xy, offsetArray[i] * In.MVar[2], realDistance);
+			lightFactor -= calcShadow(SMPos.xy, offsetArray[i] * In.MVar[2], realDistance, ShadowMapSampler, ShadowMapSamplerST);
 
 		// Multiply with diffuse.
 		#ifdef ROUND_SPOTLIGHTS

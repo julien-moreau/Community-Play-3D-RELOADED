@@ -5,7 +5,7 @@
 #include "../../CP3DRenderingEngine.h"
 #include "CMaterialCreator.h"
 
-#define __CP3D__MAX_LIGHTS__ 8
+#define __CP3D__MAX_LIGHTS__ 6
 
 using namespace irr;
 using namespace core;

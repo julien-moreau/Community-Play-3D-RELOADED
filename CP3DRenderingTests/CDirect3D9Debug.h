@@ -1,95 +1,118 @@
 #include <irrlicht.h>
 
 /// CP3D
-#define CP3DR_COMPILE_RENDERING_ENGINE // tell the compiler that we use the rendering engine
+// #define CP3DR_COMPILE_RENDERING_ENGINE // tell the compiler that we use the rendering engine
+#include <CP3DCompileConfig.h>
 #include <CP3DRenderingEngine.h>
+#include <CP3DEngine.h>
 
 namespace cp3d {
 namespace test {
 
-class CCallback : public irr::video::IShaderConstantSetCallBack {
-
-	void OnSetConstants(irr::video::IMaterialRendererServices* services, irr::s32 userData) {
-		using namespace irr;
-		video::IVideoDriver *driver = services->getVideoDriver();
-		core::matrix4 m;
-
-		m = driver->getTransform(video::ETS_PROJECTION);
-		m *= driver->getTransform(video::ETS_VIEW);
-		m *= driver->getTransform(video::ETS_WORLD);
-
-		#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
-		services->setVertexShaderConstant(services->getVertexShaderConstantID("mWorldViewProj"), m.pointer(), 16);
-		#else
-		services->setVertexShaderConstant("mWorldViewProj", m.pointer(), 16);
-		#endif
-	}
-
-};
-
-void Direct3D9Debug(irr::IrrlichtDevice *device) {
 	using namespace irr;
 	using namespace video;
 	using namespace scene;
 	using namespace core;
+	using namespace gui;
 
-	IVideoDriver *driver = device->getVideoDriver();
-	IGPUProgrammingServices *gpu = driver->getGPUProgrammingServices();
+	void Direct3D9Debug(irr::IrrlichtDevice *device, IEventReceiver *receiver) {
+		IVideoDriver *driver = device->getVideoDriver();
+		ISceneManager *smgr = device->getSceneManager();
+		IGUIEnvironment *gui = device->getGUIEnvironment();
 
-	ISceneManager *smgr = device->getSceneManager();
+		/// Create rendering engine
+		cp3d::engine::ICP3DEngine *engine = cp3d::createEngine(device);
+		engine->getEventReceiver()->addEventReceiver(receiver);
 
-	cp3d::rendering::ICP3DRenderingEngine *rengine = cp3d::createRenderingEngine(device);
-	cp3d::rendering::ICP3DHandler *handler = rengine->getHandler();
+		cp3d::rendering::ICP3DRenderingEngine *cpre = engine->getRenderingEngine();
+		cpre->createNormalMappingMaterial();
 
-	/// Create a test scene
-	//ICameraSceneNode *camera = smgr->addCameraSceneNodeFPS(0, 200.f, 0.09f);
-	device->getCursorControl()->setVisible(true);
-	ICameraSceneNode *camera = smgr->addCameraSceneNodeFPS(0, 200.f, 0.09f);
-	camera->setPosition(vector3df(10.f, 10.f, 0.f));
-	device->getCursorControl()->setVisible(false);
-	camera->setFOV(90.f * core::DEGTORAD);
+		cp3d::rendering::ICP3DHandler *handler = cpre->getHandler();
 
-	ISceneNode* skyboxNode = smgr->addSkyBoxSceneNode(
-		driver->getTexture("Textures/Skybox/glacier_up.png"),
-		driver->getTexture("Textures/Skybox/glacier_dn.png"),
-		driver->getTexture("Textures/Skybox/glacier_lf.png"),
-		driver->getTexture("Textures/Skybox/glacier_rt.png"),
-		driver->getTexture("Textures/Skybox/glacier_ft.png"),
-		driver->getTexture("Textures/Skybox/glacier_bk.png"));
+		/// Create a fps camera
+		ICameraSceneNode *camera = smgr->addCameraSceneNodeFPS(0, 200.f, 0.09f);
+		camera->setPosition(vector3df(50.f, 50.f, 0.f));
+		device->getCursorControl()->setVisible(false);
 
-	rengine->createNormalMappingMaterial();
-	rengine->getEffectsManager()->createSSAOEffect(true);
+		/// Create a light
+		cp3d::rendering::ICP3DLightSceneNode *light = cpre->createLightSceneNode(true, true);
+		light->setPosition(vector3df(150.f, 300.f, 0.f));
+		light->setLightColor(SColorf(1.f, 1.f, 1.f, 1.f));
+		light->getLightData().SpecularColor = SColorf(1.f, 1.f, 1.f, 1.f);
+		light->getShadowLight()->setUseRoundSpotLight(false);
+		light->getShadowLight()->setFarValue(1000.f);
+		light->setLightStrength(driver->getDriverType() == EDT_DIRECT3D9 ? 2.5f : 1.f);
+		light->getShadowLight()->setShadowMapResolution(4096);
 
-	for (s32 i = 0; i < 6; ++i)
-	{
-		for (s32 j = 0; j < 6; ++j)
-		{
-			for (s32 k = 0; k < 6; ++k)
-			{
-				ISceneNode* cube = smgr->addCubeSceneNode(4.0f);
-				cube->setPosition(vector3df(i * 4.0f + 2.0f, j * 5.0f + 1.0f, k * 6.0f + 3.0f));
-				cube->setRotation(vector3df((f32)(rand() % 360), (f32)(rand() % 360), (f32)(rand() % 360)));
-				cube->getMaterial(0).setTexture(0, driver->getTexture("Textures/diffuse.tga"));
-				cube->getMaterial(0).setTexture(1, driver->getTexture("Textures/normal.tga"));
-				cube->getMaterial(0).setFlag(EMF_LIGHTING, false);
-				cube->getMaterial(0).MaterialType = rengine->Materials[EMT_NORMAL_MAP_SOLID];
-				handler->getDepthPassManager()->addNodeToPass(cube);
-			}
-		}
-	}
+		ISceneNodeAnimator *animator = smgr->createFlyStraightAnimator(vector3df(-250.f, 200.f, -100.f), vector3df(250.f, 200.f, 100.f), 10000, true, true);
 
-	rendering::ICP3DLightSceneNode *light = rengine->createLightSceneNode(true, false);
-	light->setPosition(vector3df(100.f, 100.f, 0.f));
-	light->setLightColor(SColorf(1.f, 1.f, 1.f, 1.f));
+		ILightSceneNode *lightNode = *light;
+		lightNode->addAnimator(animator);
 
-	while (device->run()) {
-		driver->beginScene(true, true, SColor(0x0));
+		/// Skybox
+		ISceneNode* skyboxNode = smgr->addSkyBoxSceneNode(
+			driver->getTexture("Textures/Skybox/glacier_up.png"),
+			driver->getTexture("Textures/Skybox/glacier_dn.png"),
+			driver->getTexture("Textures/Skybox/glacier_lf.png"),
+			driver->getTexture("Textures/Skybox/glacier_rt.png"),
+			driver->getTexture("Textures/Skybox/glacier_ft.png"),
+			driver->getTexture("Textures/Skybox/glacier_bk.png"));
+
+		/// Create a test scene
+		IAnimatedMesh *planeMesh = smgr->addHillPlaneMesh("plane_mesh", dimension2d<f32>(100.f, 100.f), dimension2d<u32>(100, 100),
+			0, 0.f, dimension2d<f32>(0.f, 0.f), dimension2d<f32>(50.f, 50.f));
+
+		IMeshSceneNode *planeNode = smgr->addMeshSceneNode(planeMesh);
+		planeNode->setMaterialTexture(0, driver->getTexture("Textures/diffuse.tga"));
+		planeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
+		planeNode->setMaterialTexture(2, driver->getTexture("Textures/specular.tga"));
+		planeNode->setMaterialFlag(EMF_LIGHTING, false);
+		handler->addShadowToNode(planeNode, cp3d::rendering::EFT_16PCF, cp3d::rendering::ESM_BOTH);
+
+		IMeshSceneNode *cubeNode = smgr->addCubeSceneNode(50.f, 0, -1, vector3df(0.f, 25.f, 0.f), vector3df(0.f, 45.f, 0.f));
+		cubeNode->setMaterialTexture(0, driver->getTexture("Textures/specular.tga"));
+		cubeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
+		cubeNode->setMaterialTexture(2, driver->getTexture("Textures/specular.tga"));
+		cubeNode->setMaterialFlag(EMF_LIGHTING, false);
+		handler->addShadowToNode(cubeNode, cp3d::rendering::EFT_16PCF, cp3d::rendering::ESM_BOTH);
+
+		/// Clouds
+		engine->getSceneNodeCreator()->createCloudNode(vector2df(0.008f, 0.0f), driver->getTexture("Textures/Clouds/cloud01.png"), 1.f, 0.5f, 0.1f, -0.05f);
+		engine->getSceneNodeCreator()->createCloudNode(vector2df(0.006f, 0.003f), driver->getTexture("Textures/Clouds/cloud02.png"), 0.4f, 0.05f, -0.1f, 0.5f);
+		engine->getSceneNodeCreator()->createCloudNode(vector2df(0.006f, 0.003f), driver->getTexture("Textures/Clouds/cloud03.png"), 0.035f, 0.f, -0.15f, 0.4f);
+
+		/// SSAO and Depth
+		cpre->getEffectsManager()->createSSAOEffect(true);
+
+		handler->getDepthPassManager()->addNodeToPass(planeNode);
+		handler->getDepthPassManager()->addNodeToPass(cubeNode);
+
+		/// HDR
+		handler->getHDRManager()->setEnabled(true);
+		handler->getHDRManager()->setBrightnessThreshold(0.8f);
+		handler->getHDRManager()->setGaussWidth(2.f);
+		handler->getHDRManager()->setGaussianCoefficient(0.25f);
+		handler->getHDRManager()->setMinimumLuminance(0.5f);
+		handler->getHDRManager()->setMaximumLuminance(1e20f);
+		handler->getHDRManager()->setDecreaseRate(0.5f);
+		handler->getHDRManager()->setIncreaseRate(0.2f);
+		handler->getHDRManager()->setLensTexture(driver->getTexture("Textures/lensdirt.jpg"));
+
+		/// Finish
+		handler->setAmbientColor(SColor(255, 32, 32, 32));
+
+		/// Get hdr texture
 		handler->update();
-		//driver->draw2DImage(driver->getTexture("CP3DNormalPass"), vector2di(0, 0));
-		//smgr->drawAll();
-		driver->endScene();
+
+		ITexture *hdrTexture = driver->getTexture("CP3DHandler_SM_4096");
+		IGUIImage *img = gui->addImage(rect<s32>(driver->getScreenSize().Width - 512, 0, driver->getScreenSize().Width, 512));
+		img->setScaleImage(true);
+		img->setImage(hdrTexture);
+
+		/// Update the application
+		engine->setDrawGUI(false);
+		engine->runEngine();
 	}
-}
 
 } /// End namespace test
 } /// End namespace cp3d

@@ -150,9 +150,9 @@ void CHDRLensFlare::renderFinal(ITexture *other, CScreenQuad &screenQuad) {
 	/// Render
 	screenQuad.getMaterial().setTexture(0, LensFlareRTT);
 	screenQuad.getMaterial().setTexture(1, other);
-	screenQuad.getMaterial().setTexture(2, LensStarTexture);
-	screenQuad.getMaterial().setTexture(3, LensDirtTexture);
-	screenQuad.getMaterial().setTexture(4, DepthTexture);
+	screenQuad.getMaterial().setTexture(2, DepthTexture);
+	screenQuad.getMaterial().setTexture(3, LensStarTexture);
+	screenQuad.getMaterial().setTexture(4, LensDirtTexture);
 	screenQuad.getMaterial().MaterialType = (E_MATERIAL_TYPE)FinalMaterialType;
 	screenQuad.render(Driver);
 

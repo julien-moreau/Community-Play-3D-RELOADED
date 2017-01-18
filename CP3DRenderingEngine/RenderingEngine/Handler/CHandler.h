@@ -66,10 +66,10 @@ public:
 	void setShadowModeForNode(irr::scene::ISceneNode *node, E_SHADOW_MODE shadowMode);
 	void setFilterTypeForNode(irr::scene::ISceneNode *node, E_FILTER_TYPE filterType);
 
-	void setUseVSM(bool use) { useVSM = use; }
+	void setUseVSM(bool use) { UseVSM = use; }
 
-	void setRenderShadows(const bool render) { renderShadows = render; }
-	const bool isRenderingShadows() { return renderShadows; }
+	void setRenderShadows(const bool render) { RenderShadows = render; }
+	const bool isRenderingShadows() { return RenderShadows; }
 	
 	/// Post processes
 	void addPostProcessingEffect(irr::s32 MaterialType, IPostProcessingRenderCallback* callback = 0);
@@ -210,8 +210,25 @@ private:
 	irr::s32 Depth;
 	irr::s32 DepthT;
 
+	/// Shadows
 	irr::s32 Shadow[EFT_COUNT];
 	irr::s32 ShadowRoundedSpot[EFT_COUNT];
+
+	/// Shadows v2
+	struct SShadowMapType {
+	public:
+		SShadowMapType(irr::s32 shadowType = -1, irr::s32 shadowRoundedSpot = -1)
+			: ShadowType(shadowType), ShadowRoundedSpotType(shadowRoundedSpot)
+		{ }
+
+		irr::s32 ShadowType;
+		irr::s32 ShadowRoundedSpotType;
+	};
+
+	irr::core::map<irr::u32, irr::core::array<SShadowMapType>> ShadowsMap;
+	irr::s32 GetShadowMaterialType(const irr::u32 &lightsCount, const E_FILTER_TYPE &filterType, const bool &useRoundedSpotLight);
+
+	/// Post-processes
 	irr::s32 LightModulate;
 	irr::s32 Simple;
 	irr::s32 WhiteWash;
@@ -220,6 +237,7 @@ private:
 	irr::s32 WhiteWashTAlpha;
 	irr::s32 VSMBlurH;
 	irr::s32 VSMBlurV;
+
 	irr::core::array<ICP3DCustomPass *> CustomPasses;
 	
 	DepthShaderCB* DepthMC;
@@ -238,10 +256,10 @@ private:
 
 	irr::core::rect<irr::s32> ViewPort;
 
-	bool shadowsUnsupported;
-	bool use32BitDepth;
-	bool useVSM;
-	bool renderShadows;
+	bool ShadowsUnsupported;
+	bool Use32BitDepth;
+	bool UseVSM;
+	bool RenderShadows;
 };
 
 } /// End namespace rendering

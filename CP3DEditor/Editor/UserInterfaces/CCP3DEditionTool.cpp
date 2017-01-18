@@ -263,7 +263,7 @@ bool CCP3DEditionTool::addController(ESCENE_NODE_TYPE type, ICP3DEditionToolCont
 		EditionTools.insert(type, 0);
 
 	EditionToolControllerNode::Node *it = EditionTools.find(type);
-	for (u32 i=0; i < it->getValue().size(); i++) {
+	for (u32 i = 0; i < it->getValue().size(); i++) {
 		if (it->getValue()[i] == controller)
 			return false;
 	}

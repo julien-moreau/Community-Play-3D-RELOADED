@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
 	params.DriverType = driverType;
 	params.WindowSize = dimension2du(1280, 800);
 	params.Bits = 32;
-	params.Fullscreen = true;
+	params.Fullscreen = false;
 	// params.Vsync = true;
 	params.DriverMultithreaded = true;
 	params.Doublebuffer = true;
@@ -72,8 +72,8 @@ int main(int argc, char* argv[]) {
 
 	//cp3d::test::GlobalTest(device);
 	//cp3d::test::Direct3D11Test(device);
-	//cp3d::test::Direct3D9Debug(device);
-	cp3d::test::HDRTest(device);
+	//cp3d::test::Direct3D9Debug(device, new CEventReceiver(device));
+	cp3d::test::HDRTest(device, new CEventReceiver(device));
 
 	return EXIT_SUCCESS;
 }

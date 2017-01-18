@@ -104,6 +104,12 @@ public:
 
 			TexVar = 3;
 			services->setPixelShaderConstant("UserMapSampler", (irr::s32*)(&TexVar), 1);
+
+			TexVar = 4;
+			services->setPixelShaderConstant("UserMapSampler2", (irr::s32*)(&TexVar), 1);
+
+			TexVar = 5;
+			services->setPixelShaderConstant("UserMapSampler3", (irr::s32*)(&TexVar), 1);
 		}
 
 		if(defaultVertexShader) {

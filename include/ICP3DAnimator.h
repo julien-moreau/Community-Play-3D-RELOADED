@@ -10,13 +10,14 @@ namespace rendering {
 	class ICP3DAnimator : public irr::scene::ISceneNodeAnimator {
 	public:
 		//! Constructor
-		ICP3DAnimator()
+		ICP3DAnimator() : LastTime(0), Diff(0)
 		{
 
 		}
 
 		//! animates a scene node
 		virtual void animateNode(irr::scene::ISceneNode* node, irr::u32 timeMs) {
+			Diff = timeMs - LastTime;
 			LastTime = timeMs;
 		}
 
@@ -46,6 +47,7 @@ namespace rendering {
 		T Data;
 
 		/// Animator datas
+		irr::u32 Diff;
 		irr::u32 LastTime;
 	};
 
