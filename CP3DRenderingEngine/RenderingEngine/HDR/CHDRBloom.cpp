@@ -20,7 +20,7 @@ CHDRBloom::CHDRBloom(CCP3DHandler *handler) : Handler(handler) {
 	Driver = Handler->getVideoDriver();
 
 	/// Rendering
-	BrightPassRT = Driver->addRenderTargetTexture(Driver->getScreenSize() / 2, "CP3DHDRBrightPassRT", ECF_A32B32G32R32F);
+	BrightPassRT = Driver->addRenderTargetTexture(Driver->getScreenSize() / 4, "CP3DHDRBrightPassRT", ECF_A32B32G32R32F);
 	DownSamplerRT = Driver->addRenderTargetTexture(Driver->getScreenSize() / 4, "CP3DHDRDownSampleRT", ECF_A32B32G32R32F);
 
 	BrightPass = new CHDRBrightPass(handler);
@@ -33,13 +33,13 @@ CHDRBloom::~CHDRBloom() {
 }
 
 void CHDRBloom::render(ITexture *source, CScreenQuad &screenQuad) {
-	/// Bright pass
-	Driver->setRenderTarget(BrightPassRT, true, true, SColor(0x0));
-	BrightPass->render(source, screenQuad);
-
-	/// Down Sample
+	/// Down sample
 	Driver->setRenderTarget(DownSamplerRT, true, true, SColor(0x0));
-	DownSample->render(BrightPassRT, screenQuad);
+	DownSample->render(source, screenQuad);
+
+	/// Brightpass
+	Driver->setRenderTarget(BrightPassRT, true, true, SColor(0x0));
+	BrightPass->render(DownSamplerRT, screenQuad);
 
 	/// Gaussian Blur
 	const u32 blurSize = BlurConfigurations.size();
@@ -49,7 +49,7 @@ void CHDRBloom::render(ITexture *source, CScreenQuad &screenQuad) {
 		GaussianBlur->updateOffsets(config.Size);
 
 		Driver->setRenderTarget(config.BlurRT1, true, true, SColor(255, 0, 0, 0));
-		GaussianBlur->renderH(i == 0 ? DownSamplerRT : LastRT, screenQuad);
+		GaussianBlur->renderH(i == 0 ? BrightPassRT : LastRT, screenQuad);
 
 		Driver->setRenderTarget(config.BlurRT2, true, true, SColor(255, 0, 0, 0));
 		GaussianBlur->renderV(config.BlurRT1, screenQuad);

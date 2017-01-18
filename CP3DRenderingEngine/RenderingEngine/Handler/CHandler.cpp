@@ -637,7 +637,7 @@ void CCP3DHandler::update(ITexture *outputTarget) {
 	}
 
 	driver->setRenderTarget(0, false, false);
-	driver->setViewPort(ViewPort);
+	//driver->setViewPort(ViewPort);
 	
 	bool alter = false;
 	ITexture *lastRtt = 0;
@@ -661,8 +661,8 @@ void CCP3DHandler::update(ITexture *outputTarget) {
 			lastRtt = 0;
 
 			if (i == PostProcessingRoutinesSize - 1 && !HDRManager->isEnabled()) {
-				driver->setViewPort(ViewPort);
 				driver->setRenderTarget(outputTarget);
+				driver->setViewPort(ViewPort);
 			}
 			else {
 				ITexture *rt = ScreenQuad.rt[int(alter)];
@@ -681,7 +681,7 @@ void CCP3DHandler::update(ITexture *outputTarget) {
 
 	}
 
-	HDRManager->render(PostProcessingRoutinesSize == 0 ? ScreenRTT : ScreenQuad.rt[int(alter)], outputTarget);
+	HDRManager->render(PostProcessingRoutinesSize == 0 ? ScreenRTT : ScreenQuad.rt[int(alter)], outputTarget, ViewPort);
 }
 
 irr::video::ITexture* CCP3DHandler::getShadowMapTexture(const irr::u32 resolution, const bool secondary) {

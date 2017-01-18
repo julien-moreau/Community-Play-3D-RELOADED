@@ -80,7 +80,6 @@ void CCP3DEngine::runEngine() {
 		Updater->OnPostUpdate();
 
 		Device->getVideoDriver()->endScene();
-
 	}
 }
 

@@ -198,20 +198,6 @@ bool CCP3DEditorCore::OnEvent(const SEvent &event) {
 //---------------------------------------TESTS---------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------
-struct CustomCallback : public rendering::IPostProcessingRenderCallback {
-public:
-	CustomCallback(irr::video::IVideoDriver *driver) {
-		tex = driver->getTexture("CP3DHDRTextureAdder");
-	}
-
-	void OnPreRender(rendering::ICP3DHandler *handler) {
-		handler->setPostProcessingTextureAtIndex(3, tex);
-	}
-
-private:
-	irr::video::ITexture *tex;
-};
-
 void CCP3DEditorCore::createTestScene() {
 	ISceneManager *smgr = Device->getSceneManager();
 	IVideoDriver *driver = Device->getVideoDriver();
@@ -300,18 +286,17 @@ void CCP3DEditorCore::createTestScene() {
 	Handler->getGeneralPassManager()->addNodeToPass(cubeNode);
 	Handler->getGeneralPassManager()->addNodeToPass(bill);
 
-	Handler->getHDRManager()->setBrightnessThreshold(0.8);
+	Handler->getHDRManager()->setEnabled(true);
+	Handler->getHDRManager()->setBrightnessThreshold(0.8f);
 	Handler->getHDRManager()->setGaussWidth(2.f);
 	Handler->getHDRManager()->setMinimumLuminance(0.8f);
 	Handler->getHDRManager()->setDecreaseRate(1.f);
 	Handler->getHDRManager()->setIncreaseRate(1.f);
+	Handler->getHDRManager()->setGaussianCoefficient(0.25f);
 	Handler->getHDRManager()->setLensTexture(driver->getTexture("Textures/lensdirt.jpg"));
 
-	//Rengine->getEffectsManager()->createSSAOEffect(true);
+	Rengine->getEffectsManager()->createSSAOEffect(true);
 	//Rengine->getEffectsManager()->createVolumetricLightScatteringEffect(true, bill);
-	/*
-	//Handler->addPostProcessingEffectFromFile("Shaders/PostProcesses/Custom.fragment.fx", new CustomCallback(Driver));
-	*/
 
 	SpiesManager->addSpy(new CCP3DPostProcessSpy(this));
 	return;

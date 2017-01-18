@@ -23,7 +23,7 @@ public:
 	CHDRManager(CCP3DHandler *handler);
 	~CHDRManager();
 
-	void render(irr::video::ITexture *source, irr::video::ITexture *output);
+	void render(irr::video::ITexture *source, irr::video::ITexture *output, const irr::core::rect<irr::s32> &viewport);
 
 	void setEnabled(const bool enabled) { Enabled = enabled;  }
 	bool isEnabled() const { return Enabled; }

@@ -69,7 +69,7 @@ CHDRManager::~CHDRManager() {
 
 }
 
-void CHDRManager::render(ITexture *source, ITexture *output) {
+void CHDRManager::render(ITexture *source, ITexture *output, const rect<s32> &viewport) {
 	if (!Enabled)
 		return;
 
@@ -123,6 +123,7 @@ void CHDRManager::render(ITexture *source, ITexture *output) {
 	LensFlare->render(Bloom->BrightPassRT, ScreenQuad);
 
 	Driver->setRenderTarget(output, true, true, SColor(0x0));
+	Driver->setViewPort(viewport);
 	LensFlare->renderFinal(HdrRTT, ScreenQuad);
 }
 
