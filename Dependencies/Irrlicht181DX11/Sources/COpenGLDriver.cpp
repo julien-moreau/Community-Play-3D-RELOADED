@@ -41,8 +41,8 @@ namespace video
 // Statics variables
 const u16 COpenGLDriver::Quad2DIndices[4] = { 0, 1, 2, 3 };
 
-COpenGLVertexAttribute::COpenGLVertexAttribute(const core::stringc& name, u32 elementCount, E_VERTEX_ATTRIBUTE_SEMANTIC semantic, E_VERTEX_ATTRIBUTE_TYPE type,
-	u32 offset, u32 bufferID, u32 layerCount) : CVertexAttribute(name, elementCount, semantic, type, offset, bufferID)
+COpenGLVertexAttribute::COpenGLVertexAttribute(const core::stringc& name, u32 elementCount, E_VERTEX_ATTRIBUTE_SEMANTIC semantic, E_VERTEX_ATTRIBUTE_TYPE type, u32 offset, u32 bufferID, u32 layerCount) :
+	IVertexAttribute(name, elementCount, semantic, type, offset, bufferID)
 {
 	Cache.reallocate(layerCount);
 
@@ -55,8 +55,9 @@ COpenGLVertexAttribute::COpenGLVertexAttribute(const core::stringc& name, u32 el
 		Location.push_back(-1);
 }
 
-COpenGLVertexAttribute::~COpenGLVertexAttribute()
+void COpenGLVertexAttribute::setOffset(u32 offset)
 {
+	Offset = offset;
 }
 
 void COpenGLVertexAttribute::addLocationLayer()
@@ -99,29 +100,23 @@ s32 COpenGLVertexAttribute::getLocationStatus(u32 materialType) const
 	return status;
 }
 
-COpenGLVertexDescriptor::COpenGLVertexDescriptor(const core::stringc& name, u32 id, u32 layerCount) : CVertexDescriptor(name, id), LayerCount(layerCount)
+COpenGLVertexDescriptor::COpenGLVertexDescriptor(const core::stringc& name, u32 id, u32 layerCount) :
+	IVertexDescriptor(name, id), LayerCount(layerCount)
 {
 #ifdef _DEBUG
 	setDebugName("COpenGLVertexDescriptor");
 #endif
 }
 
-COpenGLVertexDescriptor::~COpenGLVertexDescriptor()
+void COpenGLVertexDescriptor::setID(u32 id)
 {
+	ID = id;
 }
 
-void COpenGLVertexDescriptor::addLocationLayer()
-{
-	LayerCount++;
-
-	for (u32 i = 0; i < Attribute.size(); ++i)
-		((COpenGLVertexAttribute*)Attribute[i])->addLocationLayer();
-}
-
-bool COpenGLVertexDescriptor::addAttribute(const core::stringc& name, u32 elementCount, E_VERTEX_ATTRIBUTE_SEMANTIC semantic, E_VERTEX_ATTRIBUTE_TYPE type, u32 bufferID)
+IVertexAttribute* COpenGLVertexDescriptor::addAttribute(const core::stringc& name, u32 elementCount, E_VERTEX_ATTRIBUTE_SEMANTIC semantic, E_VERTEX_ATTRIBUTE_TYPE type, u32 bufferID)
 {
 	for (u32 i = 0; i < Attribute.size(); ++i)
-		if (name == Attribute[i]->getName() || (semantic != EVAS_CUSTOM && semantic == Attribute[i]->getSemantic()))
+		if (name == Attribute[i].getName() || (semantic != EVAS_CUSTOM && semantic == Attribute[i].getSemantic()))
 			return false;
 
 	if (elementCount < 1)
@@ -136,61 +131,40 @@ bool COpenGLVertexDescriptor::addAttribute(const core::stringc& name, u32 elemen
 	for (u32 i = InstanceDataStepRate.size(); i <= bufferID; ++i)
 		InstanceDataStepRate.push_back(EIDSR_PER_VERTEX);
 
-	COpenGLVertexAttribute* attribute = new COpenGLVertexAttribute(name, elementCount, semantic, type, VertexSize[bufferID], bufferID, LayerCount);
+	COpenGLVertexAttribute attribute(name, elementCount, semantic, type, VertexSize[bufferID], bufferID, LayerCount);
 	Attribute.push_back(attribute);
 
-	AttributePointer[(u32)attribute->getSemantic()] = Attribute.size()-1;
+	AttributeSemanticIndex[(u32)attribute.getSemantic()] = Attribute.size() - 1;
 
-	VertexSize[bufferID] += (attribute->getTypeSize() * attribute->getElementCount());
+	VertexSize[bufferID] += attribute.getTypeSize() * attribute.getElementCount();
 
-	AttributeSorted.push_back(attribute);
-	AttributeSorted.sort();
+	// Assign data to the pointers.
 
-	return true;
+	AttributePointer.push_back(0);
+
+	for (u32 i = 0; i < AttributePointer.size(); ++i)
+		AttributePointer[i] = &Attribute[i];
+
+	return AttributePointer.getLast();
 }
 
-COpenGLVertexAttribute* COpenGLVertexDescriptor::getAttributeSorted(u32 id) const
+void COpenGLVertexDescriptor::clearAttribute()
 {
-	if (id < AttributeSorted.size())
-		return AttributeSorted[id];
+	AttributePointer.clear();
+	VertexSize.clear();
 
-	return 0;
+	for (u32 i = 0; i < EVAS_COUNT; ++i)
+		AttributeSemanticIndex[i] = -1;
+
+	Attribute.clear();
 }
 
-bool COpenGLVertexDescriptor::removeAttribute(u32 id)
+void COpenGLVertexDescriptor::addLocationLayer()
 {
-	bool status = false;
+	LayerCount++;
 
-	u32 sortedID = 0;
-
-	if (id < Attribute.size())
-	{
-		for (u32 i = 0; i < AttributeSorted.size(); ++i)
-		{
-			if (AttributeSorted[i] == Attribute[id])
-			{
-				sortedID = i;
-
-				break;
-			}
-		}
-	}
-
-	if (CVertexDescriptor::removeAttribute(id))
-	{
-		AttributeSorted.erase(sortedID);
-
-		status = true;
-	}
-
-	return status;
-}
-
-void COpenGLVertexDescriptor::removeAllAttribute()
-{
-	CVertexDescriptor::removeAllAttribute();
-
-	AttributeSorted.clear();
+	for (u32 i = 0; i < Attribute.size(); ++i)
+		Attribute[i].addLocationLayer();
 }
 
 COpenGLHardwareBuffer::COpenGLHardwareBuffer(scene::IIndexBuffer* indexBuffer, COpenGLDriver* driver) :
@@ -322,6 +296,8 @@ bool COpenGLHardwareBuffer::update(const scene::E_HARDWARE_MAPPING mapping, cons
 	}
 
 	Driver->extGlBindBuffer(target, 0);
+
+	RequiredUpdate = false;
 
 	return true;
 #else
@@ -1611,7 +1587,7 @@ void COpenGLDriver::drawMeshBuffer(const scene::IMeshBuffer* mb)
 
 	for (u32 i = 0; i < attributeCount && i < 16; ++i)
 	{
-		COpenGLVertexAttribute* attribute = descriptor->getAttributeSorted(i);
+		COpenGLVertexAttribute* attribute = static_cast<COpenGLVertexAttribute*>(descriptor->getAttribute(i));
 
 		const u32 attribElementCount = attribute->getElementCount();
 		const E_VERTEX_ATTRIBUTE_SEMANTIC attribSemantic = attribute->getSemantic();
@@ -1859,7 +1835,7 @@ void COpenGLDriver::drawMeshBuffer(const scene::IMeshBuffer* mb)
 
 	for (u32 i = 0; i < attributeCount && i < 16; ++i)
 	{
-		E_VERTEX_ATTRIBUTE_SEMANTIC attribSemantic = descriptor->getAttributeSorted(i)->getSemantic();
+		E_VERTEX_ATTRIBUTE_SEMANTIC attribSemantic = static_cast<COpenGLVertexAttribute*>(descriptor->getAttribute(i))->getSemantic();
 
 		switch (attribSemantic)
 		{
@@ -5151,7 +5127,7 @@ IVertexDescriptor* COpenGLDriver::addVertexDescriptor(const core::stringc& pName
 		if(pName == VertexDescriptor[i]->getName())
 			return VertexDescriptor[i];
 
-	CVertexDescriptor* vertexDescriptor = new COpenGLVertexDescriptor(pName, VertexDescriptor.size(), MaterialRenderers.size());
+	IVertexDescriptor* vertexDescriptor = new COpenGLVertexDescriptor(pName, VertexDescriptor.size(), MaterialRenderers.size());
 	VertexDescriptor.push_back(vertexDescriptor);
 
 	return vertexDescriptor;

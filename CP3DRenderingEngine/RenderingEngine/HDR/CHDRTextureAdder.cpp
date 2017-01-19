@@ -18,6 +18,7 @@ CHDRTextureAdder::CHDRTextureAdder(CCP3DHandler *handler, ITexture *other) : Han
 	Driver = Handler->getVideoDriver();
 
 	CMaterialCreator cmat(handler->getVideoDriver());
+	cmat.addDefine("POST_PROCESS", "");
 	
 	Callback = new CScreenQuadCB(Handler, true);
 

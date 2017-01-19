@@ -39,37 +39,19 @@ CD3D9VertexDescriptor::~CD3D9VertexDescriptor()
 	clear();
 }
 
-bool CD3D9VertexDescriptor::addAttribute(const core::stringc& name, u32 elementCount, E_VERTEX_ATTRIBUTE_SEMANTIC semantic, E_VERTEX_ATTRIBUTE_TYPE type, u32 bufferID)
+IVertexAttribute* CD3D9VertexDescriptor::addAttribute(const core::stringc& name, u32 elementCount, E_VERTEX_ATTRIBUTE_SEMANTIC semantic, E_VERTEX_ATTRIBUTE_TYPE type, u32 bufferID)
 {
-	bool Status = false;
+	IVertexAttribute* attribute = CVertexDescriptor::addAttribute(name, elementCount, semantic, type, bufferID);
 
-	if (CVertexDescriptor::addAttribute(name, elementCount, semantic, type, bufferID))
-	{
+	if (attribute != 0)
 		clear();
 
-		Status = true;
-	}
-
-	return Status;	
+	return attribute;
 }
 
-bool CD3D9VertexDescriptor::removeAttribute(u32 id)
+void CD3D9VertexDescriptor::clearAttribute()
 {
-	bool Status = false;
-
-	if (CVertexDescriptor::removeAttribute(id))
-	{
-		clear();
-
-		Status = true;
-	}
-
-	return Status;	
-}
-
-void CD3D9VertexDescriptor::removeAllAttribute()
-{
-	CVertexDescriptor::removeAllAttribute();
+	CVertexDescriptor::clearAttribute();
 
 	clear();
 }
@@ -365,6 +347,8 @@ bool CD3D9HardwareBuffer::updateIndexBuffer(const scene::E_HARDWARE_MAPPING mapp
 		memcpy(lockedBuffer, data, Size);
 		IndexBuffer->Unlock();
 	}
+
+	RequiredUpdate = false;
 
 	return true;
 }

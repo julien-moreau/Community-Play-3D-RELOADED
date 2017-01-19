@@ -18,6 +18,7 @@ CHDRDownSample::CHDRDownSample(CCP3DHandler *handler) : Handler(handler) {
 	Driver = Handler->getVideoDriver();
 
 	CMaterialCreator cmat(handler->getVideoDriver());
+	cmat.addDefine("POST_PROCESS", "");
 	
 	Callback = new CScreenQuadCB(Handler, true);
 	MaterialType = cmat.createMaterialFromFiles("Shaders/InternalHandler/ScreenQuad.vertex.fx", "Shaders/HDR/DownSample.fragment.fx", EMT_SOLID, Callback);

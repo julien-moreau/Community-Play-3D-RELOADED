@@ -38,6 +38,7 @@ float blurWidth;
 float4 pixelMain(VS_OUTPUT In) : COLOR0 {
 	float4 color = float4(0.0, 0.0, 0.0, 0.0);
 
+	[unroll]
 	for (int i = 0; i < 9; i++) {
 		#ifdef GAUSSIAN_BLUR_H
 		color += CP3DTex2D(ColorMapSampler, clamp(In.TexCoords.xy + float2(blurOffsets[i] * blurWidth, 0.0), float2(0.0, 0.0), float2(1.0, 1.0)), ColorMapSamplerST) * blurWeights[i];

@@ -259,7 +259,7 @@ core::stringc CShaderPreprocessor::ppShader(core::stringc shaderProgram) {
 	return shaderProgram;
 }
 
-core::stringc CShaderPreprocessor::ppShaderDF(irr::core::stringc shaderProgram) {
+core::stringc CShaderPreprocessor::ppShaderDF(irr::core::stringc shaderProgram, bool isVertex) {
 	core::stringc finalShaderProgram = "";
 	core::map<core::stringc, core::stringc>::Iterator it = DefineMap.getIterator();
 
@@ -270,7 +270,7 @@ core::stringc CShaderPreprocessor::ppShaderDF(irr::core::stringc shaderProgram) 
 	}
 
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
-	if (driver->getDriverType() == video::EDT_DIRECT3D11) {
+	if (driver->getDriverType() == video::EDT_DIRECT3D11 && !isVertex) {
 		finalShaderProgram += getFileContent("Shaders/InternalHandler/Utils.hlsl.fx").c_str();
 		finalShaderProgram += "\n";
 	}
@@ -285,8 +285,8 @@ std::string CShaderPreprocessor::getFileContent(const std::string pFile) {
 	std::string Content;
 
 	if(File.is_open()) {
-		for(std::string Line; std::getline(File, Line);)
-			Content += Line + "\n"; 
+		for (std::string Line; std::getline(File, Line);)
+			Content += Line + "\n";
 
 		File.close();
 	}
@@ -295,7 +295,7 @@ std::string CShaderPreprocessor::getFileContent(const std::string pFile) {
 }
 
 //! PreProcesses a shader using Irrlicht's built-in shader preprocessor.
-core::stringc CShaderPreprocessor::ppShaderFF(core::stringc shaderProgram) {
+core::stringc CShaderPreprocessor::ppShaderFF(stringc shaderProgram, bool isVertex) {
 	return ppShader(getFileContent(shaderProgram.c_str()).c_str());
 }
 

@@ -77,12 +77,14 @@ namespace test {
 		handler->addShadowToNode(cubeNode, cp3d::rendering::EFT_16PCF, cp3d::rendering::ESM_BOTH);
 
 		/// Clouds
+		#ifndef _IRR_COMPILE_WITH_DIRECT3D_11_
 		engine->getSceneNodeCreator()->createCloudNode(vector2df(0.008f, 0.0f), driver->getTexture("Textures/Clouds/cloud01.png"), 1.f, 0.5f, 0.1f, -0.05f);
 		engine->getSceneNodeCreator()->createCloudNode(vector2df(0.006f, 0.003f), driver->getTexture("Textures/Clouds/cloud02.png"), 0.4f, 0.05f, -0.1f, 0.5f);
 		engine->getSceneNodeCreator()->createCloudNode(vector2df(0.006f, 0.003f), driver->getTexture("Textures/Clouds/cloud03.png"), 0.035f, 0.f, -0.15f, 0.4f);
+		#endif
 
 		/// SSAO and Depth
-		cpre->getEffectsManager()->createSSAOEffect(true);
+		//cpre->getEffectsManager()->createSSAOEffect(true);
 
 		handler->getDepthPassManager()->addNodeToPass(planeNode);
 		handler->getDepthPassManager()->addNodeToPass(cubeNode);

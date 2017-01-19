@@ -18,6 +18,7 @@ CHDRLuminance::CHDRLuminance(CCP3DHandler *handler) : Handler(handler) {
 	Driver = Handler->getVideoDriver();
 
 	CMaterialCreator cmat(handler->getVideoDriver());
+	cmat.addDefine("POST_PROCESS", "");
 	
 	CallbackLuminance = new CScreenQuadCB(Handler, true);
 	cmat.addDefine("HSL_COMPONENT", "");
@@ -25,6 +26,7 @@ CHDRLuminance::CHDRLuminance(CCP3DHandler *handler) : Handler(handler) {
 
 	CallbackDownSample = new CScreenQuadCB(Handler, true);
 	cmat.clearDefines();
+	cmat.addDefine("POST_PROCESS", "");
 	MaterialTypeDownSample = cmat.createMaterialFromFiles("Shaders/InternalHandler/ScreenQuad.vertex.fx", "Shaders/HDR/LuminanceDownSample.fragment.fx", EMT_SOLID, CallbackDownSample);
 
 	MaterialTypeDownSampleFinal = cmat.createMaterialFromFiles("Shaders/InternalHandler/ScreenQuad.vertex.fx", "Shaders/HDR/LuminanceDownSample.fragment.fx", EMT_SOLID, CallbackDownSample);

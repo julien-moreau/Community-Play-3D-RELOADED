@@ -28,8 +28,14 @@ CHDRManager::CHDRManager(CCP3DHandler *handler) : Handler(handler), Enabled(true
 	TextureAdderRTT = Driver->addRenderTargetTexture(Driver->getScreenSize(), "CP3DHDRTextureAdder", ECF_A32B32G32R32F);
 	HdrRTT = Driver->addRenderTargetTexture(Driver->getScreenSize(), "CP3DHDR", ECF_A8R8G8B8);
 
+	/// Build screen quad
+	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+	ScreenQuad.initializeD3D11(Driver);
+	#endif
+
 	/// Material
 	CMaterialCreator cmat(handler->getVideoDriver());
+	cmat.addDefine("POST_PROCESS", "");
 
 	Callback = new CScreenQuadCB(Handler, true);
 	MaterialType = cmat.createMaterialFromFiles("Shaders/InternalHandler/ScreenQuad.vertex.fx", "Shaders/HDR/HDR.fragment.fx", EMT_SOLID, Callback);

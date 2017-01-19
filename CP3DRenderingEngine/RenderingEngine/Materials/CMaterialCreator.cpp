@@ -41,7 +41,7 @@ s32 CMaterialCreator::createMaterialFromStrings(const stringc &vertexShader, con
 	stringc ps = Spp->ppShaderDF(pixelShader).c_str();
 	#endif
 
-	return gpu->addHighLevelShaderMaterial(Spp->ppShaderDF(vertexShader).c_str(), "vertexMain", EVST_VS_3_0,
+	return gpu->addHighLevelShaderMaterial(Spp->ppShaderDF(vertexShader, true).c_str(), "vertexMain", EVST_VS_3_0,
 										   pixelShader == "" ? NULL : Spp->ppShaderDF(pixelShader).c_str(), pixelShader == "" ? NULL : "pixelMain", EPST_PS_3_0,
 										   callback, baseMaterial);
 }

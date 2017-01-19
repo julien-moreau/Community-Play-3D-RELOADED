@@ -209,8 +209,8 @@ void CCP3DExporter::serializeNode(ISceneNode *node, IAttributes *attributes) {
 
 		if (type == ESNT_TEXT) {
 			IBillboardTextSceneNode *tnode = (IBillboardTextSceneNode *)node;
-			attributes->addString("Text", tnode->getText());
-			attributes->addColor("TextColor", tnode->getTextColor());
+			//attributes->addString("Text", tnode->getText());
+			//attributes->addColor("TextColor", tnode->getTextColor());
 			attributes->addFloat("SizeW", tnode->getSize().Width);
 			attributes->addFloat("SizeH", tnode->getSize().Height);
 		}

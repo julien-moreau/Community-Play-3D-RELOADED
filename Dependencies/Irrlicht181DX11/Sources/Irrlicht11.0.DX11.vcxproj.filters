@@ -1423,6 +1423,9 @@
     <ClInclude Include="EProfileIDs.h">
       <Filter>Irrlicht\irr</Filter>
     </ClInclude>
+    <ClInclude Include="CBlit.h" />
+    <ClInclude Include="glxext.h" />
+    <ClInclude Include="ISceneNodeAnimatorFinishing.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\changes.txt">
@@ -2402,6 +2405,7 @@
     <ClCompile Include="CProfiler.cpp">
       <Filter>Irrlicht\irr</Filter>
     </ClCompile>
+    <ClCompile Include="utf8.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Irrlicht.rc" />

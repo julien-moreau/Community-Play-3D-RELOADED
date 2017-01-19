@@ -38,7 +38,7 @@ struct VS_OUTPUT
 
 struct VS_INPUT {
 	float3 Position  : POSITION0;
-	float4 TexCoords : TEXTURE0;
+	float2 TexCoords : TEXTURE0;
 };
 
 VS_OUTPUT vertexMain(VS_INPUT input)

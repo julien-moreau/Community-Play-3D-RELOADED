@@ -212,7 +212,8 @@ namespace scene
 		virtual bool copyVertices(IVertexBuffer* srcBuffer, u32 srcDescriptionBufferID, video::IVertexDescriptor* srcDescriptor,
 			IVertexBuffer* dstBuffer, u32 dstDescriptionBufferID, video::IVertexDescriptor* dstDescriptor, bool copyCustomAttribute) const = 0;
 
-		virtual bool createTangents(IMeshBuffer* srcBuffer, IMeshBuffer* dstBuffer, bool copyCustomAttribute) = 0;
+		virtual bool createTangents(IMeshBuffer* srcBuffer, IMeshBuffer* dstBuffer, bool copyCustomAttribute,
+			bool recalculateNormals = false, bool smooth = false, bool angleWeighted= false) = 0;
 
 		virtual bool createUniquePrimitives(IMeshBuffer* srcBuffer, IMeshBuffer* dstBuffer) const = 0;
 

@@ -40,7 +40,8 @@ public:
 	virtual bool copyVertices(IVertexBuffer* srcBuffer, u32 srcDescriptionBufferID, video::IVertexDescriptor* srcDescriptor,
 		IVertexBuffer* dstBuffer, u32 dstDescriptionBufferID, video::IVertexDescriptor* dstDescriptor, bool copyCustomAttribute) const _IRR_OVERRIDE_;
 
-	virtual bool createTangents(IMeshBuffer* srcBuffer, IMeshBuffer* dstBuffer, bool copyCustomAttribute) _IRR_OVERRIDE_;
+	virtual bool createTangents(IMeshBuffer* srcBuffer, IMeshBuffer* dstBuffer, bool copyCustomAttribute,
+		bool recalculateNormals, bool smooth, bool angleWeighted) _IRR_OVERRIDE_;
 
 	virtual bool createUniquePrimitives(IMeshBuffer* srcBuffer, IMeshBuffer* dstBuffer) const _IRR_OVERRIDE_;
 

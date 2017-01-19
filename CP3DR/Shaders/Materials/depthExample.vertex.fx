@@ -1,7 +1,7 @@
 
 #include "Shaders/InternalHandler/Utils.hlsl.fx" // Include utils for hlsl
 
-cbuffer cbParams : register(c0)
+cbuffer cbParams : register(b0)
 {
 	float4x4 mWorldViewProj;
 	float time;

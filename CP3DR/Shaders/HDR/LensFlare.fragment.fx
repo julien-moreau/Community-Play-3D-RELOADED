@@ -62,8 +62,8 @@ void main()
 #define POST_PROCESS
 #include "Shaders/InternalHandler/Utils.hlsl.fx"
 
-uniform sampler2D ColorMapSampler : registerTexture(t0);
-uniform sampler2D LensColorSampler : registerTexture(t1);
+CP3DTexture ColorMapSampler : registerTexture(t0);
+CP3DTexture LensColorSampler : registerTexture(t1);
 
 SamplerState ColorMapSamplerST : register(s0);
 SamplerState LensColorSamplerST : register(s1);

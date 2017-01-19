@@ -19,7 +19,7 @@ namespace video
 {
 	const char NORMAL_MAP_SHADER[] = 
 		"// adding constant buffer for transform matrices\n"\
-		"cbuffer cbPerFrame : register(c0)\n"\
+		"cbuffer cbPerFrame : register(b0)\n"\
 		"{\n"\
 		"   float4x4 g_mWorld;\n"\
 		"   float4x4 g_mWorldViewProj;\n"\

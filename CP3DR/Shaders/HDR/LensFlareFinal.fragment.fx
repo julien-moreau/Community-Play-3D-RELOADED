@@ -29,6 +29,7 @@ vec4 motionBlur(vec2 texCoord, vec2 screenSize) {
 
 	vec4 result = texture2D(ScreenMapSampler, texCoord);
 
+	[loop]
 	for (int i = 1; i < nSamples; ++i) {
 		vec2 offset = texCoord + velocity * (float(i) / float(nSamples - 1) - 0.5);
 		result += texture2D(ScreenMapSampler, offset);
@@ -53,11 +54,11 @@ void main()
 #define POST_PROCESS
 #include "Shaders/InternalHandler/Utils.hlsl.fx"
 
-uniform sampler2D ColorMapSampler : registerTexture(t0);
-uniform sampler2D ScreenMapSampler : registerTexture(t1);
-uniform sampler2D DepthMapSampler : registerTexture(t2);
-uniform sampler2D LensStarSampler : registerTexture(t3);
-uniform sampler2D LensDirtSampler : registerTexture(t4);
+CP3DTexture ColorMapSampler : registerTexture(t0);
+CP3DTexture ScreenMapSampler : registerTexture(t1);
+CP3DTexture DepthMapSampler : registerTexture(t2);
+CP3DTexture LensStarSampler : registerTexture(t3);
+CP3DTexture LensDirtSampler : registerTexture(t4);
 
 SamplerState ColorMapSamplerST : register(s0);
 SamplerState ScreenMapSamplerST : register(s1);
@@ -65,11 +66,11 @@ SamplerState DepthMapSamplerST : register(s2);
 SamplerState LensStarSamplerST : register(s3);
 SamplerState LensDirtSamplerST : register(s4);
 
-uniform float motionScale;
+float motionScale;
 
-uniform float4x4 inverseViewProjection;
-uniform float4x4 prevViewProjection;
-uniform float4x4 lensStarMatrix;
+float4x4 inverseViewProjection;
+float4x4 prevViewProjection;
+float4x4 lensStarMatrix;
 
 inline float4 motionBlur(float2 texCoord, float2 screenSize) {
 	float depth = CP3DTex2D(DepthMapSampler, texCoord, DepthMapSamplerST).r;

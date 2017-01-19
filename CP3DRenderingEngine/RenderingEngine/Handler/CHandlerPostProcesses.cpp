@@ -60,16 +60,18 @@ CCP3DHandler::SPostProcessingPair CCP3DHandler::obtainScreenQuadMaterial(const s
 
 	sPP.addShaderDefine("SCREENX", core::stringc(ScreenRTTSize.Width));
 	sPP.addShaderDefine("SCREENY", core::stringc(ScreenRTTSize.Height));
+	sPP.addShaderDefine("POST_PROCESS", "");
+
 	if (driver->getDriverType() == EDT_OPENGL)
 		sPP.addShaderDefine("OPENGL_DRIVER");
+
+	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+	else if (driver->getDriverType() == EDT_DIRECT3D11)
+		sPP.addShaderDefine("DIRECT3D_11", "1");
+	#endif
 	else
 		sPP.addShaderDefine("DIRECT3D_9");
 
-	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
-	if (driver->getDriverType() == EDT_DIRECT3D11)
-		sPP.addShaderDefine("DIRECT3D_11", "1");
-	#endif
-	
 	E_VERTEX_SHADER_TYPE VertexLevel = driver->queryFeature(video::EVDF_VERTEX_SHADER_3_0) ? EVST_VS_3_0 : EVST_VS_2_0;
 	E_PIXEL_SHADER_TYPE PixelLevel = driver->queryFeature(video::EVDF_PIXEL_SHADER_3_0) ? EPST_PS_3_0 : EPST_PS_2_0;
 	E_SHADER_EXTENSION shaderExt = (driver->getDriverType() == EDT_DIRECT3D9) ? ESE_HLSL : ESE_GLSL;
@@ -93,7 +95,7 @@ CCP3DHandler::SPostProcessingPair CCP3DHandler::obtainScreenQuadMaterial(const s
 	const stringc path = WorkingPath + "Shaders/InternalHandler/ScreenQuad.vertex.fx";
 
 	s32 PostMat = gpu->addHighLevelShaderMaterial(
-		sPP.ppShaderDF(sPP.getFileContent(path.c_str()).c_str()).c_str(), "vertexMain", VertexLevel,
+		sPP.ppShaderDF(sPP.getFileContent(path.c_str()).c_str(), true).c_str(), "vertexMain", VertexLevel,
 		sPP.ppShaderDF(shaderString.c_str()).c_str(), "pixelMain", PixelLevel,
 		SQCB, baseMaterial);
 	

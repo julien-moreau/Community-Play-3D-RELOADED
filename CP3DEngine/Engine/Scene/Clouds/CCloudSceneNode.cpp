@@ -217,8 +217,10 @@ void CCloudSceneNode::render() {
 		driver->setMaterial(Material);
 
 		#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+		/*
 		driver->drawIndexedTriangleFan(true, InnerBuffer->getVertexBuffer(0), true, InnerBuffer->getIndexBuffer(), CLOUDSUBDIV);
 		driver->drawVertexPrimitiveList(true, OuterBuffer->getVertexBuffer(0), true, OuterBuffer->getIndexBuffer(), 2 * CLOUDSUBDIV, EPT_TRIANGLE_STRIP);
+		*/
 		#else
 		driver->drawIndexedTriangleFan(InnerVertices, CLOUDSUBDIV+1, InnerIndices, CLOUDSUBDIV);
 		driver->drawVertexPrimitiveList(OuterVertices, 2*CLOUDSUBDIV, OuterIndices, 2*CLOUDSUBDIV, EVT_STANDARD, EPT_TRIANGLE_STRIP, EIT_16BIT);
@@ -232,8 +234,10 @@ void CCloudSceneNode::render() {
 			driver->setMaterial(m);
 
 			#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
+			/*
 			driver->drawIndexedTriangleFan(false, InnerBuffer->getVertexBuffer(0), false, InnerBuffer->getIndexBuffer(), CLOUDSUBDIV);
 			driver->drawVertexPrimitiveList(false, InnerBuffer->getVertexBuffer(0), false, OuterBuffer->getIndexBuffer(), 2 * CLOUDSUBDIV, EPT_TRIANGLE_STRIP);
+			*/
 			#else
 			driver->drawIndexedTriangleFan(InnerVertices, CLOUDSUBDIV+1, InnerIndices, CLOUDSUBDIV);
 			driver->drawVertexPrimitiveList(OuterVertices, 2*CLOUDSUBDIV, OuterIndices, 2*CLOUDSUBDIV, EVT_STANDARD, EPT_TRIANGLE_STRIP, EIT_16BIT);

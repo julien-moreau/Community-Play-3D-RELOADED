@@ -21,6 +21,7 @@ CHDRLensFlare::CHDRLensFlare(CCP3DHandler *handler) : Handler(handler), LensText
 
 	CMaterialCreator cmat(handler->getVideoDriver());
 	cmat.addDefine("SAMPLES", "8");
+	cmat.addDefine("POST_PROCESS", "");
 
 	/// Lens Flare
 	Callback = new CScreenQuadCB(Handler, true);
@@ -39,6 +40,7 @@ CHDRLensFlare::CHDRLensFlare(CCP3DHandler *handler) : Handler(handler), LensText
 
 	cmat.clearDefines();
 	cmat.addDefine("MAX_MOTION_SAMPLES", "64.0");
+	cmat.addDefine("POST_PROCESS", "");
 	FinalMaterialType = cmat.createMaterialFromFiles("Shaders/InternalHandler/ScreenQuad.vertex.fx", "Shaders/HDR/LensFlareFinal.fragment.fx", EMT_SOLID, CallbackFinal);
 
 	Dispersal = 0.1f;

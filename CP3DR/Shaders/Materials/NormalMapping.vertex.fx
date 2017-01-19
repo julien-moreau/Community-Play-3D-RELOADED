@@ -50,7 +50,7 @@ void main( void )
 
 #else
 
-cbuffer cbParams : register(c0)
+cbuffer cbParams : register(b0)
 {
 	float4x4 ModelViewProjectionMatrix;
 }

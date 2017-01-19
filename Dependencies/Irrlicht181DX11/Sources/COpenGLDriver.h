@@ -37,11 +37,12 @@ namespace video
     class COpenGLCallBridge;
 	class COpenGLTexture;
 
-	class COpenGLVertexAttribute : public CVertexAttribute
+	class COpenGLVertexAttribute : public IVertexAttribute
 	{
 	public:
 		COpenGLVertexAttribute(const core::stringc& name, u32 elementCount, E_VERTEX_ATTRIBUTE_SEMANTIC semantic, E_VERTEX_ATTRIBUTE_TYPE type, u32 offset, u32 bufferID, u32 layerCount);
-		virtual ~COpenGLVertexAttribute();
+
+		virtual void setOffset(u32 offset);
 
 		// Add location layer.
 		void addLocationLayer();
@@ -60,26 +61,23 @@ namespace video
 		core::array<s32> Location;
 	};
 
-	class COpenGLVertexDescriptor : public CVertexDescriptor
+	class COpenGLVertexDescriptor : public IVertexDescriptor
 	{
 	public:
 		COpenGLVertexDescriptor(const core::stringc& name, u32 id, u32 layerCount);
-		virtual ~COpenGLVertexDescriptor();
+
+		virtual void setID(u32 id);
+
+		virtual IVertexAttribute* addAttribute(const core::stringc& name, u32 elementCount, E_VERTEX_ATTRIBUTE_SEMANTIC semantic, E_VERTEX_ATTRIBUTE_TYPE type, u32 bufferID) _IRR_OVERRIDE_;
+
+		virtual void clearAttribute() _IRR_OVERRIDE_;
 
 		void addLocationLayer();
 
-		virtual bool addAttribute(const core::stringc& name, u32 elementCount, E_VERTEX_ATTRIBUTE_SEMANTIC semantic, E_VERTEX_ATTRIBUTE_TYPE type, u32 bufferID);
-
-		COpenGLVertexAttribute* getAttributeSorted(u32 id) const;
-
-		virtual bool removeAttribute(u32 id);
-
-		virtual void removeAllAttribute();
-
 	protected:
-		u32 LayerCount;
+		core::array<COpenGLVertexAttribute> Attribute;
 
-		core::array<COpenGLVertexAttribute*> AttributeSorted;
+		u32 LayerCount;
 	};
 
 	class COpenGLHardwareBuffer : public IHardwareBuffer

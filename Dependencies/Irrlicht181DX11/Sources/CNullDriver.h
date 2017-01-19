@@ -795,7 +795,7 @@ namespace video
 		bool RangeFog;
 		bool AllowZWriteOnTransparent;
 
-		irr::core::array<CVertexDescriptor*> VertexDescriptor;
+		irr::core::array<IVertexDescriptor*> VertexDescriptor;
 
 		bool FeatureEnabled[video::EVDF_COUNT];
 	};

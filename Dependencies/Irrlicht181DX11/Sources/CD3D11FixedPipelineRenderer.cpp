@@ -187,7 +187,7 @@ namespace video
 		"};\n"\
 		"\n"\
 		"// adding constant buffer for transform matrices\n"\
-		"cbuffer cbPerFrame : register(c0)\n"\
+		"cbuffer cbPerFrame : register(b0)\n"\
 		"{\n"\
 		"	float4x4 mWorld;\n"\
 		"	float4x4 mView;\n"\
@@ -196,7 +196,7 @@ namespace video
 		"};\n"\
 		"\n"\
 		"// adding constant buffer for fog, clip planes and point draw\n"\
-		"cbuffer cbPerTechnique : register(c1)\n"\
+		"cbuffer cbPerTechnique : register(b1)\n"\
 		"{\n"\
 		"   float4 fogColor;\n"\
 		"	int fogMode = FOGMODE_NONE;\n"\
@@ -220,7 +220,7 @@ namespace video
 		"};\n"\
 		"\n"\
 		"// adding constant buffer for lightning information\n"\
-		"cbuffer cbLights : register(c2)\n"\
+		"cbuffer cbLights : register(b2)\n"\
 		"{\n"\
 		"	float4 clipPlanes[3];\n"\
 		"	Light lights[MAX_LIGHTS];\n"\

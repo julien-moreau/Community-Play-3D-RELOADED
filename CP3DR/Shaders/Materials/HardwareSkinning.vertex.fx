@@ -7,7 +7,7 @@
 #include "Shaders/InternalHandler/Utils.hlsl.fx" // Include utils for hlsl
 //#define MAX_JOINT_NUM 57
 
-cbuffer cbParams : register(c0)
+cbuffer cbParams : register(b0)
 {
 	float4x4 mWorldViewProj;
 	float4x4 JointTransform[MAX_JOINT_NUM];

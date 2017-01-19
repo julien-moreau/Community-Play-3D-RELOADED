@@ -572,7 +572,7 @@ void CD3D11CallBridge::setInputLayout(IVertexDescriptor* vtxDescriptor, IMateria
 
 			HRESULT hr;
 			if (SUCCEEDED(hr = Device->CreateInputLayout(inputLayoutDesc.pointer(), inputLayoutDesc.size(),
-				ShaderByteCode, ShaderByteCodeSize, &state)))
+				renderer->getShaderByteCode(), renderer->getShaderByteCodeSize(), &state)))
 			{
 				LayoutMap.insert(signature, state);
 			}

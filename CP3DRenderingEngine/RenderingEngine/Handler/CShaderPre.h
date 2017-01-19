@@ -12,8 +12,8 @@ public:
 	CShaderPreprocessor(irr::video::IVideoDriver* driverIn);
 
 	irr::core::stringc ppShader(irr::core::stringc shaderProgram);
-	irr::core::stringc ppShaderFF(irr::core::stringc shaderProgram);
-	irr::core::stringc ppShaderDF(irr::core::stringc shaderProgram);
+	irr::core::stringc ppShaderFF(irr::core::stringc shaderProgram, bool isVertex = false);
+	irr::core::stringc ppShaderDF(irr::core::stringc shaderProgram, bool isVertex = false);
 
 	void addShaderDefine(const irr::core::stringc name, const irr::core::stringc value = "");
 	void removeShaderDefine(const irr::core::stringc name);

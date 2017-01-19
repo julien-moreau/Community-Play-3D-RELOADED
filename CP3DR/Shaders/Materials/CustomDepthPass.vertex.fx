@@ -9,9 +9,9 @@ void main(void) {
 	gl_TexCoord[0] = tPos;
 }
 
-##else
+##elsb
 
-cbuffer cbParams : register(c0)
+cbuffer cbParams : register(b0)
 {
 	float4x4 mWorldViewProj;
 };

@@ -16,7 +16,7 @@ void main()
 
 #else
 
-cbuffer cbParams : register(c0)
+cbuffer cbParams : register(b0)
 {
 	float4x4 WorldViewProj;
 	float4x4 WorldView;

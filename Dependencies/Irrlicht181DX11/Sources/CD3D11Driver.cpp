@@ -228,7 +228,7 @@ void CD3D11Driver::createMaterialRenderers()
 bool CD3D11Driver::initDriver(HWND hwnd, bool pureSoftware)
 {
 	HRESULT hr;
-
+	
 	if(!Device)
 	{
 		D3DLibrary = LoadLibrary( __TEXT("d3d11.dll") );
@@ -299,7 +299,7 @@ bool CD3D11Driver::initDriver(HWND hwnd, bool pureSoftware)
 		// Try creating hardware device
 		//! If you got an error here that 'D3D_FEATURE_LEVEL_11_1' is undeclared you have to download an appropriate DXSDK
 		//! Download: http://msdn.microsoft.com/en-us/windows/desktop/hh852363.aspx
-		D3D_FEATURE_LEVEL RequestedLevels[] = { /*D3D_FEATURE_LEVEL_11_1,*/ D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_10_1, D3D_FEATURE_LEVEL_10_0 };
+		D3D_FEATURE_LEVEL RequestedLevels[] = { D3D_FEATURE_LEVEL_11_1, D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_10_1, D3D_FEATURE_LEVEL_10_0 };
 
 		const u32 featureLevelSize = sizeof(RequestedLevels) / sizeof(RequestedLevels[0]);
 
@@ -320,7 +320,7 @@ bool CD3D11Driver::initDriver(HWND hwnd, bool pureSoftware)
 			Name += "WARP ";
 		}
 
-		Name += /*(FeatureLevel == D3D_FEATURE_LEVEL_11_1) ? "11.1" :*/
+		Name += (FeatureLevel == D3D_FEATURE_LEVEL_11_1) ? "11.1" :
 			(FeatureLevel == D3D_FEATURE_LEVEL_11_0) ? "11.0" :
 			(FeatureLevel == D3D_FEATURE_LEVEL_10_1) ? "10.1" : "10.0";
 	}
@@ -484,6 +484,7 @@ bool CD3D11Driver::initDriver(HWND hwnd, bool pureSoftware)
 
 		return false;
 	}
+
 	backBuffer->Release();
 
 	// creating depth buffer
@@ -2462,7 +2463,7 @@ core::dimension2du CD3D11Driver::getMaxTextureSize() const
 	// Maximal value depends of driver type.
 	switch( FeatureLevel )
 	{
-	//case D3D_FEATURE_LEVEL_11_1:
+	case D3D_FEATURE_LEVEL_11_1:
 	case D3D_FEATURE_LEVEL_11_0:
 		return core::dimension2du( 16384, 16384 );
 
@@ -3460,11 +3461,11 @@ bool CD3D11Driver::disableTextures(u32 fromStage)
 
 IVertexDescriptor* CD3D11Driver::addVertexDescriptor(const core::stringc& pName)
 {
-	for(u32 i = 0; i < VertexDescriptor.size(); ++i)
-		if(pName == VertexDescriptor[i]->getName())
+	for (u32 i = 0; i < VertexDescriptor.size(); ++i)
+		if (pName == VertexDescriptor[i]->getName())
 			return VertexDescriptor[i];
 
-	CVertexDescriptor* vertexDescriptor = new CD3D11VertexDescriptor(Device, pName, VertexDescriptor.size(), MaterialRenderers.size());
+	IVertexDescriptor* vertexDescriptor = new CD3D11VertexDescriptor(Device, pName, VertexDescriptor.size());
 	VertexDescriptor.push_back(vertexDescriptor);
 
 	return vertexDescriptor;

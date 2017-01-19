@@ -96,16 +96,17 @@ void main()
 
 #include "Shaders/InternalHandler/Utils.hlsl.fx"
 
+/*
 CP3DTexture ShadowMapSampler : registerTexture(t0);
 SamplerState ShadowMapSamplerST : register(s0);
+*/
 
-/*
+SHADOW_MAP_SAMPLER0
 SHADOW_MAP_SAMPLER1
 SHADOW_MAP_SAMPLER2
 SHADOW_MAP_SAMPLER3
 SHADOW_MAP_SAMPLER4
 SHADOW_MAP_SAMPLER5
-*/
 
 float4 LightColour;
 
@@ -117,7 +118,7 @@ struct VS_OUTPUT
 };
 
 #ifdef VSM
-float calcShadow(float2 texCoords, float2 offset, float RealDist, sampler2D shadowMapSampler, SamplerState shadowMapSamplerST)
+float calcShadow(float2 texCoords, float2 offset, float RealDist, CP3DTexture shadowMapSampler, SamplerState shadowMapSamplerST)
 {
 	float4 shadTexCol = CP3DTex2D(shadowMapSampler, texCoords + offset, shadowMapSamplerST);
 
@@ -132,7 +133,7 @@ float calcShadow(float2 texCoords, float2 offset, float RealDist, sampler2D shad
 	return (1.0 - max(lit_factor, p)) / SAMPLE_AMOUNT;
 }
 #else
-float calcShadow(float2 texCoords, float2 offset, float RealDist, sampler2D shadowMapSampler, SamplerState shadowMapSamplerST)
+float calcShadow(float2 texCoords, float2 offset, float RealDist, CP3DTexture shadowMapSampler, SamplerState shadowMapSamplerST)
 {
 	float4 shadTexCol = CP3DTex2D(shadowMapSampler, texCoords + offset, shadowMapSamplerST);
 
@@ -181,8 +182,9 @@ float4 pixelMain(VS_OUTPUT In) : COLOR0
 		float lightFactor = 1.0;
 		float realDistance = In.MVar[0] / In.MVar[3] - 0.005;
 	
+		[unroll]
 		for(unsigned int i = 0; i < SAMPLE_AMOUNT; ++i)
-			lightFactor -= calcShadow(SMPos.xy, offsetArray[i] * In.MVar[2], realDistance, ShadowMapSampler, ShadowMapSamplerST);
+			lightFactor -= calcShadow(SMPos.xy, offsetArray[i] * In.MVar[2], realDistance, ShadowMapSampler0, ShadowMapSampler0ST);
 
 		// Multiply with diffuse.
 		#ifdef ROUND_SPOTLIGHTS

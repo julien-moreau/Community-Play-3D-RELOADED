@@ -1,4 +1,4 @@
-// Copyright (C) 2012 Patryk Nadrowski
+// Copyright (C) 2012-2016 Patryk Nadrowski
 // This file is part of the "Irrlicht Engine".
 // For conditions of distribution and use, see copyright notice in irrlicht.h
 
@@ -56,47 +56,183 @@ namespace video
 	class IVertexAttribute
 	{
 	public:
-		virtual const core::stringc& getName() const = 0;
+		IVertexAttribute(const core::stringc& name, u32 elementCount, E_VERTEX_ATTRIBUTE_SEMANTIC semantic, E_VERTEX_ATTRIBUTE_TYPE type, u32 offset, u32 bufferID) :
+			Name(name), ElementCount(elementCount), Semantic(semantic), Type(type), Offset(offset), BufferID(bufferID)
+		{
+			switch (Type)
+			{
+			case EVAT_BYTE:
+			case EVAT_UBYTE:
+				TypeSize = sizeof(u8);
+				break;
+			case EVAT_SHORT:
+			case EVAT_USHORT:
+				TypeSize = sizeof(u16);
+				break;
+			case EVAT_INT:
+			case EVAT_UINT:
+				TypeSize = sizeof(u32);
+				break;
+			case EVAT_FLOAT:
+				TypeSize = sizeof(f32);
+				break;
+			case EVAT_DOUBLE:
+				TypeSize = sizeof(f64);
+				break;
+			}
+		}
 
-		virtual u32 getElementCount() const = 0;
+		virtual ~IVertexAttribute()
+		{
+		}
 
-		virtual E_VERTEX_ATTRIBUTE_SEMANTIC getSemantic() const = 0;
+		const core::stringc& getName() const
+		{
+			return Name;
+		}
 
-		virtual E_VERTEX_ATTRIBUTE_TYPE getType() const = 0;
+		u32 getElementCount() const
+		{
+			return ElementCount;
+		}
 
-		virtual u32 getTypeSize() const = 0;
+		E_VERTEX_ATTRIBUTE_SEMANTIC getSemantic() const
+		{
+			return Semantic;
+		}
 
-		virtual u32 getOffset() const = 0;
+		E_VERTEX_ATTRIBUTE_TYPE getType() const
+		{
+			return Type;
+		}
 
-		virtual u32 getBufferID() const = 0;
+		u32 getTypeSize() const
+		{
+			return TypeSize;
+		}
+
+		u32 getOffset() const
+		{
+			return Offset;
+		}
+
+		u32 getBufferID() const
+		{
+			return BufferID;
+		}
+
+	protected:
+		core::stringc Name;
+
+		u32 ElementCount;
+
+		E_VERTEX_ATTRIBUTE_SEMANTIC Semantic;
+
+		E_VERTEX_ATTRIBUTE_TYPE Type;
+
+		u32 TypeSize;
+
+		u32 Offset;
+
+		u32 BufferID;
 	};
 
 	class IVertexDescriptor : public virtual IReferenceCounted
 	{
 	public:
-		virtual u32 getID() const = 0;
+		IVertexDescriptor(const core::stringc& name, u32 id) : ID(id), Name(name)
+		{
+#ifdef _DEBUG
+			setDebugName("IVertexDescriptor");
+#endif
 
-		virtual const core::stringc& getName() const = 0;
+			for (u32 i = 0; i < EVAS_COUNT; ++i)
+				AttributeSemanticIndex[i] = -1;
+		}
 
-		virtual u32 getVertexSize(u32 bufferID) const = 0;
+		virtual ~IVertexDescriptor()
+		{
+		}
 
-		virtual E_INSTANCE_DATA_STEP_RATE getInstanceDataStepRate(u32 bufferID) const = 0;
+		u32 getID() const
+		{
+			return ID;
+		}
 
-		virtual void setInstanceDataStepRate(E_INSTANCE_DATA_STEP_RATE rate, u32 bufferID) = 0;
+		const core::stringc& getName() const
+		{
+			return Name;
+		}
 
-		virtual bool addAttribute(const core::stringc& name, u32 elementCount, E_VERTEX_ATTRIBUTE_SEMANTIC semantic, E_VERTEX_ATTRIBUTE_TYPE type, u32 bufferID) = 0;
+		u32 getVertexSize(u32 bufferID) const
+		{
+			_IRR_DEBUG_BREAK_IF(bufferID >= VertexSize.size())
 
-		virtual IVertexAttribute* getAttribute(u32 id) const = 0;
+			return VertexSize[bufferID];
+		}
 
-		virtual IVertexAttribute* getAttributeByName(const core::stringc& name) const = 0;
+		E_INSTANCE_DATA_STEP_RATE getInstanceDataStepRate(u32 bufferID) const
+		{
+			_IRR_DEBUG_BREAK_IF(bufferID >= InstanceDataStepRate.size())
 
-		virtual IVertexAttribute* getAttributeBySemantic(E_VERTEX_ATTRIBUTE_SEMANTIC semantic) const = 0;
+			return InstanceDataStepRate[bufferID];
+		}
 
-		virtual u32 getAttributeCount() const = 0;
+		void setInstanceDataStepRate(E_INSTANCE_DATA_STEP_RATE rate, u32 bufferID)
+		{
+			_IRR_DEBUG_BREAK_IF(bufferID >= InstanceDataStepRate.size())
 
-		virtual bool removeAttribute(u32 id) = 0;
+			InstanceDataStepRate[bufferID] = rate;
+		}
 
-		virtual void removeAllAttribute() = 0;
+		virtual IVertexAttribute* addAttribute(const core::stringc& name, u32 elementCount, E_VERTEX_ATTRIBUTE_SEMANTIC semantic, E_VERTEX_ATTRIBUTE_TYPE type, u32 bufferID) = 0;
+
+		virtual void clearAttribute() = 0;
+
+		IVertexAttribute* getAttribute(u32 id) const
+		{
+			_IRR_DEBUG_BREAK_IF(id >= AttributePointer.size())
+
+			return AttributePointer[id];
+		}
+
+		IVertexAttribute* getAttributeByName(const core::stringc& name) const
+		{
+			for (u32 i = 0; i < AttributePointer.size(); ++i)
+				if (name == AttributePointer[i]->getName())
+					return AttributePointer[i];
+
+			return 0;
+		}
+
+		IVertexAttribute* getAttributeBySemantic(E_VERTEX_ATTRIBUTE_SEMANTIC semantic) const
+		{
+			IVertexAttribute* attribute = 0;
+
+			s32 ID = AttributeSemanticIndex[(u32)semantic];
+
+			if (ID >= 0)
+				attribute = AttributePointer[ID];
+
+			return attribute;
+		}
+
+		u32 getAttributeCount() const
+		{
+			return AttributePointer.size();
+		}
+
+	protected:
+		u32 ID;
+
+		core::stringc Name;
+
+		core::array<u32> VertexSize;
+		core::array<E_INSTANCE_DATA_STEP_RATE> InstanceDataStepRate;
+
+		s32 AttributeSemanticIndex[(u32)EVAS_COUNT];
+
+		core::array<IVertexAttribute*> AttributePointer;
 	};
 }
 }

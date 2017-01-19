@@ -21,10 +21,12 @@ CHDRGaussianBlur::CHDRGaussianBlur(CCP3DHandler *handler) : Handler(handler) {
 	
 	CallbackH = new CScreenQuadCB(Handler, true);
 	cmat.addDefine("GAUSSIAN_BLUR_H", "");
+	cmat.addDefine("POST_PROCESS", "");
 	MaterialTypeH = cmat.createMaterialFromFiles("Shaders/InternalHandler/ScreenQuad.vertex.fx", "Shaders/HDR/GaussianBlurH.fragment.fx", EMT_SOLID, CallbackH);
 
 	CallbackV = new CScreenQuadCB(Handler, true);
 	cmat.clearDefines();
+	cmat.addDefine("POST_PROCESS", "");
 	MaterialTypeV = cmat.createMaterialFromFiles("Shaders/InternalHandler/ScreenQuad.vertex.fx", "Shaders/HDR/GaussianBlurH.fragment.fx", EMT_SOLID, CallbackV);
 
 	CallbackH->uniformDescriptors["blurWidth"] = CScreenQuadCB::SUniformDescriptor(&GaussWidth, 1);

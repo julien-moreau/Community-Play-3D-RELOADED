@@ -45,7 +45,8 @@ public:
 		driver->setTransform(irr::video::ETS_WORLD, irr::core::matrix4());
 
 		#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
-		driver->drawMeshBuffer(Buffer);
+		if (driver->getDriverType() == irr::video::EDT_DIRECT3D11)
+			driver->drawMeshBuffer(Buffer);
 		#else
 		const irr::u16 indices[6] = { 0, 1, 2, 0, 2, 3 };
 		driver->drawIndexedTriangleList(&Vertices[0], 4, &indices[0], 2);

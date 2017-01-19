@@ -311,17 +311,6 @@ void CCP3DHandler::clear() {
 }
 
 s32 CCP3DHandler::GetShadowMaterialType(const u32 &lightsCount, const E_FILTER_TYPE &filterType, const bool &useRoundedSpotLight) {
-	/*
-	irr::core::map<irr::core::stringc, SUniformDescriptor>::Iterator mapIter = uniformDescriptors.getIterator();
-
-	for(;!mapIter.atEnd();mapIter++) {
-	if(mapIter.getNode()->getValue().fPointer == 0)
-	continue;
-
-	services->setPixelShaderConstant(mapIter.getNode()->getKey().c_str(), mapIter.getNode()->getValue().fPointer,
-	mapIter.getNode()->getValue().paramCount);
-	}
-	*/
 	SShadowMapType *shadowType = 0;
 
 	map<u32, array<SShadowMapType>>::Node *lightsShadowMapNode = ShadowsMap.find(lightsCount);
@@ -355,9 +344,9 @@ s32 CCP3DHandler::GetShadowMaterialType(const u32 &lightsCount, const E_FILTER_T
 	sPP.addShaderDefine("SAMPLE_AMOUNT", stringc(filterType));
 	sPP.addShaderDefine("LIGHTS_COUNT", stringc(lightsCount));
 
-	for (u32 i = 1; i < 6; i++) {
+	for (u32 i = 0; i < 6; i++) {
 		if (i < lightsCount)
-			sPP.addShaderDefine(stringc("SHADOW_MAP_SAMPLER") + stringc(i), stringc("ADD_SAMPLER_2D(ShadowMapSampler") + stringc(i + 1) + ", " + stringc(i) + ")");
+			sPP.addShaderDefine(stringc("SHADOW_MAP_SAMPLER") + stringc(i), stringc("ADD_SAMPLER_2D(ShadowMapSampler") + stringc(i) + ", " + stringc(i) + ")");
 		else
 			sPP.addShaderDefine(stringc("SHADOW_MAP_SAMPLER") + stringc(i), "");
 	}
@@ -401,7 +390,7 @@ void CCP3DHandler::update(ITexture *outputTarget) {
 	if(ShadowsUnsupported || smgr->getActiveCamera() == 0)
 		return;
 	
-	if(!ShadowNodeArray.empty() && !LightList.empty() && RenderShadows) {
+	if (!ShadowNodeArray.empty() && !LightList.empty() && RenderShadows) {
 		driver->setRenderTarget(ScreenQuad.rt[0], true, true, AmbientColour);
 
 		ICameraSceneNode* activeCam = smgr->getActiveCamera();
@@ -521,8 +510,8 @@ void CCP3DHandler::update(ITexture *outputTarget) {
 				core::array<irr::s32> BufferMaterialList(CurrentMaterialCount);
 				core::array<irr::video::ITexture*> BufferTextureList(CurrentMaterialCount);
 
-				const s32 shadowMaterialType = ShadowNodeArray[i].shadowsMaterial != -1 ? ShadowNodeArray[i].shadowsMaterial :
-					(LightList[l].UseRoundSpotLight) ? (E_MATERIAL_TYPE)ShadowRoundedSpot[ShadowNodeArray[i].filterType] : (E_MATERIAL_TYPE)Shadow[ShadowNodeArray[i].filterType];
+				const s32 shadowMaterialType = GetShadowMaterialType(LightList.size(), ShadowNodeArray[i].filterType, LightList[l].UseRoundSpotLight); /*ShadowNodeArray[i].shadowsMaterial != -1 ? ShadowNodeArray[i].shadowsMaterial :
+					(LightList[l].UseRoundSpotLight) ? (E_MATERIAL_TYPE)ShadowRoundedSpot[ShadowNodeArray[i].filterType] : (E_MATERIAL_TYPE)Shadow[ShadowNodeArray[i].filterType];*/
 				
 				for(u32 m = 0;m < CurrentMaterialCount;++m) {
 					BufferMaterialList.push_back(ShadowNodeArray[i].node->getMaterial(m).MaterialType);

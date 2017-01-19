@@ -11,7 +11,7 @@ namespace irr
 namespace video
 {
 
-CD3D11VertexDescriptor::CD3D11VertexDescriptor(ID3D11Device* device, const core::stringc& name, u32 id, u32 layerCount)
+CD3D11VertexDescriptor::CD3D11VertexDescriptor(ID3D11Device* device, const core::stringc& name, u32 id)
 	: CVertexDescriptor(name, id), Device(device)
 {
 #ifdef _DEBUG
@@ -30,37 +30,23 @@ CD3D11VertexDescriptor::~CD3D11VertexDescriptor()
 {
 	clear();
 
-	if(Device)
+	if (Device)
 		Device->Release();
 }
 
-bool CD3D11VertexDescriptor::addAttribute(const core::stringc& name, u32 elementCount, E_VERTEX_ATTRIBUTE_SEMANTIC semantic, E_VERTEX_ATTRIBUTE_TYPE type, u32 bufferID)
+IVertexAttribute* CD3D11VertexDescriptor::addAttribute(const core::stringc& name, u32 elementCount, E_VERTEX_ATTRIBUTE_SEMANTIC semantic, E_VERTEX_ATTRIBUTE_TYPE type, u32 bufferID)
 {
-	if(CVertexDescriptor::addAttribute(name, elementCount, semantic, type, bufferID))
-	{
+	IVertexAttribute* attribute = CVertexDescriptor::addAttribute(name, elementCount, semantic, type, bufferID);
+
+	if (attribute != 0)
 		clear();
 
-		return true;
-	}
-
-	return false;	
+	return attribute;
 }
 
-bool CD3D11VertexDescriptor::removeAttribute(u32 id)
+void CD3D11VertexDescriptor::clearAttribute()
 {
-	if(CVertexDescriptor::removeAttribute(id))
-	{
-		clear();
-
-		return true;
-	}
-
-	return false;	
-}
-
-void CD3D11VertexDescriptor::removeAllAttribute()
-{
-	CVertexDescriptor::removeAllAttribute();
+	CVertexDescriptor::clearAttribute();
 
 	clear();
 }
@@ -82,10 +68,10 @@ void CD3D11VertexDescriptor::rebuild()
 
 	for(u32 i = 0; i < size; ++i)
 	{
-		desc.SemanticName = getSemanticName(Attribute[i]->getSemantic());
+		desc.SemanticName = getSemanticName(Attribute[i].getSemantic());
 
 		u32 index = 0;
-		switch (Attribute[i]->getSemantic())
+		switch (Attribute[i].getSemantic())
 		{
 		case EVAS_TEXCOORD0:
 		case EVAS_TEXCOORD1:
@@ -98,15 +84,15 @@ void CD3D11VertexDescriptor::rebuild()
 			index = SemanticIndex[EVAS_TEXCOORD0];
 			break;
 		default:
-			index = SemanticIndex[Attribute[i]->getSemantic()];
+			index = SemanticIndex[Attribute[i].getSemantic()];
 		}
 
 		desc.SemanticIndex = index;
-		desc.Format = getFormat(Attribute[i]->getType(), Attribute[i]->getElementCount());
-		desc.InputSlot = Attribute[i]->getBufferID();
+		desc.Format = getFormat(Attribute[i].getType(), Attribute[i].getElementCount());
+		desc.InputSlot = Attribute[i].getBufferID();
 		desc.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 
-		if (getInstanceDataStepRate(Attribute[i]->getBufferID()) == 0 )
+		if (getInstanceDataStepRate(Attribute[i].getBufferID()) == 0 )
 		{
 			desc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 			desc.InstanceDataStepRate = 0;
@@ -114,12 +100,12 @@ void CD3D11VertexDescriptor::rebuild()
 		else
 		{
 			desc.InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
-			desc.InstanceDataStepRate = getInstanceDataStepRate(Attribute[i]->getBufferID());
+			desc.InstanceDataStepRate = getInstanceDataStepRate(Attribute[i].getBufferID());
 		}
 
 		InputLayoutDesc.push_back(desc);
 
-		switch (Attribute[i]->getSemantic())
+		switch (Attribute[i].getSemantic())
 		{
 		case EVAS_TEXCOORD0:
 		case EVAS_TEXCOORD1:
@@ -132,7 +118,7 @@ void CD3D11VertexDescriptor::rebuild()
 			++SemanticIndex[EVAS_TEXCOORD0];
 			break;
 		default:
-			++SemanticIndex[Attribute[i]->getSemantic()];
+			++SemanticIndex[Attribute[i].getSemantic()];
 		}
 
 	}

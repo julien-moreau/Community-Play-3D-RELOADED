@@ -399,8 +399,6 @@ void calculateTangents(
 
 void CMeshManipulator::recalculateTangents(IMeshBuffer* meshBuffer, bool recalculateNormals, bool smooth, bool angleWeighted) const
 {
-	// TO-DO : Parameters support.
-
 	if (!meshBuffer || !meshBuffer->isVertexBufferCompatible())
 		return;
 
@@ -466,15 +464,17 @@ void CMeshManipulator::recalculateTangents(IMeshBuffer* meshBuffer, bool recalcu
 
 	// Recalculate tangents.
 
-	core::vector3df* normal = 0;
-	core::vector3df* tangent = 0;
-	core::vector3df* binormal = 0;
-	core::vector3df* position0 = 0;
-	core::vector3df* position1 = 0;
-	core::vector3df* position2 = 0;
-	core::vector2df* texCoord0 = 0;
-	core::vector2df* texCoord1 = 0;
-	core::vector2df* texCoord2 = 0;
+	core::vector3df* normal[3] = { 0, 0, 0 };
+	core::vector3df* tangent[3] = { 0, 0, 0 };
+	core::vector3df* binormal[3] = { 0, 0, 0 };
+	core::vector3df* position[3] = { 0, 0, 0 };
+	core::vector2df* texCoord[3] = { 0, 0, 0 };
+
+	core::vector3df tmpNormal[3] = {
+		core::vector3df(0.f, 0.f, 0.f),
+		core::vector3df(0.f, 0.f, 0.f),
+		core::vector3df(0.f, 0.f, 0.f)
+	};
 
 	IIndexBuffer* ib = meshBuffer->getIndexBuffer();
 	IVertexBuffer* vbP = meshBuffer->getVertexBuffer(positionBufferID);
@@ -504,76 +504,73 @@ void CMeshManipulator::recalculateTangents(IMeshBuffer* meshBuffer, bool recalcu
 	u8* binormalData = static_cast<u8*>(vbB->getVertices());
 	binormalData += binormalOffset;
 
-	for (u32 i = 0; i < ib->getIndexCount(); i+=3)
+	for (u32 i = 0; i < ib->getIndexCount(); i += 3)
 	{
-		// Grab pointers to first vertex.
+		normal[0] = (core::vector3df*)(normalData + vertexSizeN * ib->getIndex(i));
+		normal[1] = (core::vector3df*)(normalData + vertexSizeN * ib->getIndex(i + 1));
+		normal[2] = (core::vector3df*)(normalData + vertexSizeN * ib->getIndex(i + 2));
+		tangent[0] = (core::vector3df*)(tangentData + vertexSizeT * ib->getIndex(i));
+		tangent[1] = (core::vector3df*)(tangentData + vertexSizeT * ib->getIndex(i + 1));
+		tangent[2] = (core::vector3df*)(tangentData + vertexSizeT * ib->getIndex(i + 2));
+		binormal[0] = (core::vector3df*)(binormalData + vertexSizeB * ib->getIndex(i));
+		binormal[1] = (core::vector3df*)(binormalData + vertexSizeB * ib->getIndex(i + 1));
+		binormal[2] = (core::vector3df*)(binormalData + vertexSizeB * ib->getIndex(i + 2));
+		position[0] = (core::vector3df*)(positionData + vertexSizeP * ib->getIndex(i));
+		position[1] = (core::vector3df*)(positionData + vertexSizeP * ib->getIndex(i + 1));
+		position[2] = (core::vector3df*)(positionData + vertexSizeP * ib->getIndex(i + 2));
+		texCoord[0] = (core::vector2df*)(texCoordData + vertexSizeC * ib->getIndex(i));
+		texCoord[1] = (core::vector2df*)(texCoordData + vertexSizeC * ib->getIndex(i + 1));
+		texCoord[2] = (core::vector2df*)(texCoordData + vertexSizeC * ib->getIndex(i + 2));
 
-		normal = (core::vector3df*)(normalData + vertexSizeN * ib->getIndex(i));
-		tangent = (core::vector3df*)(tangentData + vertexSizeT * ib->getIndex(i));
-		binormal = (core::vector3df*)(binormalData + vertexSizeB * ib->getIndex(i));
-		position0 = (core::vector3df*)(positionData + vertexSizeP * ib->getIndex(i));
-		position1 = (core::vector3df*)(positionData + vertexSizeP * ib->getIndex(i + 1));
-		position2 = (core::vector3df*)(positionData + vertexSizeP * ib->getIndex(i + 2));
-		texCoord0 = (core::vector2df*)(texCoordData + vertexSizeC * ib->getIndex(i));
-		texCoord1 = (core::vector2df*)(texCoordData + vertexSizeC * ib->getIndex(i + 1));
-		texCoord2 = (core::vector2df*)(texCoordData + vertexSizeC * ib->getIndex(i + 2));
+		calculateTangents(tmpNormal[0], *(tangent[0]), *(binormal[0]),
+			*(position[0]), *(position[1]), *(position[2]),
+			*(texCoord[0]), *(texCoord[1]), *(texCoord[2]));
 
-		calculateTangents(
-			*normal,
-			*tangent,
-			*binormal,
-			*position0,
-			*position1,
-			*position2,
-			*texCoord0,
-			*texCoord1,
-			*texCoord2);
+		calculateTangents(tmpNormal[1], *(tangent[1]), *(binormal[1]),
+			*(position[1]), *(position[2]), *(position[0]),
+			*(texCoord[1]), *(texCoord[2]), *(texCoord[0]));
 
-		// Grab pointers to second vertex.
+		calculateTangents(tmpNormal[2], *(tangent[2]), *(binormal[2]),
+			*(position[2]), *(position[0]), *(position[1]),
+			*(texCoord[2]), *(texCoord[0]), *(texCoord[1]));
 
-		normal = (core::vector3df*)(normalData + vertexSizeN * ib->getIndex(i + 1));
-		tangent = (core::vector3df*)(tangentData + vertexSizeT * ib->getIndex(i + 1));
-		binormal = (core::vector3df*)(binormalData + vertexSizeB * ib->getIndex(i + 1));
-		position0 = (core::vector3df*)(positionData + vertexSizeP * ib->getIndex(i + 1));
-		position1 = (core::vector3df*)(positionData + vertexSizeP * ib->getIndex(i + 2));
-		position2 = (core::vector3df*)(positionData + vertexSizeP * ib->getIndex(i));
-		texCoord0 = (core::vector2df*)(texCoordData + vertexSizeC * ib->getIndex(i + 1));
-		texCoord1 = (core::vector2df*)(texCoordData + vertexSizeC * ib->getIndex(i + 2));
-		texCoord2 = (core::vector2df*)(texCoordData + vertexSizeC * ib->getIndex(i));
+		if (smooth)
+		{
+			core::vector3df weight(1.f, 1.f, 1.f);
 
-		calculateTangents(
-			*normal,
-			*tangent,
-			*binormal,
-			*position0,
-			*position1,
-			*position2,
-			*texCoord0,
-			*texCoord1,
-			*texCoord2);
+			if (angleWeighted)
+				weight = getAngleWeight(*(position[0]), *(position[1]), *(position[2]));
 
-		// Grab pointers to third vertex.
+			if (recalculateNormals)
+			{
+				tmpNormal[0] *= weight.X;
+				*(normal[0]) = tmpNormal[0].normalize();
+				tmpNormal[1] *= weight.Y;
+				*(normal[1]) = tmpNormal[1].normalize();
+				tmpNormal[2] *= weight.Z;
+				*(normal[2]) = tmpNormal[2].normalize();
+			}
 
-		normal = (core::vector3df*)(normalData + vertexSizeN * ib->getIndex(i + 2));
-		tangent = (core::vector3df*)(tangentData + vertexSizeT * ib->getIndex(i + 2));
-		binormal = (core::vector3df*)(binormalData + vertexSizeB * ib->getIndex(i + 2));
-		position0 = (core::vector3df*)(positionData + vertexSizeP * ib->getIndex(i + 2));
-		position1 = (core::vector3df*)(positionData + vertexSizeP * ib->getIndex(i));
-		position2 = (core::vector3df*)(positionData + vertexSizeP * ib->getIndex(i + 1));
-		texCoord0 = (core::vector2df*)(texCoordData + vertexSizeC * ib->getIndex(i + 2));
-		texCoord1 = (core::vector2df*)(texCoordData + vertexSizeC * ib->getIndex(i));
-		texCoord2 = (core::vector2df*)(texCoordData + vertexSizeC * ib->getIndex(i + 1));
+			*(tangent[0]) *= weight.X;
+			(*(tangent[0])).normalize();
+			*(tangent[1]) *= weight.Y;
+			(*(tangent[1])).normalize();
+			*(tangent[2]) *= weight.Z;
+			(*(tangent[2])).normalize();
 
-		calculateTangents(
-			*normal,
-			*tangent,
-			*binormal,
-			*position0,
-			*position1,
-			*position2,
-			*texCoord0,
-			*texCoord1,
-			*texCoord2);
+			*(binormal[0]) *= weight.X;
+			(*(binormal[0])).normalize();
+			*(binormal[1]) *= weight.Y;
+			(*(binormal[1])).normalize();
+			*(binormal[2]) *= weight.Z;
+			(*(binormal[2])).normalize();
+		}
+		else if (recalculateNormals)
+		{
+			*(normal[0]) = tmpNormal[0];
+			*(normal[1]) = tmpNormal[1];
+			*(normal[2]) = tmpNormal[2];
+		}
 	}
 }
 
@@ -875,7 +872,8 @@ bool CMeshManipulator::copyVertices(IVertexBuffer* srcBuffer, u32 srcDescription
 	return true;
 }
 
-bool CMeshManipulator::createTangents(IMeshBuffer* srcBuffer, IMeshBuffer* dstBuffer, bool copyCustomAttribute)
+bool CMeshManipulator::createTangents(IMeshBuffer* srcBuffer, IMeshBuffer* dstBuffer, bool copyCustomAttribute,
+	bool recalculateNormals, bool smooth, bool angleWeighted)
 {
 	if (!srcBuffer || !srcBuffer->isVertexBufferCompatible() || !dstBuffer || !dstBuffer->isVertexBufferCompatible())
 		return false;
@@ -927,7 +925,7 @@ bool CMeshManipulator::createTangents(IMeshBuffer* srcBuffer, IMeshBuffer* dstBu
 
 	// Calculate tangents.
 
-	recalculateTangents(dstBuffer, false, false, false);
+	recalculateTangents(dstBuffer, recalculateNormals, smooth, angleWeighted);
 
 	return true;
 }
