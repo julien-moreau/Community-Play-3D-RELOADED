@@ -508,13 +508,15 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
   </ItemGroup>
   <ItemGroup>
     <None Include="..\CP3DR\Shaders\HDR\BrightPass.fragment.fx">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">
+      </ExcludedFromBuild>
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\CP3DR\Shaders\HDR\DownSample.fragment.fx">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">
+      </ExcludedFromBuild>
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
@@ -526,25 +528,29 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
   </ItemGroup>
   <ItemGroup>
     <None Include="..\CP3DR\Shaders\HDR\TextureAdder.fragment.fx">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">
+      </ExcludedFromBuild>
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\CP3DR\Shaders\HDR\Luminance.fragment.fx">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">
+      </ExcludedFromBuild>
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\CP3DR\Shaders\HDR\LuminanceDownSample.fragment.fx">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">
+      </ExcludedFromBuild>
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\CP3DR\Shaders\HDR\HDR.fragment.fx">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug D3D11|Win32'">
+      </ExcludedFromBuild>
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

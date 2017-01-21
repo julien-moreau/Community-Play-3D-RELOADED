@@ -210,10 +210,6 @@ private:
 	irr::s32 Depth;
 	irr::s32 DepthT;
 
-	/// Shadows
-	irr::s32 Shadow[EFT_COUNT];
-	irr::s32 ShadowRoundedSpot[EFT_COUNT];
-
 	/// Shadows v2
 	struct SShadowMapType {
 	public:

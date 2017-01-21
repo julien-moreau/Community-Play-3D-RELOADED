@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
 
 	SIrrlichtCreationParameters params;
 	params.DriverType = driverType;
-	params.WindowSize = dimension2du(1280, 800);
+	params.WindowSize = dimension2du(1920, 1080);
 	params.Bits = 32;
 	params.Fullscreen = false;
 	// params.Vsync = true;

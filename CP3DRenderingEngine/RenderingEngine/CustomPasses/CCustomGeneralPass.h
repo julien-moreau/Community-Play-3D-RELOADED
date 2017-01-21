@@ -24,6 +24,8 @@ public:
 	void setVolumetricLightScatteringNode(irr::scene::ISceneNode *node) { VolumetricLightScatteringNode = node; }
 	irr::scene::ISceneNode *getVolumetricLightScatteringNode() { return VolumetricLightScatteringNode; }
 
+	void addNodeToPass(irr::scene::ISceneNode *node);
+
 private:
 	irr::core::array<irr::video::IRenderTarget> RenderTargets;
 
@@ -34,6 +36,9 @@ private:
 	/// Light scattering
 	irr::scene::ISceneNode *VolumetricLightScatteringNode;
 
+	/// Velocity
+	irr::core::array<irr::core::matrix4> PrevWorldViewProjections;
+	irr::core::array<irr::f32 *> PrevWorldViewProjectionPointers;
 };
 
 } /// End namespace rendering

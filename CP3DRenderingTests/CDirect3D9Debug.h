@@ -50,6 +50,7 @@ namespace test {
 		lightNode->addAnimator(animator);
 
 		/// Skybox
+		/*
 		ISceneNode* skyboxNode = smgr->addSkyBoxSceneNode(
 			driver->getTexture("Textures/Skybox/glacier_up.png"),
 			driver->getTexture("Textures/Skybox/glacier_dn.png"),
@@ -57,37 +58,53 @@ namespace test {
 			driver->getTexture("Textures/Skybox/glacier_rt.png"),
 			driver->getTexture("Textures/Skybox/glacier_ft.png"),
 			driver->getTexture("Textures/Skybox/glacier_bk.png"));
+		*/
 
 		/// Create a test scene
 		IAnimatedMesh *planeMesh = smgr->addHillPlaneMesh("plane_mesh", dimension2d<f32>(100.f, 100.f), dimension2d<u32>(100, 100),
 			0, 0.f, dimension2d<f32>(0.f, 0.f), dimension2d<f32>(50.f, 50.f));
 
 		IMeshSceneNode *planeNode = smgr->addMeshSceneNode(planeMesh);
-		planeNode->setMaterialTexture(0, driver->getTexture("Textures/diffuse.tga"));
+		planeNode->setMaterialTexture(0, driver->getTexture("Textures/specular.tga"));
 		planeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
 		planeNode->setMaterialTexture(2, driver->getTexture("Textures/specular.tga"));
 		planeNode->setMaterialFlag(EMF_LIGHTING, false);
 		handler->addShadowToNode(planeNode, cp3d::rendering::EFT_16PCF, cp3d::rendering::ESM_BOTH);
 
 		IMeshSceneNode *cubeNode = smgr->addCubeSceneNode(50.f, 0, -1, vector3df(0.f, 25.f, 0.f), vector3df(0.f, 45.f, 0.f));
-		cubeNode->setMaterialTexture(0, driver->getTexture("Textures/specular.tga"));
+		cubeNode->setMaterialTexture(0, driver->getTexture("Textures/diffuse.tga"));
 		cubeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
 		cubeNode->setMaterialTexture(2, driver->getTexture("Textures/specular.tga"));
 		cubeNode->setMaterialFlag(EMF_LIGHTING, false);
 		handler->addShadowToNode(cubeNode, cp3d::rendering::EFT_16PCF, cp3d::rendering::ESM_BOTH);
 
+		array<vector3df> points;
+		points.push_back(vector3df(-150.f, 25.f, 0.f));
+		points.push_back(vector3df(150.f, 25.f, 0.f));
+		animator = smgr->createFollowSplineAnimator(0, points, 1.f, 1.5f, true, true);
+		cubeNode->addAnimator(animator);
+
+		animator = smgr->createRotationAnimator(vector3df(0.f, 4.5f, 0.f));
+		cubeNode->addAnimator(animator);
+
 		/// Clouds
 		#ifndef _IRR_COMPILE_WITH_DIRECT3D_11_
-		engine->getSceneNodeCreator()->createCloudNode(vector2df(0.008f, 0.0f), driver->getTexture("Textures/Clouds/cloud01.png"), 1.f, 0.5f, 0.1f, -0.05f);
-		engine->getSceneNodeCreator()->createCloudNode(vector2df(0.006f, 0.003f), driver->getTexture("Textures/Clouds/cloud02.png"), 0.4f, 0.05f, -0.1f, 0.5f);
-		engine->getSceneNodeCreator()->createCloudNode(vector2df(0.006f, 0.003f), driver->getTexture("Textures/Clouds/cloud03.png"), 0.035f, 0.f, -0.15f, 0.4f);
+		ISceneNode *cloud1 = engine->getSceneNodeCreator()->createCloudNode(vector2df(0.008f, 0.0f), driver->getTexture("Textures/Clouds/cloud01.png"), 1.f, 0.5f, 0.1f, -0.05f);
+		ISceneNode *cloud2 = engine->getSceneNodeCreator()->createCloudNode(vector2df(0.006f, 0.003f), driver->getTexture("Textures/Clouds/cloud02.png"), 0.4f, 0.05f, -0.1f, 0.5f);
+		ISceneNode *cloud3 = engine->getSceneNodeCreator()->createCloudNode(vector2df(0.006f, 0.003f), driver->getTexture("Textures/Clouds/cloud03.png"), 0.035f, 0.f, -0.15f, 0.4f);
 		#endif
 
 		/// SSAO and Depth
-		//cpre->getEffectsManager()->createSSAOEffect(true);
+		cpre->getEffectsManager()->createSSAOEffect(true);
 
 		handler->getDepthPassManager()->addNodeToPass(planeNode);
 		handler->getDepthPassManager()->addNodeToPass(cubeNode);
+
+		handler->getGeneralPassManager()->addNodeToPass(cubeNode);
+
+		//handler->getGeneralPassManager()->addNodeToPass(cloud1);
+		//handler->getGeneralPassManager()->addNodeToPass(cloud2);
+		//handler->getGeneralPassManager()->addNodeToPass(cloud3);
 
 		/// HDR
 		handler->getHDRManager()->setEnabled(true);
@@ -106,13 +123,13 @@ namespace test {
 		/// Get hdr texture
 		handler->update();
 
-		ITexture *hdrTexture = driver->getTexture("CP3DHandler_SM_4096");
+		ITexture *hdrTexture = driver->getTexture("CP3DVelocity");
 		IGUIImage *img = gui->addImage(rect<s32>(driver->getScreenSize().Width - 512, 0, driver->getScreenSize().Width, 512));
 		img->setScaleImage(true);
 		img->setImage(hdrTexture);
 
 		/// Update the application
-		engine->setDrawGUI(false);
+		engine->setDrawGUI(true);
 		engine->runEngine();
 	}
 

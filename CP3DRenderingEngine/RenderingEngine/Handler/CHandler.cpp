@@ -102,9 +102,6 @@ AmbientColour(0x0), Use32BitDepth(use32BitDepthBuffers), UseVSM(useVSMShadows), 
 			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/WhiteWashP.fragment.fx").c_str()).c_str(), "pixelMain", video::EPST_PS_2_0,
 			DepthMC, video::EMT_TRANSPARENT_ALPHA_CHANNEL);
 
-		if(useVSMShadows)
-			sPP.addShaderDefine("VSM");
-
 		const u32 sampleCounts[EFT_COUNT] = {1, 4, 8, 12, 16};
 
 		E_VERTEX_SHADER_TYPE vertexProfile = 
@@ -112,29 +109,6 @@ AmbientColour(0x0), Use32BitDepth(use32BitDepthBuffers), UseVSM(useVSMShadows), 
 
 		E_PIXEL_SHADER_TYPE pixelProfile = 
 			driver->queryFeature(video::EVDF_PIXEL_SHADER_3_0) ? EPST_PS_3_0 : EPST_PS_2_0;
-
-		for(u32 i = 0;i < EFT_COUNT;i++) {
-			sPP.addShaderDefine("SAMPLE_AMOUNT", core::stringc(sampleCounts[i]));
-
-			#ifdef _DEBUG
-			stringc v = sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.vertex.fx").c_str()).c_str();
-			stringc p = sPP.ppShader(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.fragment.fx").c_str()).c_str();
-			#endif
-
-			Shadow[i] = gpu->addHighLevelShaderMaterial(
-				sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
-				sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile,
-				ShadowMC, video::EMT_SOLID);
-			
-			if (useRoundSpotLights) {
-				sPP.addShaderDefine("ROUND_SPOTLIGHTS");
-				ShadowRoundedSpot[i] = gpu->addHighLevelShaderMaterial(
-					sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
-					sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile,
-					ShadowMC, video::EMT_SOLID);
-				sPP.removeShaderDefine("ROUND_SPOTLIGHTS");
-			}
-		}
 
 		// Set resolution preprocessor defines.
 		sPP.addShaderDefine("SCREENX", core::stringc(ScreenRTTSize.Width));
@@ -188,9 +162,6 @@ AmbientColour(0x0), Use32BitDepth(use32BitDepthBuffers), UseVSM(useVSMShadows), 
 		WhiteWashTAdd = EMT_TRANSPARENT_ADD_COLOR;
 		WhiteWashTAlpha = EMT_TRANSPARENT_ALPHA_CHANNEL;
 		Simple = EMT_SOLID;
-
-		for(u32 i = 0;i < EFT_COUNT;++i)
-			Shadow[i] = EMT_SOLID;
 
 		device->getLogger()->log("CP3DHandler: Shader effects not supported on this system.");
 		ShadowsUnsupported = true;

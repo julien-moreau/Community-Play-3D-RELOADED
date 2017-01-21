@@ -24,7 +24,7 @@ namespace cp3d {
 
 			/// Textures
 			irr::video::ITexture *LensTexture, *LensStarTexture, *LensDirtTexture;
-			irr::video::ITexture *DepthTexture;
+			irr::video::ITexture *DepthTexture, *VelocityTexture;
 			irr::video::ITexture *LensFlareRTT, *OtherRTT;
 
 			/// Datas
@@ -32,8 +32,8 @@ namespace cp3d {
 			irr::video::IVideoDriver *Driver;
 
 			/// Material
-			CScreenQuadCB *Callback, *CallbackFinal;
-			irr::s32 MaterialType, FinalMaterialType;
+			CScreenQuadCB *Callback, *CallbackFinal, *CallbackFinalObjectBased;
+			irr::s32 MaterialType, FinalMaterialType, FinalObjectBaseMaterialType;
 
 			/// Datas
 			irr::f32 Dispersal;

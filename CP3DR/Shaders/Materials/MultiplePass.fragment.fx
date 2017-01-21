@@ -1,3 +1,5 @@
+#define CP3D_MATERIAL 
+#define DIRECT3D_9 
 
 #ifdef OPENGL_DRIVER
 
@@ -42,6 +44,9 @@ SamplerState NormalSamplerST : register(s1);
 sampler2D NormalSampler : register(s1);
 #endif
 
+/// Velocity
+//float velocityFactor;
+
 struct VertexShaderOutput
 {
 	float4 Position : SV_Position;
@@ -51,12 +56,15 @@ struct VertexShaderOutput
 	float3 Normal : TEXCOORD2;
 	float3 Tangent : TEXCOORD3;
 	float3 BiNormal : TEXCOORD4;
+	float4 CurPosition : TEXCOORD5;
+	float4 PrevPosition : TEXCOORD6;
 };
 
 struct PixelOutput
 {
 	float4 NormalTarget	 : COLOR0;
 	float4 LSTarget		 : COLOR1;
+	float4 Velocity      : COLOR2;
 };
 
 PixelOutput pixelMain(VertexShaderOutput input) {
@@ -82,6 +90,15 @@ PixelOutput pixelMain(VertexShaderOutput input) {
 	float3x3 normalRotation = float3x3(input.Tangent, input.BiNormal, input.Normal);
 	output.NormalTarget.rgb = normalize( mul(texNormal.xyz, normalRotation) );
 	output.NormalTarget.a = length(input.ViewPos) / FarDistance;
+
+	/// Velocity
+	float2 a = (input.CurPosition.xy / input.CurPosition.w) * 0.5 + 0.5;
+	float2 b = (input.PrevPosition.xy / input.PrevPosition.w) * 0.5 + 0.5;
+	float2 velocity = (a - b) * 0.5 + 0.5;
+	velocity *= 0.5 + 0.5;
+	velocity = pow(velocity, 3.0);
+
+	output.Velocity = float4(velocity, 0.0, 1.0);
 
 	return (output);
 };

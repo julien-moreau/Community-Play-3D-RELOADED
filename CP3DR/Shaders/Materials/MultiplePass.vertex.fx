@@ -19,6 +19,7 @@ void main()
 cbuffer cbParams : register(b0)
 {
 	float4x4 WorldViewProj;
+	float4x4 PrevWorldViewProj;
 	float4x4 WorldView;
 };
 
@@ -38,6 +39,8 @@ struct VertexShaderOutput {
 	float3 Normal : TEXCOORD2;
 	float3 Tangent : TEXCOORD3;
 	float3 BiNormal : TEXCOORD4;
+	float4 CurPosition : TEXCOORD5;
+	float4 PrevPosition : TEXCOORD6;
 };
 
 VertexShaderOutput vertexMain(VertexShaderInput input) {
@@ -52,6 +55,10 @@ VertexShaderOutput vertexMain(VertexShaderInput input) {
 	output.Tangent = mul(WorldView, float4(input.Tangent, 0.0)).xyz;
 	output.BiNormal = cross(output.Normal, output.Tangent);
 	output.ViewPos = mul(WorldView, input.Position).xyz;
+
+	/// Velocity
+	output.CurPosition = mul(input.Position, WorldViewProj);
+	output.PrevPosition = mul(input.Position, PrevWorldViewProj);
 
 	return (output);
 }

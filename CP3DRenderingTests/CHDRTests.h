@@ -76,13 +76,13 @@ namespace cp3d {
 			light->getLightData().SpecularColor = SColorf(1.f, 1.f, 1.f, 1.f);
 			light->getShadowLight()->setUseRoundSpotLight(false);
 			light->getShadowLight()->setFarValue(1000.f);
-			light->setLightStrength(driver->getDriverType() == EDT_DIRECT3D9 ? 2.5f : 1.f);
-			light->getShadowLight()->setShadowMapResolution(4096);
+			light->setLightStrength(1.f);
+			light->getShadowLight()->setShadowMapResolution(1024);
 
 			ISceneNodeAnimator *animator = smgr->createFlyStraightAnimator(vector3df(-250.f, 200.f, -100.f), vector3df(250.f, 200.f, 100.f), 10000, true, true);
 
 			ILightSceneNode *lightNode = *light;
-			lightNode->addAnimator(animator);
+			// lightNode->addAnimator(animator);
 
 			/// Skybox
 			ISceneNode* skyboxNode = smgr->addSkyBoxSceneNode(
@@ -109,15 +109,26 @@ namespace cp3d {
 			handler->addShadowToNode(batman, rendering::EFT_16PCF, rendering::ESM_BOTH);
 
 			/// Clouds
-			engine->getSceneNodeCreator()->createCloudNode(vector2df(0.008f, 0.0f), driver->getTexture("Textures/Clouds/cloud01.png"), 1.f, 0.5f, 0.1f, -0.05f);
-			engine->getSceneNodeCreator()->createCloudNode(vector2df(0.006f, 0.003f), driver->getTexture("Textures/Clouds/cloud02.png"), 0.4f, 0.05f, -0.1f, 0.5f);
-			engine->getSceneNodeCreator()->createCloudNode(vector2df(0.006f, 0.003f), driver->getTexture("Textures/Clouds/cloud03.png"), 0.035f, 0.f, -0.15f, 0.4f);
+			#ifndef _IRR_COMPILE_WITH_DIRECT3D_11_
+			ISceneNode *cloud1 = engine->getSceneNodeCreator()->createCloudNode(vector2df(0.008f, 0.0f), driver->getTexture("Textures/Clouds/cloud01.png"), 1.f, 0.5f, 0.1f, -0.05f);
+			ISceneNode *cloud2 = engine->getSceneNodeCreator()->createCloudNode(vector2df(0.006f, 0.003f), driver->getTexture("Textures/Clouds/cloud02.png"), 0.4f, 0.05f, -0.1f, 0.5f);
+			ISceneNode *cloud3 = engine->getSceneNodeCreator()->createCloudNode(vector2df(0.006f, 0.003f), driver->getTexture("Textures/Clouds/cloud03.png"), 0.035f, 0.f, -0.15f, 0.4f);
+			#endif
 
 			/// SSAO and Depth
 			cpre->getEffectsManager()->createSSAOEffect(true);
 
 			handler->getDepthPassManager()->addNodeToPass(sponza);
 			handler->getDepthPassManager()->addNodeToPass(batman);
+
+			/// General pass
+			handler->getGeneralPassManager()->addNodeToPass(skyboxNode);
+			//handler->getGeneralPassManager()->addNodeToPass(cloud1);
+			//handler->getGeneralPassManager()->addNodeToPass(cloud2);
+			//handler->getGeneralPassManager()->addNodeToPass(cloud3);
+
+			handler->getGeneralPassManager()->addNodeToPass(batman);
+			handler->getGeneralPassManager()->addNodeToPass(sponza);
 
 			/// HDR
 			handler->getHDRManager()->setEnabled(true);
@@ -136,13 +147,13 @@ namespace cp3d {
 			/// Get hdr texture
 			handler->update();
 
-			ITexture *hdrTexture = driver->getTexture("CP3DHandler_SM_4096");
+			ITexture *hdrTexture = driver->getTexture("CP3DVelocity");
 			IGUIImage *img = gui->addImage(rect<s32>(driver->getScreenSize().Width - 512, 0, driver->getScreenSize().Width, 512));
 			img->setScaleImage(true);
 			img->setImage(hdrTexture);
 
 			/// Update the application
-			engine->setDrawGUI(false);
+			engine->setDrawGUI(true);
 			engine->runEngine();
 		}
 
