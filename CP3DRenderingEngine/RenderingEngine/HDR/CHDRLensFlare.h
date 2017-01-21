@@ -32,8 +32,8 @@ namespace cp3d {
 			irr::video::IVideoDriver *Driver;
 
 			/// Material
-			CScreenQuadCB *Callback, *CallbackFinal, *CallbackFinalObjectBased;
-			irr::s32 MaterialType, FinalMaterialType, FinalObjectBaseMaterialType;
+			CScreenQuadCB *Callback, *CallbackFinal;
+			irr::s32 MaterialType, FinalMaterialType;
 
 			/// Datas
 			irr::f32 Dispersal;

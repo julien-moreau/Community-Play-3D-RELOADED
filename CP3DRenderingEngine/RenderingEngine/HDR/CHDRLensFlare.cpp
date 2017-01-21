@@ -43,14 +43,6 @@ CHDRLensFlare::CHDRLensFlare(CCP3DHandler *handler) : Handler(handler), LensText
 	cmat.addDefine("POST_PROCESS", "");
 	FinalMaterialType = cmat.createMaterialFromFiles("Shaders/InternalHandler/ScreenQuad.vertex.fx", "Shaders/HDR/LensFlareFinal.fragment.fx", EMT_SOLID, CallbackFinal);
 
-	/// Lens Flare final object based motion blur
-	CallbackFinalObjectBased = new CScreenQuadCB(Handler, true);
-	CallbackFinalObjectBased->uniformDescriptors["motionScale"] = CScreenQuadCB::SUniformDescriptor(&MotionScale, 1);
-	CallbackFinalObjectBased->uniformDescriptors["lensStarMatrix"] = CScreenQuadCB::SUniformDescriptor(LensStarMatrix.pointer(), 16);
-
-	cmat.addDefine("OBJECT_BASED_MOTION_BLUR", "");
-	FinalObjectBaseMaterialType = cmat.createMaterialFromFiles("Shaders/InternalHandler/ScreenQuad.vertex.fx", "Shaders/HDR/LensFlareFinal.fragment.fx", EMT_SOLID, CallbackFinalObjectBased);
-
 	Dispersal = 0.1f;
 	HaloWidth = 0.4f;
 	Distortion = 16.f;

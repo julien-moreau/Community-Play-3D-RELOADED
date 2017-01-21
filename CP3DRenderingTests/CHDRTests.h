@@ -77,12 +77,12 @@ namespace cp3d {
 			light->getShadowLight()->setUseRoundSpotLight(false);
 			light->getShadowLight()->setFarValue(1000.f);
 			light->setLightStrength(1.f);
-			light->getShadowLight()->setShadowMapResolution(1024);
+			light->getShadowLight()->setShadowMapResolution(4096);
 
 			ISceneNodeAnimator *animator = smgr->createFlyStraightAnimator(vector3df(-250.f, 200.f, -100.f), vector3df(250.f, 200.f, 100.f), 10000, true, true);
 
 			ILightSceneNode *lightNode = *light;
-			// lightNode->addAnimator(animator);
+			lightNode->addAnimator(animator);
 
 			/// Skybox
 			ISceneNode* skyboxNode = smgr->addSkyBoxSceneNode(
@@ -96,7 +96,7 @@ namespace cp3d {
 			/// Sponza
 			IMeshSceneNode *sponza = smgr->addMeshSceneNode(smgr->getMesh("data/chinese.obj"), 0, -1, vector3df(0.f), vector3df(0.f), vector3df(3.5f));
 			sponza->setMaterialType(cpre->Materials[EMT_NORMAL_MAP_SOLID]);
-			handler->addShadowToNode(sponza, rendering::EFT_16PCF, rendering::ESM_BOTH);
+			handler->addShadowToNode(sponza, rendering::EFT_NONE, rendering::ESM_BOTH);
 
 			/// Batman
 			IAnimatedMeshSceneNode *batman = smgr->addAnimatedMeshSceneNode(smgr->getMesh("data/batman.x"), 0, -1, vector3df(10.f, -19.f, -30.f), vector3df(0.f), vector3df(0.3f));
@@ -106,7 +106,7 @@ namespace cp3d {
 			batman->setMaterialTexture(0, driver->getTexture("data/batman/IOS_Batman_Diff.jpg"));
 			batman->setMaterialTexture(1, driver->getTexture("data/batman/IOS_Batman_Norm.jpg"));
 			batman->setMaterialTexture(2, driver->getTexture("data/batman/IOS_Batman_Spec.jpg"));
-			handler->addShadowToNode(batman, rendering::EFT_16PCF, rendering::ESM_BOTH);
+			handler->addShadowToNode(batman, rendering::EFT_NONE, rendering::ESM_BOTH);
 
 			/// Clouds
 			#ifndef _IRR_COMPILE_WITH_DIRECT3D_11_
@@ -122,13 +122,7 @@ namespace cp3d {
 			handler->getDepthPassManager()->addNodeToPass(batman);
 
 			/// General pass
-			handler->getGeneralPassManager()->addNodeToPass(skyboxNode);
-			//handler->getGeneralPassManager()->addNodeToPass(cloud1);
-			//handler->getGeneralPassManager()->addNodeToPass(cloud2);
-			//handler->getGeneralPassManager()->addNodeToPass(cloud3);
-
 			handler->getGeneralPassManager()->addNodeToPass(batman);
-			handler->getGeneralPassManager()->addNodeToPass(sponza);
 
 			/// HDR
 			handler->getHDRManager()->setEnabled(true);

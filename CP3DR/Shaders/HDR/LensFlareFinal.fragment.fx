@@ -59,62 +59,26 @@ CP3DTexture ScreenMapSampler : registerTexture(t1);
 CP3DTexture DepthMapSampler : registerTexture(t2);
 CP3DTexture LensStarSampler : registerTexture(t3);
 CP3DTexture LensDirtSampler : registerTexture(t4);
-
-#ifdef OBJECT_BASED_MOTION_BLUR
 CP3DTexture VelocitySampler : registerTexture(t5);
-#endif
 
 SamplerState ColorMapSamplerST : register(s0);
 SamplerState ScreenMapSamplerST : register(s1);
 SamplerState DepthMapSamplerST : register(s2);
 SamplerState LensStarSamplerST : register(s3);
 SamplerState LensDirtSamplerST : register(s4);
-
-#ifdef OBJECT_BASED_MOTION_BLUR
 SamplerState VelocitySamplerST : register(s5);
-#endif
 
 float motionScale;
 
-#ifndef OBJECT_BASED_MOTION_BLUR
 float4x4 inverseViewProjection;
 float4x4 prevViewProjection;
-#endif
-
 float4x4 lensStarMatrix;
 
 inline float4 motionBlur(float2 texCoord, float2 screenSize) {
 	// Common
 	float2 texelSize = 1.0 / screenSize;
-	int nSamples = 0;
-
-	#ifdef OBJECT_BASED_MOTION_BLUR
-	// Velocity
-	float4 result = float4(0.0, 0.0, 0.0, 0.0);
-
-	float2 velocity = pow(CP3DTex2D(VelocitySampler, texCoord, VelocitySamplerST).rg, 1.0 / 3.0) * 2.0 - 1.0;
-	velocity *= motionScale;
-
-	float speed = length(velocity / texelSize);
-	nSamples = clamp(int(speed), 1.0, MAX_MOTION_SAMPLES);
-
-	velocity = normalize(velocity) * texelSize;
-	
-	float hlim = float(-nSamples) * 0.5 + 0.5;
-
-	for (int i = 0; i < nSamples; ++i) {
-		float2 offset = velocity * (hlim + float(i));
-		result += CP3DTex2D(ScreenMapSampler, texCoord + offset, ScreenMapSamplerST);
-	}
-
-	result /= float(nSamples);
-
-	return result;
-	#else
 
 	// Motion blur
-	float4 result = float4(0.0, 0.0, 0.0, 0.0);
-
 	float depth = CP3DTex2D(DepthMapSampler, texCoord, DepthMapSamplerST).r;
 
 	float4 cpos = float4(texCoord * 2.0 - 1.0, depth, 1.0);
@@ -124,22 +88,40 @@ inline float4 motionBlur(float2 texCoord, float2 screenSize) {
 	ppos.xyz /= ppos.w;
 	ppos.xy = ppos.xy * 0.5 + 0.5;
 
-	float2 velocity = (ppos.xy - texCoord) * motionScale;
+	float2 velocity1 = (ppos.xy - texCoord) * motionScale;
+	float speed = length(velocity1 / texelSize);
+	int nSamples1 = clamp(speed, 1.0, MAX_MOTION_SAMPLES);
 
-	float speed = length(velocity / texelSize); // speed in pixels/second
-	nSamples = clamp(speed, 1.0, MAX_MOTION_SAMPLES);
+	// Object based motion blur
+	float2 velocity2 = pow(CP3DTex2D(VelocitySampler, texCoord, VelocitySamplerST).rg, 1.0 / 3.0) * 2.0 - 1.0;
+	velocity2 *= motionScale;
 
-	result = CP3DTex2D(ScreenMapSampler, texCoord, ScreenMapSamplerST);
+	speed = length(velocity2 / texelSize);
+	int nSamples2 = clamp(int(speed), 1.0, MAX_MOTION_SAMPLES);
 
-	for (int i = 1; i < nSamples; ++i) {
-		float2 offset = texCoord + velocity * (float(i) / float(nSamples - 1) - 0.5);
-		result += CP3DTex2D(ScreenMapSampler, offset, ScreenMapSamplerST);
+	velocity2 = normalize(velocity2) * texelSize;
+	float hlim = float(-nSamples2) * 0.5 + 0.5;
+
+	// Render
+	float4 result = CP3DTex2D(ScreenMapSampler, texCoord, ScreenMapSamplerST);
+	int nSamples = max(nSamples1, nSamples2);
+
+	if (nSamples1 > nSamples2) {
+		for (int i = 1; i < nSamples; ++i) {
+			float2 offset1 = texCoord + velocity1 * (float(i) / float(nSamples1 - 1) - 0.5);
+			result += CP3DTex2D(ScreenMapSampler, offset1, ScreenMapSamplerST);
+		}
+	}
+	else {
+		for (int i = 1; i < nSamples; ++i) {
+			float2 offset2 = texCoord + velocity2 * (hlim + float(i));
+			result += CP3DTex2D(ScreenMapSampler, offset2, ScreenMapSamplerST);
+		}
 	}
 
 	result /= float(nSamples);
 
 	return result;
-	#endif
 }
 
 float4 pixelMain(VS_OUTPUT In) : COLOR0 {

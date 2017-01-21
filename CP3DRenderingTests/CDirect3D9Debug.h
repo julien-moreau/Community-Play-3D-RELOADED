@@ -50,7 +50,6 @@ namespace test {
 		lightNode->addAnimator(animator);
 
 		/// Skybox
-		/*
 		ISceneNode* skyboxNode = smgr->addSkyBoxSceneNode(
 			driver->getTexture("Textures/Skybox/glacier_up.png"),
 			driver->getTexture("Textures/Skybox/glacier_dn.png"),
@@ -58,7 +57,6 @@ namespace test {
 			driver->getTexture("Textures/Skybox/glacier_rt.png"),
 			driver->getTexture("Textures/Skybox/glacier_ft.png"),
 			driver->getTexture("Textures/Skybox/glacier_bk.png"));
-		*/
 
 		/// Create a test scene
 		IAnimatedMesh *planeMesh = smgr->addHillPlaneMesh("plane_mesh", dimension2d<f32>(100.f, 100.f), dimension2d<u32>(100, 100),
@@ -102,13 +100,9 @@ namespace test {
 
 		handler->getGeneralPassManager()->addNodeToPass(cubeNode);
 
-		//handler->getGeneralPassManager()->addNodeToPass(cloud1);
-		//handler->getGeneralPassManager()->addNodeToPass(cloud2);
-		//handler->getGeneralPassManager()->addNodeToPass(cloud3);
-
 		/// HDR
 		handler->getHDRManager()->setEnabled(true);
-		handler->getHDRManager()->setBrightnessThreshold(0.8f);
+		handler->getHDRManager()->setBrightnessThreshold(1.f);
 		handler->getHDRManager()->setGaussWidth(2.f);
 		handler->getHDRManager()->setGaussianCoefficient(0.25f);
 		handler->getHDRManager()->setMinimumLuminance(0.5f);
@@ -123,7 +117,7 @@ namespace test {
 		/// Get hdr texture
 		handler->update();
 
-		ITexture *hdrTexture = driver->getTexture("CP3DVelocity");
+		ITexture *hdrTexture = driver->getTexture("CP3DNormalPass");
 		IGUIImage *img = gui->addImage(rect<s32>(driver->getScreenSize().Width - 512, 0, driver->getScreenSize().Width, 512));
 		img->setScaleImage(true);
 		img->setImage(hdrTexture);
