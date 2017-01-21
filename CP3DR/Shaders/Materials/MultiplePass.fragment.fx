@@ -88,8 +88,8 @@ PixelOutput pixelMain(VertexShaderOutput input) {
 	float4 texNormal = (tex2D(NormalSampler, input.TexCoord) - 0.5) * 2.0;
 	#endif
 	float3x3 normalRotation = float3x3(input.Tangent, input.BiNormal, input.Normal);
-	output.NormalTarget.rgb = normalize( mul(texNormal.xyz, normalRotation) );
-	output.NormalTarget.a = 1.0; // length(input.ViewPos) / FarDistance;
+	output.NormalTarget.rgb = normalize( mul(normalRotation, texNormal.xyz) );
+	output.NormalTarget.a = length(input.ViewPos) / FarDistance;
 
 	/// Velocity
 	float2 a = (input.CurPosition.xy / input.CurPosition.w) * 0.5 + 0.5;

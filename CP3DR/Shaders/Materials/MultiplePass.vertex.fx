@@ -51,16 +51,16 @@ VertexShaderOutput vertexMain(VertexShaderInput input) {
 	output.TexCoord = input.TexCoord;
 
 	/// Normal
-	output.Normal = mul(WorldView, float4(input.Normal, 0.0)).xyz;
-	output.Tangent = mul(WorldView, float4(input.Tangent, 0.0)).xyz;
+	output.Normal = mul(float4(input.Normal, 0.0), WorldView).xyz;
+	output.Tangent = mul(float4(input.Tangent, 0.0), WorldView).xyz;
 	output.BiNormal = cross(output.Normal, output.Tangent);
-	output.ViewPos = mul(WorldView, input.Position).xyz;
+	output.ViewPos = mul(input.Position, WorldView).xyz;
 
 	/// Velocity
 	output.CurPosition = mul(input.Position, WorldViewProj);
 	output.PrevPosition = mul(input.Position, PrevWorldViewProj);
 
-	return (output);
+	return output;
 }
 
 #endif
