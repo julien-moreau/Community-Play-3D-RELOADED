@@ -7,6 +7,7 @@
 //#define CP3DR_HANDLE_SRGB
 #define CP3DR_HIGH_PRECISION_FPU
 #define CP3DR_DOUBLE_BUFFER
+#define CP3DR_DRIVER_MULTITHREADED
 
 namespace cp3d {
 
@@ -22,13 +23,13 @@ namespace cp3d {
 
 		/// Create device
 		irr::SIrrlichtCreationParameters params;
-		params.AntiAlias = true;
+		params.AntiAlias = false;
 		params.Bits = 32;
 		params.Fullscreen = false;
 		params.LoggingLevel = irr::ELL_DEBUG;
 		params.WindowSize = desktopSize;
 		params.WithAlphaChannel = false;
-		params.DriverType = irr::video::EDT_DIRECT3D9;
+		params.DriverType = irr::video::EDT_OPENGL;
 		params.EventReceiver = 0;
 
 		#ifdef CP3DR_EDITOR_DIRECT3D11

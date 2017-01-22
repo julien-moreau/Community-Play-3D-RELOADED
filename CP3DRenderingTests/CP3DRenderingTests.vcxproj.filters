@@ -32,6 +32,9 @@
     <ClInclude Include="CHDRTests.h">
       <Filter>Sources</Filter>
     </ClInclude>
+    <ClInclude Include="CSkinnedMeshTest.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

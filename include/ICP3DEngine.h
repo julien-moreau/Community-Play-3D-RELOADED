@@ -16,6 +16,7 @@ class ICP3DCustomUpdater;
 class ICP3DSceneNodeCreator;
 class ICP3DGeometryCreator;
 class ICP3DExporter;
+class ICP3DAnimatedMeshSceneNodeManipulator;
 
 class ICP3DEngine {
 public:
@@ -78,6 +79,10 @@ public:
 	//! Creates an exporter instance
 	//! \return: a new exporter instance
 	virtual ICP3DExporter *createExporter() = 0;
+
+	//! Returns the animated mesh scene node manipulator
+	//! returns: the instance to the animated mesh scene node manipulator
+	virtual ICP3DAnimatedMeshSceneNodeManipulator *getAnimatedMeshSceneNodeManipulator() = 0;
 
 };
 

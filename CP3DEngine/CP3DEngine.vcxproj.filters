@@ -48,6 +48,9 @@
     <Filter Include="include\collaborative\editor\ui">
       <UniqueIdentifier>{3f495270-f5f1-43de-98df-c9b4d7f2a445}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\IO\Scene\AnimatedMeshSceneNode">
+      <UniqueIdentifier>{d97d3bc7-6a8b-44e1-8d1c-956f18de3bac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\CP3DCompileConfig.h">
@@ -209,6 +212,12 @@
     <ClInclude Include="..\include\ICP3DAnimator.h">
       <Filter>include\rendering</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Scene\AnimatedMeshSceneNode\CAnimatedMeshSceneNodeManipulator.h">
+      <Filter>Engine\IO\Scene\AnimatedMeshSceneNode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ICP3DAnimatedMeshSceneNodeManipulator.h">
+      <Filter>include\engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DEngine.cpp">
@@ -252,6 +261,9 @@
     </ClCompile>
     <ClCompile Include="Engine\IO\CCP3DImporter.cpp">
       <Filter>Engine\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scene\AnimatedMeshSceneNode\CAnimatedMeshSceneNodeManipulator.cpp">
+      <Filter>Engine\IO\Scene\AnimatedMeshSceneNode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

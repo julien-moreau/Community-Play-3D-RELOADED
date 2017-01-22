@@ -17,7 +17,6 @@ namespace rendering {
 
 		//! animates a scene node
 		virtual void animateNode(irr::scene::ISceneNode* node, irr::u32 timeMs) {
-			Diff = timeMs - LastTime;
 			LastTime = timeMs;
 		}
 
@@ -47,7 +46,6 @@ namespace rendering {
 		T Data;
 
 		/// Animator datas
-		irr::u32 Diff;
 		irr::u32 LastTime;
 	};
 

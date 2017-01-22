@@ -42,6 +42,8 @@ CCP3DEngine::CCP3DEngine(IrrlichtDevice *device) : Device(device), DrawGUI(false
 	SceneNodeCreator = new CCP3DSceneNodeCreator(Rengine);
 	GeometryCreator = new CCP3DGeometryCreator(Rengine->getSceneManager());
 
+	AnimatedMeshSceneNodeManipulator = new CCP3DAnimatedMeshSceneNodeManipulator(device->getSceneManager());
+
 	/// Finish
 	Gui = device->getGUIEnvironment();
 }
@@ -107,6 +109,10 @@ CCP3DSceneNodeCreator *CCP3DEngine::getSceneNodeCreator() {
 }
 CCP3DGeometryCreator *CCP3DEngine::getGeometryCreator() {
 	return GeometryCreator;
+}
+
+ICP3DAnimatedMeshSceneNodeManipulator *CCP3DEngine::getAnimatedMeshSceneNodeManipulator() {
+	return AnimatedMeshSceneNodeManipulator;
 }
 
 CCP3DExporter *CCP3DEngine::createExporter() {

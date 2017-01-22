@@ -22,6 +22,15 @@ void main() {
 
 	gl_FragData[0].rgb = normalize(texNormal.xyz * normalRotation);
 	gl_FragData[0].a = length(gl_TexCoord[4]) / FarDistance;
+
+	/// Velocity
+	vec2 a = (gl_TexCoord[5].xy / gl_TexCoord[5].w) * 0.5 + 0.5;
+	vec2 b = (gl_TexCoord[6].xy / gl_TexCoord[6].w) * 0.5 + 0.5;
+	vec2 velocity = (a - b) * 0.5 + 0.5;
+	velocity *= 0.5 + 0.5;
+	velocity = vec2(pow(velocity.x, 3.0), pow(velocity.y, 3.0));
+
+	gl_FragData[2] = vec4(velocity, 0.0, 1.0);
 }
 
 #else

@@ -61,6 +61,8 @@ private:
 	SCP3DInterfaceData SceneNodeScaleX, SceneNodeScaleY, SceneNodeScaleZ;
 	SCP3DInterfaceData SceneNodeSetShadowed, SceneNodeShadowType, SceneNodeFilterType;
 
+	SCP3DInterfaceData SceneNodeAnimationSpeed;
+
 	/// Materials
 	SCP3DInterfaceData MaterialName;
 	SCP3DInterfaceData MaterialSelector;

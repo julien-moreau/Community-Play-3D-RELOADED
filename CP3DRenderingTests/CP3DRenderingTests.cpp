@@ -9,6 +9,7 @@
 #include "CDirect3D11Tests.h"
 #include "CDirect3D9Debug.h"
 #include "CHDRTests.h"
+#include "CSkinnedMeshTest.h"
 
 /// Irrlicht namespaces
 using namespace irr;
@@ -41,7 +42,7 @@ private:
 int main(int argc, char* argv[]) {
 
 	/// Create a device
-	irr::video::E_DRIVER_TYPE driverType = EDT_DIRECT3D9;
+	irr::video::E_DRIVER_TYPE driverType = EDT_OPENGL;
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
 	// Automatically test the D3D11 driver
 	driverType = EDT_DIRECT3D11;
@@ -52,7 +53,7 @@ int main(int argc, char* argv[]) {
 	params.WindowSize = dimension2du(1920, 1080);
 	params.Bits = 32;
 	params.Fullscreen = false;
-	// params.Vsync = true;
+	params.Vsync = true;
 	params.DriverMultithreaded = true;
 	params.Doublebuffer = true;
 	IrrlichtDevice *device = createDeviceEx(params);
@@ -72,8 +73,9 @@ int main(int argc, char* argv[]) {
 
 	//cp3d::test::GlobalTest(device);
 	//cp3d::test::Direct3D11Test(device);
-	cp3d::test::Direct3D9Debug(device, new CEventReceiver(device));
-	//cp3d::test::HDRTest(device, new CEventReceiver(device));
+	//cp3d::test::Direct3D9Debug(device, new CEventReceiver(device));
+	cp3d::test::HDRTest(device, new CEventReceiver(device));
+	//cp3d::test::SkinnedMeshDebug(device, new CEventReceiver(device));
 
 	return EXIT_SUCCESS;
 }

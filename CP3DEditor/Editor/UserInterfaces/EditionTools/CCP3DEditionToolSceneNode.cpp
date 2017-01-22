@@ -77,6 +77,10 @@ void CCP3DEditionToolSceneNode::createInterface() {
 			SceneNodeFilterType.ComboBox->addItem(stringw(rendering::FilterTypeNames[i]).c_str());
 	}
 
+	if (SceneNode->getType() == ESNT_ANIMATED_MESH) {
+		SceneNodeAnimationSpeed = EditionTool->addField(GeneralTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Animation Speed :"));
+	}
+
 	/// Materials
 	if (SceneNode->getType() != ESNT_LIGHT) {
 		/// General
@@ -185,6 +189,10 @@ void CCP3DEditionToolSceneNode::configure() {
 		SceneNodeFilterType.ComboBox->setEnabled(SceneNodeSetShadowed.CheckBox->isChecked());
 	}
 
+	if (SceneNode->getType() == ESNT_ANIMATED_MESH) {
+		SceneNodeAnimationSpeed.TextBox->setText(stringw(((IAnimatedMeshSceneNode *)SceneNode)->getAnimationSpeed()).c_str());
+	}
+
 	/// Materials
 	if (SceneNode->getType() != ESNT_LIGHT) {
 		/// General
@@ -282,6 +290,10 @@ void CCP3DEditionToolSceneNode::apply() {
 	Handler->removeShadowFromNode(SceneNode);
 	if (SceneNodeSetShadowed.CheckBox->isChecked())
 		Handler->addShadowToNode(SceneNode, filterType, shadowMode);
+
+	if (SceneNode->getType() == ESNT_ANIMATED_MESH) {
+		((IAnimatedMeshSceneNode *)SceneNode)->setAnimationSpeed(core::fast_atof(stringc(SceneNodeAnimationSpeed.TextBox->getText()).c_str()));
+	}
 
 	/// Materials
 	if (SceneNode->getType() != ESNT_LIGHT) {

@@ -282,9 +282,7 @@ void CCP3DEditorCore::createTestScene() {
 	Handler->getDepthPassManager()->addNodeToPass(planeNode);
 	Handler->getDepthPassManager()->addNodeToPass(cubeNode);
 
-	Handler->getGeneralPassManager()->addNodeToPass(planeNode);
 	Handler->getGeneralPassManager()->addNodeToPass(cubeNode);
-	Handler->getGeneralPassManager()->addNodeToPass(bill);
 
 	Handler->getHDRManager()->setEnabled(true);
 	Handler->getHDRManager()->setBrightnessThreshold(0.8f);

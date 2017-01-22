@@ -117,7 +117,7 @@ namespace test {
 		/// Get hdr texture
 		handler->update();
 
-		ITexture *hdrTexture = driver->getTexture("CP3DNormalPass");
+		ITexture *hdrTexture = driver->getTexture("CP3DVelocity");
 		IGUIImage *img = gui->addImage(rect<s32>(driver->getScreenSize().Width - 512, 0, driver->getScreenSize().Width, 512));
 		img->setScaleImage(true);
 		img->setImage(hdrTexture);
