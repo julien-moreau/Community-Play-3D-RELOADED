@@ -288,7 +288,7 @@ s32 CCP3DHandler::GetShadowMaterialType(const u32 &lightsCount, const E_FILTER_T
 	if (lightsShadowMapNode) {
 		shadowType = &lightsShadowMapNode->getValue()[filterType];
 
-		if (shadowType->ShadowType && shadowType->ShadowRoundedSpotType)
+		if (shadowType->ShadowType != -1 && shadowType->ShadowRoundedSpotType != -1)
 			return useRoundedSpotLight ? shadowType->ShadowRoundedSpotType : shadowType->ShadowType;
 	}
 
@@ -312,7 +312,7 @@ s32 CCP3DHandler::GetShadowMaterialType(const u32 &lightsCount, const E_FILTER_T
 	E_VERTEX_SHADER_TYPE vertexProfile = driver->queryFeature(video::EVDF_VERTEX_SHADER_3_0) ? EVST_VS_3_0 : EVST_VS_2_0;
 	E_PIXEL_SHADER_TYPE pixelProfile = driver->queryFeature(video::EVDF_PIXEL_SHADER_3_0) ? EPST_PS_3_0 : EPST_PS_2_0;
 
-	sPP.addShaderDefine("SAMPLE_AMOUNT", stringc(filterType));
+	sPP.addShaderDefine("SAMPLE_AMOUNT", stringc(filterType + 1));
 	sPP.addShaderDefine("LIGHTS_COUNT", stringc(lightsCount));
 
 	for (u32 i = 0; i < 6; i++) {
@@ -481,8 +481,7 @@ void CCP3DHandler::update(ITexture *outputTarget) {
 				core::array<irr::s32> BufferMaterialList(CurrentMaterialCount);
 				core::array<irr::video::ITexture*> BufferTextureList(CurrentMaterialCount);
 
-				const s32 shadowMaterialType = GetShadowMaterialType(LightList.size(), ShadowNodeArray[i].filterType, LightList[l].UseRoundSpotLight); /*ShadowNodeArray[i].shadowsMaterial != -1 ? ShadowNodeArray[i].shadowsMaterial :
-					(LightList[l].UseRoundSpotLight) ? (E_MATERIAL_TYPE)ShadowRoundedSpot[ShadowNodeArray[i].filterType] : (E_MATERIAL_TYPE)Shadow[ShadowNodeArray[i].filterType];*/
+				const s32 shadowMaterialType = GetShadowMaterialType(LightList.size(), ShadowNodeArray[i].filterType, LightList[l].UseRoundSpotLight);
 				
 				for(u32 m = 0;m < CurrentMaterialCount;++m) {
 					BufferMaterialList.push_back(ShadowNodeArray[i].node->getMaterial(m).MaterialType);
@@ -597,7 +596,7 @@ void CCP3DHandler::update(ITexture *outputTarget) {
 	}
 
 	driver->setRenderTarget(0, false, false);
-	//driver->setViewPort(ViewPort);
+	driver->setViewPort(ViewPort);
 	
 	bool alter = false;
 	ITexture *lastRtt = 0;

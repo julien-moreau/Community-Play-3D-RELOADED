@@ -14,5 +14,6 @@
 #include "ICP3DEffectsManager.h"
 #include "ICP3DHDRManager.h"
 #include "ICP3DAnimator.h"
+#include "ICP3DAnimatedMeshSceneNodeManipulator.h"
 
 #endif

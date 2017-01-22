@@ -1,56 +1,21 @@
 #include <irrlicht.h>
 
 /// CP3D
-//#define CP3DR_COMPILE_RENDERING_ENGINE // tell the compiler that we use the rendering engine
-//#define CP3DR_COMPILE_ENGINE
-
+// #define CP3DR_COMPILE_RENDERING_ENGINE // tell the compiler that we use the rendering engine
 #include <CP3DCompileConfig.h>
 #include <CP3DRenderingEngine.h>
 #include <CP3DEngine.h>
 
 namespace cp3d {
 	namespace test {
+
 		using namespace irr;
 		using namespace video;
 		using namespace scene;
 		using namespace core;
 		using namespace gui;
 
-		/*class AnimatorTest: public rendering::ICP3DAnimator<rendering::ICP3DLightSceneNode *> {
-		public:
-			AnimatorTest(rendering::ICP3DLightSceneNode *light, const SColorf &from, const SColorf &to, const u32 &duration)
-				: From(from), To(to), StartTime(-1), Duration(duration), Inverse(false)
-			{
-				Data = light;
-				Data->setLightColor(from);
-			}
-
-			void animateNode(ISceneNode* node, u32 timeMs) {
-				rendering::ICP3DAnimator<rendering::ICP3DLightSceneNode *>::animateNode(node, timeMs);
-
-				if (StartTime == -1)
-					StartTime = timeMs;
-
-				f32 diff = f32(timeMs - StartTime) / f32(Duration);
-				if (diff >= 1.f) {
-					StartTime = timeMs;
-					Inverse = !Inverse;
-					diff = 0.f;
-				}
-
-				if (Inverse)
-					Data->setLightColor(To.getInterpolated(From, diff));
-				else
-					Data->setLightColor(From.getInterpolated(To, diff));
-			}
-
-		private:
-			SColorf From, To;
-			u32 StartTime, Duration;
-			bool Inverse;
-		};*/
-
-		void HDRTest(irr::IrrlichtDevice *device, IEventReceiver *receiver) {
+		void SkinnedMeshDebug(irr::IrrlichtDevice *device, IEventReceiver *receiver) {
 			IVideoDriver *driver = device->getVideoDriver();
 			ISceneManager *smgr = device->getSceneManager();
 			IGUIEnvironment *gui = device->getGUIEnvironment();
@@ -76,7 +41,7 @@ namespace cp3d {
 			light->getLightData().SpecularColor = SColorf(1.f, 1.f, 1.f, 1.f);
 			light->getShadowLight()->setUseRoundSpotLight(false);
 			light->getShadowLight()->setFarValue(1000.f);
-			light->setLightStrength(1.f);
+			light->setLightStrength(driver->getDriverType() == EDT_DIRECT3D9 ? 2.5f : 1.f);
 			light->getShadowLight()->setShadowMapResolution(4096);
 
 			ISceneNodeAnimator *animator = smgr->createFlyStraightAnimator(vector3df(-250.f, 200.f, -100.f), vector3df(250.f, 200.f, 100.f), 10000, true, true);
@@ -93,20 +58,18 @@ namespace cp3d {
 				driver->getTexture("Textures/Skybox/glacier_ft.png"),
 				driver->getTexture("Textures/Skybox/glacier_bk.png"));
 
-			/// Sponza
-			IMeshSceneNode *sponza = smgr->addMeshSceneNode(smgr->getMesh("data/chinese.obj"), 0, -1, vector3df(0.f), vector3df(0.f), vector3df(3.5f));
-			sponza->setMaterialType(cpre->Materials[EMT_NORMAL_MAP_SOLID]);
-			handler->addShadowToNode(sponza, rendering::EFT_16PCF, rendering::ESM_BOTH);
+			/// Create a test scene
+			IAnimatedMesh *planeMesh = smgr->addHillPlaneMesh("plane_mesh", dimension2d<f32>(100.f, 100.f), dimension2d<u32>(100, 100),
+				0, 0.f, dimension2d<f32>(0.f, 0.f), dimension2d<f32>(50.f, 50.f));
 
-			/// Batman
-			IAnimatedMeshSceneNode *batman = smgr->addAnimatedMeshSceneNode(smgr->getMesh("data/batman.x"), 0, -1, vector3df(10.f, -19.f, -30.f), vector3df(0.f), vector3df(0.3f));
-			batman->setMaterialFlag(EMF_BACK_FACE_CULLING, false);
-			batman->setFrameLoop(0, batman->getEndFrame());
-			batman->setMaterialType(cpre->Materials[EMT_NORMAL_MAP_SOLID]);
-			batman->setMaterialTexture(0, driver->getTexture("data/batman/IOS_Batman_Diff.jpg"));
-			batman->setMaterialTexture(1, driver->getTexture("data/batman/IOS_Batman_Norm.jpg"));
-			batman->setMaterialTexture(2, driver->getTexture("data/batman/IOS_Batman_Spec.jpg"));
-			handler->addShadowToNode(batman, rendering::EFT_16PCF, rendering::ESM_BOTH);
+			IMeshSceneNode *planeNode = smgr->addMeshSceneNode(planeMesh);
+			planeNode->setMaterialTexture(0, driver->getTexture("Textures/specular.tga"));
+			planeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
+			planeNode->setMaterialTexture(2, driver->getTexture("Textures/specular.tga"));
+			planeNode->setMaterialFlag(EMF_LIGHTING, false);
+			handler->addShadowToNode(planeNode, cp3d::rendering::EFT_16PCF, cp3d::rendering::ESM_BOTH);
+
+			animator = smgr->createRotationAnimator(vector3df(0.f, 4.5f, 0.f));
 
 			/// Clouds
 			#ifndef _IRR_COMPILE_WITH_DIRECT3D_11_
@@ -115,18 +78,31 @@ namespace cp3d {
 			ISceneNode *cloud3 = engine->getSceneNodeCreator()->createCloudNode(vector2df(0.006f, 0.003f), driver->getTexture("Textures/Clouds/cloud03.png"), 0.035f, 0.f, -0.15f, 0.4f);
 			#endif
 
+			/// Murphy
+			IAnimatedMeshSceneNode *murphy = smgr->addAnimatedMeshSceneNode(smgr->getMesh("data/murphy/walk.x"), 0, -1, vector3df(0.f, -0.f, 0.f), vector3df(0.f), vector3df(1.f));
+			murphy->setMaterialFlag(EMF_BACK_FACE_CULLING, false);
+			murphy->setAnimationSpeed(5000.f);
+			murphy->setMaterialType(cpre->Materials[EMT_NORMAL_MAP_SOLID]);
+			handler->addShadowToNode(murphy, rendering::EFT_16PCF, rendering::ESM_BOTH);
+
+			u32 framesCount1 = murphy->getEndFrame();
+
+			/// Test manipulator
+			ISkinnedMesh *skeletonMesh = (ISkinnedMesh *)smgr->getMesh("data/murphy/run.x");
+			engine::ICP3DAnimatedMeshSceneNodeManipulator *manipulator = engine->getAnimatedMeshSceneNodeManipulator();
+
+			//manipulator->setSkinnedMesh(murphy, skeletonMesh);
+			//manipulator->appendAnimations(murphy, skeletonMesh);
+
+			u32 framesCount2 = murphy->getEndFrame();
+
 			/// SSAO and Depth
 			cpre->getEffectsManager()->createSSAOEffect(true);
-
-			handler->getDepthPassManager()->addNodeToPass(sponza);
-			handler->getDepthPassManager()->addNodeToPass(batman);
-
-			/// General pass
-			handler->getGeneralPassManager()->addNodeToPass(batman);
+			handler->getDepthPassManager()->addNodeToPass(planeNode);
 
 			/// HDR
 			handler->getHDRManager()->setEnabled(true);
-			handler->getHDRManager()->setBrightnessThreshold(0.8f);
+			handler->getHDRManager()->setBrightnessThreshold(1.f);
 			handler->getHDRManager()->setGaussWidth(2.f);
 			handler->getHDRManager()->setGaussianCoefficient(0.25f);
 			handler->getHDRManager()->setMinimumLuminance(0.5f);
@@ -138,16 +114,7 @@ namespace cp3d {
 			/// Finish
 			handler->setAmbientColor(SColor(255, 32, 32, 32));
 
-			/// Get hdr texture
-			handler->update();
-
-			ITexture *hdrTexture = driver->getTexture("CP3DHandler_SM_4096");
-			IGUIImage *img = gui->addImage(rect<s32>(driver->getScreenSize().Width - 512, 0, driver->getScreenSize().Width, 512));
-			img->setScaleImage(true);
-			img->setImage(hdrTexture);
-
 			/// Update the application
-			engine->setDrawGUI(true);
 			engine->runEngine();
 		}
 

@@ -15,6 +15,8 @@
 #include "Engine/Scene/CCP3DSceneNodeCreator.h"
 #include "Engine/Scene/CCP3DGeometryCreator.h"
 
+#include "Engine/Scene/AnimatedMeshSceneNode/CAnimatedMeshSceneNodeManipulator.h"
+
 #include "Engine/IO/CCP3DExporter.h"
 
 namespace cp3d {
@@ -36,6 +38,8 @@ public:
 	/// Scene
 	CCP3DSceneNodeCreator *getSceneNodeCreator();
 	CCP3DGeometryCreator *getGeometryCreator();
+
+	ICP3DAnimatedMeshSceneNodeManipulator *getAnimatedMeshSceneNodeManipulator();
 
 	/// Rendering
 	rendering::ICP3DRenderingEngine *getRenderingEngine();
@@ -66,6 +70,8 @@ private:
 	/// Scene
 	CCP3DSceneNodeCreator *SceneNodeCreator;
 	CCP3DGeometryCreator *GeometryCreator;
+
+	CCP3DAnimatedMeshSceneNodeManipulator *AnimatedMeshSceneNodeManipulator;
 
 	/// Rendering
 	CCP3DMonitorPlugin *MonitorPlugin;

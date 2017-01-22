@@ -9,6 +9,7 @@
 #include "CDirect3D11Tests.h"
 #include "CDirect3D9Debug.h"
 #include "CHDRTests.h"
+#include "CSkinnedMeshTest.h"
 
 /// Irrlicht namespaces
 using namespace irr;
@@ -52,7 +53,7 @@ int main(int argc, char* argv[]) {
 	params.WindowSize = dimension2du(1280, 800);
 	params.Bits = 32;
 	params.Fullscreen = false;
-	// params.Vsync = true;
+	params.Vsync = true;
 	params.DriverMultithreaded = true;
 	params.Doublebuffer = true;
 	IrrlichtDevice *device = createDeviceEx(params);
@@ -78,8 +79,9 @@ int main(int argc, char* argv[]) {
 
 	//cp3d::test::GlobalTest(device);
 	//cp3d::test::Direct3D11Test(device);
-	cp3d::test::Direct3D9Debug(device, new CEventReceiver(device));
-	//cp3d::test::HDRTest(device, new CEventReceiver(device));
+	//cp3d::test::Direct3D9Debug(device, new CEventReceiver(device));
+	cp3d::test::HDRTest(device, new CEventReceiver(device));
+	//cp3d::test::SkinnedMeshDebug(device, new CEventReceiver(device));
 
 	return EXIT_SUCCESS;
 }

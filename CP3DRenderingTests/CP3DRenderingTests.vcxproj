@@ -146,6 +146,7 @@
     <ClInclude Include="CDirect3D9Debug.h" />
     <ClInclude Include="CGlobalTests.h" />
     <ClInclude Include="CHDRTests.h" />
+    <ClInclude Include="CSkinnedMeshTest.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>

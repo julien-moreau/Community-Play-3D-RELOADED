@@ -199,7 +199,7 @@ inline VS_OUTPUT_SHADOWS_MATERIAL computeShadowsVertex(float4 p, float3 p2, floa
 Defining multiple samplers and samplers states giving a name
 */
 #define ADD_SAMPLER_2D(name, registerId) \
-	CP3DTexture name : registerTexture(s##registerId); \
-	SamplerState name##ST : register(t##registerId); \
+	CP3DTexture name : registerTexture(t##registerId); \
+	SamplerState name##ST : register(s##registerId); \
 
 #endif /// End __FX_UTILS_HLSL_FX_INCLUDED_
