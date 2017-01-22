@@ -5,6 +5,7 @@
 
 #include <CP3DRenderingEngine.h>
 #include <CP3DEngine.h>
+#include <ICP3DEngine.h>
 
 #include "Engine/Core/Plugins/CCP3DMonitorPlugin.h"
 

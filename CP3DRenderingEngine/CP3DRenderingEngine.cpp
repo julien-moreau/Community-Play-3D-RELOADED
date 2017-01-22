@@ -19,7 +19,7 @@ using namespace gui;
 
 /// Create rendering engine
 namespace cp3d {
-	CP3DR_LIB_API rendering::ICP3DRenderingEngine *createRenderingEngine(IrrlichtDevice *device) {
+	extern "C" CP3DR_LIB_API rendering::ICP3DRenderingEngine *createRenderingEngine(IrrlichtDevice *device) {
 		return new rendering::CCP3DRenderingEngine(device);
 	}
 }

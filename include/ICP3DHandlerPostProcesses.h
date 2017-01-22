@@ -77,8 +77,8 @@ public:
 	//! \param OnPreRender: OnPreRender lamba function to set
 	//! \param OnPostRender: OnPostRender lambda function to set
 	virtual void setPostProcessingRenderCallback(const irr::s32 &materialType,
-		std::function<void(ICP3DHandler *handler)> OnPreRender = [&](ICP3DHandler *handler) {},
-		std::function<void(ICP3DHandler *handler)> OnPostRender = [&](ICP3DHandler *handler) {}) = 0;
+		std::function<void(ICP3DHandler *handler)> OnPreRender = [](ICP3DHandler *handler) {},
+		std::function<void(ICP3DHandler *handler)> OnPostRender = [](ICP3DHandler *handler) {}) = 0;
 
 	//! Adds a custom UserMapSampler texture
 	//! \param userTexture: the texture to set at UserMapSampler

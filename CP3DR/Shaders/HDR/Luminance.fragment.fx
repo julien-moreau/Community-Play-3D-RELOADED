@@ -34,7 +34,7 @@ void main()
 		#endif
 
 		maximum = max(maximum, GreyValue);
-		average += (0.25f * log(1e-5 + GreyValue));
+		average += (0.25 * log(1e-5 + GreyValue));
 	}
 
 	average = exp(average);

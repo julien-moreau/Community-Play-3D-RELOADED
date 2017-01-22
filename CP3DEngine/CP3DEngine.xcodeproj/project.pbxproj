@@ -1,0 +1,440 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2EEBD6301E34F20600E78D00 /* CP3DEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD6101E34F20600E78D00 /* CP3DEngine.cpp */; };
+		2EEBD6311E34F20600E78D00 /* CP3DEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD6111E34F20600E78D00 /* CP3DEngine.h */; };
+		2EEBD6321E34F20600E78D00 /* CCP3DCustomUpdater.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD6141E34F20600E78D00 /* CCP3DCustomUpdater.cpp */; };
+		2EEBD6331E34F20600E78D00 /* CCP3DCustomUpdater.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD6151E34F20600E78D00 /* CCP3DCustomUpdater.h */; };
+		2EEBD6341E34F20600E78D00 /* CCP3DEngineCore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD6161E34F20600E78D00 /* CCP3DEngineCore.cpp */; };
+		2EEBD6351E34F20600E78D00 /* CCP3DEngineCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD6171E34F20600E78D00 /* CCP3DEngineCore.h */; };
+		2EEBD6361E34F20600E78D00 /* CCP3DEventReceiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD6181E34F20600E78D00 /* CCP3DEventReceiver.cpp */; };
+		2EEBD6371E34F20600E78D00 /* CCP3DEventReceiver.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD6191E34F20600E78D00 /* CCP3DEventReceiver.h */; };
+		2EEBD6381E34F20600E78D00 /* CCP3DMonitorPlugin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD61B1E34F20600E78D00 /* CCP3DMonitorPlugin.cpp */; };
+		2EEBD6391E34F20600E78D00 /* CCP3DMonitorPlugin.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD61C1E34F20600E78D00 /* CCP3DMonitorPlugin.h */; };
+		2EEBD63A1E34F20600E78D00 /* CCP3DPluginManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD61D1E34F20600E78D00 /* CCP3DPluginManager.cpp */; };
+		2EEBD63B1E34F20600E78D00 /* CCP3DPluginManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD61E1E34F20600E78D00 /* CCP3DPluginManager.h */; };
+		2EEBD63C1E34F20600E78D00 /* CCP3DExporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD6201E34F20600E78D00 /* CCP3DExporter.cpp */; };
+		2EEBD63D1E34F20600E78D00 /* CCP3DExporter.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD6211E34F20600E78D00 /* CCP3DExporter.h */; };
+		2EEBD63E1E34F20600E78D00 /* CCP3DImporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD6221E34F20600E78D00 /* CCP3DImporter.cpp */; };
+		2EEBD63F1E34F20600E78D00 /* CCP3DGeometryCreator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD6241E34F20600E78D00 /* CCP3DGeometryCreator.cpp */; };
+		2EEBD6401E34F20600E78D00 /* CCP3DGeometryCreator.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD6251E34F20600E78D00 /* CCP3DGeometryCreator.h */; };
+		2EEBD6411E34F20600E78D00 /* CCP3DSceneNodeCreator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD6261E34F20600E78D00 /* CCP3DSceneNodeCreator.cpp */; };
+		2EEBD6421E34F20600E78D00 /* CCP3DSceneNodeCreator.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD6271E34F20600E78D00 /* CCP3DSceneNodeCreator.h */; };
+		2EEBD6431E34F20600E78D00 /* CCloudSceneNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD6291E34F20600E78D00 /* CCloudSceneNode.cpp */; };
+		2EEBD6441E34F20600E78D00 /* CCloudSceneNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD62A1E34F20600E78D00 /* CCloudSceneNode.h */; };
+		2EEBD6451E34F20600E78D00 /* CMeshSceneNodeInstances.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD62C1E34F20600E78D00 /* CMeshSceneNodeInstances.cpp */; };
+		2EEBD6461E34F20600E78D00 /* CMeshSceneNodeInstances.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD62D1E34F20600E78D00 /* CMeshSceneNodeInstances.h */; };
+		2EEBD6471E34F20600E78D00 /* Stdafx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD62E1E34F20600E78D00 /* Stdafx.cpp */; };
+		2EEBD6481E34F20600E78D00 /* Stdafx.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD62F1E34F20600E78D00 /* Stdafx.h */; };
+		2EEBD6DD1E34FF0700E78D00 /* libCP3DRenderingEngine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EEBD6DB1E34FF0700E78D00 /* libCP3DRenderingEngine.a */; };
+		2EEBD6DE1E34FF0700E78D00 /* libIrrlicht.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EEBD6DC1E34FF0700E78D00 /* libIrrlicht.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		2EEBD6081E34F1E400E78D00 /* libCP3DEngine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCP3DEngine.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2EEBD6101E34F20600E78D00 /* CP3DEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CP3DEngine.cpp; sourceTree = "<group>"; };
+		2EEBD6111E34F20600E78D00 /* CP3DEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CP3DEngine.h; sourceTree = "<group>"; };
+		2EEBD6141E34F20600E78D00 /* CCP3DCustomUpdater.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCP3DCustomUpdater.cpp; sourceTree = "<group>"; };
+		2EEBD6151E34F20600E78D00 /* CCP3DCustomUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCP3DCustomUpdater.h; sourceTree = "<group>"; };
+		2EEBD6161E34F20600E78D00 /* CCP3DEngineCore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCP3DEngineCore.cpp; sourceTree = "<group>"; };
+		2EEBD6171E34F20600E78D00 /* CCP3DEngineCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCP3DEngineCore.h; sourceTree = "<group>"; };
+		2EEBD6181E34F20600E78D00 /* CCP3DEventReceiver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCP3DEventReceiver.cpp; sourceTree = "<group>"; };
+		2EEBD6191E34F20600E78D00 /* CCP3DEventReceiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCP3DEventReceiver.h; sourceTree = "<group>"; };
+		2EEBD61B1E34F20600E78D00 /* CCP3DMonitorPlugin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCP3DMonitorPlugin.cpp; sourceTree = "<group>"; };
+		2EEBD61C1E34F20600E78D00 /* CCP3DMonitorPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCP3DMonitorPlugin.h; sourceTree = "<group>"; };
+		2EEBD61D1E34F20600E78D00 /* CCP3DPluginManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCP3DPluginManager.cpp; sourceTree = "<group>"; };
+		2EEBD61E1E34F20600E78D00 /* CCP3DPluginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCP3DPluginManager.h; sourceTree = "<group>"; };
+		2EEBD6201E34F20600E78D00 /* CCP3DExporter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCP3DExporter.cpp; sourceTree = "<group>"; };
+		2EEBD6211E34F20600E78D00 /* CCP3DExporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCP3DExporter.h; sourceTree = "<group>"; };
+		2EEBD6221E34F20600E78D00 /* CCP3DImporter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCP3DImporter.cpp; sourceTree = "<group>"; };
+		2EEBD6241E34F20600E78D00 /* CCP3DGeometryCreator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCP3DGeometryCreator.cpp; sourceTree = "<group>"; };
+		2EEBD6251E34F20600E78D00 /* CCP3DGeometryCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCP3DGeometryCreator.h; sourceTree = "<group>"; };
+		2EEBD6261E34F20600E78D00 /* CCP3DSceneNodeCreator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCP3DSceneNodeCreator.cpp; sourceTree = "<group>"; };
+		2EEBD6271E34F20600E78D00 /* CCP3DSceneNodeCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCP3DSceneNodeCreator.h; sourceTree = "<group>"; };
+		2EEBD6291E34F20600E78D00 /* CCloudSceneNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCloudSceneNode.cpp; sourceTree = "<group>"; };
+		2EEBD62A1E34F20600E78D00 /* CCloudSceneNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCloudSceneNode.h; sourceTree = "<group>"; };
+		2EEBD62C1E34F20600E78D00 /* CMeshSceneNodeInstances.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CMeshSceneNodeInstances.cpp; sourceTree = "<group>"; };
+		2EEBD62D1E34F20600E78D00 /* CMeshSceneNodeInstances.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMeshSceneNodeInstances.h; sourceTree = "<group>"; };
+		2EEBD62E1E34F20600E78D00 /* Stdafx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Stdafx.cpp; sourceTree = "<group>"; };
+		2EEBD62F1E34F20600E78D00 /* Stdafx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stdafx.h; sourceTree = "<group>"; };
+		2EEBD6DB1E34FF0700E78D00 /* libCP3DRenderingEngine.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCP3DRenderingEngine.a; path = "../../../../Library/Developer/Xcode/DerivedData/CP3D-bsyxoyntifdldmbldiirobaowphw/Build/Products/Debug/libCP3DRenderingEngine.a"; sourceTree = "<group>"; };
+		2EEBD6DC1E34FF0700E78D00 /* libIrrlicht.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libIrrlicht.a; path = ../Dependencies/Irrlicht181/Sources/MacOSX/build/Debug/libIrrlicht.a; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2EEBD6051E34F1E400E78D00 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2EEBD6DD1E34FF0700E78D00 /* libCP3DRenderingEngine.a in Frameworks */,
+				2EEBD6DE1E34FF0700E78D00 /* libIrrlicht.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2EEBD5FF1E34F1E400E78D00 = {
+			isa = PBXGroup;
+			children = (
+				2EEBD60F1E34F1F900E78D00 /* Sources */,
+				2EEBD6091E34F1E400E78D00 /* Products */,
+				2EEBD6DA1E34FF0600E78D00 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		2EEBD6091E34F1E400E78D00 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2EEBD6081E34F1E400E78D00 /* libCP3DEngine.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2EEBD60F1E34F1F900E78D00 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				2EEBD6101E34F20600E78D00 /* CP3DEngine.cpp */,
+				2EEBD6111E34F20600E78D00 /* CP3DEngine.h */,
+				2EEBD6121E34F20600E78D00 /* Engine */,
+				2EEBD62E1E34F20600E78D00 /* Stdafx.cpp */,
+				2EEBD62F1E34F20600E78D00 /* Stdafx.h */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		2EEBD6121E34F20600E78D00 /* Engine */ = {
+			isa = PBXGroup;
+			children = (
+				2EEBD6131E34F20600E78D00 /* Core */,
+				2EEBD61F1E34F20600E78D00 /* IO */,
+				2EEBD6231E34F20600E78D00 /* Scene */,
+			);
+			path = Engine;
+			sourceTree = "<group>";
+		};
+		2EEBD6131E34F20600E78D00 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				2EEBD6141E34F20600E78D00 /* CCP3DCustomUpdater.cpp */,
+				2EEBD6151E34F20600E78D00 /* CCP3DCustomUpdater.h */,
+				2EEBD6161E34F20600E78D00 /* CCP3DEngineCore.cpp */,
+				2EEBD6171E34F20600E78D00 /* CCP3DEngineCore.h */,
+				2EEBD6181E34F20600E78D00 /* CCP3DEventReceiver.cpp */,
+				2EEBD6191E34F20600E78D00 /* CCP3DEventReceiver.h */,
+				2EEBD61A1E34F20600E78D00 /* Plugins */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		2EEBD61A1E34F20600E78D00 /* Plugins */ = {
+			isa = PBXGroup;
+			children = (
+				2EEBD61B1E34F20600E78D00 /* CCP3DMonitorPlugin.cpp */,
+				2EEBD61C1E34F20600E78D00 /* CCP3DMonitorPlugin.h */,
+				2EEBD61D1E34F20600E78D00 /* CCP3DPluginManager.cpp */,
+				2EEBD61E1E34F20600E78D00 /* CCP3DPluginManager.h */,
+			);
+			path = Plugins;
+			sourceTree = "<group>";
+		};
+		2EEBD61F1E34F20600E78D00 /* IO */ = {
+			isa = PBXGroup;
+			children = (
+				2EEBD6201E34F20600E78D00 /* CCP3DExporter.cpp */,
+				2EEBD6211E34F20600E78D00 /* CCP3DExporter.h */,
+				2EEBD6221E34F20600E78D00 /* CCP3DImporter.cpp */,
+			);
+			path = IO;
+			sourceTree = "<group>";
+		};
+		2EEBD6231E34F20600E78D00 /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				2EEBD6241E34F20600E78D00 /* CCP3DGeometryCreator.cpp */,
+				2EEBD6251E34F20600E78D00 /* CCP3DGeometryCreator.h */,
+				2EEBD6261E34F20600E78D00 /* CCP3DSceneNodeCreator.cpp */,
+				2EEBD6271E34F20600E78D00 /* CCP3DSceneNodeCreator.h */,
+				2EEBD6281E34F20600E78D00 /* Clouds */,
+				2EEBD62B1E34F20600E78D00 /* MeshSceneNodeInstances */,
+			);
+			path = Scene;
+			sourceTree = "<group>";
+		};
+		2EEBD6281E34F20600E78D00 /* Clouds */ = {
+			isa = PBXGroup;
+			children = (
+				2EEBD6291E34F20600E78D00 /* CCloudSceneNode.cpp */,
+				2EEBD62A1E34F20600E78D00 /* CCloudSceneNode.h */,
+			);
+			path = Clouds;
+			sourceTree = "<group>";
+		};
+		2EEBD62B1E34F20600E78D00 /* MeshSceneNodeInstances */ = {
+			isa = PBXGroup;
+			children = (
+				2EEBD62C1E34F20600E78D00 /* CMeshSceneNodeInstances.cpp */,
+				2EEBD62D1E34F20600E78D00 /* CMeshSceneNodeInstances.h */,
+			);
+			path = MeshSceneNodeInstances;
+			sourceTree = "<group>";
+		};
+		2EEBD6DA1E34FF0600E78D00 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2EEBD6DB1E34FF0700E78D00 /* libCP3DRenderingEngine.a */,
+				2EEBD6DC1E34FF0700E78D00 /* libIrrlicht.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		2EEBD6061E34F1E400E78D00 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2EEBD6351E34F20600E78D00 /* CCP3DEngineCore.h in Headers */,
+				2EEBD6391E34F20600E78D00 /* CCP3DMonitorPlugin.h in Headers */,
+				2EEBD63D1E34F20600E78D00 /* CCP3DExporter.h in Headers */,
+				2EEBD6311E34F20600E78D00 /* CP3DEngine.h in Headers */,
+				2EEBD6481E34F20600E78D00 /* Stdafx.h in Headers */,
+				2EEBD6371E34F20600E78D00 /* CCP3DEventReceiver.h in Headers */,
+				2EEBD6461E34F20600E78D00 /* CMeshSceneNodeInstances.h in Headers */,
+				2EEBD6441E34F20600E78D00 /* CCloudSceneNode.h in Headers */,
+				2EEBD6401E34F20600E78D00 /* CCP3DGeometryCreator.h in Headers */,
+				2EEBD6421E34F20600E78D00 /* CCP3DSceneNodeCreator.h in Headers */,
+				2EEBD6331E34F20600E78D00 /* CCP3DCustomUpdater.h in Headers */,
+				2EEBD63B1E34F20600E78D00 /* CCP3DPluginManager.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		2EEBD6071E34F1E400E78D00 /* CP3DEngine */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2EEBD60C1E34F1E400E78D00 /* Build configuration list for PBXNativeTarget "CP3DEngine" */;
+			buildPhases = (
+				2EEBD6041E34F1E400E78D00 /* Sources */,
+				2EEBD6051E34F1E400E78D00 /* Frameworks */,
+				2EEBD6061E34F1E400E78D00 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CP3DEngine;
+			productName = CP3DEngine;
+			productReference = 2EEBD6081E34F1E400E78D00 /* libCP3DEngine.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2EEBD6001E34F1E400E78D00 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0800;
+				ORGANIZATIONNAME = "Julien Moreau-Mathis";
+				TargetAttributes = {
+					2EEBD6071E34F1E400E78D00 = {
+						CreatedOnToolsVersion = 8.0;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 2EEBD6031E34F1E400E78D00 /* Build configuration list for PBXProject "CP3DEngine" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 2EEBD5FF1E34F1E400E78D00;
+			productRefGroup = 2EEBD6091E34F1E400E78D00 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2EEBD6071E34F1E400E78D00 /* CP3DEngine */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2EEBD6041E34F1E400E78D00 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2EEBD63F1E34F20600E78D00 /* CCP3DGeometryCreator.cpp in Sources */,
+				2EEBD63A1E34F20600E78D00 /* CCP3DPluginManager.cpp in Sources */,
+				2EEBD63E1E34F20600E78D00 /* CCP3DImporter.cpp in Sources */,
+				2EEBD6411E34F20600E78D00 /* CCP3DSceneNodeCreator.cpp in Sources */,
+				2EEBD6321E34F20600E78D00 /* CCP3DCustomUpdater.cpp in Sources */,
+				2EEBD6381E34F20600E78D00 /* CCP3DMonitorPlugin.cpp in Sources */,
+				2EEBD6431E34F20600E78D00 /* CCloudSceneNode.cpp in Sources */,
+				2EEBD6341E34F20600E78D00 /* CCP3DEngineCore.cpp in Sources */,
+				2EEBD6451E34F20600E78D00 /* CMeshSceneNodeInstances.cpp in Sources */,
+				2EEBD6471E34F20600E78D00 /* Stdafx.cpp in Sources */,
+				2EEBD6301E34F20600E78D00 /* CP3DEngine.cpp in Sources */,
+				2EEBD63C1E34F20600E78D00 /* CCP3DExporter.cpp in Sources */,
+				2EEBD6361E34F20600E78D00 /* CCP3DEventReceiver.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2EEBD60A1E34F1E400E78D00 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		2EEBD60B1E34F1E400E78D00 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		2EEBD60D1E34F1E400E78D00 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				EXECUTABLE_PREFIX = lib;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_INPUT_FILETYPE = automatic;
+				HEADER_SEARCH_PATHS = (
+					../Dependencies/Irrlicht181/include/,
+					../include/,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		2EEBD60E1E34F1E400E78D00 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				EXECUTABLE_PREFIX = lib;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_INPUT_FILETYPE = automatic;
+				HEADER_SEARCH_PATHS = (
+					../Dependencies/Irrlicht181/include/,
+					../include/,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2EEBD6031E34F1E400E78D00 /* Build configuration list for PBXProject "CP3DEngine" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2EEBD60A1E34F1E400E78D00 /* Debug */,
+				2EEBD60B1E34F1E400E78D00 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2EEBD60C1E34F1E400E78D00 /* Build configuration list for PBXNativeTarget "CP3DEngine" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2EEBD60D1E34F1E400E78D00 /* Debug */,
+				2EEBD60E1E34F1E400E78D00 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2EEBD6001E34F1E400E78D00 /* Project object */;
+}

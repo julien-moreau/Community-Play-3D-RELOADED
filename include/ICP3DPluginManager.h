@@ -7,6 +7,7 @@
 #include <Windows.h>
 typedef HINSTANCE PluginLibraryType;
 #else
+#include <dlfcn.h>
 typedef void* PluginLibraryType;
 #endif
 
@@ -46,7 +47,7 @@ public:
 		#if defined(_IRR_WINDOWS_API_)
 		PluginLibraryType hdll = LoadLibrary(path.c_str());
 		#else
-		PluginLibraryType hdll = dlopen(stringc(path).c_str(), RTLD_LAZY);
+        PluginLibraryType hdll = dlopen(irr::core::stringc(path).c_str(), RTLD_LAZY);
 		#endif
 
 		return hdll;
@@ -70,7 +71,7 @@ public:
 		#if defined(_IRR_WINDOWS_API_)
 		fd = reinterpret_cast<functionDef>(GetProcAddress(lib, name.c_str()));
 		#else
-		fd = reinterpret_cast<functionDef>(dlsym(hdll, name.c_str()));
+		fd = reinterpret_cast<functionDef>(dlsym(lib, name.c_str()));
 		#endif
 
 		if (fd) {
@@ -92,6 +93,8 @@ public:
 		int hThreadresult = CloseHandle(process.processInformation.hThread);
 
 		return !(hProcessResult == 0 || hThreadresult == 0);
+        #else
+        return 0;
 		#endif
 	}
 

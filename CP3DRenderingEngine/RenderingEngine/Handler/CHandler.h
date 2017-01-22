@@ -75,8 +75,8 @@ public:
 	void addPostProcessingEffect(irr::s32 MaterialType, IPostProcessingRenderCallback* callback = 0);
 	void setPostProcessingRenderCallback(irr::s32 materialType, IPostProcessingRenderCallback* callback);
 	void setPostProcessingRenderCallback(const irr::s32 &materialType,
-		std::function<void(ICP3DHandler *handler)> OnPreRender = [&](ICP3DHandler *handler) {},
-		std::function<void(ICP3DHandler *handler)> OnPostRender = [&](ICP3DHandler *handler) {});
+		std::function<void(ICP3DHandler *handler)> OnPreRender = [](ICP3DHandler *handler) {},
+		std::function<void(ICP3DHandler *handler)> OnPostRender = [](ICP3DHandler *handler) {});
 	bool removePostProcessingEffect(irr::s32 materialType, const bool deleteCallback = true);
 	irr::s32 replacePostProcessAtIndex(irr::s32 index, const irr::core::stringc &filename, IPostProcessingRenderCallback *callback = 0, irr::video::ITexture *customRTT = 0);
 	irr::s32 addPostProcessingEffectFromFile(const irr::core::stringc &filename, IPostProcessingRenderCallback *callback = 0);

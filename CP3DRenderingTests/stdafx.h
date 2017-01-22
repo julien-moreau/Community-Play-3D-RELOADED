@@ -5,10 +5,11 @@
 
 #pragma once
 
+#ifdef _IRR_WINDOW_API_
 #include "targetver.h"
+#endif
 
 #include <stdio.h>
-#include <tchar.h>
 
 #define CP3DR_COMPILE_ENGINE
 #define CP3DR_COMPILE_COLLABORATIVE

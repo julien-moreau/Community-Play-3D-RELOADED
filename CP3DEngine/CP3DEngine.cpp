@@ -13,7 +13,7 @@ using namespace core;
 using namespace scene;
 
 namespace cp3d {
-	CP3DR_LIB_API engine::ICP3DEngine *createEngine(IrrlichtDevice *device) {
+	extern "C" CP3DR_LIB_API engine::ICP3DEngine *createEngine(IrrlichtDevice *device) {
 		return new engine::CCP3DEngine(device);
 	}
 }

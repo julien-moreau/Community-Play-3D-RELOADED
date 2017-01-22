@@ -1,0 +1,536 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2EEBD4621E34EF3F00E78D00 /* CP3DRenderingEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD42B1E34EF3F00E78D00 /* CP3DRenderingEngine.cpp */; };
+		2EEBD4631E34EF3F00E78D00 /* CP3DRenderingEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD42C1E34EF3F00E78D00 /* CP3DRenderingEngine.h */; };
+		2EEBD4641E34EF3F00E78D00 /* CCustomDepthPass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD42F1E34EF3F00E78D00 /* CCustomDepthPass.cpp */; };
+		2EEBD4651E34EF3F00E78D00 /* CCustomDepthPass.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD4301E34EF3F00E78D00 /* CCustomDepthPass.h */; };
+		2EEBD4661E34EF3F00E78D00 /* CCustomGeneralPass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD4311E34EF3F00E78D00 /* CCustomGeneralPass.cpp */; };
+		2EEBD4671E34EF3F00E78D00 /* CCustomGeneralPass.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD4321E34EF3F00E78D00 /* CCustomGeneralPass.h */; };
+		2EEBD4681E34EF3F00E78D00 /* CCP3DEffectsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD4341E34EF3F00E78D00 /* CCP3DEffectsManager.cpp */; };
+		2EEBD4691E34EF3F00E78D00 /* CCP3DEffectsManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD4351E34EF3F00E78D00 /* CCP3DEffectsManager.h */; };
+		2EEBD46A1E34EF3F00E78D00 /* CSSAOEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD4361E34EF3F00E78D00 /* CSSAOEffect.cpp */; };
+		2EEBD46B1E34EF3F00E78D00 /* CSSAOEffect.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD4371E34EF3F00E78D00 /* CSSAOEffect.h */; };
+		2EEBD46C1E34EF3F00E78D00 /* CVolumetricLightScattering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD4381E34EF3F00E78D00 /* CVolumetricLightScattering.cpp */; };
+		2EEBD46D1E34EF3F00E78D00 /* CVolumetricLightScattering.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD4391E34EF3F00E78D00 /* CVolumetricLightScattering.h */; };
+		2EEBD46E1E34EF3F00E78D00 /* CHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD43B1E34EF3F00E78D00 /* CHandler.cpp */; };
+		2EEBD46F1E34EF3F00E78D00 /* CHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD43C1E34EF3F00E78D00 /* CHandler.h */; };
+		2EEBD4701E34EF3F00E78D00 /* CHandlerCB.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD43D1E34EF3F00E78D00 /* CHandlerCB.h */; };
+		2EEBD4711E34EF3F00E78D00 /* CHandlerPostProcesses.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD43E1E34EF3F00E78D00 /* CHandlerPostProcesses.cpp */; };
+		2EEBD4721E34EF3F00E78D00 /* CP3DHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD43F1E34EF3F00E78D00 /* CP3DHandler.h */; };
+		2EEBD4731E34EF3F00E78D00 /* CShaderPre.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD4401E34EF3F00E78D00 /* CShaderPre.cpp */; };
+		2EEBD4741E34EF3F00E78D00 /* CShaderPre.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD4411E34EF3F00E78D00 /* CShaderPre.h */; };
+		2EEBD4751E34EF3F00E78D00 /* HandlerShaders.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD4421E34EF3F00E78D00 /* HandlerShaders.h */; };
+		2EEBD4761E34EF3F00E78D00 /* CCP3DHDRManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD4441E34EF3F00E78D00 /* CCP3DHDRManager.cpp */; };
+		2EEBD4771E34EF3F00E78D00 /* CCP3DHDRManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD4451E34EF3F00E78D00 /* CCP3DHDRManager.h */; };
+		2EEBD4781E34EF3F00E78D00 /* CHDRBloom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD4461E34EF3F00E78D00 /* CHDRBloom.cpp */; };
+		2EEBD4791E34EF3F00E78D00 /* CHDRBloom.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD4471E34EF3F00E78D00 /* CHDRBloom.h */; };
+		2EEBD47A1E34EF3F00E78D00 /* CHDRBrightPass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD4481E34EF3F00E78D00 /* CHDRBrightPass.cpp */; };
+		2EEBD47B1E34EF3F00E78D00 /* CHDRBrightPass.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD4491E34EF3F00E78D00 /* CHDRBrightPass.h */; };
+		2EEBD47C1E34EF3F00E78D00 /* CHDRDownSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD44A1E34EF3F00E78D00 /* CHDRDownSample.cpp */; };
+		2EEBD47D1E34EF3F00E78D00 /* CHDRDownSample.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD44B1E34EF3F00E78D00 /* CHDRDownSample.h */; };
+		2EEBD47E1E34EF3F00E78D00 /* CHDRGaussianBlur.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD44C1E34EF3F00E78D00 /* CHDRGaussianBlur.cpp */; };
+		2EEBD47F1E34EF3F00E78D00 /* CHDRGaussianBlur.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD44D1E34EF3F00E78D00 /* CHDRGaussianBlur.h */; };
+		2EEBD4801E34EF3F00E78D00 /* CHDRLensFlare.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD44E1E34EF3F00E78D00 /* CHDRLensFlare.cpp */; };
+		2EEBD4811E34EF3F00E78D00 /* CHDRLensFlare.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD44F1E34EF3F00E78D00 /* CHDRLensFlare.h */; };
+		2EEBD4821E34EF3F00E78D00 /* CHDRLuminance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD4501E34EF3F00E78D00 /* CHDRLuminance.cpp */; };
+		2EEBD4831E34EF3F00E78D00 /* CHDRLuminance.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD4511E34EF3F00E78D00 /* CHDRLuminance.h */; };
+		2EEBD4841E34EF3F00E78D00 /* CHDRTextureAdder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD4521E34EF3F00E78D00 /* CHDRTextureAdder.cpp */; };
+		2EEBD4851E34EF3F00E78D00 /* CHDRTextureAdder.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD4531E34EF3F00E78D00 /* CHDRTextureAdder.h */; };
+		2EEBD4861E34EF3F00E78D00 /* CHardwareSkinningManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD4551E34EF3F00E78D00 /* CHardwareSkinningManager.cpp */; };
+		2EEBD4871E34EF3F00E78D00 /* CHardwareSkinningManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD4561E34EF3F00E78D00 /* CHardwareSkinningManager.h */; };
+		2EEBD4881E34EF3F00E78D00 /* CHardwareSkinningMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD4581E34EF3F00E78D00 /* CHardwareSkinningMaterial.cpp */; };
+		2EEBD4891E34EF3F00E78D00 /* CHardwareSkinningMaterial.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD4591E34EF3F00E78D00 /* CHardwareSkinningMaterial.h */; };
+		2EEBD48A1E34EF3F00E78D00 /* CMaterialCreator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD45A1E34EF3F00E78D00 /* CMaterialCreator.cpp */; };
+		2EEBD48B1E34EF3F00E78D00 /* CMaterialCreator.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD45B1E34EF3F00E78D00 /* CMaterialCreator.h */; };
+		2EEBD48C1E34EF3F00E78D00 /* CNormalMappingMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD45C1E34EF3F00E78D00 /* CNormalMappingMaterial.cpp */; };
+		2EEBD48D1E34EF3F00E78D00 /* CNormalMappingMaterial.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD45D1E34EF3F00E78D00 /* CNormalMappingMaterial.h */; };
+		2EEBD48E1E34EF3F00E78D00 /* CSolidMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD45E1E34EF3F00E78D00 /* CSolidMaterial.cpp */; };
+		2EEBD48F1E34EF3F00E78D00 /* CSolidMaterial.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD45F1E34EF3F00E78D00 /* CSolidMaterial.h */; };
+		2EEBD4901E34EF3F00E78D00 /* Stdafx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD4601E34EF3F00E78D00 /* Stdafx.cpp */; };
+		2EEBD4911E34EF3F00E78D00 /* Stdafx.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD4611E34EF3F00E78D00 /* Stdafx.h */; };
+		2EEBD6E11E34FF1100E78D00 /* libIrrlicht.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EEBD6E01E34FF1100E78D00 /* libIrrlicht.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		2EEBD41B1E34EE4B00E78D00 /* libCP3DRenderingEngine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCP3DRenderingEngine.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2EEBD42B1E34EF3F00E78D00 /* CP3DRenderingEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CP3DRenderingEngine.cpp; sourceTree = "<group>"; };
+		2EEBD42C1E34EF3F00E78D00 /* CP3DRenderingEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CP3DRenderingEngine.h; sourceTree = "<group>"; };
+		2EEBD42F1E34EF3F00E78D00 /* CCustomDepthPass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCustomDepthPass.cpp; sourceTree = "<group>"; };
+		2EEBD4301E34EF3F00E78D00 /* CCustomDepthPass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCustomDepthPass.h; sourceTree = "<group>"; };
+		2EEBD4311E34EF3F00E78D00 /* CCustomGeneralPass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCustomGeneralPass.cpp; sourceTree = "<group>"; };
+		2EEBD4321E34EF3F00E78D00 /* CCustomGeneralPass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCustomGeneralPass.h; sourceTree = "<group>"; };
+		2EEBD4341E34EF3F00E78D00 /* CCP3DEffectsManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCP3DEffectsManager.cpp; sourceTree = "<group>"; };
+		2EEBD4351E34EF3F00E78D00 /* CCP3DEffectsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCP3DEffectsManager.h; sourceTree = "<group>"; };
+		2EEBD4361E34EF3F00E78D00 /* CSSAOEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CSSAOEffect.cpp; sourceTree = "<group>"; };
+		2EEBD4371E34EF3F00E78D00 /* CSSAOEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSAOEffect.h; sourceTree = "<group>"; };
+		2EEBD4381E34EF3F00E78D00 /* CVolumetricLightScattering.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CVolumetricLightScattering.cpp; sourceTree = "<group>"; };
+		2EEBD4391E34EF3F00E78D00 /* CVolumetricLightScattering.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CVolumetricLightScattering.h; sourceTree = "<group>"; };
+		2EEBD43B1E34EF3F00E78D00 /* CHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CHandler.cpp; sourceTree = "<group>"; };
+		2EEBD43C1E34EF3F00E78D00 /* CHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHandler.h; sourceTree = "<group>"; };
+		2EEBD43D1E34EF3F00E78D00 /* CHandlerCB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHandlerCB.h; sourceTree = "<group>"; };
+		2EEBD43E1E34EF3F00E78D00 /* CHandlerPostProcesses.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CHandlerPostProcesses.cpp; sourceTree = "<group>"; };
+		2EEBD43F1E34EF3F00E78D00 /* CP3DHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CP3DHandler.h; sourceTree = "<group>"; };
+		2EEBD4401E34EF3F00E78D00 /* CShaderPre.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CShaderPre.cpp; sourceTree = "<group>"; };
+		2EEBD4411E34EF3F00E78D00 /* CShaderPre.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CShaderPre.h; sourceTree = "<group>"; };
+		2EEBD4421E34EF3F00E78D00 /* HandlerShaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HandlerShaders.h; sourceTree = "<group>"; };
+		2EEBD4441E34EF3F00E78D00 /* CCP3DHDRManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCP3DHDRManager.cpp; sourceTree = "<group>"; };
+		2EEBD4451E34EF3F00E78D00 /* CCP3DHDRManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCP3DHDRManager.h; sourceTree = "<group>"; };
+		2EEBD4461E34EF3F00E78D00 /* CHDRBloom.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CHDRBloom.cpp; sourceTree = "<group>"; };
+		2EEBD4471E34EF3F00E78D00 /* CHDRBloom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHDRBloom.h; sourceTree = "<group>"; };
+		2EEBD4481E34EF3F00E78D00 /* CHDRBrightPass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CHDRBrightPass.cpp; sourceTree = "<group>"; };
+		2EEBD4491E34EF3F00E78D00 /* CHDRBrightPass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHDRBrightPass.h; sourceTree = "<group>"; };
+		2EEBD44A1E34EF3F00E78D00 /* CHDRDownSample.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CHDRDownSample.cpp; sourceTree = "<group>"; };
+		2EEBD44B1E34EF3F00E78D00 /* CHDRDownSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHDRDownSample.h; sourceTree = "<group>"; };
+		2EEBD44C1E34EF3F00E78D00 /* CHDRGaussianBlur.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CHDRGaussianBlur.cpp; sourceTree = "<group>"; };
+		2EEBD44D1E34EF3F00E78D00 /* CHDRGaussianBlur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHDRGaussianBlur.h; sourceTree = "<group>"; };
+		2EEBD44E1E34EF3F00E78D00 /* CHDRLensFlare.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CHDRLensFlare.cpp; sourceTree = "<group>"; };
+		2EEBD44F1E34EF3F00E78D00 /* CHDRLensFlare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHDRLensFlare.h; sourceTree = "<group>"; };
+		2EEBD4501E34EF3F00E78D00 /* CHDRLuminance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CHDRLuminance.cpp; sourceTree = "<group>"; };
+		2EEBD4511E34EF3F00E78D00 /* CHDRLuminance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHDRLuminance.h; sourceTree = "<group>"; };
+		2EEBD4521E34EF3F00E78D00 /* CHDRTextureAdder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CHDRTextureAdder.cpp; sourceTree = "<group>"; };
+		2EEBD4531E34EF3F00E78D00 /* CHDRTextureAdder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHDRTextureAdder.h; sourceTree = "<group>"; };
+		2EEBD4551E34EF3F00E78D00 /* CHardwareSkinningManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CHardwareSkinningManager.cpp; sourceTree = "<group>"; };
+		2EEBD4561E34EF3F00E78D00 /* CHardwareSkinningManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHardwareSkinningManager.h; sourceTree = "<group>"; };
+		2EEBD4581E34EF3F00E78D00 /* CHardwareSkinningMaterial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CHardwareSkinningMaterial.cpp; sourceTree = "<group>"; };
+		2EEBD4591E34EF3F00E78D00 /* CHardwareSkinningMaterial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHardwareSkinningMaterial.h; sourceTree = "<group>"; };
+		2EEBD45A1E34EF3F00E78D00 /* CMaterialCreator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CMaterialCreator.cpp; sourceTree = "<group>"; };
+		2EEBD45B1E34EF3F00E78D00 /* CMaterialCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CMaterialCreator.h; sourceTree = "<group>"; };
+		2EEBD45C1E34EF3F00E78D00 /* CNormalMappingMaterial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CNormalMappingMaterial.cpp; sourceTree = "<group>"; };
+		2EEBD45D1E34EF3F00E78D00 /* CNormalMappingMaterial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNormalMappingMaterial.h; sourceTree = "<group>"; };
+		2EEBD45E1E34EF3F00E78D00 /* CSolidMaterial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CSolidMaterial.cpp; sourceTree = "<group>"; };
+		2EEBD45F1E34EF3F00E78D00 /* CSolidMaterial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSolidMaterial.h; sourceTree = "<group>"; };
+		2EEBD4601E34EF3F00E78D00 /* Stdafx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Stdafx.cpp; sourceTree = "<group>"; };
+		2EEBD4611E34EF3F00E78D00 /* Stdafx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stdafx.h; sourceTree = "<group>"; };
+		2EEBD6E01E34FF1100E78D00 /* libIrrlicht.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libIrrlicht.a; path = ../Dependencies/Irrlicht181/Sources/MacOSX/build/Debug/libIrrlicht.a; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2EEBD4181E34EE4B00E78D00 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2EEBD6E11E34FF1100E78D00 /* libIrrlicht.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2EEBD4121E34EE4B00E78D00 = {
+			isa = PBXGroup;
+			children = (
+				2EEBD4221E34EE5300E78D00 /* Sources */,
+				2EEBD41C1E34EE4B00E78D00 /* Products */,
+				2EEBD6DF1E34FF1100E78D00 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		2EEBD41C1E34EE4B00E78D00 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2EEBD41B1E34EE4B00E78D00 /* libCP3DRenderingEngine.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2EEBD4221E34EE5300E78D00 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				2EEBD42B1E34EF3F00E78D00 /* CP3DRenderingEngine.cpp */,
+				2EEBD42C1E34EF3F00E78D00 /* CP3DRenderingEngine.h */,
+				2EEBD42D1E34EF3F00E78D00 /* RenderingEngine */,
+				2EEBD4601E34EF3F00E78D00 /* Stdafx.cpp */,
+				2EEBD4611E34EF3F00E78D00 /* Stdafx.h */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		2EEBD42D1E34EF3F00E78D00 /* RenderingEngine */ = {
+			isa = PBXGroup;
+			children = (
+				2EEBD42E1E34EF3F00E78D00 /* CustomPasses */,
+				2EEBD4331E34EF3F00E78D00 /* Effects */,
+				2EEBD43A1E34EF3F00E78D00 /* Handler */,
+				2EEBD4431E34EF3F00E78D00 /* HDR */,
+				2EEBD4541E34EF3F00E78D00 /* Managers */,
+				2EEBD4571E34EF3F00E78D00 /* Materials */,
+			);
+			path = RenderingEngine;
+			sourceTree = "<group>";
+		};
+		2EEBD42E1E34EF3F00E78D00 /* CustomPasses */ = {
+			isa = PBXGroup;
+			children = (
+				2EEBD42F1E34EF3F00E78D00 /* CCustomDepthPass.cpp */,
+				2EEBD4301E34EF3F00E78D00 /* CCustomDepthPass.h */,
+				2EEBD4311E34EF3F00E78D00 /* CCustomGeneralPass.cpp */,
+				2EEBD4321E34EF3F00E78D00 /* CCustomGeneralPass.h */,
+			);
+			path = CustomPasses;
+			sourceTree = "<group>";
+		};
+		2EEBD4331E34EF3F00E78D00 /* Effects */ = {
+			isa = PBXGroup;
+			children = (
+				2EEBD4341E34EF3F00E78D00 /* CCP3DEffectsManager.cpp */,
+				2EEBD4351E34EF3F00E78D00 /* CCP3DEffectsManager.h */,
+				2EEBD4361E34EF3F00E78D00 /* CSSAOEffect.cpp */,
+				2EEBD4371E34EF3F00E78D00 /* CSSAOEffect.h */,
+				2EEBD4381E34EF3F00E78D00 /* CVolumetricLightScattering.cpp */,
+				2EEBD4391E34EF3F00E78D00 /* CVolumetricLightScattering.h */,
+			);
+			path = Effects;
+			sourceTree = "<group>";
+		};
+		2EEBD43A1E34EF3F00E78D00 /* Handler */ = {
+			isa = PBXGroup;
+			children = (
+				2EEBD43B1E34EF3F00E78D00 /* CHandler.cpp */,
+				2EEBD43C1E34EF3F00E78D00 /* CHandler.h */,
+				2EEBD43D1E34EF3F00E78D00 /* CHandlerCB.h */,
+				2EEBD43E1E34EF3F00E78D00 /* CHandlerPostProcesses.cpp */,
+				2EEBD43F1E34EF3F00E78D00 /* CP3DHandler.h */,
+				2EEBD4401E34EF3F00E78D00 /* CShaderPre.cpp */,
+				2EEBD4411E34EF3F00E78D00 /* CShaderPre.h */,
+				2EEBD4421E34EF3F00E78D00 /* HandlerShaders.h */,
+			);
+			path = Handler;
+			sourceTree = "<group>";
+		};
+		2EEBD4431E34EF3F00E78D00 /* HDR */ = {
+			isa = PBXGroup;
+			children = (
+				2EEBD4441E34EF3F00E78D00 /* CCP3DHDRManager.cpp */,
+				2EEBD4451E34EF3F00E78D00 /* CCP3DHDRManager.h */,
+				2EEBD4461E34EF3F00E78D00 /* CHDRBloom.cpp */,
+				2EEBD4471E34EF3F00E78D00 /* CHDRBloom.h */,
+				2EEBD4481E34EF3F00E78D00 /* CHDRBrightPass.cpp */,
+				2EEBD4491E34EF3F00E78D00 /* CHDRBrightPass.h */,
+				2EEBD44A1E34EF3F00E78D00 /* CHDRDownSample.cpp */,
+				2EEBD44B1E34EF3F00E78D00 /* CHDRDownSample.h */,
+				2EEBD44C1E34EF3F00E78D00 /* CHDRGaussianBlur.cpp */,
+				2EEBD44D1E34EF3F00E78D00 /* CHDRGaussianBlur.h */,
+				2EEBD44E1E34EF3F00E78D00 /* CHDRLensFlare.cpp */,
+				2EEBD44F1E34EF3F00E78D00 /* CHDRLensFlare.h */,
+				2EEBD4501E34EF3F00E78D00 /* CHDRLuminance.cpp */,
+				2EEBD4511E34EF3F00E78D00 /* CHDRLuminance.h */,
+				2EEBD4521E34EF3F00E78D00 /* CHDRTextureAdder.cpp */,
+				2EEBD4531E34EF3F00E78D00 /* CHDRTextureAdder.h */,
+			);
+			path = HDR;
+			sourceTree = "<group>";
+		};
+		2EEBD4541E34EF3F00E78D00 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				2EEBD4551E34EF3F00E78D00 /* CHardwareSkinningManager.cpp */,
+				2EEBD4561E34EF3F00E78D00 /* CHardwareSkinningManager.h */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		2EEBD4571E34EF3F00E78D00 /* Materials */ = {
+			isa = PBXGroup;
+			children = (
+				2EEBD4581E34EF3F00E78D00 /* CHardwareSkinningMaterial.cpp */,
+				2EEBD4591E34EF3F00E78D00 /* CHardwareSkinningMaterial.h */,
+				2EEBD45A1E34EF3F00E78D00 /* CMaterialCreator.cpp */,
+				2EEBD45B1E34EF3F00E78D00 /* CMaterialCreator.h */,
+				2EEBD45C1E34EF3F00E78D00 /* CNormalMappingMaterial.cpp */,
+				2EEBD45D1E34EF3F00E78D00 /* CNormalMappingMaterial.h */,
+				2EEBD45E1E34EF3F00E78D00 /* CSolidMaterial.cpp */,
+				2EEBD45F1E34EF3F00E78D00 /* CSolidMaterial.h */,
+			);
+			path = Materials;
+			sourceTree = "<group>";
+		};
+		2EEBD6DF1E34FF1100E78D00 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2EEBD6E01E34FF1100E78D00 /* libIrrlicht.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		2EEBD4191E34EE4B00E78D00 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2EEBD4751E34EF3F00E78D00 /* HandlerShaders.h in Headers */,
+				2EEBD48D1E34EF3F00E78D00 /* CNormalMappingMaterial.h in Headers */,
+				2EEBD4771E34EF3F00E78D00 /* CCP3DHDRManager.h in Headers */,
+				2EEBD4911E34EF3F00E78D00 /* Stdafx.h in Headers */,
+				2EEBD48F1E34EF3F00E78D00 /* CSolidMaterial.h in Headers */,
+				2EEBD4701E34EF3F00E78D00 /* CHandlerCB.h in Headers */,
+				2EEBD4791E34EF3F00E78D00 /* CHDRBloom.h in Headers */,
+				2EEBD47D1E34EF3F00E78D00 /* CHDRDownSample.h in Headers */,
+				2EEBD4651E34EF3F00E78D00 /* CCustomDepthPass.h in Headers */,
+				2EEBD4851E34EF3F00E78D00 /* CHDRTextureAdder.h in Headers */,
+				2EEBD4631E34EF3F00E78D00 /* CP3DRenderingEngine.h in Headers */,
+				2EEBD4671E34EF3F00E78D00 /* CCustomGeneralPass.h in Headers */,
+				2EEBD46D1E34EF3F00E78D00 /* CVolumetricLightScattering.h in Headers */,
+				2EEBD47F1E34EF3F00E78D00 /* CHDRGaussianBlur.h in Headers */,
+				2EEBD47B1E34EF3F00E78D00 /* CHDRBrightPass.h in Headers */,
+				2EEBD4741E34EF3F00E78D00 /* CShaderPre.h in Headers */,
+				2EEBD4871E34EF3F00E78D00 /* CHardwareSkinningManager.h in Headers */,
+				2EEBD48B1E34EF3F00E78D00 /* CMaterialCreator.h in Headers */,
+				2EEBD4891E34EF3F00E78D00 /* CHardwareSkinningMaterial.h in Headers */,
+				2EEBD46B1E34EF3F00E78D00 /* CSSAOEffect.h in Headers */,
+				2EEBD4691E34EF3F00E78D00 /* CCP3DEffectsManager.h in Headers */,
+				2EEBD4831E34EF3F00E78D00 /* CHDRLuminance.h in Headers */,
+				2EEBD4721E34EF3F00E78D00 /* CP3DHandler.h in Headers */,
+				2EEBD46F1E34EF3F00E78D00 /* CHandler.h in Headers */,
+				2EEBD4811E34EF3F00E78D00 /* CHDRLensFlare.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		2EEBD41A1E34EE4B00E78D00 /* CP3DRenderingEngine */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2EEBD41F1E34EE4B00E78D00 /* Build configuration list for PBXNativeTarget "CP3DRenderingEngine" */;
+			buildPhases = (
+				2EEBD4171E34EE4B00E78D00 /* Sources */,
+				2EEBD4181E34EE4B00E78D00 /* Frameworks */,
+				2EEBD4191E34EE4B00E78D00 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CP3DRenderingEngine;
+			productName = CP3DRenderingEngine;
+			productReference = 2EEBD41B1E34EE4B00E78D00 /* libCP3DRenderingEngine.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2EEBD4131E34EE4B00E78D00 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0800;
+				ORGANIZATIONNAME = "Julien Moreau-Mathis";
+				TargetAttributes = {
+					2EEBD41A1E34EE4B00E78D00 = {
+						CreatedOnToolsVersion = 8.0;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 2EEBD4161E34EE4B00E78D00 /* Build configuration list for PBXProject "CP3DRenderingEngine" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 2EEBD4121E34EE4B00E78D00;
+			productRefGroup = 2EEBD41C1E34EE4B00E78D00 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2EEBD41A1E34EE4B00E78D00 /* CP3DRenderingEngine */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2EEBD4171E34EE4B00E78D00 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2EEBD48E1E34EF3F00E78D00 /* CSolidMaterial.cpp in Sources */,
+				2EEBD4761E34EF3F00E78D00 /* CCP3DHDRManager.cpp in Sources */,
+				2EEBD4711E34EF3F00E78D00 /* CHandlerPostProcesses.cpp in Sources */,
+				2EEBD4681E34EF3F00E78D00 /* CCP3DEffectsManager.cpp in Sources */,
+				2EEBD4841E34EF3F00E78D00 /* CHDRTextureAdder.cpp in Sources */,
+				2EEBD4781E34EF3F00E78D00 /* CHDRBloom.cpp in Sources */,
+				2EEBD4621E34EF3F00E78D00 /* CP3DRenderingEngine.cpp in Sources */,
+				2EEBD46A1E34EF3F00E78D00 /* CSSAOEffect.cpp in Sources */,
+				2EEBD47C1E34EF3F00E78D00 /* CHDRDownSample.cpp in Sources */,
+				2EEBD4881E34EF3F00E78D00 /* CHardwareSkinningMaterial.cpp in Sources */,
+				2EEBD4901E34EF3F00E78D00 /* Stdafx.cpp in Sources */,
+				2EEBD46E1E34EF3F00E78D00 /* CHandler.cpp in Sources */,
+				2EEBD4801E34EF3F00E78D00 /* CHDRLensFlare.cpp in Sources */,
+				2EEBD4861E34EF3F00E78D00 /* CHardwareSkinningManager.cpp in Sources */,
+				2EEBD47E1E34EF3F00E78D00 /* CHDRGaussianBlur.cpp in Sources */,
+				2EEBD47A1E34EF3F00E78D00 /* CHDRBrightPass.cpp in Sources */,
+				2EEBD4661E34EF3F00E78D00 /* CCustomGeneralPass.cpp in Sources */,
+				2EEBD48A1E34EF3F00E78D00 /* CMaterialCreator.cpp in Sources */,
+				2EEBD46C1E34EF3F00E78D00 /* CVolumetricLightScattering.cpp in Sources */,
+				2EEBD48C1E34EF3F00E78D00 /* CNormalMappingMaterial.cpp in Sources */,
+				2EEBD4731E34EF3F00E78D00 /* CShaderPre.cpp in Sources */,
+				2EEBD4641E34EF3F00E78D00 /* CCustomDepthPass.cpp in Sources */,
+				2EEBD4821E34EF3F00E78D00 /* CHDRLuminance.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2EEBD41D1E34EE4B00E78D00 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		2EEBD41E1E34EE4B00E78D00 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		2EEBD4201E34EE4B00E78D00 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				EXECUTABLE_PREFIX = lib;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_INPUT_FILETYPE = automatic;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"_DEBUG=1",
+					"$(inherited)",
+				);
+				HEADER_SEARCH_PATHS = (
+					"../Dependencies/Irrlicht181/include/**",
+					"../include/**",
+				);
+				LIBRARY_SEARCH_PATHS = ../Dependencies/Irrlicht181/;
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		2EEBD4211E34EE4B00E78D00 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				EXECUTABLE_PREFIX = lib;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_INPUT_FILETYPE = automatic;
+				HEADER_SEARCH_PATHS = (
+					"../Dependencies/Irrlicht181/include/**",
+					"../include/**",
+				);
+				LIBRARY_SEARCH_PATHS = ../Dependencies/Irrlicht181/;
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2EEBD4161E34EE4B00E78D00 /* Build configuration list for PBXProject "CP3DRenderingEngine" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2EEBD41D1E34EE4B00E78D00 /* Debug */,
+				2EEBD41E1E34EE4B00E78D00 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2EEBD41F1E34EE4B00E78D00 /* Build configuration list for PBXNativeTarget "CP3DRenderingEngine" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2EEBD4201E34EE4B00E78D00 /* Debug */,
+				2EEBD4211E34EE4B00E78D00 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2EEBD4131E34EE4B00E78D00 /* Project object */;
+}

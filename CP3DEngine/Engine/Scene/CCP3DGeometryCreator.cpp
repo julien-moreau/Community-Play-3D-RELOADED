@@ -10,14 +10,14 @@ using namespace video;
 namespace cp3d {
 namespace engine {
 
-auto CCP3DGeometryCreatorAddVertex = [&](CMeshBuffer<S3DVertex> *buffer, S3DVertex v, const u32 &indice) {
+auto CCP3DGeometryCreatorAddVertex = [](CMeshBuffer<S3DVertex> *buffer, S3DVertex v, const u32 &indice) {
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
 	buffer->getVertexBuffer(indice)->addVertex(&v);
 	#else
 	buffer->Vertices.push_back(v);
 	#endif
 };
-auto CCP3DGeometryCreatorAddIndex = [&](CMeshBuffer<S3DVertex> * buffer, const u32 &index) {
+auto CCP3DGeometryCreatorAddIndex = [](CMeshBuffer<S3DVertex> * buffer, const u32 &index) {
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
 	buffer->getIndexBuffer()->addIndex(index);
 	#else
@@ -25,14 +25,14 @@ auto CCP3DGeometryCreatorAddIndex = [&](CMeshBuffer<S3DVertex> * buffer, const u
 	#endif
 };
 
-auto CCP3DGeometryCreatorSetUsedVertices = [&](CMeshBuffer<S3DVertex> *buffer, const u32 &used) {
+auto CCP3DGeometryCreatorSetUsedVertices = [](CMeshBuffer<S3DVertex> *buffer, const u32 &used) {
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
 	buffer->getVertexBuffer(0)->set_used(used);
 	#else
 	buffer->Vertices.set_used(used);
 	#endif
 };
-auto CCP3DGeometryCreatorSetUsedIndices = [&](CMeshBuffer<S3DVertex> *buffer, const u32 &used) {
+auto CCP3DGeometryCreatorSetUsedIndices = [](CMeshBuffer<S3DVertex> *buffer, const u32 &used) {
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
 	buffer->getIndexBuffer()->set_used(used);
 	#else
@@ -40,21 +40,21 @@ auto CCP3DGeometryCreatorSetUsedIndices = [&](CMeshBuffer<S3DVertex> *buffer, co
 	#endif
 };
 
-auto CCP3DGeometryCreatorGetVertices = [&](IMeshBuffer *buffer) -> S3DVertex* {
+auto CCP3DGeometryCreatorGetVertices = [](IMeshBuffer *buffer) -> S3DVertex* {
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
 	return (S3DVertex *)buffer->getVertexBuffer(0)->getVertices();
 	#else
 	return (S3DVertex *)buffer->getVertices();
 	#endif
 };
-auto CCP3DGeometryCreatorGetVertex = [&](CMeshBuffer<S3DVertex> *buffer, const u32 &indice) -> S3DVertex& {
+auto CCP3DGeometryCreatorGetVertex = [](CMeshBuffer<S3DVertex> *buffer, const u32 &indice) -> S3DVertex& {
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
 	return *(S3DVertex *)buffer->getVertexBuffer(0)->getVertex(indice);
 	#else
 	return buffer->Vertices[indice];
 	#endif
 };
-auto CCP3DGeometryCreatorSetIndex = [&](CMeshBuffer<S3DVertex> *buffer, const u32 &indice, const u32& value) {
+auto CCP3DGeometryCreatorSetIndex = [](CMeshBuffer<S3DVertex> *buffer, const u32 &indice, const u32& value) {
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
 	buffer->getIndexBuffer()->setIndex(indice, value);
 	#else
@@ -62,7 +62,7 @@ auto CCP3DGeometryCreatorSetIndex = [&](CMeshBuffer<S3DVertex> *buffer, const u3
 	#endif
 };
 
-auto CCP3DGeometryCreatorGetVertexCount = [&](IMeshBuffer *buffer) -> const u32 {
+auto CCP3DGeometryCreatorGetVertexCount = [](IMeshBuffer *buffer) -> const u32 {
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
 	return buffer->getVertexBuffer(0)->getVertexCount();
 	#else
@@ -208,7 +208,7 @@ irr::scene::IMesh *CCP3DGeometryCreator::createTorusMesh(irr::f32 diameter, irr:
 		f32 outerAngle = i * core::PI * 2.f / tessellation - core::PI / 2.f;
 
 		matrix4 transform;
-		transform.setTranslation(vector3df(diameter / 2.f, 0.f, 0.f)).rotateVect(vector3df(0.f, outerAngle, 0.f));
+		//transform.setTranslation(vector3df(diameter / 2.f, 0.f, 0.f)).rotateVect(vector3df(0.f, outerAngle, 0.f));
 
 		for (u32 j=0; j <= tessellation; j++) {
 			f32 v = 1.f - f32(j) / f32(tessellation);

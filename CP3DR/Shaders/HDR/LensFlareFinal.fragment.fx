@@ -29,7 +29,6 @@ vec4 motionBlur(vec2 texCoord, vec2 screenSize) {
 
 	vec4 result = texture2D(ScreenMapSampler, texCoord);
 
-	[loop]
 	for (int i = 1; i < nSamples; ++i) {
 		vec2 offset = texCoord + velocity * (float(i) / float(nSamples - 1) - 0.5);
 		result += texture2D(ScreenMapSampler, offset);

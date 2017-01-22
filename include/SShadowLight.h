@@ -25,7 +25,7 @@ public:
 	//! \param directional: if the light is directional of not
 	SShadowLight(irr::u32 shadowMapResolution = 1024,
 				 irr::core::vector3df position = irr::core::vector3df(0.f),
-				 irr::core::vector3df& target = irr::core::vector3df(0.f),
+				 irr::core::vector3df target = irr::core::vector3df(0.f),
 				 irr::video::SColorf lightColor = irr::video::SColor(0xffffffff), 
 				 irr::f32 nearValue = 10.0f, irr::f32 farValue = 400.0f,
 				 irr::f32 fov = 90.0f * irr::core::DEGTORAD64, bool directional = false)

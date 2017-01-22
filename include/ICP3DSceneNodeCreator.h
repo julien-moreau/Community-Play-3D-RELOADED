@@ -9,7 +9,7 @@ namespace cp3d {
 namespace engine {
 
 typedef std::function<void(irr::scene::ISceneNode *node)> ICP3DSceneNodeCreatorCallback;
-#define ICP3D_SN_CREATOR_DEFAULT_CB [&](irr::scene::ISceneNode *node) { }
+#define ICP3D_SN_CREATOR_DEFAULT_CB [](irr::scene::ISceneNode *node) { }
 
 class ICP3DSceneNodeCreator {
 public:

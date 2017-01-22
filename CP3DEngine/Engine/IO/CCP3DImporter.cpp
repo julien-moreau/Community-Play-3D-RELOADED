@@ -1,7 +1,8 @@
 
 #include "stdafx.h"
-#include "CCP3DExporter.h"
+#include <cstdlib>
 
+#include "CCP3DExporter.h"
 #include "../../CP3DEngine.h"
 
 using namespace irr;
