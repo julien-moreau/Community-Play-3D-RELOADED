@@ -36,14 +36,14 @@ vec4 motionBlur(vec2 texCoord, vec2 screenSize) {
 	velocity2 *= motionScale;
 
 	speed = length(velocity2 / texelSize);
-	int nSamples2 = int(clamp(int(speed), 1.0, MAX_MOTION_SAMPLES));
+	int nSamples2 = int(clamp(speed, 1.0, MAX_MOTION_SAMPLES));
 
 	velocity2 = normalize(velocity2) * texelSize;
 	float hlim = float(-nSamples2) * 0.5 + 0.5;
 
 	// Render
 	vec4 result = texture2D(ScreenMapSampler, texCoord);
-	int nSamples = max(nSamples1, nSamples2);
+	int nSamples = int(max(float(nSamples1), float(nSamples2)));
 
 	if (nSamples1 > nSamples2) {
 		for (int i = 1; i < nSamples; ++i) {

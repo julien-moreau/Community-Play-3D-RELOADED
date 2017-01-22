@@ -10,7 +10,7 @@ namespace rendering {
 	class ICP3DAnimator : public irr::scene::ISceneNodeAnimator {
 	public:
 		//! Constructor
-		ICP3DAnimator() : LastTime(0), Diff(0)
+		ICP3DAnimator() : LastTime(0)
 		{
 
 		}

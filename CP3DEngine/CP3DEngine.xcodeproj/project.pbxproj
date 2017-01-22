@@ -34,6 +34,8 @@
 		2EEBD6481E34F20600E78D00 /* Stdafx.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD62F1E34F20600E78D00 /* Stdafx.h */; };
 		2EEBD6DD1E34FF0700E78D00 /* libCP3DRenderingEngine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EEBD6DB1E34FF0700E78D00 /* libCP3DRenderingEngine.a */; };
 		2EEBD6DE1E34FF0700E78D00 /* libIrrlicht.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EEBD6DC1E34FF0700E78D00 /* libIrrlicht.a */; };
+		2EEBD7571E350B8600E78D00 /* CAnimatedMeshSceneNodeManipulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBD7551E350B8600E78D00 /* CAnimatedMeshSceneNodeManipulator.cpp */; };
+		2EEBD7581E350B8600E78D00 /* CAnimatedMeshSceneNodeManipulator.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EEBD7561E350B8600E78D00 /* CAnimatedMeshSceneNodeManipulator.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -65,6 +67,8 @@
 		2EEBD62F1E34F20600E78D00 /* Stdafx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stdafx.h; sourceTree = "<group>"; };
 		2EEBD6DB1E34FF0700E78D00 /* libCP3DRenderingEngine.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libCP3DRenderingEngine.a; path = "../../../../Library/Developer/Xcode/DerivedData/CP3D-bsyxoyntifdldmbldiirobaowphw/Build/Products/Debug/libCP3DRenderingEngine.a"; sourceTree = "<group>"; };
 		2EEBD6DC1E34FF0700E78D00 /* libIrrlicht.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libIrrlicht.a; path = ../Dependencies/Irrlicht181/Sources/MacOSX/build/Debug/libIrrlicht.a; sourceTree = "<group>"; };
+		2EEBD7551E350B8600E78D00 /* CAnimatedMeshSceneNodeManipulator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAnimatedMeshSceneNodeManipulator.cpp; sourceTree = "<group>"; };
+		2EEBD7561E350B8600E78D00 /* CAnimatedMeshSceneNodeManipulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAnimatedMeshSceneNodeManipulator.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,6 +161,7 @@
 		2EEBD6231E34F20600E78D00 /* Scene */ = {
 			isa = PBXGroup;
 			children = (
+				2EEBD7541E350B8600E78D00 /* AnimatedMeshSceneNode */,
 				2EEBD6241E34F20600E78D00 /* CCP3DGeometryCreator.cpp */,
 				2EEBD6251E34F20600E78D00 /* CCP3DGeometryCreator.h */,
 				2EEBD6261E34F20600E78D00 /* CCP3DSceneNodeCreator.cpp */,
@@ -194,6 +199,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		2EEBD7541E350B8600E78D00 /* AnimatedMeshSceneNode */ = {
+			isa = PBXGroup;
+			children = (
+				2EEBD7551E350B8600E78D00 /* CAnimatedMeshSceneNodeManipulator.cpp */,
+				2EEBD7561E350B8600E78D00 /* CAnimatedMeshSceneNodeManipulator.h */,
+			);
+			path = AnimatedMeshSceneNode;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -209,6 +223,7 @@
 				2EEBD6371E34F20600E78D00 /* CCP3DEventReceiver.h in Headers */,
 				2EEBD6461E34F20600E78D00 /* CMeshSceneNodeInstances.h in Headers */,
 				2EEBD6441E34F20600E78D00 /* CCloudSceneNode.h in Headers */,
+				2EEBD7581E350B8600E78D00 /* CAnimatedMeshSceneNodeManipulator.h in Headers */,
 				2EEBD6401E34F20600E78D00 /* CCP3DGeometryCreator.h in Headers */,
 				2EEBD6421E34F20600E78D00 /* CCP3DSceneNodeCreator.h in Headers */,
 				2EEBD6331E34F20600E78D00 /* CCP3DCustomUpdater.h in Headers */,
@@ -282,6 +297,7 @@
 				2EEBD6431E34F20600E78D00 /* CCloudSceneNode.cpp in Sources */,
 				2EEBD6341E34F20600E78D00 /* CCP3DEngineCore.cpp in Sources */,
 				2EEBD6451E34F20600E78D00 /* CMeshSceneNodeInstances.cpp in Sources */,
+				2EEBD7571E350B8600E78D00 /* CAnimatedMeshSceneNodeManipulator.cpp in Sources */,
 				2EEBD6471E34F20600E78D00 /* Stdafx.cpp in Sources */,
 				2EEBD6301E34F20600E78D00 /* CP3DEngine.cpp in Sources */,
 				2EEBD63C1E34F20600E78D00 /* CCP3DExporter.cpp in Sources */,

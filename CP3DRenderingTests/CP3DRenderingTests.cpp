@@ -79,8 +79,8 @@ int main(int argc, char* argv[]) {
 
 	//cp3d::test::GlobalTest(device);
 	//cp3d::test::Direct3D11Test(device);
-	//cp3d::test::Direct3D9Debug(device, new CEventReceiver(device));
-	cp3d::test::HDRTest(device, new CEventReceiver(device));
+	cp3d::test::Direct3D9Debug(device, new CEventReceiver(device));
+	//cp3d::test::HDRTest(device, new CEventReceiver(device));
 	//cp3d::test::SkinnedMeshDebug(device, new CEventReceiver(device));
 
 	return EXIT_SUCCESS;
