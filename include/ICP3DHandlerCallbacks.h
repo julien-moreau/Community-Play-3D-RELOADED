@@ -44,8 +44,14 @@ class ICP3DHandlerShadowsCallback {
 public:
 
 	//! Constructor
-	ICP3DHandlerShadowsCallback()
-	{ }
+	ICP3DHandlerShadowsCallback() {
+        LightColour.set_used(_IRR_MATERIAL_MAX_TEXTURES_);
+        ProjLink.set_used(_IRR_MATERIAL_MAX_TEXTURES_);
+        ViewLink.set_used(_IRR_MATERIAL_MAX_TEXTURES_);
+        LightLink.set_used(_IRR_MATERIAL_MAX_TEXTURES_);
+        FarLink.set_used(_IRR_MATERIAL_MAX_TEXTURES_);
+        MapRes.set_used(_IRR_MATERIAL_MAX_TEXTURES_);
+    }
 
 	//! Destructor
 	virtual ~ICP3DHandlerShadowsCallback()
@@ -63,30 +69,57 @@ public:
 		}
 		#endif
 
-		irr::core::matrix4 worldViewProj2 = ProjLink;
-		worldViewProj2 *= ViewLink;
-		worldViewProj2 *= driver->getTransform(irr::video::ETS_WORLD);
-		services->setVertexShaderConstant("mWorldViewProj2", worldViewProj2.pointer(), 16);
-
-		driver->getTransform(irr::video::ETS_WORLD).getInverse(invWorld);
-		irr::core::vector3df lightPosOS = LightLink;
-		invWorld.transformVect(lightPosOS);
-		services->setVertexShaderConstant("LightPos", reinterpret_cast<irr::f32*>(&lightPosOS.X), 3);
-
-		services->setVertexShaderConstant("MaxD", reinterpret_cast<irr::f32*>(&FarLink), 1);
-		services->setVertexShaderConstant("MAPRES", &MapRes, 1);
-
-		services->setPixelShaderConstant("LightColour", reinterpret_cast<irr::f32*>(&LightColour.r), 4);
+        for (irr::s32 i = 0; i < LightsCount; i++) {
+            CurrentName = "mWorldViewProjLight";
+            CurrentName += i;
+            WorldViewProj2.setM(ProjLink[i].pointer());
+            WorldViewProj2 *= ViewLink[i];
+            WorldViewProj2 *= driver->getTransform(irr::video::ETS_WORLD);
+            services->setVertexShaderConstant(CurrentName.c_str(), WorldViewProj2.pointer(), 16);
+            
+            CurrentName = "LightPos";
+            CurrentName += i;
+            driver->getTransform(irr::video::ETS_WORLD).getInverse(InvWorld);
+            irr::core::vector3df lightPosOS = LightLink[i];
+            InvWorld.transformVect(lightPosOS);
+            services->setVertexShaderConstant(CurrentName.c_str(), reinterpret_cast<irr::f32*>(&lightPosOS.X), 3);
+            
+            CurrentName = "MaxD";
+            CurrentName += i;
+            services->setVertexShaderConstant(CurrentName.c_str(), reinterpret_cast<irr::f32*>(&FarLink[i]), 1);
+            
+            CurrentName = "MAPRES";
+            CurrentName += i;
+            services->setVertexShaderConstant(CurrentName.c_str(), reinterpret_cast<irr::f32*>(&MapRes[i]), 1);
+            
+            CurrentName = "LightColour";
+            CurrentName += i;
+            irr::video::SColorf &lightColour = LightColour[i];
+            services->setPixelShaderConstant(CurrentName.c_str(), reinterpret_cast<irr::f32*>(&lightColour.r), 4);
+            
+            if (driver->getDriverType() == irr::video::EDT_OPENGL) {
+                CurrentName = "ShadowMapSampler";
+                CurrentName += i;
+                services->setPixelShaderConstant(CurrentName.c_str(), &i, 1);
+            }
+        }
 	}
 
 public:
 
-	irr::core::matrix4 invWorld;
-	irr::video::SColorf LightColour;
-	irr::core::matrix4 ProjLink;
-	irr::core::matrix4 ViewLink;
-	irr::core::vector3df LightLink;
-	irr::f32 FarLink, MapRes;
+	irr::core::matrix4 InvWorld;
+    irr::core::matrix4 WorldViewProj2;
+    
+    irr::core::array<irr::video::SColorf> LightColour;
+	irr::core::array<irr::core::matrix4> ProjLink;
+	irr::core::array<irr::core::matrix4> ViewLink;
+	irr::core::array<irr::core::vector3df> LightLink;
+    irr::core::array<irr::f32> FarLink;
+    irr::core::array<irr::f32> MapRes;
+    irr::u32 LightsCount;
+    
+private:
+    irr::core::stringc CurrentName;
 
 };
 

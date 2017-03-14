@@ -28,8 +28,12 @@ CCP3DEngine::CCP3DEngine(IrrlichtDevice *device) : Device(device), DrawGUI(false
 	Handler = Rengine->getHandler();
 
 	MonitorPlugin = new CCP3DMonitorPlugin(Rengine);
-	MonitorPlugin->addMonitor("CP3DDefaultMonitor_d.dll");
-	
+    #ifdef _IRR_OSX_PLATFORM_
+    MonitorPlugin->addMonitor("CP3DDefaultMonitor_d");
+    #else
+	MonitorPlugin->addMonitor("CP3DDefaultMonitor_d");
+    #endif
+    
 	Driver = Rengine->getVideoDriver();
 
 	/// Configure Events & Update
@@ -37,7 +41,7 @@ CCP3DEngine::CCP3DEngine(IrrlichtDevice *device) : Device(device), DrawGUI(false
 	Device->setEventReceiver(EventReceiver);
 
 	Updater = new CCP3DCustomUpdater();
-
+    
 	/// Scene
 	SceneNodeCreator = new CCP3DSceneNodeCreator(Rengine);
 	GeometryCreator = new CCP3DGeometryCreator(Rengine->getSceneManager());

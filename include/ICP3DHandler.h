@@ -68,7 +68,7 @@ public:
 	//! Returns the shadow map of a light
 	//! \param resolution: the resolution of the shadow map
 	//! \param secondary: if the returns shadow map was blurred
-	virtual irr::video::ITexture* getShadowMapTexture(const irr::u32 resolution, const bool secondary = false) = 0;
+    virtual irr::video::ITexture* getShadowMapTexture(const irr::u32 &resolution, const bool &secondary = false, const irr::u32 &index = -1) = 0;
 
 	//! Removes shadows from a node.
 	//! \param node: the node you want to remove from lighting calculations

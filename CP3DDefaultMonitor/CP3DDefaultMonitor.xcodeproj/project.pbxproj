@@ -1,0 +1,294 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2E26E4891E77658400A3A684 /* CP3DDefaultMonitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2E26E4851E77658400A3A684 /* CP3DDefaultMonitor.cpp */; };
+		2E26E48A1E77658400A3A684 /* CP3DDefaultMonitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E26E4861E77658400A3A684 /* CP3DDefaultMonitor.h */; };
+		2E26E48B1E77658400A3A684 /* Stdafx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2E26E4871E77658400A3A684 /* Stdafx.cpp */; };
+		2E26E48C1E77658400A3A684 /* Stdafx.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E26E4881E77658400A3A684 /* Stdafx.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		2E26E45E1E77652D00A3A684 /* libCP3DDefaultMonitor_d.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libCP3DDefaultMonitor_d.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		2E26E4851E77658400A3A684 /* CP3DDefaultMonitor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CP3DDefaultMonitor.cpp; sourceTree = "<group>"; };
+		2E26E4861E77658400A3A684 /* CP3DDefaultMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CP3DDefaultMonitor.h; sourceTree = "<group>"; };
+		2E26E4871E77658400A3A684 /* Stdafx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Stdafx.cpp; sourceTree = "<group>"; };
+		2E26E4881E77658400A3A684 /* Stdafx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stdafx.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2E26E45B1E77652D00A3A684 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2E26E4551E77652D00A3A684 = {
+			isa = PBXGroup;
+			children = (
+				2E26E4841E77657200A3A684 /* Sources */,
+				2E26E45F1E77652D00A3A684 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2E26E45F1E77652D00A3A684 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2E26E45E1E77652D00A3A684 /* libCP3DDefaultMonitor_d.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2E26E4841E77657200A3A684 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				2E26E4851E77658400A3A684 /* CP3DDefaultMonitor.cpp */,
+				2E26E4861E77658400A3A684 /* CP3DDefaultMonitor.h */,
+				2E26E4871E77658400A3A684 /* Stdafx.cpp */,
+				2E26E4881E77658400A3A684 /* Stdafx.h */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		2E26E45C1E77652D00A3A684 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2E26E48C1E77658400A3A684 /* Stdafx.h in Headers */,
+				2E26E48A1E77658400A3A684 /* CP3DDefaultMonitor.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		2E26E45D1E77652D00A3A684 /* CP3DDefaultMonitor */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2E26E4621E77652D00A3A684 /* Build configuration list for PBXNativeTarget "CP3DDefaultMonitor" */;
+			buildPhases = (
+				2E26E45A1E77652D00A3A684 /* Sources */,
+				2E26E45B1E77652D00A3A684 /* Frameworks */,
+				2E26E45C1E77652D00A3A684 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CP3DDefaultMonitor;
+			productName = CP3DDefaultMonitor;
+			productReference = 2E26E45E1E77652D00A3A684 /* libCP3DDefaultMonitor_d.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2E26E4561E77652D00A3A684 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0800;
+				ORGANIZATIONNAME = "Julien Moreau-Mathis";
+				TargetAttributes = {
+					2E26E45D1E77652D00A3A684 = {
+						CreatedOnToolsVersion = 8.0;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 2E26E4591E77652D00A3A684 /* Build configuration list for PBXProject "CP3DDefaultMonitor" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 2E26E4551E77652D00A3A684;
+			productRefGroup = 2E26E45F1E77652D00A3A684 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2E26E45D1E77652D00A3A684 /* CP3DDefaultMonitor */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2E26E45A1E77652D00A3A684 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2E26E4891E77658400A3A684 /* CP3DDefaultMonitor.cpp in Sources */,
+				2E26E48B1E77658400A3A684 /* Stdafx.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2E26E4601E77652D00A3A684 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		2E26E4611E77652D00A3A684 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		2E26E4631E77652D00A3A684 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				DSTROOT = ../CP3DR;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				HEADER_SEARCH_PATHS = (
+					../Dependencies/Irrlicht181/include,
+					../include,
+				);
+				INSTALL_PATH = ../CP3DR;
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_NAME = "$(TARGET_NAME)_d";
+			};
+			name = Debug;
+		};
+		2E26E4641E77652D00A3A684 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				DSTROOT = ../CP3DR;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				HEADER_SEARCH_PATHS = (
+					../Dependencies/Irrlicht181/include,
+					../include,
+				);
+				INSTALL_PATH = ../CP3DR;
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2E26E4591E77652D00A3A684 /* Build configuration list for PBXProject "CP3DDefaultMonitor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2E26E4601E77652D00A3A684 /* Debug */,
+				2E26E4611E77652D00A3A684 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2E26E4621E77652D00A3A684 /* Build configuration list for PBXNativeTarget "CP3DDefaultMonitor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2E26E4631E77652D00A3A684 /* Debug */,
+				2E26E4641E77652D00A3A684 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2E26E4561E77652D00A3A684 /* Project object */;
+}

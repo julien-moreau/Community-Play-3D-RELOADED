@@ -1,26 +1,28 @@
-
 #ifdef OPENGL_DRIVER
 
 struct VS_OUTPUT 
 {
-	vec4 Position;
 	vec4 ShadowMapSamplingPos;
 	vec4 MVar;
 };
 
-uniform float MaxD, MAPRES;
-uniform vec3 LightPos;
+uniform float MaxD0, MaxD1, MaxD2, MaxD3, MaxD4, MaxD5;
+uniform float MAPRES0, MAPRES1, MAPRES2, MAPRES3, MAPRES4, MAPRES5;
+uniform vec3 LightPos0, LightPos1, LightPos2, LightPos3, LightPos4, LightPos5;
 uniform mat4 mWorldViewProj;
-uniform mat4 mWorldViewProj2;
+uniform mat4 mWorldViewProjLight0, mWorldViewProjLight1, mWorldViewProjLight2,
+             mWorldViewProjLight3, mWorldViewProjLight4, mWorldViewProjLight5;
 
-VS_OUTPUT vertexMain( in vec3 Position) 
+varying vec4 SMPos0, SMPos1, SMPos2, SMPos3, SMPos4, SMPos5;
+varying vec4 MVar0, MVar1, MVar2, MVar3, MVar4, MVar5;
+
+VS_OUTPUT vertexMain(in vec3 Position, in mat4 worldViewProj, in vec3 lightPos, in float MaxD, in float MAPRES)
 {
 	VS_OUTPUT OUT;
 
-	OUT.Position = (mWorldViewProj * vec4(Position.x, Position.y, Position.z, 1.0));
-	OUT.ShadowMapSamplingPos = (mWorldViewProj2 * vec4(Position.x, Position.y, Position.z, 1.0));
+	OUT.ShadowMapSamplingPos = (worldViewProj * vec4(gl_Vertex.xyz, 1.0));
 
-	vec3 lightDir = normalize(LightPos - Position);
+	vec3 lightDir = normalize(lightPos - gl_Vertex.xyz);
 	
 	OUT.MVar.x = OUT.ShadowMapSamplingPos.z;
 	OUT.MVar.y = dot(normalize(gl_Normal.xyz), lightDir);
@@ -32,11 +34,41 @@ VS_OUTPUT vertexMain( in vec3 Position)
 
 void main() 
 {
-	VS_OUTPUT vOut = vertexMain(gl_Vertex.xyz);
+    gl_Position = (mWorldViewProj * vec4(gl_Vertex.x, gl_Vertex.y, gl_Vertex.z, 1.0));
 
-	gl_Position = vOut.Position;
-	gl_TexCoord[0] = vOut.ShadowMapSamplingPos;
-	gl_TexCoord[1] = vOut.MVar;
+	VS_OUTPUT vOut = vertexMain(gl_Position.xyz, mWorldViewProjLight0, LightPos0, MaxD0, MAPRES0);
+	SMPos0 = vOut.ShadowMapSamplingPos;
+	MVar0 = vOut.MVar;
+
+    #if (LIGHTS_COUNT >= 2)
+    VS_OUTPUT vOut2 = vertexMain(gl_Position.xyz, mWorldViewProjLight1, LightPos1, MaxD1, MAPRES1);
+    SMPos1 = vOut2.ShadowMapSamplingPos;
+    MVar1 = vOut2.MVar;
+    #endif
+
+    #if (LIGHTS_COUNT >= 3)
+    VS_OUTPUT vOut3 = vertexMain(gl_Position.xyz, mWorldViewProjLight2, LightPos2, MaxD2, MAPRES2);
+    SMPos2 = vOut3.ShadowMapSamplingPos;
+    MVar2 = vOut3.MVar;
+    #endif
+
+    #if (LIGHTS_COUNT >= 4)
+    VS_OUTPUT vOut4 = vertexMain(gl_Position.xyz, mWorldViewProjLight3, LightPos3, MaxD3, MAPRES3);
+    SMPos3 = vOut4.ShadowMapSamplingPos;
+    MVar3 = vOut4.MVar;
+    #endif
+
+    #if (LIGHTS_COUNT >= 5)
+    VS_OUTPUT vOut5 = vertexMain(gl_Position.xyz, mWorldViewProjLight4, LightPos4, MaxD4, MAPRES4);
+    SMPos4 = vOut5.ShadowMapSamplingPos;
+    MVar4 = vOut5.MVar;
+    #endif
+
+    #if (LIGHTS_COUNT >= 6)
+    VS_OUTPUT vOut6 = vertexMain(gl_Position.xyz, mWorldViewProjLight5, LightPos5, MaxD5, MAPRES5);
+    SMPos5 = vOut6.ShadowMapSamplingPos;
+    MVar5 = vOut6.MVar;
+    #endif
 }
 
 #else

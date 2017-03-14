@@ -25,6 +25,12 @@ void CCP3DMonitorPlugin::render() {
 }
 
 bool CCP3DMonitorPlugin::addMonitor(stringc path) {
+    #ifdef _IRR_OSX_PLATFORM_
+    path += ".dylib";
+    #else
+    path += ".dll";
+    #endif
+    
 	PluginLibraryType hdll = ICP3DPluginManager::loadLibrary(stringw(path));
 	if (!hdll)
 		return false;

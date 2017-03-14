@@ -4,15 +4,15 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>CP3DEngine.xcscheme</key>
+		<key>CP3DDefaultMonitor.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>1</integer>
+			<integer>0</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>2EEBD6071E34F1E400E78D00</key>
+		<key>2E26E45D1E77652D00A3A684</key>
 		<dict>
 			<key>primary</key>
 			<true/>

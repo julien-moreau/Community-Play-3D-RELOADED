@@ -16,7 +16,7 @@ vec4 textureDistorted(
 		texture2D(ColorMapSampler, texCoord + direction * distortion.g).g,
 		texture2D(ColorMapSampler, texCoord + direction * distortion.b).b,
 		1.0
-		);
+    );
 }
 
 void main()

@@ -56,7 +56,7 @@ void CHDRGaussianBlur::updateOffsets(const irr::core::dimension2du &size) {
 		BlurOffsetsH[i] = (f32(i) - 4.f) * (1.f / f32(size.Width / 2));
 		BlurOffsetsV[i] = (f32(i) - 4.f) * (1.f / f32(size.Height / 2));
 	}
-
+    
 	E_DRIVER_TYPE type = Driver->getDriverType();
 
 	CallbackH->uniformDescriptors[type == EDT_OPENGL ? "blurOffsets[0]" : "blurOffsets"] = CScreenQuadCB::SUniformDescriptor(BlurOffsetsH, 9);

@@ -36,7 +36,6 @@ CHDRLensFlare::CHDRLensFlare(CCP3DHandler *handler) : Handler(handler), LensText
 	CallbackFinal->uniformDescriptors["motionScale"] = CScreenQuadCB::SUniformDescriptor(&MotionScale, 1);
 	CallbackFinal->uniformDescriptors["inverseViewProjection"] = CScreenQuadCB::SUniformDescriptor(InverseViewProjection.pointer(), 16);
 	CallbackFinal->uniformDescriptors["prevViewProjection"] = CScreenQuadCB::SUniformDescriptor(PrevViewProjection.pointer(), 16);
-	CallbackFinal->uniformDescriptors["lensStarMatrix"] = CScreenQuadCB::SUniformDescriptor(LensStarMatrix.pointer(), 16);
 
 	cmat.clearDefines();
 	cmat.addDefine("MAX_MOTION_SAMPLES", "64.0");
@@ -76,80 +75,7 @@ void CHDRLensFlare::renderFinal(ITexture *other, CScreenQuad &screenQuad) {
 	}
 
 	MotionScale = f32(Driver->getFPS()) / 60.f;
-
-	/// Lens Flare
-	const matrix4 viewMatrix = camera->getViewMatrix();
-	const vector3df camx = vector3df(viewMatrix(0, 0), viewMatrix(0, 1), viewMatrix(0, 2));
-	const vector3df camz = vector3df(viewMatrix(2, 0), viewMatrix(2, 1), viewMatrix(2, 2));
-
-	float cameraRotation = camx.dotProduct(vector3df(0.f, 0.f, 1.f)) + camz.dotProduct(vector3df(0.f, 1.f, 0.f));
-	cameraRotation *= 4.f;
-
-	LensStarMatrix.makeIdentity();
-	LensStarMatrix(0, 0) = cosf(cameraRotation) * 0.5f;
-	LensStarMatrix(1, 0) = -sinf(cameraRotation);
-	LensStarMatrix(2, 0) = 0.f;
-	LensStarMatrix(3, 0) = 1.f;
-
-	LensStarMatrix(0, 1) = sinf(cameraRotation);
-	LensStarMatrix(1, 1) = cosf(cameraRotation) * 0.5f;
-	LensStarMatrix(2, 1) = 0.f;
-	LensStarMatrix(3, 1) = 1.f;
-
-	LensStarMatrix(0, 2) = 0.f;
-	LensStarMatrix(1, 2) = 0.f;
-	LensStarMatrix(2, 2) = 1.f;
-	LensStarMatrix(3, 2) = 1.f;
-
-	LensStarMatrix(0, 3) = 1.f;
-	LensStarMatrix(1, 3) = 1.f;
-	LensStarMatrix(2, 3) = 1.f;
-	LensStarMatrix(3, 3) = 1.f;
-
-	matrix4 sb1;
-	sb1(0, 0) = 2.f;
-	sb1(1, 0) = 0.f;
-	sb1(2, 0) = -1.f;
-	sb1(3, 0) = 1.f;
-
-	sb1(0, 1) = 0.f;
-	sb1(1, 1) = 2.f;
-	sb1(2, 1) = -1.f;
-	sb1(3, 1) = 1.f;
-
-	sb1(0, 2) = 0.f;
-	sb1(1, 2) = 0.f;
-	sb1(2, 2) = 0.f;
-	sb1(3, 2) = 1.f;
-
-	sb1(0, 3) = 1.f;
-	sb1(1, 3) = 1.f;
-	sb1(2, 3) = 1.f;
-	sb1(3, 3) = 1.f;
-
-	matrix4 sb2;
-	sb2(0, 0) = 0.5f;
-	sb2(1, 0) = 0.f;
-	sb2(2, 0) = 0.5f;
-	sb2(3, 0) = 1.f;
-
-	sb2(0, 1) = 0.f;
-	sb2(1, 1) = 0.5f;
-	sb2(2, 1) = 0.5f;
-	sb2(3, 1) = 1.f;
-
-	sb2(0, 2) = 0.f;
-	sb2(1, 2) = 0.f;
-	sb2(2, 2) = 1.f;
-	sb2(3, 2) = 1.f;
-
-	sb2(0, 3) = 1.f;
-	sb2(1, 3) = 1.f;
-	sb2(2, 3) = 1.f;
-	sb2(3, 3) = 1.f;
-	
-	LensStarMatrix = sb2 * LensStarMatrix * sb1;
-
+    
 	/// Render
 	screenQuad.getMaterial().setTexture(0, LensFlareRTT);
 	screenQuad.getMaterial().setTexture(1, other);

@@ -143,9 +143,9 @@
 		2EEBD4221E34EE5300E78D00 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				2EEBD42D1E34EF3F00E78D00 /* RenderingEngine */,
 				2EEBD42B1E34EF3F00E78D00 /* CP3DRenderingEngine.cpp */,
 				2EEBD42C1E34EF3F00E78D00 /* CP3DRenderingEngine.h */,
-				2EEBD42D1E34EF3F00E78D00 /* RenderingEngine */,
 				2EEBD4601E34EF3F00E78D00 /* Stdafx.cpp */,
 				2EEBD4611E34EF3F00E78D00 /* Stdafx.h */,
 			);

@@ -38,6 +38,8 @@ AmbientColour(0x0), Use32BitDepth(use32BitDepthBuffers), UseVSM(useVSMShadows), 
 
 	driver->setTextureCreationFlag(ETCF_CREATE_MIP_MAPS, tempTexFlagMipMaps);
 	driver->setTextureCreationFlag(ETCF_ALWAYS_32_BIT, tempTexFlag32);
+    
+    CurrentShadowMaps.set_used(_IRR_MATERIAL_MAX_TEXTURES_);
 
 	CShaderPreprocessor sPP(driver);
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
@@ -315,13 +317,6 @@ s32 CCP3DHandler::GetShadowMaterialType(const u32 &lightsCount, const E_FILTER_T
 	sPP.addShaderDefine("SAMPLE_AMOUNT", stringc(filterType + 1));
 	sPP.addShaderDefine("LIGHTS_COUNT", stringc(lightsCount));
 
-	for (u32 i = 0; i < 6; i++) {
-		if (i < lightsCount)
-			sPP.addShaderDefine(stringc("SHADOW_MAP_SAMPLER") + stringc(i), stringc("ADD_SAMPLER_2D(ShadowMapSampler") + stringc(i) + ", " + stringc(i) + ")");
-		else
-			sPP.addShaderDefine(stringc("SHADOW_MAP_SAMPLER") + stringc(i), "");
-	}
-
 	#ifdef _DEBUG
 	stringc v = sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.vertex.fx").c_str()).c_str();
 	stringc p = sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.fragment.fx").c_str()).c_str();
@@ -391,7 +386,7 @@ void CCP3DHandler::update(ITexture *outputTarget) {
 			driver->setTransform(ETS_VIEW, LightList[l].getViewMatrix());
 			driver->setTransform(ETS_PROJECTION, LightList[l].getProjectionMatrix());
 			
-			ITexture* currentShadowMapTexture = getShadowMapTexture(LightList[l].getShadowMapResolution());
+			ITexture* currentShadowMapTexture = getShadowMapTexture(LightList[l].getShadowMapResolution(), false, l);
 
 			/// Recalculate the shadow map if the shadow light must be recalculated or auto recalculated
 			if (LightList[l].mustRecalculate() || LightList[l].mustAutoRecalculate()) {
@@ -429,7 +424,7 @@ void CCP3DHandler::update(ITexture *outputTarget) {
 
 				/// Blur the shadow map texture if we're using VSM filtering.
 				if(UseVSM) {
-					ITexture* currentSecondaryShadowMap = getShadowMapTexture(LightList[l].getShadowMapResolution(), true);
+					ITexture* currentSecondaryShadowMap = getShadowMapTexture(LightList[l].getShadowMapResolution(), true, l);
 
 					driver->setRenderTarget(currentSecondaryShadowMap, true, true, SColor(0xffffffff));
 					ScreenQuad.getMaterial().setTexture(0, currentShadowMapTexture);
@@ -446,71 +441,81 @@ void CCP3DHandler::update(ITexture *outputTarget) {
 
 				LightList[l].setMustRecalculate(false);
 			}
-
-			driver->setRenderTarget(ScreenQuad.rt[1], true, true, SColor(0xffffffff));
-		
-			driver->setTransform(ETS_VIEW, activeCam->getViewMatrix());
-			driver->setTransform(ETS_PROJECTION, activeCam->getProjectionMatrix());
-
+            
+            CurrentShadowMaps[l] = currentShadowMapTexture;
+            
 			/// configure default shadows callback
-			ShadowMC->ShadowsCallback->LightColour = LightList[l].DiffuseColor;
-			ShadowMC->ShadowsCallback->LightLink = LightList[l].Pos;
-			ShadowMC->ShadowsCallback->FarLink = LightList[l].FarPlane;
-			ShadowMC->ShadowsCallback->ViewLink = LightList[l].ViewMat;
-			ShadowMC->ShadowsCallback->ProjLink = LightList[l].ProjMat;
-			ShadowMC->ShadowsCallback->MapRes = (f32)LightList[l].MapRes;
+            ShadowMC->ShadowsCallback->LightColour[l] = LightList[l].DiffuseColor;
+			ShadowMC->ShadowsCallback->LightLink[l].set(LightList[l].Pos);
+			ShadowMC->ShadowsCallback->FarLink[l] = LightList[l].FarPlane;
+            ShadowMC->ShadowsCallback->ViewLink[l].setM(LightList[l].ViewMat.pointer());
+            ShadowMC->ShadowsCallback->ProjLink[l].setM(LightList[l].ProjMat.pointer());
+			ShadowMC->ShadowsCallback->MapRes[l] = (f32)LightList[l].MapRes;
+            ShadowMC->ShadowsCallback->LightsCount = LightListSize;
 			ShadowMC->PassType = ECHPT_SHADOWS;
-
-			/// Render all receive nodes
-			for(u32 i = 0;i < ShadowNodeArraySize;++i) {
-				if(ShadowNodeArray[i].shadowMode == ESM_CAST || ShadowNodeArray[i].shadowMode == ESM_EXCLUDE)
-						continue;
-
-				/// Configure custom shadows callback & set pass type
-				if (ShadowNodeArray[i].customCallback && ShadowNodeArray[i].customCallback->ShadowsCallback) {
-					ShadowNodeArray[i].customCallback->ShadowsCallback->LightColour = LightList[l].DiffuseColor;
-					ShadowNodeArray[i].customCallback->ShadowsCallback->LightLink = LightList[l].Pos;
-					ShadowNodeArray[i].customCallback->ShadowsCallback->FarLink = LightList[l].FarPlane;
-					ShadowNodeArray[i].customCallback->ShadowsCallback->ViewLink = LightList[l].ViewMat;
-					ShadowNodeArray[i].customCallback->ShadowsCallback->ProjLink = LightList[l].ProjMat;
-					ShadowNodeArray[i].customCallback->ShadowsCallback->MapRes = (f32)LightList[l].MapRes;
-					ShadowNodeArray[i].customCallback->PassType = ECHPT_SHADOWS;
-				}
-
-				const u32 CurrentMaterialCount = ShadowNodeArray[i].node->getMaterialCount();
-				core::array<irr::s32> BufferMaterialList(CurrentMaterialCount);
-				core::array<irr::video::ITexture*> BufferTextureList(CurrentMaterialCount);
-
-				const s32 shadowMaterialType = GetShadowMaterialType(LightList.size(), ShadowNodeArray[i].filterType, LightList[l].UseRoundSpotLight);
-				
-				for(u32 m = 0;m < CurrentMaterialCount;++m) {
-					BufferMaterialList.push_back(ShadowNodeArray[i].node->getMaterial(m).MaterialType);
-					BufferTextureList.push_back(ShadowNodeArray[i].node->getMaterial(m).getTexture(0));
-				
-					ShadowNodeArray[i].node->getMaterial(m).MaterialType = (E_MATERIAL_TYPE)shadowMaterialType;
-					ShadowNodeArray[i].node->getMaterial(m).setTexture(0, currentShadowMapTexture);
-				}
-
-				ShadowNodeArray[i].node->OnAnimate(device->getTimer()->getTime());
-				ShadowNodeArray[i].node->render();
-
-				for(u32 m = 0;m < CurrentMaterialCount;++m) {
-					ShadowNodeArray[i].node->getMaterial(m).MaterialType = (E_MATERIAL_TYPE)BufferMaterialList[m];
-					ShadowNodeArray[i].node->getMaterial(m).setTexture(0, BufferTextureList[m]);
-				}
-
-				if (ShadowNodeArray[i].customCallback)
-					ShadowNodeArray[i].customCallback->PassType = ECHPT_NONE;
-			}
-
-			driver->setRenderTarget(ScreenQuad.rt[0], false, false, SColor(0x0));
-			ScreenQuad.getMaterial().setTexture(0, ScreenQuad.rt[1]);
-			ScreenQuad.getMaterial().MaterialType = (E_MATERIAL_TYPE)Simple;
-			auto blendOperation = ScreenQuad.getMaterial().BlendOperation;
-			ScreenQuad.getMaterial().BlendOperation = EBO_ADD;
-			ScreenQuad.render(driver);
-			ScreenQuad.getMaterial().BlendOperation = blendOperation;
-		}
+            
+            for(u32 i = 0;i < ShadowNodeArraySize;++i) {
+                if(ShadowNodeArray[i].shadowMode == ESM_CAST || ShadowNodeArray[i].shadowMode == ESM_EXCLUDE)
+                    continue;
+                
+                /// Configure custom shadows callback & set pass type
+                if (ShadowNodeArray[i].customCallback && ShadowNodeArray[i].customCallback->ShadowsCallback) {
+                    ShadowNodeArray[i].customCallback->ShadowsCallback->LightColour[l] = LightList[l].DiffuseColor;
+                    ShadowNodeArray[i].customCallback->ShadowsCallback->LightLink[l] = LightList[l].Pos;
+                    ShadowNodeArray[i].customCallback->ShadowsCallback->FarLink[l] = LightList[l].FarPlane;
+                    ShadowNodeArray[i].customCallback->ShadowsCallback->ViewLink[l] = LightList[l].ViewMat;
+                    ShadowNodeArray[i].customCallback->ShadowsCallback->ProjLink[l] = LightList[l].ProjMat;
+                    ShadowNodeArray[i].customCallback->ShadowsCallback->MapRes[l] = (f32)LightList[l].MapRes;
+                    ShadowNodeArray[i].customCallback->PassType = ECHPT_SHADOWS;
+                }
+            }
+        }
+        
+        driver->setRenderTarget(ScreenQuad.rt[1], true, true, SColor(0xffffffff));
+        
+        driver->setTransform(ETS_VIEW, activeCam->getViewMatrix());
+        driver->setTransform(ETS_PROJECTION, activeCam->getProjectionMatrix());
+        
+        /// Render all receive nodes
+        for(u32 i = 0;i < ShadowNodeArraySize; ++i) {
+            if(ShadowNodeArray[i].shadowMode == ESM_CAST || ShadowNodeArray[i].shadowMode == ESM_EXCLUDE)
+                continue;
+            
+            const u32 CurrentMaterialCount = ShadowNodeArray[i].node->getMaterialCount();
+            core::array<irr::s32> BufferMaterialList(CurrentMaterialCount);
+            core::array<irr::video::ITexture*> BufferTextureList(CurrentMaterialCount);
+            
+            const s32 shadowMaterialType = GetShadowMaterialType(LightList.size(), ShadowNodeArray[i].filterType, /*LightList[l].UseRoundSpotLight*/ false);
+            
+            for(u32 m = 0;m < CurrentMaterialCount;++m) {
+                BufferMaterialList.push_back(ShadowNodeArray[i].node->getMaterial(m).MaterialType);
+                BufferTextureList.push_back(ShadowNodeArray[i].node->getMaterial(m).getTexture(0));
+                
+                ShadowNodeArray[i].node->getMaterial(m).MaterialType = (E_MATERIAL_TYPE)shadowMaterialType;
+                
+                for (u32 t = 0; t < LightListSize; t++)
+                    ShadowNodeArray[i].node->getMaterial(m).setTexture(t, CurrentShadowMaps[t]);
+            }
+            
+            ShadowNodeArray[i].node->OnAnimate(device->getTimer()->getTime());
+            ShadowNodeArray[i].node->render();
+            
+            for(u32 m = 0;m < CurrentMaterialCount;++m) {
+                ShadowNodeArray[i].node->getMaterial(m).MaterialType = (E_MATERIAL_TYPE)BufferMaterialList[m];
+                ShadowNodeArray[i].node->getMaterial(m).setTexture(0, BufferTextureList[m]);
+            }
+            
+            if (ShadowNodeArray[i].customCallback)
+                ShadowNodeArray[i].customCallback->PassType = ECHPT_NONE;
+        }
+        
+        driver->setRenderTarget(ScreenQuad.rt[0], false, false, SColor(0x0));
+        ScreenQuad.getMaterial().setTexture(0, ScreenQuad.rt[1]);
+        ScreenQuad.getMaterial().MaterialType = (E_MATERIAL_TYPE)Simple;
+        auto blendOperation = ScreenQuad.getMaterial().BlendOperation;
+        ScreenQuad.getMaterial().BlendOperation = EBO_ADD;
+        ScreenQuad.render(driver);
+        ScreenQuad.getMaterial().BlendOperation = blendOperation;
 
 		// Render all the excluded and casting-only nodes.
 		for(u32 i = 0;i < ShadowNodeArraySize;++i) {
@@ -643,8 +648,11 @@ void CCP3DHandler::update(ITexture *outputTarget) {
 	HDRManager->render(PostProcessingRoutinesSize == 0 ? ScreenRTT : ScreenQuad.rt[int(alter)], outputTarget, ViewPort);
 }
 
-irr::video::ITexture* CCP3DHandler::getShadowMapTexture(const irr::u32 resolution, const bool secondary) {
-	core::stringc shadowMapName = core::stringc("CP3DHandler_SM_") + core::stringc(resolution);
+irr::video::ITexture* CCP3DHandler::getShadowMapTexture(const irr::u32 &resolution, const bool &secondary, const u32 &index) {
+    core::stringc shadowMapName = core::stringc("CP3DHandler_SM_") + core::stringc(resolution);
+    
+    if (index != -1)
+        shadowMapName += core::stringc("_") + core::stringc(index);
 
 	if(secondary)
 		shadowMapName += "_2";

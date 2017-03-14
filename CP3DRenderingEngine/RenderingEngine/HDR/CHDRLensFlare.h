@@ -43,7 +43,6 @@ namespace cp3d {
 			irr::f32 MotionScale;
 			irr::core::matrix4 InverseViewProjection;
 			irr::core::matrix4 PrevViewProjection;
-			irr::core::matrix4 LensStarMatrix;
 
 			bool FirstUpdate;
 		};

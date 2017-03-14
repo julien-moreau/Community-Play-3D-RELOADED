@@ -10,7 +10,6 @@ uniform float motionScale;
 
 uniform mat4 inverseViewProjection;
 uniform mat4 prevViewProjection;
-uniform mat4 lensStarMatrix;
 
 vec4 motionBlur(vec2 texCoord, vec2 screenSize) {
 	// Common
@@ -91,9 +90,7 @@ vec4 motionBlur(vec2 texCoord, vec2 screenSize) {
 void main()
 {
 	vec4 lensMod = texture2D(UserMapSampler2, gl_TexCoord[0].xy);
-
-	vec2 lensStarTexcoord = (lensStarMatrix * vec4(gl_TexCoord[0].xy, 1.0, 1.0)).xy;
-	lensMod += texture2D(UserMapSampler, lensStarTexcoord);
+	lensMod += texture2D(UserMapSampler, gl_TexCoord[0].xy);
 
 	vec4 lensColor = texture2D(ColorMapSampler, gl_TexCoord[0].xy);
 
@@ -122,7 +119,6 @@ float motionScale;
 
 float4x4 inverseViewProjection;
 float4x4 prevViewProjection;
-float4x4 lensStarMatrix;
 
 inline float4 motionBlur(float2 texCoord, float2 screenSize) {
 	// Common
@@ -178,9 +174,7 @@ inline float4 motionBlur(float2 texCoord, float2 screenSize) {
 
 float4 pixelMain(VS_OUTPUT In) : COLOR0 {
 	float4 lensMod = CP3DTex2D(LensDirtSampler, In.TexCoords.xy, LensDirtSamplerST);
-
-	float2 lensStarTexcoord = mul(lensStarMatrix, float4(In.TexCoords.xy, 1.0, 1.0)).xy;
-	lensMod += CP3DTex2D(LensStarSampler, lensStarTexcoord, LensStarSamplerST);
+	lensMod += CP3DTex2D(LensStarSampler, In.TexCoords.xy, LensStarSamplerST);
 
 	float4 lensColor = CP3DTex2D(ColorMapSampler, In.TexCoords.xy, ColorMapSamplerST);
 

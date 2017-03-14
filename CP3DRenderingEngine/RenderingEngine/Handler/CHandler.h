@@ -42,7 +42,7 @@ public:
 		return LightList.size();
 	}
 
-	irr::video::ITexture* getShadowMapTexture(const irr::u32 resolution, const bool secondary = false);
+    irr::video::ITexture* getShadowMapTexture(const irr::u32 &resolution, const bool &secondary = false, const irr::u32 &index = -1);
 	void removeShadowFromNode(irr::scene::ISceneNode* node) {
 		for (irr::u32 i=0; i < ShadowNodeArray.size(); i++) {
 			if (ShadowNodeArray[i].node == node) {
@@ -221,6 +221,7 @@ private:
 		irr::s32 ShadowRoundedSpotType;
 	};
 
+    irr::core::array<irr::video::ITexture *> CurrentShadowMaps;
 	irr::core::map<irr::u32, irr::core::array<SShadowMapType>> ShadowsMap;
 	irr::s32 GetShadowMaterialType(const irr::u32 &lightsCount, const E_FILTER_TYPE &filterType, const bool &useRoundedSpotLight);
 
