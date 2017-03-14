@@ -45,6 +45,7 @@ namespace cp3d {
 			irr::core::matrix4 PrevViewProjection;
 
 			bool FirstUpdate;
+			bool AutoUpdate;
 		};
 
 	} /// End namespace rendering

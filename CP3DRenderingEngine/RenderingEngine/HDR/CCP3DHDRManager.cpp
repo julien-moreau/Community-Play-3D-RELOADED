@@ -21,7 +21,7 @@ using namespace core;
 namespace cp3d {
 namespace rendering {
 
-CHDRManager::CHDRManager(CCP3DHandler *handler) : Handler(handler), Enabled(true) {
+CHDRManager::CHDRManager(CCP3DHandler *handler) : Handler(handler), Enabled(true), LuminanceEnabled(true), LensFlareEnabled(true) {
 	/// Configure
 	Driver = Handler->getVideoDriver();
 	Timer = Handler->getIrrlichtDevice()->getTimer();
@@ -82,9 +82,18 @@ void CHDRManager::render(ITexture *source, ITexture *output, const rect<s32> &vi
 	/// Render pipeline
 	Bloom->render(source, ScreenQuad);
 
-	Driver->setRenderTarget(TextureAdderRTT, true, true, SColor(0x0));
+	if (LuminanceEnabled)
+		Driver->setRenderTarget(TextureAdderRTT, true, true, SColor(0x0));
+	else {
+		Driver->setRenderTarget(output, true, true, SColor(0x0));
+		Driver->setViewPort(viewport);
+	}
+
 	TextureAdder->OtherRTT = Bloom->LastRT;
 	TextureAdder->render(source, ScreenQuad);
+
+	if (!LuminanceEnabled)
+		return;
 
 	Driver->setRenderTarget(Luminance->LuminanceRTTs[CHDRLuminance::LumStepsNum - 1], true, true, SColor(0x0));
 	Luminance->renderLuminance(TextureAdderRTT, ScreenQuad);
@@ -119,18 +128,26 @@ void CHDRManager::render(ITexture *source, ITexture *output, const rect<s32> &vi
 	OutputLuminance = clamp(OutputLuminance, MinLuminance, MaxLuminance);
 	LastTime = Timer->getTime();
 
-	Driver->setRenderTarget(HdrRTT, true, true, SColor(0x0));
+	if (LensFlareEnabled)
+		Driver->setRenderTarget(HdrRTT, true, true, SColor(0x0));
+	else {
+		Driver->setRenderTarget(output, true, true, SColor(0x0));
+		Driver->setViewPort(viewport);
+	}
+
 	ScreenQuad.getMaterial().setTexture(0, TextureAdderRTT);
 	ScreenQuad.getMaterial().MaterialType = (E_MATERIAL_TYPE)MaterialType;
 	ScreenQuad.render(Driver);
 
 	// Lens flare
-	Driver->setRenderTarget(LensFlare->LensFlareRTT, true, true, SColor(0x0));
-	LensFlare->render(Bloom->BrightPassRT, ScreenQuad);
+	if (LensFlareEnabled) {
+		Driver->setRenderTarget(LensFlare->LensFlareRTT, true, true, SColor(0x0));
+		LensFlare->render(Bloom->BrightPassRT, ScreenQuad);
 
-	Driver->setRenderTarget(output, true, true, SColor(0x0));
-	Driver->setViewPort(viewport);
-	LensFlare->renderFinal(HdrRTT, ScreenQuad);
+		Driver->setRenderTarget(output, true, true, SColor(0x0));
+		Driver->setViewPort(viewport);
+		LensFlare->renderFinal(HdrRTT, ScreenQuad);
+	}
 }
 
 void CHDRManager::setGaussianCoefficient(const irr::f32 coeff) {
@@ -182,6 +199,10 @@ void CHDRManager::setLensTexture(irr::video::ITexture *texture) {
 
 const irr::video::ITexture *CHDRManager::getLensTexture() const {
 	return LensFlare->LensDirtTexture;
+}
+
+void CHDRManager::setAutoUpdate(const bool autoUpdate) {
+	LensFlare->AutoUpdate = autoUpdate;
 }
 
 } /// End namespace rendering

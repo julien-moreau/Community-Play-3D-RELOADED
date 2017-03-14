@@ -341,4 +341,9 @@
       <Filter>Shaders\HDR</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\CP3DR\Shaders\InternalHandler\VR.fragment.fx">
+      <Filter>Shaders\InternalHandler</Filter>
+    </FxCompile>
+  </ItemGroup>
 </Project>

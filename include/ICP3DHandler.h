@@ -40,6 +40,7 @@ enum E_FILTER_TYPE {
 	EFT_16PCF,
 	EFT_COUNT
 };
+
 const irr::c8* const FilterTypeNames[] = {
 	"None",
 	"4 PCF",
@@ -47,6 +48,18 @@ const irr::c8* const FilterTypeNames[] = {
 	"12 PCF",
 	"16 PCF",
 	0
+};
+
+//! Custom render targets used by handler structure
+struct SHandlerRenderTargets {
+public:
+	//! Empty constructor
+	SHandlerRenderTargets()
+	{ }
+
+	irr::video::ITexture *ScreenRTT;
+	irr::video::ITexture *ScreenMapSampler;
+	irr::video::ITexture *ColorMapSampler;
 };
 
 class ICP3DCustomPass;
@@ -60,7 +73,7 @@ public:
 
 	//! Draw call. Updates the scene using custom passes, shadows, filters...
 	//! \param output: The output texture. 0 if backbuffer
-	virtual void update(irr::video::ITexture *output = 0) = 0;
+	virtual void update(irr::video::ITexture *output = 0, SHandlerRenderTargets *textures = 0) = 0;
 
 	//! Returns the shadow lights count
 	virtual const irr::u32 getShadowLightCount() const = 0;
@@ -68,7 +81,8 @@ public:
 	//! Returns the shadow map of a light
 	//! \param resolution: the resolution of the shadow map
 	//! \param secondary: if the returns shadow map was blurred
-    virtual irr::video::ITexture* getShadowMapTexture(const irr::u32 &resolution, const bool &secondary = false, const irr::u32 &index = -1) = 0;
+	//! \param index: the light index
+	virtual irr::video::ITexture* getShadowMapTexture(const irr::u32 &resolution, const bool &secondary = false, const irr::u32 &index = -1) = 0;
 
 	//! Removes shadows from a node.
 	//! \param node: the node you want to remove from lighting calculations

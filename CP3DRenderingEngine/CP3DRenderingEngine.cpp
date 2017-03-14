@@ -31,7 +31,7 @@ namespace rendering {
 CCP3DRenderingEngine::CCP3DRenderingEngine(IrrlichtDevice *device) : NormalMapMaterialType(0)
 {
 	/// Configure
-	Handler = new CCP3DHandler(device, device->getVideoDriver()->getScreenSize(), false, true, true);
+	Handler = new CCP3DHandler(device, device->getVideoDriver()->getScreenSize(), true, true, true);
 	
 	/// Configure materials
 	u32 i = 0;

@@ -32,9 +32,9 @@ AmbientColour(0x0), Use32BitDepth(use32BitDepthBuffers), UseVSM(useVSMShadows), 
 	bool tempTexFlagMipMaps = driver->getTextureCreationFlag(ETCF_CREATE_MIP_MAPS);
 	bool tempTexFlag32 = driver->getTextureCreationFlag(ETCF_ALWAYS_32_BIT);
 
-	ScreenRTT = driver->addRenderTargetTexture(ScreenRTTSize, "ScreenRTT");
-	ScreenQuad.rt[0] = driver->addRenderTargetTexture(ScreenRTTSize, "ColorMapSampler");
-	ScreenQuad.rt[1] = driver->addRenderTargetTexture(ScreenRTTSize, "ScreenMapSampler");
+	ScreenRTT = BaseScreenRTT = driver->addRenderTargetTexture(ScreenRTTSize, "ScreenRTT");
+	ScreenQuad.rt[0] = BaseRT[0] = driver->addRenderTargetTexture(ScreenRTTSize, "ColorMapSampler");
+	ScreenQuad.rt[1] = BaseRT[1] = driver->addRenderTargetTexture(ScreenRTTSize, "ScreenMapSampler");
 
 	driver->setTextureCreationFlag(ETCF_CREATE_MIP_MAPS, tempTexFlagMipMaps);
 	driver->setTextureCreationFlag(ETCF_ALWAYS_32_BIT, tempTexFlag32);
@@ -140,6 +140,13 @@ AmbientColour(0x0), Use32BitDepth(use32BitDepthBuffers), UseVSM(useVSMShadows), 
 		VSMBlurV = gpu->addHighLevelShaderMaterial(
 			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ScreenQuad.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
 			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/VSMBlur.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile, SQCB);
+
+		// VR
+		VRMaterial = gpu->addHighLevelShaderMaterial(
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ScreenQuad.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/VR.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile, SQCB);
+
+		addPostProcessingEffect(VRMaterial);
 		
 		// Drop the screen quad callback.
 		SQCB->drop();
@@ -352,9 +359,20 @@ s32 CCP3DHandler::GetShadowMaterialType(const u32 &lightsCount, const E_FILTER_T
 	return useRoundedSpotLight ? shadowRoundedSpotMaterialType : shadowMaterialType;
 }
 
-void CCP3DHandler::update(ITexture *outputTarget) {
+void CCP3DHandler::update(ITexture *outputTarget, SHandlerRenderTargets *textures) {
 	if(ShadowsUnsupported || smgr->getActiveCamera() == 0)
 		return;
+
+	if (textures) {
+		ScreenRTT = textures->ScreenRTT;
+		ScreenQuad.rt[0] = textures->ColorMapSampler;
+		ScreenQuad.rt[1] = textures->ScreenMapSampler;
+	}
+	else {
+		ScreenRTT = BaseScreenRTT;
+		ScreenQuad.rt[0] = BaseRT[0];
+		ScreenQuad.rt[1] = BaseRT[1];
+	}
 	
 	if (!ShadowNodeArray.empty() && !LightList.empty() && RenderShadows) {
 		driver->setRenderTarget(ScreenQuad.rt[0], true, true, AmbientColour);

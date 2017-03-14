@@ -31,7 +31,7 @@ public:
 	
 	~CCP3DHandler();
 
-	void update(irr::video::ITexture* outputTarget = 0);
+	void update(irr::video::ITexture* outputTarget = 0, SHandlerRenderTargets *textures = 0);
 
 	/// Shadows
 	irr::u32 addShadowLight(SShadowLight& shadowLight);
@@ -42,7 +42,7 @@ public:
 		return LightList.size();
 	}
 
-    irr::video::ITexture* getShadowMapTexture(const irr::u32 &resolution, const bool &secondary = false, const irr::u32 &index = -1);
+	irr::video::ITexture* getShadowMapTexture(const irr::u32 &resolution, const bool &secondary = false, const irr::u32 &index = -1);
 	void removeShadowFromNode(irr::scene::ISceneNode* node) {
 		for (irr::u32 i=0; i < ShadowNodeArray.size(); i++) {
 			if (ShadowNodeArray[i].node == node) {
@@ -221,7 +221,7 @@ private:
 		irr::s32 ShadowRoundedSpotType;
 	};
 
-    irr::core::array<irr::video::ITexture *> CurrentShadowMaps;
+	irr::core::array<irr::video::ITexture *> CurrentShadowMaps;
 	irr::core::map<irr::u32, irr::core::array<SShadowMapType>> ShadowsMap;
 	irr::s32 GetShadowMaterialType(const irr::u32 &lightsCount, const E_FILTER_TYPE &filterType, const bool &useRoundedSpotLight);
 
@@ -235,12 +235,15 @@ private:
 	irr::s32 VSMBlurH;
 	irr::s32 VSMBlurV;
 
+	irr::s32 VRMaterial;
+
 	irr::core::array<ICP3DCustomPass *> CustomPasses;
 	
 	DepthShaderCB* DepthMC;
 	ShadowShaderCB* ShadowMC;
 
-	irr::video::ITexture* ScreenRTT;
+	irr::video::ITexture *ScreenRTT, *BaseScreenRTT;
+	irr::video::ITexture *BaseRT[2];
 
 	irr::core::array<SPostProcessingPair> PostProcessingRoutines;
 	irr::core::array<SShadowLight> LightList;

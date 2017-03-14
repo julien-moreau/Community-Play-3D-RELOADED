@@ -14,7 +14,7 @@ using namespace core;
 namespace cp3d {
 namespace rendering {
 
-CHDRLensFlare::CHDRLensFlare(CCP3DHandler *handler) : Handler(handler), LensTexture(0), FirstUpdate(true) {
+CHDRLensFlare::CHDRLensFlare(CCP3DHandler *handler) : Handler(handler), LensTexture(0), FirstUpdate(true), AutoUpdate(true) {
 	Driver = Handler->getVideoDriver();
 
 	LensFlareRTT = Driver->addRenderTargetTexture(Driver->getScreenSize() / 8, "CP3DHDRLensFlare", ECF_A8R8G8B8);
@@ -75,7 +75,7 @@ void CHDRLensFlare::renderFinal(ITexture *other, CScreenQuad &screenQuad) {
 	}
 
 	MotionScale = f32(Driver->getFPS()) / 60.f;
-    
+
 	/// Render
 	screenQuad.getMaterial().setTexture(0, LensFlareRTT);
 	screenQuad.getMaterial().setTexture(1, other);
@@ -86,7 +86,8 @@ void CHDRLensFlare::renderFinal(ITexture *other, CScreenQuad &screenQuad) {
 	screenQuad.getMaterial().MaterialType = (E_MATERIAL_TYPE)FinalMaterialType;
 	screenQuad.render(Driver);
 
-	PrevViewProjection = camera->getViewMatrix() * camera->getProjectionMatrix();
+	if (AutoUpdate)
+		PrevViewProjection = camera->getViewMatrix() * camera->getProjectionMatrix();
 }
 
 } /// End namespace rendering

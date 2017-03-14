@@ -28,11 +28,8 @@ CCP3DEngine::CCP3DEngine(IrrlichtDevice *device) : Device(device), DrawGUI(false
 	Handler = Rengine->getHandler();
 
 	MonitorPlugin = new CCP3DMonitorPlugin(Rengine);
-    #ifdef _IRR_OSX_PLATFORM_
-    MonitorPlugin->addMonitor("CP3DDefaultMonitor_d");
-    #else
-	MonitorPlugin->addMonitor("CP3DDefaultMonitor_d");
-    #endif
+	//MonitorPlugin->addMonitor("CP3DDefaultMonitor_d");
+	MonitorPlugin->addMonitor("CP3DVRMonitor_d");
     
 	Driver = Rengine->getVideoDriver();
 

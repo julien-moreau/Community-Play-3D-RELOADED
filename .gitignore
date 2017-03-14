@@ -45,6 +45,7 @@
 *.res
 *.suo
 *.cache
+*.enc
 
 # Files
 Thumbs.db
@@ -54,4 +55,6 @@ Thumbs.db
 
 # Folders
 CP3DR/Tests
+CP3DR/data
+
 

@@ -53,9 +53,13 @@ int main(int argc, char* argv[]) {
 	params.WindowSize = dimension2du(1280, 800);
 	params.Bits = 32;
 	params.Fullscreen = false;
-	params.Vsync = true;
+	params.Vsync = false;
 	params.DriverMultithreaded = true;
 	params.Doublebuffer = true;
+	params.Stencilbuffer = false;
+	params.AntiAlias = 32;
+	params.ZBufferBits = 32;
+	params.HighPrecisionFPU = true;
 	IrrlichtDevice *device = createDeviceEx(params);
 	device->getLogger()->setLogLevel(ELL_INFORMATION);
     

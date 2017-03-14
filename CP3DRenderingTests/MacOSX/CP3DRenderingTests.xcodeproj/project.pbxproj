@@ -21,7 +21,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2E113DCC1E3564400049C7FF /* CSkinnedMeshTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSkinnedMeshTest.h; path = ../CSkinnedMeshTest.h; sourceTree = "<group>"; };
 		2EEBD6521E34F55C00E78D00 /* CP3DRenderingTests.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CP3DRenderingTests.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2EEBD6671E34F60E00E78D00 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		2EEBD6691E34F61200E78D00 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
@@ -104,7 +103,6 @@
 		2EEBD66F1E34F64500E78D00 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				2E113DCC1E3564400049C7FF /* CSkinnedMeshTest.h */,
 				2EEBD6781E34F69A00E78D00 /* CDirect3D9Debug.h */,
 				2EEBD6791E34F69A00E78D00 /* CDirect3D11Tests.h */,
 				2EEBD67A1E34F69A00E78D00 /* CGlobalTests.h */,

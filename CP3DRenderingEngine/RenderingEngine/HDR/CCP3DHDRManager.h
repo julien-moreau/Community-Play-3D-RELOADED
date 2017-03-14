@@ -53,6 +53,11 @@ public:
 	void setDecreaseRate(const irr::f32 rate) { DecreaseRate = rate; }
 	irr::f32 getDecreaseRate() const { return DecreaseRate; }
 
+	void enableLuminance(const bool enable) { LuminanceEnabled = enable; }
+	void enableLensFlare(const bool enable) { LensFlareEnabled = enable; }
+
+	void setAutoUpdate(const bool autoUpdate);
+
 private:
 
 	/// Datas
@@ -87,6 +92,10 @@ private:
 	irr::f32 OutputLuminance;
 	irr::f32 IncreaseRate;
 	irr::f32 DecreaseRate;
+
+	/// Enables
+	bool LuminanceEnabled;
+	bool LensFlareEnabled;
 };
 
 } /// End namespace rendering
