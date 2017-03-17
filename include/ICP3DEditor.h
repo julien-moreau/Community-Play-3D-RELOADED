@@ -22,6 +22,8 @@ public:
 	//! \return: the gui manager instance
 	virtual ui::ICP3DGUIManager *getGUIManager() = 0;
 
+	//! Returns the rendering engine
+	//! \return: the CP3D rendering engine
 	virtual rendering::ICP3DRenderingEngine *getRenderingEngine() = 0;
 
 };

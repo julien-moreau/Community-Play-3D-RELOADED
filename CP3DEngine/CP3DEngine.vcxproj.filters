@@ -42,14 +42,14 @@
     <Filter Include="Engine\IO\Scene\MeshSceneNodeInstances">
       <UniqueIdentifier>{585db4e8-c199-423f-ab07-97d9ead79111}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\collaborative\editor">
-      <UniqueIdentifier>{ce285ca4-fb69-4c38-abd1-f830896864e5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="include\collaborative\editor\ui">
-      <UniqueIdentifier>{3f495270-f5f1-43de-98df-c9b4d7f2a445}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\IO\Scene\AnimatedMeshSceneNode">
       <UniqueIdentifier>{d97d3bc7-6a8b-44e1-8d1c-956f18de3bac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\editor">
+      <UniqueIdentifier>{ce285ca4-fb69-4c38-abd1-f830896864e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\editor\ui">
+      <UniqueIdentifier>{3f495270-f5f1-43de-98df-c9b4d7f2a445}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -120,31 +120,31 @@
       <Filter>include\engine</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DEditor.h">
-      <Filter>include\collaborative\editor</Filter>
+      <Filter>include\editor</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DEditionTool.h">
-      <Filter>include\collaborative\editor</Filter>
+      <Filter>include\editor</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DFileSelector.h">
-      <Filter>include\collaborative\editor</Filter>
+      <Filter>include\editor</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DCollaborativeEngine.h">
       <Filter>include\collaborative</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DCustomView.h">
-      <Filter>include\collaborative\editor</Filter>
+      <Filter>include\editor</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DInterface.h">
-      <Filter>include\collaborative\editor</Filter>
+      <Filter>include\editor</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DColorDialog.h">
-      <Filter>include\collaborative\editor\ui</Filter>
+      <Filter>include\editor\ui</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ECP3DGUIEvents.h">
-      <Filter>include\collaborative\editor\ui</Filter>
+      <Filter>include\editor\ui</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DTransformer.h">
-      <Filter>include\collaborative\editor</Filter>
+      <Filter>include\editor</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DGeometryCreator.h">
       <Filter>include\engine</Filter>
@@ -180,16 +180,16 @@
       <Filter>include\engine</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DUIRegister.h">
-      <Filter>include\collaborative\editor\ui</Filter>
+      <Filter>include\editor\ui</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DSpy.h">
-      <Filter>include\collaborative\editor</Filter>
+      <Filter>include\editor</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DViewPort.h">
-      <Filter>include\collaborative\editor\ui</Filter>
+      <Filter>include\editor\ui</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DGUIManager.h">
-      <Filter>include\collaborative\editor\ui</Filter>
+      <Filter>include\editor\ui</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DHardwareSkinningManager.h">
       <Filter>include\rendering</Filter>

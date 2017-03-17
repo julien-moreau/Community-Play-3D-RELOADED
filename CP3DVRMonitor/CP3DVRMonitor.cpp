@@ -21,7 +21,7 @@ CCP3DVRMonitor::CCP3DVRMonitor(rendering::ICP3DRenderingEngine *rengine)
 	Handler = rengine->getHandler();
 	Name = stringc("VR Monitor");
 
-	// VR
+	// Init vr
 	vr::HmdError vrError;
 	VRSystem = vr::VR_Init(&vrError, vr::VRApplication_Scene);
 
@@ -39,10 +39,23 @@ CCP3DVRMonitor::CCP3DVRMonitor(rendering::ICP3DRenderingEngine *rengine)
 		// Create event receiver
 		Receiver = new CVREventReceiver(rengine, VRSystem);
 	}
+	else {
+		// Disable monitor and log error
+		setEnabled(false);
+		Rengine->getDevice()->getLogger()->log("Cannot get VR System: VR MOnitor has been disabled\n", ELL_ERROR);
+	}
 }
 
 CCP3DVRMonitor::~CCP3DVRMonitor() {
+	vr::VR_Shutdown();
+	
+	// Clear render targets
+	LeftRenderTarget->drop();
+	RightRenderTarget->drop();
 
+	HandlerRenderTargets.drop();
+
+	delete Receiver;
 }
 
 void CCP3DVRMonitor::render() {
@@ -50,7 +63,6 @@ void CCP3DVRMonitor::render() {
 		return;
 
 	/// Update poses
-	matrix4 systemPose;
 	vr::VRCompositor()->WaitGetPoses(TrackedDevicePose, vr::k_unMaxTrackedDeviceCount, NULL, 0);
 
 	for (int nDevice = 0; nDevice < vr::k_unMaxTrackedDeviceCount; nDevice++) {
@@ -58,17 +70,18 @@ void CCP3DVRMonitor::render() {
 			Mat4DevicePose[nDevice] = Utils::getMatrix(TrackedDevicePose[nDevice].mDeviceToAbsoluteTracking);
 
 			ISceneNode *deviceNode = Receiver->getSceneNodes()[nDevice];
-			if (deviceNode) {
-				deviceNode->setPosition(Mat4DevicePose[nDevice].getTranslation());
-				deviceNode->setRotation(Mat4DevicePose[nDevice].getRotationDegrees());
-				deviceNode->setScale(Mat4DevicePose[nDevice].getScale());
-			}
+			if (!deviceNode)
+				continue;
+
+			deviceNode->setPosition(Mat4DevicePose[nDevice].getTranslation());
+			deviceNode->setRotation(Mat4DevicePose[nDevice].getRotationDegrees());
+			deviceNode->setScale(Mat4DevicePose[nDevice].getScale());
 		}
 	}
 
 	if (TrackedDevicePose[vr::k_unTrackedDeviceIndex_Hmd].bPoseIsValid) {
-		systemPose = Mat4DevicePose[vr::k_unTrackedDeviceIndex_Hmd];
-		systemPose.makeInverse();
+		SystemPose = Mat4DevicePose[vr::k_unTrackedDeviceIndex_Hmd];
+		SystemPose.makeInverse();
 	}
 
 	vr::IVRCompositor *vrCompositor = vr::VRCompositor();
@@ -79,55 +92,42 @@ void CCP3DVRMonitor::render() {
 	/// Left eye
 	Handler->getHDRManager()->setAutoUpdate(false);
 
-	vr::HmdMatrix44_t hmdLeftProjection = VRSystem->GetProjectionMatrix(vr::Eye_Left, camera->getNearValue(), camera->getFarValue());
-	vr::HmdMatrix34_t hmdLeftView = VRSystem->GetEyeToHeadTransform(vr::Eye_Left);
-
-	matrix4 finalLeftProjection = Utils::getMatrix(hmdLeftProjection);
-
-	matrix4 finalLeftView = Utils::getMatrix(hmdLeftView);
+	matrix4 finalLeftProjection = Utils::getMatrix(VRSystem->GetProjectionMatrix(vr::Eye_Left, camera->getNearValue(), camera->getFarValue()));
+	matrix4 finalLeftView = Utils::getMatrix(VRSystem->GetEyeToHeadTransform(vr::Eye_Left));
 	finalLeftView.makeInverse();
 
 	camera->setProjectionMatrix(finalLeftProjection);
-	camera->setViewMatrixAffector(finalLeftView * systemPose);
+	camera->setViewMatrixAffector(finalLeftView * SystemPose);
 
 	// Update and submit
 	Handler->update(LeftRenderTarget, &HandlerRenderTargets);
 
 	if (vrCompositor) {
-		u32 textureId = LeftRenderTarget->getOpenGLTextureName();
-
-		vr::Texture_t leftEyeTexture = { (void*)(uintptr_t)(textureId) , vr::TextureType_OpenGL, vr::ColorSpace_Linear };
+		vr::Texture_t leftEyeTexture = { (void*)(uintptr_t)(LeftRenderTarget->getOpenGLTextureName()) , vr::TextureType_OpenGL, vr::ColorSpace_Linear };
 		vrCompositor->Submit(vr::Eye_Left, &leftEyeTexture);
 	}
 
 	/// Right eye
 	Handler->getHDRManager()->setAutoUpdate(true);
 
-	vr::HmdMatrix44_t hmdRightProjection = VRSystem->GetProjectionMatrix(vr::Eye_Right, camera->getNearValue(), camera->getFarValue());
-	vr::HmdMatrix34_t hmdRightView = VRSystem->GetEyeToHeadTransform(vr::Eye_Right);
-
-	matrix4 finalRightProjection = Utils::getMatrix(hmdRightProjection);
-
-	matrix4 finalRightView = Utils::getMatrix(hmdRightView);
+	matrix4 finalRightProjection = Utils::getMatrix(VRSystem->GetProjectionMatrix(vr::Eye_Right, camera->getNearValue(), camera->getFarValue()));
+	matrix4 finalRightView = Utils::getMatrix(VRSystem->GetEyeToHeadTransform(vr::Eye_Right));
 	finalRightView.makeInverse();
 
 	camera->setProjectionMatrix(finalRightProjection);
-	camera->setViewMatrixAffector(finalRightView * systemPose);
+	camera->setViewMatrixAffector(finalRightView * SystemPose);
 
 	// Update and submit
 	Handler->update(RightRenderTarget, &HandlerRenderTargets);
 
 	if (vrCompositor) {
-		u32 textureId = RightRenderTarget->getOpenGLTextureName();
-
-		vr::Texture_t rightEyeTexture = { (void*)(uintptr_t)(textureId) , vr::TextureType_OpenGL, vr::ColorSpace_Linear };
+		vr::Texture_t rightEyeTexture = { (void*)(uintptr_t)(RightRenderTarget->getOpenGLTextureName()) , vr::TextureType_OpenGL, vr::ColorSpace_Linear };
 		vrCompositor->Submit(vr::Eye_Right, &rightEyeTexture);
 	}
 
 	// Clear event stack
-	vr::VREvent_t event;
-	while (VRSystem->PollNextEvent(&event, sizeof(event)))
-		Receiver->onEvent(event);
+	while (VRSystem->PollNextEvent(&Event, sizeof(Event)))
+		Receiver->onEvent(Event);
 
 	// Finish
 	Rengine->getVideoDriver()->setRenderTarget(0, true, true, SColor(0x0));

@@ -57,6 +57,13 @@ public:
 	SHandlerRenderTargets()
 	{ }
 
+	//! Drops the render targets in the structure
+	void drop() {
+		ScreenRTT->drop();
+		ScreenMapSampler->drop();
+		ColorMapSampler->drop();
+	}
+
 	irr::video::ITexture *ScreenRTT;
 	irr::video::ITexture *ScreenMapSampler;
 	irr::video::ITexture *ColorMapSampler;

@@ -340,10 +340,8 @@
     <None Include="..\CP3DR\Shaders\HDR\LensFlareFinal.fragment.fx">
       <Filter>Shaders\HDR</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="..\CP3DR\Shaders\InternalHandler\VR.fragment.fx">
+    <None Include="..\CP3DR\Shaders\InternalHandler\VR.fragment.fx">
       <Filter>Shaders\InternalHandler</Filter>
-    </FxCompile>
+    </None>
   </ItemGroup>
 </Project>

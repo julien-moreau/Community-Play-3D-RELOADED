@@ -36,6 +36,9 @@ private:
 	irr::video::ITexture *RightRenderTarget;
 
 	rendering::SHandlerRenderTargets HandlerRenderTargets;
+
+	vr::VREvent_t Event;
+	irr::core::matrix4 SystemPose;
 };
 
 } /// End namespace engine

@@ -13,6 +13,7 @@ using namespace rendering;
 
 CVREventReceiver::CVREventReceiver(ICP3DRenderingEngine *rengine, vr::IVRSystem *vrSystem) : Rengine(rengine), VRSystem(vrSystem) {
 	memset(TrackedDeviceNodes, 0, vr::k_unMaxTrackedDeviceCount);
+	memset(TrackedDeviceTextures, 0, vr::k_unMaxTrackedDeviceCount);
 
 	// Load models
 	for (u32 unTrackedDevice = vr::k_unTrackedDeviceIndex_Hmd + 1; unTrackedDevice < vr::k_unMaxTrackedDeviceCount; unTrackedDevice++)
@@ -27,40 +28,41 @@ CVREventReceiver::CVREventReceiver(ICP3DRenderingEngine *rengine, vr::IVRSystem 
 CVREventReceiver::~CVREventReceiver() {
 	// Remove nodes
 	for (u32 i = 0; i < vr::k_unMaxTrackedDeviceCount; i++) {
+		// MeshSceneNode drop the meshes then it's cool
 		if (TrackedDeviceNodes[i])
 			TrackedDeviceNodes[i]->drop();
+
+		if (TrackedDeviceTextures[i])
+			TrackedDeviceTextures[i]->drop();
 	}
 }
 
 void CVREventReceiver::onEvent(const vr::VREvent_t &event) {
 	switch (event.eventType) {
-	case vr::VREvent_TrackedDeviceActivated:
-		setupDeviceModel(event.trackedDeviceIndex);
-		break;
-	default: break;
+		case vr::VREvent_TrackedDeviceActivated:
+			setupDeviceModel(event.trackedDeviceIndex);
+			break;
+		default: break;
 	}
 }
 
-void CVREventReceiver::setupDeviceModel(const vr::TrackedDeviceIndex_t &index) {
-	if (index >= vr::k_unMaxTrackedDeviceCount)
+void CVREventReceiver::setupDeviceModel(const vr::TrackedDeviceIndex_t &index){
+	u32 modelNameBufferLen = VRSystem->GetStringTrackedDeviceProperty(index, vr::Prop_RenderModelName_String, 0, 0, 0);
+	if (modelNameBufferLen == 0)
 		return;
 
-	u32 unRequiredBufferLen = VRSystem->GetStringTrackedDeviceProperty(index, vr::Prop_RenderModelName_String, NULL, 0, NULL);
-	if (unRequiredBufferLen == 0)
-		return;
-
-	char *pchBuffer = new char[unRequiredBufferLen];
-	unRequiredBufferLen = VRSystem->GetStringTrackedDeviceProperty(index, vr::Prop_RenderModelName_String, pchBuffer, unRequiredBufferLen, NULL);
-	stringc sResult = pchBuffer;
-	delete[] pchBuffer;
+	char *modelNameBuffer = new char[modelNameBufferLen];
+	modelNameBufferLen = VRSystem->GetStringTrackedDeviceProperty(index, vr::Prop_RenderModelName_String, modelNameBuffer, modelNameBufferLen, NULL);
+	stringc modelName(modelNameBuffer);
+	delete[] modelNameBuffer;
 
 	// Load model
-	vr::RenderModel_t *pModel;
 	vr::EVRRenderModelError error;
+	vr::RenderModel_t *pModel;
 	vr::RenderModel_TextureMap_t *pTexture;
 
 	while (1) { // Model
-		error = vr::VRRenderModels()->LoadRenderModel_Async(sResult.c_str(), &pModel);
+		error = vr::VRRenderModels()->LoadRenderModel_Async(modelName.c_str(), &pModel);
 		if (error != vr::VRRenderModelError_Loading)
 			break;
 	}
@@ -97,9 +99,9 @@ void CVREventReceiver::setupDeviceModel(const vr::TrackedDeviceIndex_t &index) {
 		buffer->Vertices.push_back(vertex);
 	}
 
-	for (u32 i = 0; i < pModel->unTriangleCount * 3; i++) {
-		buffer->Indices.push_back(pModel->rIndexData[i]);
-	}
+	buffer->Indices.set_used(pModel->unTriangleCount * 3);
+	for (u32 i = 0; i < pModel->unTriangleCount * 3; i++)
+		buffer->Indices[i] = pModel->rIndexData[i];
 
 	// Create mesh
 	SMesh *mesh = new SMesh();
@@ -111,20 +113,24 @@ void CVREventReceiver::setupDeviceModel(const vr::TrackedDeviceIndex_t &index) {
 	u8 *data = (u8 *)image->lock();
 	memcpy(data, pTexture->rubTextureMapData, pTexture->unWidth * pTexture->unHeight * 4);
 
+	ITexture *texture = Rengine->getVideoDriver()->addTexture("VRTexture" + pModel->diffuseTextureId, image);
+
 	// Create scene node
 	IMeshSceneNode *node = Rengine->getSceneManager()->addMeshSceneNode(mesh);
+	node->setName(modelName);
 	node->setMaterialFlag(EMF_LIGHTING, false);
 	node->setMaterialFlag(EMF_BACK_FACE_CULLING, false);
 	node->setMaterialFlag(EMF_FRONT_FACE_CULLING, true);
-	node->setMaterialTexture(0, Rengine->getVideoDriver()->addTexture("VRTexture" + pModel->diffuseTextureId, image));
+	node->setMaterialTexture(0, texture);
 
 	Rengine->getHandler()->addShadowToNode(node, EFT_NONE, ESM_EXCLUDE);
 
+	// Finish
 	vr::VRRenderModels()->FreeRenderModel(pModel);
 	vr::VRRenderModels()->FreeTexture(pTexture);
 
-	// Finish
 	TrackedDeviceNodes[index] = node;
+	TrackedDeviceTextures[index] = texture;
 }
 
 } /// End namespace engine

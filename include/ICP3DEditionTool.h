@@ -114,7 +114,7 @@ typedef std::function<void(const SCP3DInterfaceData &data)> ICP3DEditionToolCall
 
 //! Default ICP3DEditionTool::addField callback
 //! \param text: the text to displayed by the element
-static auto DefaultEditionToolCallback = [](irr::core::stringw text) -> ICP3DEditionToolCallback {
+static auto DefaultEditionToolCallback = [](const irr::core::stringw &text) -> ICP3DEditionToolCallback {
 	ICP3DEditionToolCallback c = [=](SCP3DInterfaceData data) {
 		if (data.Type == irr::gui::EGUIET_CHECK_BOX)
 			data.CheckBox->setText(text.c_str());

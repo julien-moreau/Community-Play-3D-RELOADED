@@ -31,7 +31,7 @@ public:
 	//! Free the already loaded dynamic library
 	//! \param lib: the library instance
 	//! \return: returns if the library was free
-	static int freeLibrary(PluginLibraryType lib) {
+	static int freeLibrary(const PluginLibraryType &lib) {
 		#if defined(_IRR_WINDOWS_API_)
 		return FreeLibrary(lib);
 		#else
@@ -43,7 +43,7 @@ public:
 	//! Loads a dynamic library
 	//! \param path: the path of the library on your file system
 	//! \return: returns the library instance
-	static PluginLibraryType loadLibrary(irr::core::stringw path) {
+	static PluginLibraryType loadLibrary(const irr::core::stringw &path) {
 		#if defined(_IRR_WINDOWS_API_)
 		PluginLibraryType hdll = LoadLibrary(path.c_str());
 		#else
@@ -64,7 +64,7 @@ public:
 	//! \param name: the function name
 	//! \param params: the parameters used during the call
 	template<typename T, typename... Args>
-	static T callFunction(PluginLibraryType lib, irr::core::stringc name, Args... params) {
+	static T callFunction(const PluginLibraryType &lib, const irr::core::stringc &name, Args... params) {
 		typedef T (*functionDef)(Args...);
 		functionDef fd;
 
@@ -84,7 +84,7 @@ public:
 
 	//! Closes a given process
 	//! \param process: the process structure returned by startProcess()
-	static int closeProcess(PluginProcessType process) {
+	static int closeProcess(const PluginProcessType &process) {
 		if (!process.started)
 			return 0;
 
@@ -106,7 +106,7 @@ public:
 	Example:
 		var process = ICP3DPluginManager::startProcess("app.exe", true, "game.map 0 text.txt" );
 	*/
-	static PluginProcessType startProcess(const irr::core::stringw path, const bool wait, irr::core::stringw arguments) {
+	static PluginProcessType startProcess(const irr::core::stringw &path, const bool &wait, const irr::core::stringw &arguments) {
 		// Begin process...
 		PluginProcessType process;
 

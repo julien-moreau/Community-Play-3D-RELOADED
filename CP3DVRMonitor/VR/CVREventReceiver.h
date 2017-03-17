@@ -26,6 +26,7 @@ private:
 
 	/// Scene
 	irr::scene::ISceneNode *TrackedDeviceNodes[vr::k_unMaxTrackedDeviceCount];
+	irr::video::ITexture *TrackedDeviceTextures[vr::k_unMaxTrackedDeviceCount];
 
 	/// Methods
 	void setupDeviceModel(const vr::TrackedDeviceIndex_t &index);
