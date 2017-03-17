@@ -78,9 +78,9 @@ public:
 		std::function<void(ICP3DHandler *handler)> OnPreRender = [](ICP3DHandler *handler) {},
 		std::function<void(ICP3DHandler *handler)> OnPostRender = [](ICP3DHandler *handler) {});
 	bool removePostProcessingEffect(irr::s32 materialType, const bool deleteCallback = true);
-	irr::s32 replacePostProcessAtIndex(irr::s32 index, const irr::core::stringc &filename, IPostProcessingRenderCallback *callback = 0, irr::video::ITexture *customRTT = 0);
-	irr::s32 addPostProcessingEffectFromFile(const irr::core::stringc &filename, IPostProcessingRenderCallback *callback = 0);
-	irr::s32 addPostProcessingEffectFromString(const irr::core::stringc &shader, IPostProcessingRenderCallback *callback = 0);
+	irr::u32 replacePostProcessAtIndex(irr::s32 index, const irr::core::stringc &filename, IPostProcessingRenderCallback *callback = 0, irr::video::ITexture *customRTT = 0);
+	irr::u32 addPostProcessingEffectFromFile(const irr::core::stringc &filename, IPostProcessingRenderCallback *callback = 0);
+	irr::u32 addPostProcessingEffectFromString(const irr::core::stringc &shader, IPostProcessingRenderCallback *callback = 0);
 	void setPostProcessingEffectConstant(const irr::s32 materialType, const irr::core::stringc& name, const irr::f32* data, const irr::u32 count);
 
 	CScreenQuad& getScreenQuad() {
@@ -108,6 +108,9 @@ public:
 	void setPostProcessCustomRTT(const irr::s32 &materialType, const irr::core::dimension2du &size, const irr::core::stringc &name, const irr::video::ECOLOR_FORMAT format = irr::video::ECF_A8R8G8B8);
 	void removePostProcessCustomRTT(const irr::s32 &materialType);
 	irr::video::ITexture *getPostProcessCustomRTT(const irr::s32 &materialType);
+
+	void enableVirtualReality(const bool &enable);
+	bool isVirtualRealityEnabled() { return VREnabled; }
 
 	/// Rendering
 	CHDRManager *getHDRManager() {
@@ -260,6 +263,7 @@ private:
 	bool Use32BitDepth;
 	bool UseVSM;
 	bool RenderShadows;
+	bool VREnabled;
 };
 
 } /// End namespace rendering

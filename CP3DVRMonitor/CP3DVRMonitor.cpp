@@ -38,6 +38,9 @@ CCP3DVRMonitor::CCP3DVRMonitor(rendering::ICP3DRenderingEngine *rengine)
 
 		// Create event receiver
 		Receiver = new CVREventReceiver(rengine, VRSystem);
+
+		// Enable Virtual Reality
+		Handler->enableVirtualReality(true);
 	}
 	else {
 		// Disable monitor and log error
@@ -125,11 +128,11 @@ void CCP3DVRMonitor::render() {
 		vrCompositor->Submit(vr::Eye_Right, &rightEyeTexture);
 	}
 
-	// Clear event stack
+	/// Clear stack and send events
 	while (VRSystem->PollNextEvent(&Event, sizeof(Event)))
 		Receiver->onEvent(Event);
 
-	// Finish
+	/// Finish
 	Rengine->getVideoDriver()->setRenderTarget(0, true, true, SColor(0x0));
 }
 

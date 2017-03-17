@@ -21,7 +21,8 @@ CCP3DHandler::CCP3DHandler(IrrlichtDevice* dev, const irr::core::dimension2du& s
 : device(dev), smgr(dev->getSceneManager()), driver(dev->getVideoDriver()),
 ScreenRTTSize(screenRTTSize.getArea() == 0 ? dev->getVideoDriver()->getScreenSize() : screenRTTSize),
 ClearColour(0x0), ShadowsUnsupported(false), DepthMC(0), ShadowMC(0),
-AmbientColour(0x0), Use32BitDepth(use32BitDepthBuffers), UseVSM(useVSMShadows), RenderShadows(true), HDRManager(0)
+AmbientColour(0x0), Use32BitDepth(use32BitDepthBuffers), UseVSM(useVSMShadows), RenderShadows(true), HDRManager(0),
+VREnabled(false), VRMaterial(-1)
 {
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
 	ScreenQuad.initializeD3D11(driver);
@@ -140,13 +141,6 @@ AmbientColour(0x0), Use32BitDepth(use32BitDepthBuffers), UseVSM(useVSMShadows), 
 		VSMBlurV = gpu->addHighLevelShaderMaterial(
 			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ScreenQuad.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
 			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/VSMBlur.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile, SQCB);
-
-		// VR
-		VRMaterial = gpu->addHighLevelShaderMaterial(
-			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ScreenQuad.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
-			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/VR.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile, SQCB);
-
-		addPostProcessingEffect(VRMaterial);
 		
 		// Drop the screen quad callback.
 		SQCB->drop();

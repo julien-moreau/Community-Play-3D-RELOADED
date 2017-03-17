@@ -218,6 +218,14 @@ public:
 
 	//! Returns the HDR manager
 	virtual ICP3DHDRManager *getHDRManager() = 0;
+
+	//! Enables the virtual reality
+	//! \param enable: true to enable the virtual reality, then false to disable
+	virtual void enableVirtualReality(const bool &enable) = 0;
+
+	//! Returns if the virtual reality is enabled
+	//! \return: if the virtual reality is enabled
+	virtual bool isVirtualRealityEnabled() = 0;
 };
 
 } /// End rendering namespace

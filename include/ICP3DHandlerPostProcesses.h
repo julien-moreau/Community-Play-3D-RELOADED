@@ -36,11 +36,11 @@ public:
 	//! Adds a post-process from a file
 	//! \param filename: the file containing the shader's code
 	//! \param callback: the callback derived from cp3d::rendering::IPostProcessingRenderCallback
-	virtual irr::s32 addPostProcessingEffectFromFile(const irr::core::stringc &filename, IPostProcessingRenderCallback *callback = 0) = 0;
+	virtual irr::u32 addPostProcessingEffectFromFile(const irr::core::stringc &filename, IPostProcessingRenderCallback *callback = 0) = 0;
 	//! Adds a post-process from a string
 	//! \param shader: the string containing the shader's code
 	//! \param callback: the callback derived from cp3d::rendering::IPostProcessingRenderCallback
-	virtual irr::s32 addPostProcessingEffectFromString(const irr::core::stringc &shader, IPostProcessingRenderCallback *callback = 0) = 0;
+	virtual irr::u32 addPostProcessingEffectFromString(const irr::core::stringc &shader, IPostProcessingRenderCallback *callback = 0) = 0;
 	//! Adds a custom post-process created using IGPUProgramingServices*
 	//! Allow you to debug your shader in the awesome tool named Microsoft Visual Studio =D
 	//! \param MaterialType: the material index given by IGPUProgramingServices*
@@ -59,7 +59,7 @@ public:
 	//! \param index: the index of the post-process to replace (can be the materialType)
 	//! \param filename: the name of the post-process file
 	//! \param callback: the callback pointer of the post-process
-	virtual irr::s32 replacePostProcessAtIndex(irr::s32 index, const irr::core::stringc &filename, IPostProcessingRenderCallback *callback = 0, irr::video::ITexture *customRtt = 0) = 0;
+	virtual irr::u32 replacePostProcessAtIndex(irr::s32 index, const irr::core::stringc &filename, IPostProcessingRenderCallback *callback = 0, irr::video::ITexture *customRtt = 0) = 0;
 
 	//! Sets a post processing effect constant (OnSetConstant)
 	//! \param materialType: the material to configure

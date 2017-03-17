@@ -161,7 +161,7 @@ const stringc CCP3DHandler::getPostProcessingRoutineName(const s32 &materialType
 	return "";
 }
 
-s32 CCP3DHandler::addPostProcessingEffectFromString(const irr::core::stringc &shader, IPostProcessingRenderCallback *callback) {
+u32 CCP3DHandler::addPostProcessingEffectFromString(const irr::core::stringc &shader, IPostProcessingRenderCallback *callback) {
 	SPostProcessingPair pPair = obtainScreenQuadMaterial(shader, EMT_SOLID, false);
 	pPair.renderCallback = callback;
 
@@ -174,7 +174,7 @@ s32 CCP3DHandler::addPostProcessingEffectFromString(const irr::core::stringc &sh
 	//return pPair.materialType;
 }
 
-s32 CCP3DHandler::addPostProcessingEffectFromFile(const irr::core::stringc& filename, IPostProcessingRenderCallback* callback) {
+u32 CCP3DHandler::addPostProcessingEffectFromFile(const irr::core::stringc& filename, IPostProcessingRenderCallback* callback) {
 	SPostProcessingPair pPair = obtainScreenQuadMaterial(filename, EMT_SOLID, true);
 	pPair.renderCallback = callback;
 	pPair.path = filename;
@@ -188,7 +188,7 @@ s32 CCP3DHandler::addPostProcessingEffectFromFile(const irr::core::stringc& file
 	//return pPair.materialType;
 }
 
-s32 CCP3DHandler::replacePostProcessAtIndex(s32 index, const stringc &filename, IPostProcessingRenderCallback *callback, ITexture *customRTT) {
+u32 CCP3DHandler::replacePostProcessAtIndex(s32 index, const stringc &filename, IPostProcessingRenderCallback *callback, ITexture *customRTT) {
 	if (index < 0 || index >= (s32)PostProcessingRoutines.size())
 		return -1;
 
@@ -251,6 +251,19 @@ irr::video::ITexture *CCP3DHandler::getPostProcessCustomRTT(const irr::s32 &mate
 	}
 
 	return 0;
+}
+
+void CCP3DHandler::enableVirtualReality(const bool &enable) {
+	if (VRMaterial == -1 && enable) {
+		u32 index = addPostProcessingEffectFromFile("Shaders/InternalHandler/VR.fragment.fx", 0);
+		VRMaterial = PostProcessingRoutines[index].materialType;
+	}
+	else if (enable && !VREnabled)
+		addPostProcessingEffect(VRMaterial);
+	else if (!enable)
+		removePostProcessingEffect(VRMaterial);
+
+	VREnabled = enable;
 }
 
 } /// End namespace rendering
