@@ -111,7 +111,7 @@ void CCP3DEditionToolLightSceneNode::configure() {
 			ShadowMapResolution.ComboBox->setSelected(i - 1);
 		}
 
-		ShadowMapTexture.TextureData.Image->setImage(Rengine->getHandler()->getShadowMapTexture(LightSceneNode->getShadowLight()->getShadowMapResolution(), false));
+		ShadowMapTexture.TextureData.Image->setImage(Rengine->getHandler()->getShadowMapTexture(LightSceneNode->getShadowLight()->getShadowMapResolution(), false, LightSceneNode->getShadowLightIndex()));
 	}
 	else {
 		ComputeRoundedSpot.CheckBox->setEnabled(false);
@@ -174,7 +174,7 @@ bool CCP3DEditionToolLightSceneNode::OnEvent(const SEvent &event) {
 				rect<s32> r = customView->getParentGUIElement()->getRelativePosition();
 				IGUIImage *img = Gui->addImage(rect<s32>(5, 5, r.getWidth() - 20, r.getHeight() - 5), customView->getParentGUIElement(), -1, 0, false);
 				img->setScaleImage(true);
-				img->setImage(Rengine->getHandler()->getShadowMapTexture(LightSceneNode->getShadowLight()->getShadowMapResolution(), false));
+				img->setImage(Rengine->getHandler()->getShadowMapTexture(LightSceneNode->getShadowLight()->getShadowMapResolution(), false, LightSceneNode->getShadowLightIndex()));
 
 				return true;
 			}

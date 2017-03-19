@@ -146,7 +146,9 @@
     <ClInclude Include="Editor\IO\CCP3DSaverOpener.h">
       <Filter>Editor\IO</Filter>
     </ClInclude>
-    <ClInclude Include="Editor\UserInterfaces\EditionTools\AddObject\CCP3DEditionToolAddMesh.h" />
+    <ClInclude Include="Editor\UserInterfaces\EditionTools\AddObject\CCP3DEditionToolAddMesh.h">
+      <Filter>Editor\UserInterfaces\EditionTools\AddObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DEditor.cpp">

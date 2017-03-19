@@ -190,20 +190,20 @@ void CCP3DHandler::setScreenRenderTargetResolution(const dimension2du& resolutio
 	bool tempTexFlagMipMaps = driver->getTextureCreationFlag(ETCF_CREATE_MIP_MAPS);
 	bool tempTexFlag32 = driver->getTextureCreationFlag(ETCF_ALWAYS_32_BIT);
 
-	if(ScreenRTT)
+	if (ScreenRTT)
 		driver->removeTexture(ScreenRTT);
 
-	ScreenRTT = driver->addRenderTargetTexture(resolution);
+	ScreenRTT = BaseScreenRTT = driver->addRenderTargetTexture(resolution);
 
 	if(ScreenQuad.rt[0])
 		driver->removeTexture(ScreenQuad.rt[0]);
 
-	ScreenQuad.rt[0] = driver->addRenderTargetTexture(resolution);
+	ScreenQuad.rt[0] = BaseRT[0] = driver->addRenderTargetTexture(resolution);
 
 	if(ScreenQuad.rt[1])
 		driver->removeTexture(ScreenQuad.rt[1]);
 
-	ScreenQuad.rt[1] = driver->addRenderTargetTexture(resolution);
+	ScreenQuad.rt[1] = BaseRT[1] = driver->addRenderTargetTexture(resolution);
 
 	driver->setTextureCreationFlag(ETCF_CREATE_MIP_MAPS, tempTexFlagMipMaps);
 	driver->setTextureCreationFlag(ETCF_ALWAYS_32_BIT, tempTexFlag32);
@@ -654,7 +654,6 @@ void CCP3DHandler::update(ITexture *outputTarget, SHandlerRenderTargets *texture
 			ScreenQuad.render(driver);
 			if (pair.renderCallback) pair.renderCallback->OnPostRender(this);
 		}
-
 	}
 
 	HDRManager->render(PostProcessingRoutinesSize == 0 ? ScreenRTT : ScreenQuad.rt[int(alter)], outputTarget, ViewPort);

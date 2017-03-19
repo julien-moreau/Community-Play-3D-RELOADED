@@ -28,8 +28,8 @@ CCP3DEngine::CCP3DEngine(IrrlichtDevice *device) : Device(device), DrawGUI(false
 	Handler = Rengine->getHandler();
 
 	MonitorPlugin = new CCP3DMonitorPlugin(Rengine);
-	//MonitorPlugin->addMonitor("CP3DDefaultMonitor_d");
-	MonitorPlugin->addMonitor("CP3DVRMonitor_d");
+	MonitorPlugin->addMonitor("CP3DDefaultMonitor_d");
+	//MonitorPlugin->addMonitor("CP3DVRMonitor_d");
     
 	Driver = Rengine->getVideoDriver();
 

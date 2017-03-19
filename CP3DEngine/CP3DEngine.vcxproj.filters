@@ -51,6 +51,9 @@
     <Filter Include="include\editor\ui">
       <UniqueIdentifier>{3f495270-f5f1-43de-98df-c9b4d7f2a445}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\dependencies">
+      <UniqueIdentifier>{cb10cf0f-d5fb-492b-8492-c10082bd1430}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\CP3DCompileConfig.h">

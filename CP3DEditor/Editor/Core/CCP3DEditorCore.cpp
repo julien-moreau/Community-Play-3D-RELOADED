@@ -291,9 +291,9 @@ void CCP3DEditorCore::createTestScene() {
 	Handler->getHDRManager()->setDecreaseRate(1.f);
 	Handler->getHDRManager()->setIncreaseRate(1.f);
 	Handler->getHDRManager()->setGaussianCoefficient(0.25f);
-	Handler->getHDRManager()->setLensTexture(driver->getTexture("Textures/lensdirt.jpg"));
+	Handler->getHDRManager()->setLensTexture(driver->getTexture("Textures/lensdirt.png"));
 
-	Rengine->getEffectsManager()->createSSAOEffect(true);
+	//Rengine->getEffectsManager()->createSSAOEffect(true);
 	//Rengine->getEffectsManager()->createVolumetricLightScatteringEffect(true, bill);
 
 	SpiesManager->addSpy(new CCP3DPostProcessSpy(this));
@@ -309,5 +309,4 @@ void CCP3DEditorCore::createTestScene() {
 	exporter->importProject("test.cp3d");
 	SceneGraph->fillGraph();
 }
-
 } /// End namespace cp3d
