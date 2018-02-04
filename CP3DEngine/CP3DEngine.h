@@ -30,6 +30,7 @@ public:
 
 	/// ICP3DEngine
 	void runEngine();
+	inline void drawAll();
 
 	/// Events & Updates
 	CCP3DEventReceiver *getEventReceiver();

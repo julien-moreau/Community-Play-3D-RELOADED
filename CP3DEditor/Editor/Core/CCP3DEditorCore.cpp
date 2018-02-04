@@ -282,6 +282,7 @@ void CCP3DEditorCore::createTestScene() {
 	Handler->getDepthPassManager()->addNodeToPass(planeNode);
 	Handler->getDepthPassManager()->addNodeToPass(cubeNode);
 
+	Handler->getGeneralPassManager()->addNodeToPass(planeNode);
 	Handler->getGeneralPassManager()->addNodeToPass(cubeNode);
 
 	Handler->getHDRManager()->setEnabled(true);

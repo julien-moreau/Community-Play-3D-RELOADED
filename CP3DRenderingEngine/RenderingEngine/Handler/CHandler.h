@@ -160,6 +160,8 @@ public:
 		return CustomGeneralPass;
 	}
 
+	void setCurrentFade(const irr::f32 &fade) { CurrentFade = fade; }
+
 private:
 
 	struct SShadowNode {
@@ -258,6 +260,8 @@ private:
 	CScreenQuad ScreenQuad;
 
 	irr::core::rect<irr::s32> ViewPort;
+
+	irr::f32 CurrentFade;
 
 	bool ShadowsUnsupported;
 	bool Use32BitDepth;

@@ -4,6 +4,10 @@
 #ifndef __H_CP3D_COMPILE_CONFIG__
 #define __H_CP3D_COMPILE_CONFIG__
 
+#if defined(_IRR_WINDOWS_API_)
+#include <windows.h>
+#endif
+
 namespace irr {
 	class IrrlichtDevice;
 }
@@ -47,6 +51,12 @@ namespace cp3d {
 	//! Creates a new CP3D engine
 	//! \param device: the device used by the engine
 	extern "C" CP3DR_LIB_API engine::ICP3DEngine *createEngine(irr::IrrlichtDevice *device);
+	#endif
+
+	#if defined(CP3DR_COMPILE_ENGINE) && defined(_IRR_WINDOWS_API_)
+	//! Creates an Irrlicht device giving a specific handler
+	//! \param hWnd: the windows handler
+	extern "C" CP3DR_LIB_API irr::IrrlichtDevice *createHwndIrrlichtDeviceEx(const HWND hWnd);
 	#endif
 
 	#if defined(CP3DR_COMPILE_EDITOR)

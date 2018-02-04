@@ -25,6 +25,10 @@ void CCP3DMonitorPlugin::render() {
 }
 
 bool CCP3DMonitorPlugin::addMonitor(stringc path) {
+	#ifdef _DEBUG
+	path += "_d";
+	#endif
+
     #ifdef _IRR_OSX_PLATFORM_
     path += ".dylib";
     #else

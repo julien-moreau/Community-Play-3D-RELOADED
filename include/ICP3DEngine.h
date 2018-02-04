@@ -47,6 +47,9 @@ public:
 	//! will run other processes you called
 	virtual void runEngine() = 0;
 
+	//! Renders the scene(s) unsing the engine
+	virtual inline void drawAll() = 0;
+
 	//! Returns the rendering engine
 	virtual rendering::ICP3DRenderingEngine *getRenderingEngine() = 0;
 

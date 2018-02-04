@@ -226,6 +226,10 @@ public:
 	//! Returns if the virtual reality is enabled
 	//! \return: if the virtual reality is enabled
 	virtual bool isVirtualRealityEnabled() = 0;
+
+	//! Sets the current fade value in [0.f, 1.f]
+	//! \param fade: the fade value
+	virtual void setCurrentFade(const irr::f32 &fade) = 0;
 };
 
 } /// End rendering namespace

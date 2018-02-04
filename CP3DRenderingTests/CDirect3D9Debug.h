@@ -21,33 +21,34 @@ namespace test {
 		IGUIEnvironment *gui = device->getGUIEnvironment();
 
 		/// Create rendering engine
-		cp3d::engine::ICP3DEngine *engine = cp3d::createEngine(device);
+		engine::ICP3DEngine *engine = cp3d::createEngine(device);
 		engine->getEventReceiver()->addEventReceiver(receiver);
 
-		cp3d::rendering::ICP3DRenderingEngine *cpre = engine->getRenderingEngine();
+		rendering::ICP3DRenderingEngine *cpre = engine->getRenderingEngine();
 		cpre->createNormalMappingMaterial();
 
-		cp3d::rendering::ICP3DHandler *handler = cpre->getHandler();
+		rendering::ICP3DHandler *handler = cpre->getHandler();
 
 		/// Create a fps camera
 		ICameraSceneNode *camera = smgr->addCameraSceneNodeFPS(0, 200.f, 0.09f);
-		camera->setPosition(vector3df(50.f, 50.f, 0.f));
+		camera->setPosition(vector3df(0.f, 0.f, 0.f));
 		device->getCursorControl()->setVisible(false);
 
 		/// Create a light
-		cp3d::rendering::ICP3DLightSceneNode *light = cpre->createLightSceneNode(true, true);
-		light->setPosition(vector3df(150.f, 300.f, 0.f));
+		rendering::ICP3DLightSceneNode *light = cpre->createLightSceneNode(true, true);
+		light->setPosition(vector3df(10.f, 15.f, 0.f));
 		light->setLightColor(SColorf(1.f, 1.f, 1.f, 1.f));
-		light->getLightData().SpecularColor = SColorf(1.f, 1.f, 1.f, 1.f);
+		light->getLightData().SpecularColor = SColorf(0.02f, 0.02f, 0.02f, 1.f);
 		light->getShadowLight()->setUseRoundSpotLight(false);
-		light->getShadowLight()->setFarValue(1000.f);
+		light->getShadowLight()->setFarValue(50.f);
+		light->setLightStrength(0.01f);
 		light->setLightStrength(driver->getDriverType() == EDT_DIRECT3D9 ? 2.5f : 1.f);
 		light->getShadowLight()->setShadowMapResolution(4096);
+		//light->getShadowLight()->setMustAutoRecalculate(false);
 
 		ISceneNodeAnimator *animator = smgr->createFlyStraightAnimator(vector3df(-250.f, 200.f, -100.f), vector3df(250.f, 200.f, 100.f), 10000, true, true);
-
 		ILightSceneNode *lightNode = *light;
-		lightNode->addAnimator(animator);
+		//lightNode->addAnimator(animator);
 
 		/// Skybox
 		ISceneNode* skyboxNode = smgr->addSkyBoxSceneNode(
@@ -57,59 +58,100 @@ namespace test {
 			driver->getTexture("Textures/Skybox/glacier_rt.png"),
 			driver->getTexture("Textures/Skybox/glacier_ft.png"),
 			driver->getTexture("Textures/Skybox/glacier_bk.png"));
+		skyboxNode->setMaterialFlag(EMF_BACK_FACE_CULLING, false);
+		skyboxNode->setMaterialFlag(EMF_ANTI_ALIASING, true);
+		skyboxNode->setMaterialFlag(EMF_TRILINEAR_FILTER, true);
+		skyboxNode->setMaterialFlag(EMF_BILINEAR_FILTER, true);
+		skyboxNode->setMaterialFlag(EMF_FRONT_FACE_CULLING, true); // VR
 
 		/// Create a test scene
-		IAnimatedMesh *planeMesh = smgr->addHillPlaneMesh("plane_mesh", dimension2d<f32>(100.f, 100.f), dimension2d<u32>(100, 100),
+		IAnimatedMesh *planeMesh = smgr->addHillPlaneMesh("plane_mesh", dimension2d<f32>(1.f, 1.f), dimension2d<u32>(100, 100),
 			0, 0.f, dimension2d<f32>(0.f, 0.f), dimension2d<f32>(50.f, 50.f));
 
 		IMeshSceneNode *planeNode = smgr->addMeshSceneNode(planeMesh);
+		planeNode->setPosition(vector3df(0.f, 0.f, 0.f));
 		planeNode->setMaterialTexture(0, driver->getTexture("Textures/specular.tga"));
 		planeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
 		planeNode->setMaterialTexture(2, driver->getTexture("Textures/specular.tga"));
 		planeNode->setMaterialFlag(EMF_LIGHTING, false);
-		handler->addShadowToNode(planeNode, cp3d::rendering::EFT_16PCF, cp3d::rendering::ESM_BOTH);
+		planeNode->setMaterialFlag(EMF_ANTI_ALIASING, true);
+		planeNode->setMaterialFlag(EMF_TRILINEAR_FILTER, true);
+		planeNode->setMaterialFlag(EMF_BILINEAR_FILTER, true);
+		planeNode->setMaterialFlag(EMF_ANISOTROPIC_FILTER, true);
+		planeNode->setMaterialFlag(EMF_BACK_FACE_CULLING, false); // VR
+		planeNode->setMaterialFlag(EMF_FRONT_FACE_CULLING, true); // VR
+		handler->addShadowToNode(planeNode, cp3d::rendering::EFT_NONE, cp3d::rendering::ESM_BOTH);
 
-		IMeshSceneNode *cubeNode = smgr->addCubeSceneNode(50.f, 0, -1, vector3df(0.f, 25.f, 0.f), vector3df(0.f, 45.f, 0.f));
+		/*
+		IMeshSceneNode *cubeNode = smgr->addCubeSceneNode(1.f, 0, -1, vector3df(0.f, 0.5f, -2.f), vector3df(0.f, 45.f, 0.f));
 		cubeNode->setMaterialTexture(0, driver->getTexture("Textures/diffuse.tga"));
 		cubeNode->setMaterialTexture(1, driver->getTexture("Textures/normal.tga"));
 		cubeNode->setMaterialTexture(2, driver->getTexture("Textures/specular.tga"));
 		cubeNode->setMaterialFlag(EMF_LIGHTING, false);
+		cubeNode->setMaterialFlag(EMF_ANTI_ALIASING, true);
+		cubeNode->setMaterialFlag(EMF_TRILINEAR_FILTER, true);
+		cubeNode->setMaterialFlag(EMF_BILINEAR_FILTER, true);
+		cubeNode->setMaterialFlag(EMF_BACK_FACE_CULLING, false); // VR
+		cubeNode->setMaterialFlag(EMF_FRONT_FACE_CULLING, true); // VR
 		handler->addShadowToNode(cubeNode, cp3d::rendering::EFT_16PCF, cp3d::rendering::ESM_BOTH);
 
 		array<vector3df> points;
-		points.push_back(vector3df(-150.f, 25.f, 0.f));
-		points.push_back(vector3df(150.f, 25.f, 0.f));
+		points.push_back(vector3df(-150.f, -25.f, 0.f));
+		points.push_back(vector3df(150.f, -25.f, 0.f));
 		animator = smgr->createFollowSplineAnimator(0, points, 1.f, 1.5f, true, true);
-		cubeNode->addAnimator(animator);
+		//cubeNode->addAnimator(animator);
 
 		animator = smgr->createRotationAnimator(vector3df(0.f, 4.5f, 0.f));
-		cubeNode->addAnimator(animator);
+		//cubeNode->addAnimator(animator);
+		*/
+		/// Murphy
+		IAnimatedMeshSceneNode *batman = smgr->addAnimatedMeshSceneNode(smgr->getMesh("data/batman.x"), 0, -1, vector3df(0.f, 0.f, -2.f), vector3df(0.f, 180.f, 0.f), vector3df(0.05f));
+		batman->setMaterialFlag(EMF_BACK_FACE_CULLING, false);
+		batman->setAnimationSpeed(40.f);
+		batman->setMaterialTexture(0, driver->getTexture("data/batman/IOS_Batman_Spec.jpg"));
+		batman->setMaterialType(cpre->Materials[EMT_NORMAL_MAP_SOLID]);
+		batman->setMaterialTexture(1, driver->getTexture("data/batman/IOS_Batman_Norm.jpg"));
+		batman->setMaterialTexture(2, driver->getTexture("data/batman/IOS_Batman_Spec.jpg"));
+		handler->addShadowToNode(batman, rendering::EFT_NONE, rendering::ESM_BOTH);
 
 		/// Clouds
 		#ifndef _IRR_COMPILE_WITH_DIRECT3D_11_
 		ISceneNode *cloud1 = engine->getSceneNodeCreator()->createCloudNode(vector2df(0.008f, 0.0f), driver->getTexture("Textures/Clouds/cloud01.png"), 1.f, 0.5f, 0.1f, -0.05f);
 		ISceneNode *cloud2 = engine->getSceneNodeCreator()->createCloudNode(vector2df(0.006f, 0.003f), driver->getTexture("Textures/Clouds/cloud02.png"), 0.4f, 0.05f, -0.1f, 0.5f);
 		ISceneNode *cloud3 = engine->getSceneNodeCreator()->createCloudNode(vector2df(0.006f, 0.003f), driver->getTexture("Textures/Clouds/cloud03.png"), 0.035f, 0.f, -0.15f, 0.4f);
+
+		// VR
+		cloud1->setMaterialFlag(EMF_BACK_FACE_CULLING, false);
+		cloud2->setMaterialFlag(EMF_BACK_FACE_CULLING, false);
+		cloud3->setMaterialFlag(EMF_BACK_FACE_CULLING, false);
+
+		cloud1->setMaterialFlag(EMF_FRONT_FACE_CULLING, true);
+		cloud2->setMaterialFlag(EMF_FRONT_FACE_CULLING, true);
+		cloud3->setMaterialFlag(EMF_FRONT_FACE_CULLING, true);
 		#endif
 
 		/// SSAO and Depth
-		cpre->getEffectsManager()->createSSAOEffect(true);
+		//cpre->getEffectsManager()->createSSAOEffect(true);
 
-		handler->getDepthPassManager()->addNodeToPass(planeNode);
-		handler->getDepthPassManager()->addNodeToPass(cubeNode);
+		//handler->getDepthPassManager()->addNodeToPass(planeNode);
+		//handler->getDepthPassManager()->addNodeToPass(cubeNode);
 
-		handler->getGeneralPassManager()->addNodeToPass(cubeNode);
+		//handler->getGeneralPassManager()->addNodeToPass(cubeNode);
 
 		/// HDR
-		handler->getHDRManager()->setEnabled(true);
+		handler->getHDRManager()->setEnabled(false);
 		handler->getHDRManager()->setBrightnessThreshold(1.f);
 		handler->getHDRManager()->setGaussWidth(2.f);
 		handler->getHDRManager()->setGaussianCoefficient(0.25f);
 		handler->getHDRManager()->setMinimumLuminance(0.5f);
 		handler->getHDRManager()->setMaximumLuminance(1e20f);
-		handler->getHDRManager()->setDecreaseRate(0.5f);
+		handler->getHDRManager()->setDecreaseRate(0.2f);
 		handler->getHDRManager()->setIncreaseRate(0.2f);
-		handler->getHDRManager()->setLensTexture(driver->getTexture("Textures/lensdirt.jpg"));
+		handler->getHDRManager()->setLensTexture(driver->getTexture("Textures/lensdirt.png"));
+
+		// VR
+		handler->getHDRManager()->enableLuminance(false);
+		handler->getHDRManager()->enableLensFlare(false);
 
 		/// Finish
 		handler->setAmbientColor(SColor(255, 32, 32, 32));
@@ -117,8 +159,9 @@ namespace test {
 		/// Get hdr texture
 		handler->update();
 
-		ITexture *hdrTexture = driver->getTexture("CP3DVelocity");
-		IGUIImage *img = gui->addImage(rect<s32>(driver->getScreenSize().Width - 512, 0, driver->getScreenSize().Width, 512));
+		ITexture *hdrTexture = driver->getTexture("leftEye");
+		//IGUIImage *img = gui->addImage(rect<s32>(driver->getScreenSize().Width - 512, 0, driver->getScreenSize().Width, 512));
+		IGUIImage *img = gui->addImage(rect<s32>(0, 0, driver->getScreenSize().Width, driver->getScreenSize().Height)); // VR
 		img->setScaleImage(true);
 		img->setImage(hdrTexture);
 

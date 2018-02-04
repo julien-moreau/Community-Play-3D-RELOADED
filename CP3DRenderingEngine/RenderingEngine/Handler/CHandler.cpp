@@ -22,7 +22,7 @@ CCP3DHandler::CCP3DHandler(IrrlichtDevice* dev, const irr::core::dimension2du& s
 ScreenRTTSize(screenRTTSize.getArea() == 0 ? dev->getVideoDriver()->getScreenSize() : screenRTTSize),
 ClearColour(0x0), ShadowsUnsupported(false), DepthMC(0), ShadowMC(0),
 AmbientColour(0x0), Use32BitDepth(use32BitDepthBuffers), UseVSM(useVSMShadows), RenderShadows(true), HDRManager(0),
-VREnabled(false), VRMaterial(-1)
+VREnabled(false), VRMaterial(-1), CurrentFade(1.f)
 {
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
 	ScreenQuad.initializeD3D11(driver);
@@ -120,10 +120,13 @@ VREnabled(false), VRMaterial(-1)
 		// Create screen quad shader callback.
 		CScreenQuadCB* SQCB = new CScreenQuadCB(this, true);
 
+		CScreenQuadCB* SQCBModulate = new CScreenQuadCB(this, true);
+		SQCBModulate->uniformDescriptors["fade"] = CScreenQuadCB::SUniformDescriptor(&CurrentFade, 1);
+
 		// Light modulate.
 		LightModulate = gpu->addHighLevelShaderMaterial(
 			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ScreenQuad.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
-			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/LightModulate.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile, SQCB);
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/LightModulate.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile, SQCBModulate);
 
 		// Simple present.
 		Simple = gpu->addHighLevelShaderMaterial(
