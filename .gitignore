@@ -57,4 +57,4 @@ Thumbs.db
 CP3DR/Tests
 CP3DR/data
 
-
+!Dependencies/openvr/**/*.dll
