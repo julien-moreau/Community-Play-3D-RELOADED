@@ -30,6 +30,7 @@
 
 # Others
 *.ipch
+*.ipdb
 *.tlog
 *.log
 *.lastbuildstate
@@ -46,6 +47,11 @@
 *.suo
 *.cache
 *.enc
+*.db
+*.opendb
+*.iobj
+*.db-wal
+*.db-shm
 
 # Files
 Thumbs.db
