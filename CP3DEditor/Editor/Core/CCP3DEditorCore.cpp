@@ -230,6 +230,15 @@ void CCP3DEditorCore::createTestScene() {
 	light->getShadowLight()->setMustAutoRecalculate(true);
 	light->setLightStrength(1.f);
 
+	cp3d::rendering::ICP3DLightSceneNode *light2 = Rengine->createLightSceneNode(true, true);
+	light2->setPosition(vector3df(0.f, 300.f, 250.f));
+	light2->setLightColor(SColorf(1.f, 0.f, 0.5f, 1.f));
+	light2->getLightData().SpecularColor = SColorf(1.f, 1.f, 1.f, 1.f);
+	light2->getShadowLight()->setUseRoundSpotLight(false);
+	light2->getShadowLight()->setFarValue(1000.f);
+	light2->setLightStrength(driver->getDriverType() == EDT_DIRECT3D9 ? 2.5f : 1.f);
+	light2->getShadowLight()->setShadowMapResolution(1024);
+
 	IBillboardTextSceneNode *emptySceneNode = smgr->addBillboardTextSceneNode(Gui->getSkin()->getFont(), L"Light :)", 0, dimension2df(30.f, 30.f), vector3df(0.f), -1, SColor(255, 255, 0, 0));
 	emptySceneNode->setName("Text Node");
 	emptySceneNode->setMaterialFlag(EMF_LIGHTING, false);

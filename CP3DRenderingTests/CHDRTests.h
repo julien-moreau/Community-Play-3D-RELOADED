@@ -65,7 +65,7 @@ namespace cp3d {
 			cp3d::rendering::ICP3DHandler *handler = cpre->getHandler();
 
 			/// Create a fps camera
-			ICameraSceneNode *camera = smgr->addCameraSceneNodeFPS(0, 200.f, 0.09f);
+			ICameraSceneNode *camera = smgr->addCameraSceneNodeFPS(0, 200.f, 0.01f);
 			camera->setFarValue(1000.f);
 			device->getCursorControl()->setVisible(false);
 
@@ -77,8 +77,8 @@ namespace cp3d {
 			light->getShadowLight()->setUseRoundSpotLight(false);
 			light->getShadowLight()->setFarValue(200.f);
 			light->setLightStrength(0.01f);
-			light->getShadowLight()->setShadowMapResolution(1024);
-			light->getShadowLight()->setMustAutoRecalculate(false);
+			light->getShadowLight()->setShadowMapResolution(4096);
+			light->getShadowLight()->setMustAutoRecalculate(true);
 
 			ISceneNodeAnimator *animator = smgr->createFlyStraightAnimator(vector3df(-250.f, 200.f, -100.f), vector3df(250.f, 200.f, 100.f), 30000, true, true);
 
@@ -93,19 +93,15 @@ namespace cp3d {
 				driver->getTexture("Textures/Skybox/glacier_rt.png"),
 				driver->getTexture("Textures/Skybox/glacier_ft.png"),
 				driver->getTexture("Textures/Skybox/glacier_bk.png"));
-			skyboxNode->setMaterialFlag(EMF_BACK_FACE_CULLING, false); // VR
-			skyboxNode->setMaterialFlag(EMF_FRONT_FACE_CULLING, true); // VR
 
 			/// Sponza
 			IMeshSceneNode *sponza = smgr->addMeshSceneNode(smgr->getMesh("data/chinese.obj"), 0, -1, vector3df(0.f), vector3df(0.f), vector3df(0.5f));
 			sponza->setMaterialType(cpre->Materials[EMT_NORMAL_MAP_SOLID]);
-			sponza->setMaterialFlag(EMF_BACK_FACE_CULLING, false); // VR
-			sponza->setMaterialFlag(EMF_FRONT_FACE_CULLING, true); // VR
 			sponza->setMaterialFlag(EMF_ANISOTROPIC_FILTER, true);
 			sponza->setMaterialFlag(EMF_ANTI_ALIASING, true);
 			sponza->setMaterialFlag(EMF_TRILINEAR_FILTER, true);
 			sponza->setMaterialFlag(EMF_BILINEAR_FILTER, true);
-			handler->addShadowToNode(sponza, rendering::EFT_NONE, rendering::ESM_RECEIVE);
+			handler->addShadowToNode(sponza, rendering::EFT_NONE, rendering::ESM_BOTH);
 
 			/// Batman
 			/*IAnimatedMeshSceneNode *batman = smgr->addAnimatedMeshSceneNode(smgr->getMesh("data/batman.x"), 0, -1, vector3df(10.f, -19.f, -30.f), vector3df(0.f, 180.f, 0.f), vector3df(0.3f));
@@ -123,15 +119,6 @@ namespace cp3d {
 			ISceneNode *cloud1 = engine->getSceneNodeCreator()->createCloudNode(vector2df(0.008f, 0.0f), driver->getTexture("Textures/Clouds/cloud01.png"), 1.f, 0.5f, 0.1f, -0.05f);
 			ISceneNode *cloud2 = engine->getSceneNodeCreator()->createCloudNode(vector2df(0.006f, 0.003f), driver->getTexture("Textures/Clouds/cloud02.png"), 0.4f, 0.05f, -0.1f, 0.5f);
 			ISceneNode *cloud3 = engine->getSceneNodeCreator()->createCloudNode(vector2df(0.006f, 0.003f), driver->getTexture("Textures/Clouds/cloud03.png"), 0.035f, 0.f, -0.15f, 0.4f);
-
-			// VR
-			cloud1->setMaterialFlag(EMF_BACK_FACE_CULLING, false);
-			cloud2->setMaterialFlag(EMF_BACK_FACE_CULLING, false);
-			cloud3->setMaterialFlag(EMF_BACK_FACE_CULLING, false);
-
-			cloud1->setMaterialFlag(EMF_FRONT_FACE_CULLING, true);
-			cloud2->setMaterialFlag(EMF_FRONT_FACE_CULLING, true);
-			cloud3->setMaterialFlag(EMF_FRONT_FACE_CULLING, true);
 			#endif
 
 			/// SSAO and Depth
@@ -160,14 +147,6 @@ namespace cp3d {
 
 			/// Finish
 			handler->setAmbientColor(SColor(255, 32, 32, 32));
-
-			/// Get hdr texture
-			//handler->update();
-
-			ITexture *hdrTexture = driver->getTexture("leftEye");
-			IGUIImage *img = gui->addImage(rect<s32>(driver->getScreenSize().Width - 512, 0, driver->getScreenSize().Width, 512));
-			img->setScaleImage(true);
-			img->setImage(hdrTexture);
 
 			/// Update the application
 			engine->setDrawGUI(true);

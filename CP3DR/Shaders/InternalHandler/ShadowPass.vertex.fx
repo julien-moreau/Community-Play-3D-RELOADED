@@ -77,16 +77,32 @@ void main()
 float4x4 mWorldTrans;
 #endif
 float4x4 mWorldViewProj;
-float4x4 mWorldViewProj2;
-float3 LightPos;
-float MaxD;
-float MAPRES;
+float4x4 mWorldViewProjLight0, mWorldViewProjLight1, mWorldViewProjLight2, mWorldViewProjLight3, mWorldViewProjLight4, mWorldViewProjLight5;
+float3 LightPos0, LightPos1, LightPos2, LightPos3, LightPos4, LightPos5;
+float MaxD0, MaxD1, MaxD2, MaxD3, MaxD4, MaxD5;
+float MAPRES0, MAPRES1, MAPRES2, MAPRES3, MAPRES4, MAPRES5;
 
 struct VS_OUTPUT
 {
-	float4 Position				: SV_Position;
-	float4 ShadowMapSamplingPos : TEXCOORD0; 
-	float4 MVar        			: TEXCOORD1;
+	float4 Position				 : SV_Position;
+
+	float4 ShadowMapSamplingPos0 : TEXCOORD0; 
+	float4 MVar0        		 : TEXCOORD1;
+
+	#if (LIGHTS_COUNT >= 2)
+	float4 ShadowMapSamplingPos1 : TEXCOORD2;
+	float4 MVar1        		 : TEXCOORD3;
+	#endif
+
+	#if (LIGHTS_COUNT >= 3)
+	float4 ShadowMapSamplingPos2 : TEXCOORD4;
+	float4 MVar2        		 : TEXCOORD5;
+	#endif
+
+	#if (LIGHTS_COUNT >= 4)
+	float4 ShadowMapSamplingPos3 : TEXCOORD6;
+	float4 MVar3        		 : TEXCOORD7;
+	#endif
 };
 
 struct VS_INPUT
@@ -95,24 +111,63 @@ struct VS_INPUT
 	float3 Normal : NORMAL;
 };
 
-VS_OUTPUT vertexMain(VS_INPUT In)
+struct LIGHT_OUTPUT
 {
-	VS_OUTPUT OUT = (VS_OUTPUT)0;
-	OUT.Position = mul(float4(In.Position.x, In.Position.y, In.Position.z, 1.0), mWorldViewProj);
-	float4 SMPos = mul(float4(In.Position.x, In.Position.y, In.Position.z, 1.0), mWorldViewProj2);
+	float4 ShadowMapSamplingPos : TEXCOORD0;
+	float4 MVar        			: TEXCOORD1;
+};
+
+LIGHT_OUTPUT getLightOutput(VS_INPUT In, float4x4 mWorldViewProjLight, float3 LightPos, float MAPRES, float MaxD)
+{
+	LIGHT_OUTPUT OUT = (LIGHT_OUTPUT)0;
+	float4 SMPos = mul(float4(In.Position.x, In.Position.y, In.Position.z, 1.0), mWorldViewProjLight);
 	SMPos.xy = float2(SMPos.x, -SMPos.y) / 2.0;
-	
+
 	OUT.ShadowMapSamplingPos = SMPos;
-	
+
 	#ifdef DIRECT3D_11
 	float4 worldpos = mul(float4(In.Position.x, In.Position.y, In.Position.z, 1.0), mWorldTrans);
 	float3 LightDir = normalize(LightPos - worldpos.xyz);
 	#else
 	float3 LightDir = normalize(LightPos - In.Position);
 	#endif
-		
+
 	OUT.MVar = float4(SMPos.z, dot(In.Normal, LightDir), 1.0 / MAPRES, MaxD);
-	
+
+	return (OUT);
+}
+
+VS_OUTPUT vertexMain(VS_INPUT In)
+{
+	VS_OUTPUT OUT = (VS_OUTPUT)0;
+	OUT.Position = mul(float4(In.Position.x, In.Position.y, In.Position.z, 1.0), mWorldViewProj);
+
+	// Light 1
+	LIGHT_OUTPUT output0 = getLightOutput(In, mWorldViewProjLight0, LightPos0, MAPRES0, MaxD0);
+	OUT.ShadowMapSamplingPos0 = output0.ShadowMapSamplingPos;
+	OUT.MVar0 = output0.MVar;
+
+	// Light 2
+	#if (LIGHTS_COUNT >= 2)
+	LIGHT_OUTPUT output1 = getLightOutput(In, mWorldViewProjLight1, LightPos1, MAPRES1, MaxD1);
+	OUT.ShadowMapSamplingPos1 = output1.ShadowMapSamplingPos;
+	OUT.MVar1 = output1.MVar;
+	#endif
+
+	// Light 3
+	#if (LIGHTS_COUNT >= 3)
+	LIGHT_OUTPUT output2 = getLightOutput(In, mWorldViewProjLight2, LightPos2, MAPRES2, MaxD2);
+	OUT.ShadowMapSamplingPos2 = output2.ShadowMapSamplingPos;
+	OUT.MVar2 = output2.MVar;
+	#endif
+
+	// Light 3
+	#if (LIGHTS_COUNT >= 4)
+	LIGHT_OUTPUT output3 = getLightOutput(In, mWorldViewProjLight3, LightPos3, MAPRES3, MaxD3);
+	OUT.ShadowMapSamplingPos3 = output3.ShadowMapSamplingPos;
+	OUT.MVar3 = output3.MVar;
+	#endif
+
 	return (OUT);
 }
 

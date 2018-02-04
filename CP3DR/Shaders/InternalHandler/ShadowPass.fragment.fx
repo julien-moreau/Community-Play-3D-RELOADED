@@ -120,29 +120,51 @@ void main()
 
 #include "Shaders/InternalHandler/Utils.hlsl.fx"
 
-/*
-CP3DTexture ShadowMapSampler : registerTexture(t0);
-SamplerState ShadowMapSamplerST : register(s0);
-*/
+CP3DTexture ShadowMapSampler0 : registerTexture(t0);
+SamplerState ShadowMapSamplerST0 : register(s0);
 
-SHADOW_MAP_SAMPLER0
-SHADOW_MAP_SAMPLER1
-SHADOW_MAP_SAMPLER2
-SHADOW_MAP_SAMPLER3
-SHADOW_MAP_SAMPLER4
-SHADOW_MAP_SAMPLER5
+CP3DTexture ShadowMapSampler1 : registerTexture(t1);
+SamplerState ShadowMapSamplerST1 : register(s1);
 
-float4 LightColour;
+CP3DTexture ShadowMapSampler2 : registerTexture(t2);
+SamplerState ShadowMapSamplerST2 : register(s2);
+
+CP3DTexture ShadowMapSampler3 : registerTexture(t3);
+SamplerState ShadowMapSamplerST3 : register(s3);
+
+CP3DTexture ShadowMapSampler4 : registerTexture(t4);
+SamplerState ShadowMapSamplerST4 : register(s4);
+
+CP3DTexture ShadowMapSampler5 : registerTexture(t5);
+SamplerState ShadowMapSamplerST5 : register(s5);
+
+float4 LightColour0, LightColour1, LightColour2, LightColour3, LightColour4, LightColour5;
 
 struct VS_OUTPUT
 {
-	float4 Position				: SV_Position;
-	float4 ShadowMapSamplingPos : TEXCOORD0;
-	float4 MVar        			: TEXCOORD1;
+	float4 Position				 : SV_Position;
+
+	float4 ShadowMapSamplingPos0 : TEXCOORD0;
+	float4 MVar0        		 : TEXCOORD1;
+
+	#if (LIGHTS_COUNT >= 2)
+	float4 ShadowMapSamplingPos1 : TEXCOORD2;
+	float4 MVar1        		 : TEXCOORD3;
+	#endif
+
+	#if (LIGHTS_COUNT >= 3)
+	float4 ShadowMapSamplingPos2 : TEXCOORD4;
+	float4 MVar2        		 : TEXCOORD5;
+	#endif
+
+	#if (LIGHTS_COUNT >= 4)
+	float4 ShadowMapSamplingPos3 : TEXCOORD6;
+	float4 MVar3        		 : TEXCOORD7;
+	#endif
 };
 
 #ifdef VSM
-float calcShadow(float2 texCoords, float2 offset, float RealDist, CP3DTexture shadowMapSampler, SamplerState shadowMapSamplerST)
+inline float calcShadow(float2 texCoords, float2 offset, float RealDist, CP3DTexture shadowMapSampler, SamplerState shadowMapSamplerST)
 {
 	float4 shadTexCol = CP3DTex2D(shadowMapSampler, texCoords + offset, shadowMapSamplerST);
 
@@ -157,7 +179,7 @@ float calcShadow(float2 texCoords, float2 offset, float RealDist, CP3DTexture sh
 	return (1.0 - max(lit_factor, p)) / SAMPLE_AMOUNT;
 }
 #else
-float calcShadow(float2 texCoords, float2 offset, float RealDist, CP3DTexture shadowMapSampler, SamplerState shadowMapSamplerST)
+inline float calcShadow(float2 texCoords, float2 offset, float RealDist, CP3DTexture shadowMapSampler, SamplerState shadowMapSamplerST)
 {
 	float4 shadTexCol = CP3DTex2D(shadowMapSampler, texCoords + offset, shadowMapSamplerST);
 
@@ -187,34 +209,34 @@ const float2 offsetArray[16] =
 	float2(4.0, 4.0)
 };
 
-float4 pixelMain(VS_OUTPUT In) : COLOR0
+inline float4 getLightOutput(float4 ShadowMapSamplingPos, float4 MVar, float4 LightColour, sampler2D ShadowMapSampler, SamplerState ShadowMapSamplerST)
 {
-	float4 SMPos = In.ShadowMapSamplingPos;
-	SMPos.xy = In.ShadowMapSamplingPos.xy / In.ShadowMapSamplingPos.w + float2(0.5, 0.5);
+	float4 SMPos = ShadowMapSamplingPos;
+	SMPos.xy = ShadowMapSamplingPos.xy / ShadowMapSamplingPos.w + float2(0.5, 0.5);
 
 	float4 finalCol = float4(0.0, 0.0, 0.0, 0.0);
 
 	// If this point is within the light's frustum.
 	#ifdef ROUND_SPOTLIGHTS
 	float lengthToCenter = length(SMPos.xy - float2(0.5, 0.5));
-	if (lengthToCenter < 0.5 && SMPos.z > 0.0 && SMPos.z < In.MVar[3])
+	if (lengthToCenter < 0.5 && SMPos.z > 0.0 && SMPos.z < MVar[3])
 	#else
 	float2 clampedSMPos = saturate(SMPos.xy);
-	if (clampedSMPos.x == SMPos.x && clampedSMPos.y == SMPos.y && SMPos.z > 0.0 && SMPos.z < In.MVar[3])
+	if (clampedSMPos.x == SMPos.x && clampedSMPos.y == SMPos.y && SMPos.z > 0.0 && SMPos.z < MVar[3])
 	#endif
 	{
 		float lightFactor = 1.0;
-		float realDistance = In.MVar[0] / In.MVar[3] - 0.005;
+		float realDistance = MVar[0] / MVar[3] - 0.005;
 	
 		[unroll]
 		for(unsigned int i = 0; i < SAMPLE_AMOUNT; ++i)
-			lightFactor -= calcShadow(SMPos.xy, offsetArray[i] * In.MVar[2], realDistance, ShadowMapSampler0, ShadowMapSampler0ST);
+			lightFactor -= calcShadow(SMPos.xy, offsetArray[i] * MVar[2], realDistance, ShadowMapSampler, ShadowMapSamplerST);
 
 		// Multiply with diffuse.
 		#ifdef ROUND_SPOTLIGHTS
-		finalCol = LightColour * lightFactor * In.MVar[1] * clamp(5.0 - 10.0 * lengthToCenter, 0.0, 1.0);
+		finalCol = LightColour * lightFactor * MVar[1] * clamp(5.0 - 10.0 * lengthToCenter, 0.0, 1.0);
 		#else
-		finalCol = LightColour * lightFactor * In.MVar[1];
+		finalCol = LightColour * lightFactor * MVar[1];
 		#endif
 	}
 	
@@ -223,10 +245,29 @@ float4 pixelMain(VS_OUTPUT In) : COLOR0
 	#else
 	else
 	{
-		finalCol = LightColour * In.MVar[1];
+		finalCol = LightColour * MVar[1];
 	}
 	return finalCol;
 	#endif
+}
+
+float4 pixelMain(VS_OUTPUT In) : COLOR0
+{
+	float4 finalCol = getLightOutput(In.ShadowMapSamplingPos0, In.MVar0, LightColour0, ShadowMapSampler0, ShadowMapSamplerST0);
+
+	#if (LIGHTS_COUNT >= 2)
+	finalCol += getLightOutput(In.ShadowMapSamplingPos1, In.MVar1, LightColour1, ShadowMapSampler1, ShadowMapSamplerST1);
+    #endif
+
+	#if (LIGHTS_COUNT >= 3)
+	finalCol += getLightOutput(In.ShadowMapSamplingPos2, In.MVar2, LightColour2, ShadowMapSampler2, ShadowMapSamplerST2);
+    #endif
+
+	#if (LIGHTS_COUNT >= 4)
+	finalCol += getLightOutput(In.ShadowMapSamplingPos3, In.MVar3, LightColour3, ShadowMapSampler3, ShadowMapSamplerST3);
+    #endif
+
+	return finalCol;
 }
 
 #endif

@@ -287,7 +287,7 @@ void CCP3DHandler::clear() {
 	CustomGeneralPass->setVolumetricLightScatteringNode(0);
 }
 
-s32 CCP3DHandler::GetShadowMaterialType(const u32 &lightsCount, const E_FILTER_TYPE &filterType, const bool &useRoundedSpotLight) {
+s32 CCP3DHandler::getShadowMaterialType(const u32 &lightsCount, const E_FILTER_TYPE &filterType, const bool &useRoundedSpotLight) {
 	SShadowMapType *shadowType = 0;
 
 	map<u32, array<SShadowMapType>>::Node *lightsShadowMapNode = ShadowsMap.find(lightsCount);
@@ -343,7 +343,8 @@ s32 CCP3DHandler::GetShadowMaterialType(const u32 &lightsCount, const E_FILTER_T
 
 	/// Save it for cache purpose
 	if (lightsShadowMapNode)
-		lightsShadowMapNode->getValue().push_back(SShadowMapType(shadowMaterialType, shadowRoundedSpotMaterialType));
+		lightsShadowMapNode->getValue()[filterType] = SShadowMapType(shadowMaterialType, shadowRoundedSpotMaterialType);
+		//lightsShadowMapNode->getValue().push_back(SShadowMapType(shadowMaterialType, shadowRoundedSpotMaterialType));
 	else {
 		array<SShadowMapType> newArray;
 		for (u32 i = 0; i < EFT_COUNT; i++)
@@ -500,7 +501,7 @@ void CCP3DHandler::update(ITexture *outputTarget, SHandlerRenderTargets *texture
             core::array<irr::s32> BufferMaterialList(CurrentMaterialCount);
             core::array<irr::video::ITexture*> BufferTextureList(CurrentMaterialCount);
             
-            const s32 shadowMaterialType = GetShadowMaterialType(LightList.size(), ShadowNodeArray[i].filterType, /*LightList[l].UseRoundSpotLight*/ false);
+            const s32 shadowMaterialType = getShadowMaterialType(LightList.size(), ShadowNodeArray[i].filterType, /*LightList[l].UseRoundSpotLight*/ false);
             
             for(u32 m = 0;m < CurrentMaterialCount;++m) {
                 BufferMaterialList.push_back(ShadowNodeArray[i].node->getMaterial(m).MaterialType);

@@ -228,7 +228,7 @@ private:
 
 	irr::core::array<irr::video::ITexture *> CurrentShadowMaps;
 	irr::core::map<irr::u32, irr::core::array<SShadowMapType>> ShadowsMap;
-	irr::s32 GetShadowMaterialType(const irr::u32 &lightsCount, const E_FILTER_TYPE &filterType, const bool &useRoundedSpotLight);
+	irr::s32 getShadowMaterialType(const irr::u32 &lightsCount, const E_FILTER_TYPE &filterType, const bool &useRoundedSpotLight);
 
 	/// Post-processes
 	irr::s32 LightModulate;
