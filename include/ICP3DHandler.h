@@ -196,7 +196,7 @@ public:
 	virtual void setViewPort(const irr::core::rect<irr::s32> viewPort) = 0;
 
 	//! Returns the current viewport of the handler
-	virtual irr::core::rect<irr::s32> getViewPort() = 0;
+	virtual irr::core::rect<irr::s32>& getViewPort() = 0;
 
 	//! Returns the shadow mode for the given node
 	//! \param node: the node to test

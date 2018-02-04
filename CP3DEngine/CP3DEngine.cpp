@@ -105,6 +105,11 @@ inline void CCP3DEngine::drawAll() {
 
 	Updater->OnPreUpdate();
 
+	// Setup active camera
+	ICameraSceneNode* camera = Rengine->getSceneManager()->getActiveCamera();
+	camera->setAspectRatio((f32) Handler->getViewPort().getWidth() / (f32) Handler->getViewPort().getHeight());
+
+	// Render
 	if (MonitorPlugin->getMonitorCount() == 0)
 		Handler->update();
 	else

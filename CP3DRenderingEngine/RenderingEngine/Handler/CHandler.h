@@ -128,7 +128,7 @@ public:
 	irr::f32 getTime() { return device->getTimer()->getTime() / 100.0f; }
 	void setClearColour(irr::video::SColor ClearCol) { ClearColour = ClearCol; }
 	void setViewPort(const irr::core::rect<irr::s32> viewPort) { ViewPort = viewPort; }
-	irr::core::rect<irr::s32> getViewPort() { return ViewPort; }
+	irr::core::rect<irr::s32> &getViewPort() { return ViewPort; }
 	irr::video::IVideoDriver *getVideoDriver() { return driver; }
 	irr::core::dimension2du getScreenRTTSize() { return ScreenRTTSize; }
 	void clear();

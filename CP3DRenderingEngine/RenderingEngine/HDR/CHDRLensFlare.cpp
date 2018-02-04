@@ -19,6 +19,12 @@ CHDRLensFlare::CHDRLensFlare(CCP3DHandler *handler) : Handler(handler), LensText
 
 	LensFlareRTT = Driver->addRenderTargetTexture(Driver->getScreenSize() / 8, "CP3DHDRLensFlare", ECF_A8R8G8B8);
 
+	Dispersal = 0.1f;
+	HaloWidth = 0.4f;
+	Distortion = 16.f;
+
+	MotionScale = 1.f;
+
 	CMaterialCreator cmat(handler->getVideoDriver());
 	cmat.addDefine("SAMPLES", "8");
 	cmat.addDefine("POST_PROCESS", "");
@@ -41,12 +47,6 @@ CHDRLensFlare::CHDRLensFlare(CCP3DHandler *handler) : Handler(handler), LensText
 	cmat.addDefine("MAX_MOTION_SAMPLES", "64.0");
 	cmat.addDefine("POST_PROCESS", "");
 	FinalMaterialType = cmat.createMaterialFromFiles("Shaders/InternalHandler/ScreenQuad.vertex.fx", "Shaders/HDR/LensFlareFinal.fragment.fx", EMT_SOLID, CallbackFinal);
-
-	Dispersal = 0.1f;
-	HaloWidth = 0.4f;
-	Distortion = 16.f;
-
-	MotionScale = 1.f;
 
 	DepthTexture = Driver->getTexture("HDRLensFlarePass");
 	VelocityTexture = Driver->getTexture("CP3DVelocity");

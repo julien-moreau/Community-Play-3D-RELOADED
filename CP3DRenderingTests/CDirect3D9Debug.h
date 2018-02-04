@@ -154,7 +154,7 @@ namespace test {
 		handler->getGeneralPassManager()->addNodeToPass(cubeNode);
 
 		/// HDR
-		handler->getHDRManager()->setEnabled(false);
+		handler->getHDRManager()->setEnabled(true);
 		handler->getHDRManager()->setBrightnessThreshold(1.f);
 		handler->getHDRManager()->setGaussWidth(2.f);
 		handler->getHDRManager()->setGaussianCoefficient(0.25f);

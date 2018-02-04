@@ -617,7 +617,9 @@ void CCP3DHandler::update(ITexture *outputTarget, SHandlerRenderTargets *texture
 	}
 
 	driver->setRenderTarget(0, false, false);
-	driver->setViewPort(ViewPort);
+
+	if (!PostProcessingRoutinesSize && !HDRManager->isEnabled())
+		driver->setViewPort(ViewPort);
 	
 	bool alter = false;
 	ITexture *lastRtt = 0;

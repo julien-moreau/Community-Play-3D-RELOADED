@@ -43,7 +43,7 @@ private:
 int main(int argc, char* argv[]) {
 
 	/// Create a device
-	irr::video::E_DRIVER_TYPE driverType = EDT_DIRECT3D9;
+	irr::video::E_DRIVER_TYPE driverType = EDT_OPENGL;
 	#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
 	// Automatically test the D3D11 driver
 	driverType = EDT_DIRECT3D11;

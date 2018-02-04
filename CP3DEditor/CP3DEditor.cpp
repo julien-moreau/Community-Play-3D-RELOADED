@@ -29,7 +29,7 @@ namespace cp3d {
 		params.LoggingLevel = irr::ELL_DEBUG;
 		params.WindowSize = desktopSize;
 		params.WithAlphaChannel = false;
-		params.DriverType = irr::video::EDT_DIRECT3D9;
+		params.DriverType = irr::video::EDT_OPENGL;
 		params.EventReceiver = 0;
 
 		#ifdef CP3DR_EDITOR_DIRECT3D11

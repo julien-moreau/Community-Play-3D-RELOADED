@@ -153,14 +153,12 @@ inline float4 motionBlur(float2 texCoord, float2 screenSize) {
 	int nSamples = max(nSamples1, nSamples2);
 
 	if (nSamples1 > nSamples2) {
-		[loop]
 		for (int i = 1; i < nSamples; ++i) {
 			float2 offset1 = texCoord + velocity1 * (float(i) / float(nSamples1 - 1) - 0.5);
 			result += CP3DTex2D(ScreenMapSampler, offset1, ScreenMapSamplerST);
 		}
 	}
 	else {
-		[loop]
 		for (int i = 1; i < nSamples; ++i) {
 			float2 offset2 = texCoord + velocity2 * (hlim + float(i));
 			result += CP3DTex2D(ScreenMapSampler, offset2, ScreenMapSamplerST);
