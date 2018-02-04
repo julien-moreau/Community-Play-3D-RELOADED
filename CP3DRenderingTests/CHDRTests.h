@@ -97,13 +97,19 @@ namespace cp3d {
 			IMeshSceneNode *sponza = smgr->addMeshSceneNode(smgr->getMesh("data/chinese.obj"), 0, -1, vector3df(0.f), vector3df(0.f), vector3df(3.5f));
 			sponza->setMaterialType(cpre->Materials[EMT_NORMAL_MAP_SOLID]);
 			handler->addShadowToNode(sponza, rendering::EFT_16PCF, rendering::ESM_BOTH);
+            
+            ITexture *normal = driver->getTexture("Textures/floor_bump.png");
+            ITexture *spec = driver->getTexture("Textures/floor_specular.png");
+            sponza->setMaterialTexture(1, normal);
+            sponza->setMaterialTexture(2, spec);
 
 			/// Batman
 			IAnimatedMeshSceneNode *batman = smgr->addAnimatedMeshSceneNode(smgr->getMesh("data/batman.x"), 0, -1, vector3df(10.f, -19.f, -30.f), vector3df(0.f), vector3df(0.3f));
 			batman->setMaterialFlag(EMF_BACK_FACE_CULLING, false);
 			batman->setFrameLoop(0, batman->getEndFrame());
+            batman->setAnimationSpeed(40.f);
 			batman->setMaterialType(cpre->Materials[EMT_NORMAL_MAP_SOLID]);
-			batman->setMaterialTexture(0, driver->getTexture("data/batman/IOS_Batman_Diff.jpg"));
+			batman->setMaterialTexture(0, driver->getTexture("data/batman/IOS_Batman_Spec.jpg"));
 			batman->setMaterialTexture(1, driver->getTexture("data/batman/IOS_Batman_Norm.jpg"));
 			batman->setMaterialTexture(2, driver->getTexture("data/batman/IOS_Batman_Spec.jpg"));
 			handler->addShadowToNode(batman, rendering::EFT_16PCF, rendering::ESM_BOTH);
@@ -126,14 +132,14 @@ namespace cp3d {
 
 			/// HDR
 			handler->getHDRManager()->setEnabled(true);
-			handler->getHDRManager()->setBrightnessThreshold(0.8f);
+			handler->getHDRManager()->setBrightnessThreshold(1.f);
 			handler->getHDRManager()->setGaussWidth(2.f);
 			handler->getHDRManager()->setGaussianCoefficient(0.25f);
 			handler->getHDRManager()->setMinimumLuminance(0.5f);
 			handler->getHDRManager()->setMaximumLuminance(1e20f);
 			handler->getHDRManager()->setDecreaseRate(0.5f);
 			handler->getHDRManager()->setIncreaseRate(0.2f);
-			handler->getHDRManager()->setLensTexture(driver->getTexture("Textures/lensdirt.jpg"));
+			handler->getHDRManager()->setLensTexture(driver->getTexture("Textures/lensdirt.png"));
 
 			/// Finish
 			handler->setAmbientColor(SColor(255, 32, 32, 32));

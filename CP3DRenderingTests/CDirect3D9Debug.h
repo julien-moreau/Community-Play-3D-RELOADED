@@ -36,19 +36,49 @@ namespace test {
 
 		/// Create a light
 		cp3d::rendering::ICP3DLightSceneNode *light = cpre->createLightSceneNode(true, true);
-		light->setPosition(vector3df(150.f, 300.f, 0.f));
-		light->setLightColor(SColorf(1.f, 1.f, 1.f, 1.f));
+		light->setPosition(vector3df(250.f, 300.f, 0.f));
+		light->setLightColor(SColorf(1.f, 0.5f, 0.f, 1.f));
 		light->getLightData().SpecularColor = SColorf(1.f, 1.f, 1.f, 1.f);
 		light->getShadowLight()->setUseRoundSpotLight(false);
 		light->getShadowLight()->setFarValue(1000.f);
 		light->setLightStrength(driver->getDriverType() == EDT_DIRECT3D9 ? 2.5f : 1.f);
-		light->getShadowLight()->setShadowMapResolution(4096);
+		light->getShadowLight()->setShadowMapResolution(1024);
 
 		ISceneNodeAnimator *animator = smgr->createFlyStraightAnimator(vector3df(-250.f, 200.f, -100.f), vector3df(250.f, 200.f, 100.f), 10000, true, true);
 
 		ILightSceneNode *lightNode = *light;
-		lightNode->addAnimator(animator);
-
+		//lightNode->addAnimator(animator);
+        
+        /// Create another light
+        cp3d::rendering::ICP3DLightSceneNode *light2 = cpre->createLightSceneNode(true, true);
+        light2->setPosition(vector3df(0.f, 300.f, 250.f));
+        light2->setLightColor(SColorf(1.f, 0.f, 0.5f, 1.f));
+        light2->getLightData().SpecularColor = SColorf(1.f, 1.f, 1.f, 1.f);
+        light2->getShadowLight()->setUseRoundSpotLight(false);
+        light2->getShadowLight()->setFarValue(1000.f);
+        light2->setLightStrength(driver->getDriverType() == EDT_DIRECT3D9 ? 2.5f : 1.f);
+        light2->getShadowLight()->setShadowMapResolution(1024);
+        
+        /// Create another light
+        cp3d::rendering::ICP3DLightSceneNode *light3 = cpre->createLightSceneNode(true, true);
+        light3->setPosition(vector3df(-250.f, 300.f, 0.f));
+        light3->setLightColor(SColorf(0.f, 0.5f, 1.f, 1.f));
+        light3->getLightData().SpecularColor = SColorf(1.f, 1.f, 1.f, 1.f);
+        light3->getShadowLight()->setUseRoundSpotLight(false);
+        light3->getShadowLight()->setFarValue(1000.f);
+        light3->setLightStrength(driver->getDriverType() == EDT_DIRECT3D9 ? 2.5f : 1.f);
+        light3->getShadowLight()->setShadowMapResolution(1024);
+        
+        /// Create another light
+        cp3d::rendering::ICP3DLightSceneNode *light4 = cpre->createLightSceneNode(true, true);
+        light4->setPosition(vector3df(0.f, 300.f, -250.f));
+        light4->setLightColor(SColorf(0.f, 1.f, 0.5f, 1.f));
+        light4->getLightData().SpecularColor = SColorf(1.f, 1.f, 1.f, 1.f);
+        light4->getShadowLight()->setUseRoundSpotLight(false);
+        light4->getShadowLight()->setFarValue(1000.f);
+        light4->setLightStrength(driver->getDriverType() == EDT_DIRECT3D9 ? 2.5f : 1.f);
+        light4->getShadowLight()->setShadowMapResolution(1024);
+        
 		/// Skybox
 		ISceneNode* skyboxNode = smgr->addSkyBoxSceneNode(
 			driver->getTexture("Textures/Skybox/glacier_up.png"),
@@ -109,7 +139,7 @@ namespace test {
 		handler->getHDRManager()->setMaximumLuminance(1e20f);
 		handler->getHDRManager()->setDecreaseRate(0.5f);
 		handler->getHDRManager()->setIncreaseRate(0.2f);
-		handler->getHDRManager()->setLensTexture(driver->getTexture("Textures/lensdirt.jpg"));
+		handler->getHDRManager()->setLensTexture(driver->getTexture("Textures/lensdirt.png"));
 
 		/// Finish
 		handler->setAmbientColor(SColor(255, 32, 32, 32));
@@ -117,7 +147,7 @@ namespace test {
 		/// Get hdr texture
 		handler->update();
 
-		ITexture *hdrTexture = driver->getTexture("CP3DVelocity");
+		ITexture *hdrTexture = driver->getTexture("ColorMapSampler");
 		IGUIImage *img = gui->addImage(rect<s32>(driver->getScreenSize().Width - 512, 0, driver->getScreenSize().Width, 512));
 		img->setScaleImage(true);
 		img->setImage(hdrTexture);
