@@ -37,6 +37,10 @@ void CCP3DEditionToolHDR::createInterface() {
 	HDRTab = EditionTool->addTab("Post-Processes");
 	
 	/// Parameters
+	EditionTool->setNewZone(HDRTab, "Activate");
+	Enabled = EditionTool->addField(HDRTab, EGUIET_CHECK_BOX, DefaultEditionToolCallback("Post-Processes Enabled"));
+	LensFlareEnabled = EditionTool->addField(HDRTab, EGUIET_CHECK_BOX, DefaultEditionToolCallback("Lens Flare Enabled"));
+
 	EditionTool->setNewZone(HDRTab, "HDR");
 	HDRExposure = EditionTool->addField(HDRTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Exposure"));
 	HDRIncrease = EditionTool->addField(HDRTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Increase Rate"));
@@ -48,12 +52,16 @@ void CCP3DEditionToolHDR::createInterface() {
 	BloomCoeff = EditionTool->addField(HDRTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Coefficient"));
 	BloomMean = EditionTool->addField(HDRTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Mean"));
 	BloomStandDev = EditionTool->addField(HDRTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Standard Derivation"));
+	BloomWidth = EditionTool->addField(HDRTab, EGUIET_EDIT_BOX, DefaultEditionToolCallback("Blur Width"));
 }
 
 void CCP3DEditionToolHDR::configure() {
 	rendering::ICP3DHDRManager *mgr = Handler->getHDRManager();
 
 	// Configure
+	Enabled.CheckBox->setChecked(mgr->isEnabled());
+	LensFlareEnabled.CheckBox->setChecked(mgr->lensFlareEnabled());
+
 	HDRExposure.TextBox->setText(stringw(mgr->getExposure()).c_str());
 	HDRIncrease.TextBox->setText(stringw(mgr->getIncreaseRate()).c_str());
 	HDRDecrease.TextBox->setText(stringw(mgr->getDecreaseRate()).c_str());
@@ -63,12 +71,16 @@ void CCP3DEditionToolHDR::configure() {
 	BloomCoeff.TextBox->setText(stringw(mgr->getGaussianCoefficient()).c_str());
 	BloomMean.TextBox->setText(stringw(mgr->getGaussianMean()).c_str());
 	BloomStandDev.TextBox->setText(stringw(mgr->getGaussianStandardDerivation()).c_str());
+	BloomWidth.TextBox->setText(stringw(mgr->getGaussianWidth()).c_str());
 }
 
 void CCP3DEditionToolHDR::apply() {
 	rendering::ICP3DHDRManager *mgr = Handler->getHDRManager();
 
 	// Apply
+	mgr->setEnabled(Enabled.CheckBox->isChecked());
+	mgr->enableLensFlare(LensFlareEnabled.CheckBox->isChecked());
+
 	mgr->setExposure(core::fast_atof(stringc(HDRExposure.TextBox->getText()).c_str()));
 	mgr->setIncreaseRate(core::fast_atof(stringc(HDRIncrease.TextBox->getText()).c_str()));
 	mgr->setDecreaseRate(core::fast_atof(stringc(HDRDecrease.TextBox->getText()).c_str()));
@@ -78,6 +90,7 @@ void CCP3DEditionToolHDR::apply() {
 	mgr->setGaussianCoefficient(core::fast_atof(stringc(BloomCoeff.TextBox->getText()).c_str()));
 	mgr->setGaussianMean(core::fast_atof(stringc(BloomMean.TextBox->getText()).c_str()));
 	mgr->setGaussianStandardDerivation(core::fast_atof(stringc(BloomStandDev.TextBox->getText()).c_str()));
+	mgr->setGaussWidth(core::fast_atof(stringc(BloomWidth.TextBox->getText()).c_str()));
 }
 
 bool CCP3DEditionToolHDR::OnEvent(const SEvent &event) {

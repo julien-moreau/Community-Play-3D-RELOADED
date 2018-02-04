@@ -155,6 +155,7 @@ bool CCP3DEditionToolAddMesh::OnEvent(const SEvent &event) {
 					Node->setMaterialFlag(EMF_LIGHTING, false);
 					Node->setMaterialType(EMT_SOLID);
 				}
+
 				return true;
 			}
 		}

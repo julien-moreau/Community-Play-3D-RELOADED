@@ -33,18 +33,6 @@
     <Filter Include="Engine\IO">
       <UniqueIdentifier>{08ddd7cf-f37a-42e6-a66c-490203ecc7ab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\IO\Scene">
-      <UniqueIdentifier>{7ed508a5-1600-4cf3-b26e-1d1c44e30cd7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\IO\Scene\Clouds">
-      <UniqueIdentifier>{0ea7a1b2-a81d-484f-ae88-a782b34fa8ce}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\IO\Scene\MeshSceneNodeInstances">
-      <UniqueIdentifier>{585db4e8-c199-423f-ab07-97d9ead79111}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\IO\Scene\AnimatedMeshSceneNode">
-      <UniqueIdentifier>{d97d3bc7-6a8b-44e1-8d1c-956f18de3bac}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\editor">
       <UniqueIdentifier>{ce285ca4-fb69-4c38-abd1-f830896864e5}</UniqueIdentifier>
     </Filter>
@@ -53,6 +41,21 @@
     </Filter>
     <Filter Include="include\dependencies">
       <UniqueIdentifier>{cb10cf0f-d5fb-492b-8492-c10082bd1430}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\IO\Loaders">
+      <UniqueIdentifier>{1639ce89-763a-43cb-a32e-a40a5af3283e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Scene">
+      <UniqueIdentifier>{7ed508a5-1600-4cf3-b26e-1d1c44e30cd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Scene\Clouds">
+      <UniqueIdentifier>{0ea7a1b2-a81d-484f-ae88-a782b34fa8ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Scene\MeshSceneNodeInstances">
+      <UniqueIdentifier>{585db4e8-c199-423f-ab07-97d9ead79111}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Scene\AnimatedMeshSceneNode">
+      <UniqueIdentifier>{d97d3bc7-6a8b-44e1-8d1c-956f18de3bac}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -84,10 +87,10 @@
       <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Scene\CCP3DSceneNodeCreator.h">
-      <Filter>Engine\IO\Scene</Filter>
+      <Filter>Engine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Scene\Clouds\CCloudSceneNode.h">
-      <Filter>Engine\IO\Scene\Clouds</Filter>
+      <Filter>Engine\Scene\Clouds</Filter>
     </ClInclude>
     <ClInclude Include="..\include\SShadowLight.h">
       <Filter>include\rendering</Filter>
@@ -153,13 +156,13 @@
       <Filter>include\engine</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Scene\CCP3DGeometryCreator.h">
-      <Filter>Engine\IO\Scene</Filter>
+      <Filter>Engine\Scene</Filter>
     </ClInclude>
     <ClInclude Include="..\include\CScreenQuad.h">
       <Filter>include\rendering</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Scene\MeshSceneNodeInstances\CMeshSceneNodeInstances.h">
-      <Filter>Engine\IO\Scene\MeshSceneNodeInstances</Filter>
+      <Filter>Engine\Scene\MeshSceneNodeInstances</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DHandlerCallbacks.h">
       <Filter>include\rendering</Filter>
@@ -216,13 +219,19 @@
       <Filter>include\rendering</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Scene\AnimatedMeshSceneNode\CAnimatedMeshSceneNodeManipulator.h">
-      <Filter>Engine\IO\Scene\AnimatedMeshSceneNode</Filter>
+      <Filter>Engine\Scene\AnimatedMeshSceneNode</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DAnimatedMeshSceneNodeManipulator.h">
       <Filter>include\engine</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ICP3DTimer.h">
       <Filter>include\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\IO\Loaders\CJSONParser.h">
+      <Filter>Engine\IO\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\IO\Loaders\CTokenizer.h">
+      <Filter>Engine\IO\Loaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -245,16 +254,16 @@
       <Filter>Engine\Core</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Scene\CCP3DSceneNodeCreator.cpp">
-      <Filter>Engine\IO\Scene</Filter>
+      <Filter>Engine\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Scene\Clouds\CCloudSceneNode.cpp">
-      <Filter>Engine\IO\Scene\Clouds</Filter>
+      <Filter>Engine\Scene\Clouds</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Scene\CCP3DGeometryCreator.cpp">
-      <Filter>Engine\IO\Scene</Filter>
+      <Filter>Engine\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Scene\MeshSceneNodeInstances\CMeshSceneNodeInstances.cpp">
-      <Filter>Engine\IO\Scene\MeshSceneNodeInstances</Filter>
+      <Filter>Engine\Scene\MeshSceneNodeInstances</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Core\Plugins\CCP3DMonitorPlugin.cpp">
       <Filter>Engine\Core\Plugins</Filter>
@@ -269,7 +278,13 @@
       <Filter>Engine\IO</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Scene\AnimatedMeshSceneNode\CAnimatedMeshSceneNodeManipulator.cpp">
-      <Filter>Engine\IO\Scene\AnimatedMeshSceneNode</Filter>
+      <Filter>Engine\Scene\AnimatedMeshSceneNode</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\IO\Loaders\CJSONParser.cpp">
+      <Filter>Engine\IO\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\IO\Loaders\CTokenizer.cpp">
+      <Filter>Engine\IO\Loaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

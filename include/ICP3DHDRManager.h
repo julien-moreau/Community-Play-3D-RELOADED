@@ -100,6 +100,9 @@ public:
 	//! Enables or not the Lens flare and motion blur
 	virtual void enableLensFlare(const bool enable) = 0;
 
+	//! Returns if the lens flare is enabled or not
+	virtual bool lensFlareEnabled() = 0;
+
 	//! Sets if the pipeline should auto update
 	virtual void setAutoUpdate(const bool autoUpdate) = 0;
 };

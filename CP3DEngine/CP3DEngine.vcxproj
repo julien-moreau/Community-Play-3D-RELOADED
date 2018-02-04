@@ -201,6 +201,8 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClInclude Include="Engine\Core\Plugins\CCP3DMonitorPlugin.h" />
     <ClInclude Include="Engine\Core\Plugins\CCP3DPluginManager.h" />
     <ClInclude Include="Engine\IO\CCP3DExporter.h" />
+    <ClInclude Include="Engine\IO\Loaders\CJSONParser.h" />
+    <ClInclude Include="Engine\IO\Loaders\CTokenizer.h" />
     <ClInclude Include="Engine\Scene\AnimatedMeshSceneNode\CAnimatedMeshSceneNodeManipulator.h" />
     <ClInclude Include="Engine\Scene\CCP3DGeometryCreator.h" />
     <ClInclude Include="Engine\Scene\CCP3DSceneNodeCreator.h" />
@@ -219,6 +221,8 @@ copy "$(OutDir)$(TargetName).lib" "$(SolutionDir)lib\$(TargetName).lib" /y</Comm
     <ClCompile Include="Engine\Core\Plugins\CCP3DPluginManager.cpp" />
     <ClCompile Include="Engine\IO\CCP3DExporter.cpp" />
     <ClCompile Include="Engine\IO\CCP3DImporter.cpp" />
+    <ClCompile Include="Engine\IO\Loaders\CJSONParser.cpp" />
+    <ClCompile Include="Engine\IO\Loaders\CTokenizer.cpp" />
     <ClCompile Include="Engine\Scene\AnimatedMeshSceneNode\CAnimatedMeshSceneNodeManipulator.cpp" />
     <ClCompile Include="Engine\Scene\CCP3DGeometryCreator.cpp" />
     <ClCompile Include="Engine\Scene\CCP3DSceneNodeCreator.cpp" />

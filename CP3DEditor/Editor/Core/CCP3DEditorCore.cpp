@@ -231,6 +231,7 @@ void CCP3DEditorCore::createTestScene() {
 	light->setLightStrength(1.f);
 
 	cp3d::rendering::ICP3DLightSceneNode *light2 = Rengine->createLightSceneNode(true, true);
+	light2->setName("Light 2");
 	light2->setPosition(vector3df(0.f, 300.f, 250.f));
 	light2->setLightColor(SColorf(1.f, 0.f, 0.5f, 1.f));
 	light2->getLightData().SpecularColor = SColorf(1.f, 1.f, 1.f, 1.f);

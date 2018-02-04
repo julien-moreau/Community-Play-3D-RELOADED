@@ -19,7 +19,7 @@ public:
 	void removeShaderDefine(const irr::core::stringc name);
 	void clearDefines();
 
-	std::string getFileContent(const std::string pFile);
+	std::string getFileContent(const irr::core::stringc pFile);
 
 private:
 	void initDefineMap();

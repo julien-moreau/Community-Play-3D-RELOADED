@@ -322,22 +322,22 @@ s32 CCP3DHandler::getShadowMaterialType(const u32 &lightsCount, const E_FILTER_T
 	sPP.addShaderDefine("LIGHTS_COUNT", stringc(lightsCount));
 
 	#ifdef _DEBUG
-	stringc v = sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.vertex.fx").c_str()).c_str();
-	stringc p = sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.fragment.fx").c_str()).c_str();
+	stringc v = sPP.ppShaderDF(sPP.getFileContent(WorkingPath + "Shaders/InternalHandler/ShadowPass.vertex.fx").c_str()).c_str();
+	stringc p = sPP.ppShaderDF(sPP.getFileContent(WorkingPath + "Shaders/InternalHandler/ShadowPass.fragment.fx").c_str()).c_str();
 	#endif
 
 	IGPUProgrammingServices *gpu = driver->getGPUProgrammingServices();
 
 	s32 shadowMaterialType = gpu->addHighLevelShaderMaterial(
-		sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
-		sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile,
+		sPP.ppShaderDF(sPP.getFileContent(WorkingPath + "Shaders/InternalHandler/ShadowPass.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
+		sPP.ppShaderDF(sPP.getFileContent(WorkingPath + "Shaders/InternalHandler/ShadowPass.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile,
 		ShadowMC, video::EMT_SOLID);
 
 	sPP.addShaderDefine("ROUND_SPOTLIGHTS");
 
 	s32 shadowRoundedSpotMaterialType = gpu->addHighLevelShaderMaterial(
-		sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
-		sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ShadowPass.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile,
+		sPP.ppShaderDF(sPP.getFileContent(WorkingPath + "Shaders/InternalHandler/ShadowPass.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
+		sPP.ppShaderDF(sPP.getFileContent(WorkingPath + "Shaders/InternalHandler/ShadowPass.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile,
 		ShadowMC, video::EMT_SOLID);
 	sPP.removeShaderDefine("ROUND_SPOTLIGHTS");
 

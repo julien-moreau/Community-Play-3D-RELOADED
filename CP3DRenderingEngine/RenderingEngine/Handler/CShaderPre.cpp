@@ -280,7 +280,7 @@ core::stringc CShaderPreprocessor::ppShaderDF(irr::core::stringc shaderProgram, 
 	return finalShaderProgram;
 }
 
-std::string CShaderPreprocessor::getFileContent(const std::string pFile) {
+std::string CShaderPreprocessor::getFileContent(const irr::core::stringc pFile) {
 	std::ifstream File(pFile.c_str(), std::ios::in);
 	std::string Content;
 

@@ -54,7 +54,9 @@ public:
 	irr::f32 getDecreaseRate() const { return DecreaseRate; }
 
 	void enableLuminance(const bool enable) { LuminanceEnabled = enable; }
+
 	void enableLensFlare(const bool enable) { LensFlareEnabled = enable; }
+	bool lensFlareEnabled() { return LensFlareEnabled; }
 
 	void setAutoUpdate(const bool autoUpdate);
 

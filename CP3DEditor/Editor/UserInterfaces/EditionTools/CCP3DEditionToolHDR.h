@@ -51,6 +51,9 @@ private:
 	irr::gui::IGUITab *HDRTab;
 
 	/// Post-Processes list
+	SCP3DInterfaceData Enabled;
+	SCP3DInterfaceData LensFlareEnabled;
+
 	SCP3DInterfaceData HDRExposure;
 	SCP3DInterfaceData HDRIncrease;
 	SCP3DInterfaceData HDRDecrease;
@@ -60,6 +63,7 @@ private:
 	SCP3DInterfaceData BloomCoeff;
 	SCP3DInterfaceData BloomMean;
 	SCP3DInterfaceData BloomStandDev;
+	SCP3DInterfaceData BloomWidth;
 };
 
 } /// End namespace cp3d
