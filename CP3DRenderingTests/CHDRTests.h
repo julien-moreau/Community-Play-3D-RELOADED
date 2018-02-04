@@ -111,8 +111,9 @@ namespace cp3d {
 			/*IAnimatedMeshSceneNode *batman = smgr->addAnimatedMeshSceneNode(smgr->getMesh("data/batman.x"), 0, -1, vector3df(10.f, -19.f, -30.f), vector3df(0.f, 180.f, 0.f), vector3df(0.3f));
 			batman->setMaterialFlag(EMF_BACK_FACE_CULLING, false);
 			batman->setFrameLoop(0, batman->getEndFrame());
+            batman->setAnimationSpeed(40.f);
 			batman->setMaterialType(cpre->Materials[EMT_NORMAL_MAP_SOLID]);
-			batman->setMaterialTexture(0, driver->getTexture("data/batman/IOS_Batman_Diff.jpg"));
+			batman->setMaterialTexture(0, driver->getTexture("data/batman/IOS_Batman_Spec.jpg"));
 			batman->setMaterialTexture(1, driver->getTexture("data/batman/IOS_Batman_Norm.jpg"));
 			batman->setMaterialTexture(2, driver->getTexture("data/batman/IOS_Batman_Spec.jpg"));
 			handler->addShadowToNode(batman, rendering::EFT_NONE, rendering::ESM_BOTH);*/

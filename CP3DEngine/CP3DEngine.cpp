@@ -73,7 +73,7 @@ CCP3DEngine::CCP3DEngine(IrrlichtDevice *device) : Device(device), DrawGUI(false
 	/// Configure Events & Update
 	EventReceiver = new CCP3DEventReceiver();
 	Device->setEventReceiver(EventReceiver);
-
+    
 	Updater = new CCP3DCustomUpdater();
     
 	/// Scene
