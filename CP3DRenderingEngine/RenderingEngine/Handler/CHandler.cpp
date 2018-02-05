@@ -16,7 +16,7 @@ using namespace core;
 namespace cp3d {
 namespace rendering {
 
-CCP3DHandler::CCP3DHandler(IrrlichtDevice* dev, const irr::core::dimension2du& screenRTTSize,
+CCP3DHandler::CCP3DHandler(IrrlichtDevice* dev, const dimension2du& screenRTTSize,
 	const bool useVSMShadows, const bool useRoundSpotLights, const bool use32BitDepthBuffers)
 : device(dev), smgr(dev->getSceneManager()), driver(dev->getVideoDriver()),
 ScreenRTTSize(screenRTTSize.getArea() == 0 ? dev->getVideoDriver()->getScreenSize() : screenRTTSize),
@@ -59,7 +59,7 @@ VREnabled(false), VRMaterial(-1), CurrentFade(1.f)
 	E_SHADER_EXTENSION shaderExt = (driver->getDriverType() == EDT_DIRECT3D9) ? ESE_HLSL : ESE_GLSL;
 	#endif
 
-	video::IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
+	IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
 	
 	if (gpu && ((driver->getDriverType() == EDT_OPENGL && driver->queryFeature(EVDF_ARB_GLSL)) || ((driver->getDriverType() == EDT_DIRECT3D9)
 		#ifdef _IRR_COMPILE_WITH_DIRECT3D_11_
@@ -73,49 +73,49 @@ VREnabled(false), VRMaterial(-1), CurrentFade(1.f)
 		ShadowMC = new ShadowShaderCB(this);
 		
 		Depth = gpu->addHighLevelShaderMaterial(
-			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Depth.vertex.fx").c_str()).c_str(), "vertexMain", video::EVST_VS_2_0,
-			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Depth.fragment.fx").c_str()).c_str(), "pixelMain", video::EPST_PS_2_0,
-			DepthMC, video::EMT_SOLID);
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Depth.vertex.fx").c_str()).c_str(), "vertexMain", EVST_VS_2_0,
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Depth.fragment.fx").c_str()).c_str(), "pixelMain", EPST_PS_2_0,
+			DepthMC, EMT_SOLID);
 
 		sPP.addShaderDefine("ALPHA_ENABLED");
 
 		DepthT = gpu->addHighLevelShaderMaterial(
-			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Depth.vertex.fx").c_str()).c_str(), "vertexMain", video::EVST_VS_2_0,
-			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Depth.fragment.fx").c_str()).c_str(), "pixelMain", video::EPST_PS_2_0,
-			DepthMC, video::EMT_TRANSPARENT_ALPHA_CHANNEL_REF);
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Depth.vertex.fx").c_str()).c_str(), "vertexMain", EVST_VS_2_0,
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Depth.fragment.fx").c_str()).c_str(), "pixelMain", EPST_PS_2_0,
+			DepthMC, EMT_TRANSPARENT_ALPHA_CHANNEL_REF);
 		sPP.removeShaderDefine("ALPHA_ENABLED");
 
 		WhiteWash = gpu->addHighLevelShaderMaterial(
-			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Depth.vertex.fx").c_str()).c_str(), "vertexMain", video::EVST_VS_2_0,
-			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/WhiteWashP.fragment.fx").c_str()).c_str(), "pixelMain", video::EPST_PS_2_0,
-			DepthMC, video::EMT_SOLID);
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Depth.vertex.fx").c_str()).c_str(), "vertexMain", EVST_VS_2_0,
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/WhiteWashP.fragment.fx").c_str()).c_str(), "pixelMain", EPST_PS_2_0,
+			DepthMC, EMT_SOLID);
 
 		WhiteWashTRef = gpu->addHighLevelShaderMaterial(
-			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Depth.vertex.fx").c_str()).c_str(), "vertexMain", video::EVST_VS_2_0,
-			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/WhiteWashP.fragment.fx").c_str()).c_str(), "pixelMain", video::EPST_PS_2_0,
-			DepthMC, video::EMT_TRANSPARENT_ALPHA_CHANNEL_REF);
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Depth.vertex.fx").c_str()).c_str(), "vertexMain", EVST_VS_2_0,
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/WhiteWashP.fragment.fx").c_str()).c_str(), "pixelMain", EPST_PS_2_0,
+			DepthMC, EMT_TRANSPARENT_ALPHA_CHANNEL_REF);
 
 		WhiteWashTAdd = gpu->addHighLevelShaderMaterial(
-			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Depth.vertex.fx").c_str()).c_str(), "vertexMain", video::EVST_VS_2_0,
-			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/WhiteWashPADD.fragment.fx").c_str()).c_str(), "pixelMain", video::EPST_PS_2_0,
-			DepthMC, video::EMT_TRANSPARENT_ADD_COLOR);
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Depth.vertex.fx").c_str()).c_str(), "vertexMain", EVST_VS_2_0,
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/WhiteWashPADD.fragment.fx").c_str()).c_str(), "pixelMain", EPST_PS_2_0,
+			DepthMC, EMT_TRANSPARENT_ADD_COLOR);
 
 		WhiteWashTAlpha = gpu->addHighLevelShaderMaterial(
-			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Depth.vertex.fx").c_str()).c_str(), "vertexMain", video::EVST_VS_2_0,
-			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/WhiteWashP.fragment.fx").c_str()).c_str(), "pixelMain", video::EPST_PS_2_0,
-			DepthMC, video::EMT_TRANSPARENT_ALPHA_CHANNEL);
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Depth.vertex.fx").c_str()).c_str(), "vertexMain", EVST_VS_2_0,
+			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/WhiteWashP.fragment.fx").c_str()).c_str(), "pixelMain", EPST_PS_2_0,
+			DepthMC, EMT_TRANSPARENT_ALPHA_CHANNEL);
 
 		const u32 sampleCounts[EFT_COUNT] = {1, 4, 8, 12, 16};
 
 		E_VERTEX_SHADER_TYPE vertexProfile = 
-			driver->queryFeature(video::EVDF_VERTEX_SHADER_3_0) ? EVST_VS_3_0 : EVST_VS_2_0;
+			driver->queryFeature(EVDF_VERTEX_SHADER_3_0) ? EVST_VS_3_0 : EVST_VS_2_0;
 
 		E_PIXEL_SHADER_TYPE pixelProfile = 
-			driver->queryFeature(video::EVDF_PIXEL_SHADER_3_0) ? EPST_PS_3_0 : EPST_PS_2_0;
+			driver->queryFeature(EVDF_PIXEL_SHADER_3_0) ? EPST_PS_3_0 : EPST_PS_2_0;
 
 		// Set resolution preprocessor defines.
-		sPP.addShaderDefine("SCREENX", core::stringc(ScreenRTTSize.Width));
-		sPP.addShaderDefine("SCREENY", core::stringc(ScreenRTTSize.Height));
+		sPP.addShaderDefine("SCREENX", stringc(ScreenRTTSize.Width));
+		sPP.addShaderDefine("SCREENY", stringc(ScreenRTTSize.Height));
 
 		// Create screen quad shader callback.
 		CScreenQuadCB* SQCB = new CScreenQuadCB(this, true);
@@ -132,7 +132,7 @@ VREnabled(false), VRMaterial(-1), CurrentFade(1.f)
 		Simple = gpu->addHighLevelShaderMaterial(
 			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/ScreenQuad.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
 			sPP.ppShaderDF(sPP.getFileContent("Shaders/InternalHandler/Simple.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile, SQCB,
-			video::EMT_TRANSPARENT_ADD_COLOR);
+			EMT_TRANSPARENT_ADD_COLOR);
 
 		// VSM blur.
 		VSMBlurH = gpu->addHighLevelShaderMaterial(
@@ -214,13 +214,13 @@ void CCP3DHandler::setScreenRenderTargetResolution(const dimension2du& resolutio
 	ScreenRTTSize = resolution;
 }
 
-void CCP3DHandler::addShadowToNode(irr::scene::ISceneNode *node, E_FILTER_TYPE filterType, E_SHADOW_MODE shadowMode,
+void CCP3DHandler::addShadowToNode(ISceneNode *node, E_FILTER_TYPE filterType, E_SHADOW_MODE shadowMode,
 								   s32 depthMaterial, s32 shadowsMaterial, ICP3DHandlerCustomCallback *customCallback) {
 	SShadowNode snode = { node, shadowMode, filterType, depthMaterial, shadowsMaterial, customCallback };
 	ShadowNodeArray.push_back(snode);
 }
 
-E_SHADOW_MODE CCP3DHandler::getShadowModeForNode(irr::scene::ISceneNode *node) {
+E_SHADOW_MODE CCP3DHandler::getShadowModeForNode(ISceneNode *node) {
 	for (u32 i=0; i < ShadowNodeArray.size(); i++) {
 		if (ShadowNodeArray[i].node == node)
 			return ShadowNodeArray[i].shadowMode;
@@ -228,7 +228,7 @@ E_SHADOW_MODE CCP3DHandler::getShadowModeForNode(irr::scene::ISceneNode *node) {
 
 	return ESM_NO_SHADOW;
 }
-void CCP3DHandler::setShadowModeForNode(irr::scene::ISceneNode *node, E_SHADOW_MODE shadowMode) {
+void CCP3DHandler::setShadowModeForNode(ISceneNode *node, E_SHADOW_MODE shadowMode) {
 	for (u32 i=0; i < ShadowNodeArray.size(); i++) {
 		if (ShadowNodeArray[i].node == node) {
 			ShadowNodeArray[i].shadowMode = shadowMode;
@@ -237,7 +237,7 @@ void CCP3DHandler::setShadowModeForNode(irr::scene::ISceneNode *node, E_SHADOW_M
 	}
 }
 
-E_FILTER_TYPE CCP3DHandler::getFilterTypeForNode(irr::scene::ISceneNode *node) {
+E_FILTER_TYPE CCP3DHandler::getFilterTypeForNode(ISceneNode *node) {
 	for (u32 i=0; i < ShadowNodeArray.size(); i++) {
 		if (ShadowNodeArray[i].node == node)
 			return ShadowNodeArray[i].filterType;
@@ -246,7 +246,7 @@ E_FILTER_TYPE CCP3DHandler::getFilterTypeForNode(irr::scene::ISceneNode *node) {
 	return EFT_NONE;
 }
 
-void CCP3DHandler::setFilterTypeForNode(irr::scene::ISceneNode *node, E_FILTER_TYPE filterType) {
+void CCP3DHandler::setFilterTypeForNode(ISceneNode *node, E_FILTER_TYPE filterType) {
 	for (u32 i=0; i < ShadowNodeArray.size(); i++) {
 		if (ShadowNodeArray[i].node == node) {
 			ShadowNodeArray[i].filterType = filterType;
@@ -255,7 +255,7 @@ void CCP3DHandler::setFilterTypeForNode(irr::scene::ISceneNode *node, E_FILTER_T
 	}
 }
 
-bool CCP3DHandler::isNodeShadowed(irr::scene::ISceneNode *node) {
+bool CCP3DHandler::isNodeShadowed(ISceneNode *node) {
 	for (u32 i=0; i < ShadowNodeArray.size(); i++) {
 		if (ShadowNodeArray[i].node == node)
 			return true;
@@ -269,7 +269,7 @@ u32 CCP3DHandler::addShadowLight(SShadowLight &shadowLight) {
 	 return LightList.size() - 1;
 }
 
-bool CCP3DHandler::removeShadowLight(const irr::u32 index) {
+bool CCP3DHandler::removeShadowLight(const u32 index) {
 	if (index >= 0 && index < LightList.size())
 		LightList.erase(index);
 	else
@@ -315,8 +315,8 @@ s32 CCP3DHandler::getShadowMaterialType(const u32 &lightsCount, const E_FILTER_T
 	if (UseVSM)
 		sPP.addShaderDefine("VSM");
 
-	E_VERTEX_SHADER_TYPE vertexProfile = driver->queryFeature(video::EVDF_VERTEX_SHADER_3_0) ? EVST_VS_3_0 : EVST_VS_2_0;
-	E_PIXEL_SHADER_TYPE pixelProfile = driver->queryFeature(video::EVDF_PIXEL_SHADER_3_0) ? EPST_PS_3_0 : EPST_PS_2_0;
+	E_VERTEX_SHADER_TYPE vertexProfile = driver->queryFeature(EVDF_VERTEX_SHADER_3_0) ? EVST_VS_3_0 : EVST_VS_2_0;
+	E_PIXEL_SHADER_TYPE pixelProfile = driver->queryFeature(EVDF_PIXEL_SHADER_3_0) ? EPST_PS_3_0 : EPST_PS_2_0;
 
 	sPP.addShaderDefine("SAMPLE_AMOUNT", stringc(filterType + 1));
 	sPP.addShaderDefine("LIGHTS_COUNT", stringc(lightsCount));
@@ -331,14 +331,14 @@ s32 CCP3DHandler::getShadowMaterialType(const u32 &lightsCount, const E_FILTER_T
 	s32 shadowMaterialType = gpu->addHighLevelShaderMaterial(
 		sPP.ppShaderDF(sPP.getFileContent(WorkingPath + "Shaders/InternalHandler/ShadowPass.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
 		sPP.ppShaderDF(sPP.getFileContent(WorkingPath + "Shaders/InternalHandler/ShadowPass.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile,
-		ShadowMC, video::EMT_SOLID);
+		ShadowMC, EMT_SOLID);
 
 	sPP.addShaderDefine("ROUND_SPOTLIGHTS");
 
 	s32 shadowRoundedSpotMaterialType = gpu->addHighLevelShaderMaterial(
 		sPP.ppShaderDF(sPP.getFileContent(WorkingPath + "Shaders/InternalHandler/ShadowPass.vertex.fx").c_str()).c_str(), "vertexMain", vertexProfile,
 		sPP.ppShaderDF(sPP.getFileContent(WorkingPath + "Shaders/InternalHandler/ShadowPass.fragment.fx").c_str()).c_str(), "pixelMain", pixelProfile,
-		ShadowMC, video::EMT_SOLID);
+		ShadowMC, EMT_SOLID);
 	sPP.removeShaderDefine("ROUND_SPOTLIGHTS");
 
 	/// Save it for cache purpose
@@ -382,7 +382,7 @@ void CCP3DHandler::update(ITexture *outputTarget, SHandlerRenderTargets *texture
 		const u32 ShadowNodeArraySize = ShadowNodeArray.size();
 		const u32 LightListSize = LightList.size();
 
-		/// Render all dept maps used by shadow mapping materials
+		// Render all dept maps used by shadow mapping materials
 		for(u32 l = 0;l < LightListSize;++l) {
 
 			if (LightList[l].LightScenenode->getParent() != smgr->getRootSceneNode()) {
@@ -395,7 +395,7 @@ void CCP3DHandler::update(ITexture *outputTarget, SHandlerRenderTargets *texture
 					LightList[l].setPosition(LightList[l].LightScenenode->getPosition());
 			}
 
-			/// Configure default depth material
+			// Configure default depth material
 			DepthMC->DepthCallback->FarLink = LightList[l].FarPlane;
 
 			driver->setTransform(ETS_VIEW, LightList[l].getViewMatrix());
@@ -403,7 +403,7 @@ void CCP3DHandler::update(ITexture *outputTarget, SHandlerRenderTargets *texture
 			
 			ITexture* currentShadowMapTexture = getShadowMapTexture(LightList[l].getShadowMapResolution(), false, l);
 
-			/// Recalculate the shadow map if the shadow light must be recalculated or auto recalculated
+			// Recalculate the shadow map if the shadow light must be recalculated or auto recalculated
 			if (LightList[l].mustRecalculate() || LightList[l].mustAutoRecalculate()) {
 				driver->setRenderTarget(currentShadowMapTexture, true, true, SColor(0xffffffff));
 				for(u32 i = 0;i < ShadowNodeArraySize;++i) {
@@ -417,7 +417,7 @@ void CCP3DHandler::update(ITexture *outputTarget, SHandlerRenderTargets *texture
 					}
 
 					const u32 CurrentMaterialCount = ShadowNodeArray[i].node->getMaterialCount();
-					core::array<irr::s32> BufferMaterialList(CurrentMaterialCount);
+					array<s32> BufferMaterialList(CurrentMaterialCount);
 					BufferMaterialList.set_used(0);
 
 					for(u32 m = 0;m < CurrentMaterialCount;++m) {
@@ -437,7 +437,7 @@ void CCP3DHandler::update(ITexture *outputTarget, SHandlerRenderTargets *texture
 						ShadowNodeArray[i].node->getMaterial(m).MaterialType = (E_MATERIAL_TYPE)BufferMaterialList[m];
 				}
 
-				/// Blur the shadow map texture if we're using VSM filtering.
+				// Blur the shadow map texture if we're using VSM filtering.
 				if(UseVSM) {
 					ITexture* currentSecondaryShadowMap = getShadowMapTexture(LightList[l].getShadowMapResolution(), true, l);
 
@@ -459,7 +459,7 @@ void CCP3DHandler::update(ITexture *outputTarget, SHandlerRenderTargets *texture
             
             CurrentShadowMaps[l] = currentShadowMapTexture;
             
-			/// configure default shadows callback
+			// configure default shadows callback
             ShadowMC->ShadowsCallback->LightColour[l] = LightList[l].DiffuseColor;
 			ShadowMC->ShadowsCallback->LightLink[l].set(LightList[l].Pos);
 			ShadowMC->ShadowsCallback->FarLink[l] = LightList[l].FarPlane;
@@ -473,7 +473,7 @@ void CCP3DHandler::update(ITexture *outputTarget, SHandlerRenderTargets *texture
                 if(ShadowNodeArray[i].shadowMode == ESM_CAST || ShadowNodeArray[i].shadowMode == ESM_EXCLUDE)
                     continue;
                 
-                /// Configure custom shadows callback & set pass type
+                // Configure custom shadows callback & set pass type
                 if (ShadowNodeArray[i].customCallback && ShadowNodeArray[i].customCallback->ShadowsCallback) {
                     ShadowNodeArray[i].customCallback->ShadowsCallback->LightColour[l] = LightList[l].DiffuseColor;
                     ShadowNodeArray[i].customCallback->ShadowsCallback->LightLink[l] = LightList[l].Pos;
@@ -491,21 +491,25 @@ void CCP3DHandler::update(ITexture *outputTarget, SHandlerRenderTargets *texture
         driver->setTransform(ETS_VIEW, activeCam->getViewMatrix());
         driver->setTransform(ETS_PROJECTION, activeCam->getProjectionMatrix());
         
-        /// Render all receive nodes
+        // Render all receive nodes
         for(u32 i = 0;i < ShadowNodeArraySize; ++i) {
             if(ShadowNodeArray[i].shadowMode == ESM_CAST || ShadowNodeArray[i].shadowMode == ESM_EXCLUDE)
                 continue;
             
-            const u32 CurrentMaterialCount = ShadowNodeArray[i].node->getMaterialCount();
-            core::array<irr::s32> BufferMaterialList(CurrentMaterialCount);
-            core::array<irr::video::ITexture*> BufferTextureList(CurrentMaterialCount);
+            const u32 currentMaterialCount = ShadowNodeArray[i].node->getMaterialCount();
+            array<s32> bufferMaterialList(currentMaterialCount);
+            array<array<ITexture*>> bufferTextureList(currentMaterialCount);
             
             const s32 shadowMaterialType = getShadowMaterialType(LightList.size(), ShadowNodeArray[i].filterType, /*LightList[l].UseRoundSpotLight*/ false);
             
-            for(u32 m = 0;m < CurrentMaterialCount;++m) {
-                BufferMaterialList.push_back(ShadowNodeArray[i].node->getMaterial(m).MaterialType);
-                BufferTextureList.push_back(ShadowNodeArray[i].node->getMaterial(m).getTexture(0));
-                
+            for(u32 m = 0;m < currentMaterialCount;++m) {
+				bufferMaterialList.push_back(ShadowNodeArray[i].node->getMaterial(m).MaterialType);
+
+				array<ITexture*> textures;
+				for (u32 t = 0; t < _IRR_MATERIAL_MAX_TEXTURES_; t++)
+					textures.push_back(ShadowNodeArray[i].node->getMaterial(m).getTexture(t));
+				bufferTextureList.push_back(textures);
+
                 ShadowNodeArray[i].node->getMaterial(m).MaterialType = (E_MATERIAL_TYPE)shadowMaterialType;
                 
                 for (u32 t = 0; t < LightListSize; t++)
@@ -515,9 +519,14 @@ void CCP3DHandler::update(ITexture *outputTarget, SHandlerRenderTargets *texture
             ShadowNodeArray[i].node->OnAnimate(device->getTimer()->getTime());
             ShadowNodeArray[i].node->render();
             
-            for(u32 m = 0;m < CurrentMaterialCount;++m) {
-                ShadowNodeArray[i].node->getMaterial(m).MaterialType = (E_MATERIAL_TYPE)BufferMaterialList[m];
-                ShadowNodeArray[i].node->getMaterial(m).setTexture(0, BufferTextureList[m]);
+            for(u32 m = 0;m < currentMaterialCount;++m) {
+                ShadowNodeArray[i].node->getMaterial(m).MaterialType = (E_MATERIAL_TYPE)bufferMaterialList[m];
+
+				const array<ITexture*> textures = bufferTextureList[m];
+				const u32 texturesCount = textures.size();
+
+				for (u32 t = 0; t < texturesCount; t++)
+					ShadowNodeArray[i].node->getMaterial(m).setTexture(t, textures[t]);
             }
             
             if (ShadowNodeArray[i].customCallback)
@@ -533,18 +542,18 @@ void CCP3DHandler::update(ITexture *outputTarget, SHandlerRenderTargets *texture
         ScreenQuad.getMaterial().BlendOperation = blendOperation;
 
 		// Render all the excluded and casting-only nodes.
-		for(u32 i = 0;i < ShadowNodeArraySize;++i) {
+		for(u32 i = 0; i < ShadowNodeArraySize;++i) {
 			if(ShadowNodeArray[i].shadowMode != ESM_CAST && ShadowNodeArray[i].shadowMode != ESM_EXCLUDE)
 					continue;
 
-			const u32 CurrentMaterialCount = ShadowNodeArray[i].node->getMaterialCount();
-			core::array<irr::s32> BufferMaterialList(CurrentMaterialCount);
-			BufferMaterialList.set_used(0);
+			const u32 currentMaterialCount = ShadowNodeArray[i].node->getMaterialCount();
+			array<s32> bufferMaterialList(currentMaterialCount);
+			bufferMaterialList.set_used(0);
 			
-			for(u32 m = 0;m < CurrentMaterialCount;++m) {
-				BufferMaterialList.push_back(ShadowNodeArray[i].node->getMaterial(m).MaterialType);
+			for(u32 m = 0;m < currentMaterialCount;++m) {
+				bufferMaterialList.push_back(ShadowNodeArray[i].node->getMaterial(m).MaterialType);
 			
-				switch(BufferMaterialList[m]) {
+				switch(bufferMaterialList[m]) {
 					case EMT_TRANSPARENT_ALPHA_CHANNEL_REF:
 						ShadowNodeArray[i].node->getMaterial(m).MaterialType = (E_MATERIAL_TYPE)WhiteWashTRef;
 						break;
@@ -563,8 +572,8 @@ void CCP3DHandler::update(ITexture *outputTarget, SHandlerRenderTargets *texture
 			ShadowNodeArray[i].node->OnAnimate(device->getTimer()->getTime());
 			ShadowNodeArray[i].node->render();
 
-			for(u32 m = 0;m < CurrentMaterialCount;++m)
-				ShadowNodeArray[i].node->getMaterial(m).MaterialType = (E_MATERIAL_TYPE)BufferMaterialList[m];
+			for(u32 m = 0; m < currentMaterialCount;++m)
+				ShadowNodeArray[i].node->getMaterial(m).MaterialType = (E_MATERIAL_TYPE)bufferMaterialList[m];
 		}
 	}
 	else {
@@ -594,7 +603,7 @@ void CCP3DHandler::update(ITexture *outputTarget, SHandlerRenderTargets *texture
 				continue;
 
 			for (u32 j=0; j < CustomPasses[i]->getSceneNodes().size(); j++) {
-				core::array<irr::s32> BufferMaterialList(CustomPasses[i]->getSceneNodes()[j]->getMaterialCount());
+				array<s32> BufferMaterialList(CustomPasses[i]->getSceneNodes()[j]->getMaterialCount());
 				BufferMaterialList.set_used(0);
 				for(u32 g = 0;g < CustomPasses[i]->getSceneNodes()[j]->getMaterialCount(); ++g)
 					BufferMaterialList.push_back(CustomPasses[i]->getSceneNodes()[j]->getMaterial(g).MaterialType);
