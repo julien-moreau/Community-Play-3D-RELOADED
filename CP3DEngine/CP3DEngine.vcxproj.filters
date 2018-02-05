@@ -233,6 +233,12 @@
     <ClInclude Include="Engine\IO\Loaders\CTokenizer.h">
       <Filter>Engine\IO\Loaders</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\IO\Loaders\CBabylonFileLoader.h">
+      <Filter>Engine\IO\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\IO\Loaders\SJSONObject.h">
+      <Filter>Engine\IO\Loaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CP3DEngine.cpp">
@@ -284,6 +290,9 @@
       <Filter>Engine\IO\Loaders</Filter>
     </ClCompile>
     <ClCompile Include="Engine\IO\Loaders\CTokenizer.cpp">
+      <Filter>Engine\IO\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\IO\Loaders\CBabylonFileLoader.cpp">
       <Filter>Engine\IO\Loaders</Filter>
     </ClCompile>
   </ItemGroup>

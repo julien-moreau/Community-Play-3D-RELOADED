@@ -3,24 +3,36 @@
 
 #include <irrlicht.h>
 
+#include "SJSONObject.h"
+
 namespace cp3d {
 namespace engine {
 
 class CTokenizer;
 
+//! JSON parser class
 class CJSONParser
 {
 public:
-	CJSONParser(const irr::core::stringc& filePath);
+	/// ctor and dtor
+	CJSONParser(irr::io::IReadFile* fileToRead);
+	CJSONParser(const irr::core::stringc& fileContent);
+
 	~CJSONParser();
+
+	//! Parses the JSON file
+	SJSONObjectTree* parse(SJSONObjectTree* tree = 0);
 
 private:
 	/// Datas
 	CTokenizer* Tokenizer;
-	irr::core::stringc FilePath;
+
+	/// Methods
+	SJSONObject* parseValue();
+	irr::core::array<SJSONObject*>* parseArray();
 };
 
-}
-}
+} /// End namespace engine
+} /// End namespace engine
 
 #endif

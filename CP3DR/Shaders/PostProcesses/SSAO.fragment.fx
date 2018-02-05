@@ -25,13 +25,13 @@ vec3 normalFromDepth(float depth, vec2 coords) {
 
 void main()
 {
-	const float totalStrength = 1.0;
-	const float base = 0.2;
+	const float totalStrength = 2.0;
+	const float base = 1.0;
 
 	const float area = 1.0;
 	const float fallOff = 0.000001;
 
-	const float radius = 0.0001;
+	const float radius = 0.001;
 
 	const int samples = 16;
 

@@ -344,7 +344,6 @@ s32 CCP3DHandler::getShadowMaterialType(const u32 &lightsCount, const E_FILTER_T
 	/// Save it for cache purpose
 	if (lightsShadowMapNode)
 		lightsShadowMapNode->getValue()[filterType] = SShadowMapType(shadowMaterialType, shadowRoundedSpotMaterialType);
-		//lightsShadowMapNode->getValue().push_back(SShadowMapType(shadowMaterialType, shadowRoundedSpotMaterialType));
 	else {
 		array<SShadowMapType> newArray;
 		for (u32 i = 0; i < EFT_COUNT; i++)

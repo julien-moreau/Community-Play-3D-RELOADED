@@ -1,8 +1,5 @@
 #include "Stdafx.h"
 
-#include <fstream>
-#include <string>
-#include <iostream>
 #include <cctype>
 
 #include "CTokenizer.h"
@@ -15,9 +12,9 @@ using namespace core;
 
 //! Ctor
 //! \param filePath the path to the file to read
-CTokenizer::CTokenizer(const stringc& filePath) : Pos(0)
+CTokenizer::CTokenizer(const stringc& content) : Pos(0)
 {
-	Content = readFile(filePath);
+	Content = content;
 	CurrentToken = getNextToken();
 }
 
@@ -25,14 +22,106 @@ CTokenizer::CTokenizer(const stringc& filePath) : Pos(0)
 CTokenizer::~CTokenizer()
 { }
 
+//! Matches the current token
+bool CTokenizer::match(E_TOKEN_TYPE token)
+{
+	if (CurrentToken == token)
+	{
+		CurrentToken = getNextToken();
+
+		return true;
+	}
+
+	return false;
+}
+
 //! Returns if the tokenizer matches an identifier
-bool CTokenizer::matchIdentifier(irr::core::stringc *identifier)
+bool CTokenizer::matchIdentifier(stringc *identifier)
 {
 	if (CurrentToken == ETT_IDENTIFIER)
 	{
 		*identifier = CurrentIdentifier;
-		getNextToken();
+		CurrentToken = getNextToken();
 
+		return true;
+	}
+
+	return false;
+}
+
+//! Matches a string like a key
+bool CTokenizer::matchString(stringc *string)
+{
+	if (CurrentToken == ETT_STRING)
+	{
+		*string = CurrentString;
+		CurrentToken = getNextToken();
+
+		return true;
+	}
+
+	return false;
+}
+
+//! Matches a number
+bool CTokenizer::matchNumber(stringc* number)
+{
+	if (CurrentToken == ETT_NUMBER)
+	{
+		*number = CurrentNumber;
+		CurrentToken = getNextToken();
+
+		return true;
+	}
+
+	return false;
+}
+
+//! Matches an object definition "{"
+bool CTokenizer::matchObjectDefinition()
+{
+	if (CurrentToken == ETT_BRACKET_OPEN)
+	{
+		CurrentToken = getNextToken();
+
+		return true;
+	}
+
+	return false;
+}
+
+//! Matches an array definition
+bool CTokenizer::matchArrayDefinition()
+{
+	if (CurrentToken == ETT_ACCESSOR_OPEN)
+	{
+		CurrentToken = getNextToken();
+
+		return true;
+	}
+
+	return false;
+}
+
+//! Matches an assignation ":"
+bool CTokenizer::matchAssignation()
+{
+	if (CurrentToken == ETT_ASSIGN)
+	{
+		CurrentToken = getNextToken();
+
+		return true;
+	}
+
+	return false;
+}
+
+//! Matches a comma
+bool CTokenizer::matchComma()
+{
+	if (CurrentToken == ETT_COMMA)
+	{
+		CurrentToken = getNextToken();
 		return true;
 	}
 
@@ -58,16 +147,20 @@ E_TOKEN_TYPE CTokenizer::getNextToken()
 		case '{': return ETT_BRACKET_OPEN;
 		case '}': return ETT_BRACKET_CLOSE;
 		case ':': return ETT_ASSIGN;
+		case ',': return ETT_COMMA;
 
 		default:
 		{
 			// Identifier
 			if (c == '_' || std::isalpha(c))
 			{
-				CurrentIdentifier += c;
+				CurrentIdentifier = stringc(c);
 				
-				while ((c = read()) == '_' || std::isalpha(c) || std::isdigit(c))
+				while ((c = peek()) == '_' || std::isalpha(c) || std::isdigit(c))
+				{
 					CurrentIdentifier += c;
+					forward();
+				}
 
 				return ETT_IDENTIFIER;
 			}
@@ -75,7 +168,8 @@ E_TOKEN_TYPE CTokenizer::getNextToken()
 			// String
 			if (c == '"')
 			{
-				CurrentString += c;
+				CurrentString = "";
+
 				while ((c = read()) && c != '"')
 					CurrentString += c;
 
@@ -85,10 +179,13 @@ E_TOKEN_TYPE CTokenizer::getNextToken()
 			// Number
 			if (std::isdigit(c))
 			{
-				CurrentNumber += c;
+				CurrentNumber = stringc(c);
 
-				while ((c = read()) && (std::isdigit(c) || c == '.'))
+				while ((c = peek()) && (std::isdigit(c) || c == '.'))
+				{
 					CurrentNumber += c;
+					forward();
+				}
 
 				return ETT_NUMBER;
 			}
@@ -96,22 +193,6 @@ E_TOKEN_TYPE CTokenizer::getNextToken()
 	}
 
 	return ETT_UNKNOWN;
-}
-
-//! Reads the given file and returns its string
-stringc CTokenizer::readFile(const stringc& filePath)
-{
-	std::ifstream file(filePath.c_str(), std::ios::in);
-	std::string content;
-	
-	if (file.is_open()) {
-		for (std::string line; std::getline(file, line);)
-			content += line + "\n";
-
-		file.close();
-	}
-
-	return content.c_str();
 }
 
 } /// End namespace engine

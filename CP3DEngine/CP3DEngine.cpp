@@ -3,6 +3,8 @@
 #include "CP3DEngine.h"
 #include "Engine/Core/CCP3DEventReceiver.h"
 
+#include "Engine/IO/Loaders/CBabylonFileLoader.h"
+
 #if defined(CP3DR_COMPILE_WITH_OPENMP) && defined(_IRR_WINDOWS_API_)
 #include <omp.h>
 #endif
@@ -60,7 +62,7 @@ namespace engine {
 
 CCP3DEngine::CCP3DEngine(IrrlichtDevice *device) : Device(device), DrawGUI(false)
 {
-	/// Configure rendering
+	// Configure rendering
 	Rengine = createRenderingEngine(device);
 	Handler = Rengine->getHandler();
 
@@ -70,19 +72,22 @@ CCP3DEngine::CCP3DEngine(IrrlichtDevice *device) : Device(device), DrawGUI(false
     
 	Driver = Rengine->getVideoDriver();
 
-	/// Configure Events & Update
+	// Configure Events & Update
 	EventReceiver = new CCP3DEventReceiver();
 	Device->setEventReceiver(EventReceiver);
     
 	Updater = new CCP3DCustomUpdater();
     
-	/// Scene
+	// Scene
 	SceneNodeCreator = new CCP3DSceneNodeCreator(Rengine);
 	GeometryCreator = new CCP3DGeometryCreator(Rengine->getSceneManager());
 
 	AnimatedMeshSceneNodeManipulator = new CCP3DAnimatedMeshSceneNodeManipulator(device->getSceneManager());
 
-	/// Finish
+	// Loaders
+	Rengine->getSceneManager()->addExternalSceneLoader(new CBabylonSceneFileLoader(Rengine->getSceneManager(), Device->getFileSystem()));
+
+	// Finish
 	Gui = device->getGUIEnvironment();
 }
 

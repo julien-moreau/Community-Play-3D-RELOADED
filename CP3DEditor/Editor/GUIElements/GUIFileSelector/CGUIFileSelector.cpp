@@ -825,35 +825,35 @@ void CGUIFileSelector::populatePCDrives()
 		dr_type=GetDriveType((LPWSTR)temp);
 		switch(dr_type) {
 			case 0: // Unknown
-				printf("%s : Unknown Drive type\n",temp);
+				printf("%ls : Unknown Drive type\n",temp);
 				break;
 
 			case 1: // Invalid
-				printf("%s : Drive is invalid\n",temp);
+				printf("%ls : Drive is invalid\n",temp);
 				break;
 
 			case 2: // Removable Drive
-				printf("%s : Removable Drive\n",temp);
+				printf("%ls : Removable Drive\n",temp);
 				DriveBox->addItem(temp);
 				break;
 
 			case 3: // Fixed
-				printf("%s : Hard Disk (Fixed)\n",temp);
+				printf("%ls : Hard Disk (Fixed)\n",temp);
 				DriveBox->addItem(temp);
 				break;
 
 			case 4: // Remote
-				printf("%s : Remote (Network) Drive\n",temp);
+				printf("%ls : Remote (Network) Drive\n",temp);
 				DriveBox->addItem(temp);
 				break;
 
 			case 5: // CDROM
-				printf("%s : CD-Rom/DVD-Rom\n",temp);
+				printf("%ls : CD-Rom/DVD-Rom\n",temp);
 				DriveBox->addItem(temp);
 				break;
 
 			case 6: // RamDrive
-				printf("%s : Ram Drive\n",temp);
+				printf("%ls : Ram Drive\n",temp);
 				DriveBox->addItem(temp);
 				break;
 

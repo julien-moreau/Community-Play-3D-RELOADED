@@ -201,6 +201,10 @@ bool CCP3DEditorCore::OnEvent(const SEvent &event) {
 void CCP3DEditorCore::createTestScene() {
 	ISceneManager *smgr = Device->getSceneManager();
 	IVideoDriver *driver = Device->getVideoDriver();
+
+	/// Load scene
+	smgr->loadScene("data/scene.babylon");
+
 	/// Create a test scene
 	IAnimatedMesh *planeMesh = smgr->addHillPlaneMesh("plane_mesh", dimension2d<f32>(100.f, 100.f), dimension2d<u32>(50, 50),
 													  0, 0.f, dimension2d<f32>(0.f, 0.f), dimension2d<f32>(50.f, 50.f));
