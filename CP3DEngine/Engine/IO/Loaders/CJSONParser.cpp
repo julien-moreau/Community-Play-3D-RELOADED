@@ -11,20 +11,9 @@ using namespace core;
 using namespace io;
 
 /// Ctor
-CJSONParser::CJSONParser(const stringc& fileContent)
-{
-	Tokenizer = new CTokenizer(fileContent);
-}
-
 CJSONParser::CJSONParser(IReadFile* fileToRead)
 {
-	stringc str;
-	c8 c;
-
-	while (fileToRead->read(&c, 1) != 0)
-		str += c;
-
-	Tokenizer = new CTokenizer(str);
+	Tokenizer = new CTokenizer(fileToRead);
 }
 
 /// Dtor
@@ -38,6 +27,7 @@ SJSONObjectTree* CJSONParser::parse(SJSONObjectTree* tree)
 {
 	// Init
 	stringc string;
+	stringc key;
 
 	if (!tree)
 		tree = new SJSONObjectTree();
@@ -50,6 +40,7 @@ SJSONObjectTree* CJSONParser::parse(SJSONObjectTree* tree)
 		// New object
 		if (Tokenizer->matchObjectDefinition())
 		{
+			printf("%s\n", key.c_str());
 			return parse(tree);
 		}
 		// End object
@@ -62,6 +53,8 @@ SJSONObjectTree* CJSONParser::parse(SJSONObjectTree* tree)
 		{
 			if (isKey)
 			{
+				key = string;
+
 				if (!Tokenizer->matchAssignation())
 					return 0;
 
@@ -98,6 +91,8 @@ SJSONObject* CJSONParser::parseValue()
 		return new SJSONObject(new stringc(identifier), identifier == "false" || identifier == "true" ? EJOT_BOOL : EJOT_NULL);
 	else if (Tokenizer->matchArrayDefinition())
 		return new SJSONObject(parseArray(), EJOT_ARRAY);
+	else if (Tokenizer->matchObjectDefinition())
+		return new SJSONObject(parse(), EJOT_OBJECT);
 
 	return 0;
 }

@@ -21,21 +21,23 @@ enum E_TOKEN_TYPE
 	ETT_BRACKET_CLOSE,
 
 	ETT_ASSIGN,
-	ETT_COMMA
+	ETT_COMMA,
+
+	ETT_END_OF_FILE
 };
 
 class CTokenizer
 {
 public:
 	/// ctor and dtor
-	CTokenizer(const irr::core::stringc& content);
+	CTokenizer(irr::io::IReadFile *file);
 	~CTokenizer();
 
 	//! Returns the next token type
 	E_TOKEN_TYPE getNextToken();
 
 	//! Matches the current token
-	bool match(E_TOKEN_TYPE token);
+	bool match(const E_TOKEN_TYPE& token);
 
 	//! Returns if the tokenizer matches an identifier
 	bool matchIdentifier(irr::core::stringc *identifier);
@@ -59,22 +61,23 @@ public:
 	bool matchComma();
 
 	//! Returns if the tokenizer is at the end of file's content
-	bool isEnd() { return Pos >= Content.size(); }
+	bool isEnd();
 
 	//! Reads the next char and returns its value
-	char& read() { return Content[Pos++]; }
+	char read();
 
 	//! Goes to the next char without returning its value
-	void forward() { Pos++; }
+	void forward();
 
 	//! Peeks the current char
-	char& peek() { return Content[Pos]; }
+	char peek();
 
 private:
 	/// Datas
-	irr::u32 Pos;
+	irr::c8 CurrentChar;
 
-	irr::core::stringc Content;
+	irr::io::IReadFile *File;
+
 	irr::core::stringc CurrentIdentifier;
 	irr::core::stringc CurrentString;
 	irr::core::stringc CurrentNumber;

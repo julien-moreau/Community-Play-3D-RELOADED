@@ -16,7 +16,6 @@ class CJSONParser
 public:
 	/// ctor and dtor
 	CJSONParser(irr::io::IReadFile* fileToRead);
-	CJSONParser(const irr::core::stringc& fileContent);
 
 	~CJSONParser();
 

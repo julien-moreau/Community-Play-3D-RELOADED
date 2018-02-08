@@ -39,7 +39,7 @@ bool CBabylonSceneFileLoader::loadScene(IReadFile* file, ISceneUserDataSerialize
 	CJSONParser *p = new CJSONParser(file);
 	SJSONObjectTree *object = p->parse();
 
-	f64 num = object->getNumber("number");
+	array<SJSONObject*> arr = object->getArray("string[]");
 
 	delete object;
 	

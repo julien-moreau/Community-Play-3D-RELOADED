@@ -81,6 +81,13 @@ public:
 		return n ? *(irr::core::stringc*) n->getValue()->Value : "";
 	}
 
+	//! Returns the given array identified by its key in the JSON file
+	irr::core::array<SJSONObject*> getArray(const irr::core::stringc& key)
+	{
+		JSONObjectKeysType::Node* n = Keys.find(key);
+		return n ? *(irr::core::array<SJSONObject*>*) n->getValue()->Value : irr::core::array<SJSONObject*>();
+	}
+
 	//! Returns the given object idenfified by its key in the JSON file
 	SJSONObjectTree* getObject(const irr::core::stringc& key)
 	{

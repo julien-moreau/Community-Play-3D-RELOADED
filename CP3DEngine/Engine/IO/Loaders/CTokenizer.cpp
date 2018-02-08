@@ -9,12 +9,13 @@ namespace engine {
 
 using namespace irr;
 using namespace core;
+using namespace io;
 
 //! Ctor
 //! \param filePath the path to the file to read
-CTokenizer::CTokenizer(const stringc& content) : Pos(0)
+CTokenizer::CTokenizer(IReadFile* file)
 {
-	Content = content;
+	File = file;
 	CurrentToken = getNextToken();
 }
 
@@ -22,8 +23,37 @@ CTokenizer::CTokenizer(const stringc& content) : Pos(0)
 CTokenizer::~CTokenizer()
 { }
 
+//! Peeks the current character
+char CTokenizer::peek()
+{
+	char c = read();
+	File->seek(File->getPos() - 1);
+	
+	return c;
+}
+
+//! Reads the character at current position
+char CTokenizer::read()
+{
+	c8 c;
+	File->read(&c, sizeof(c8));
+
+	return c;
+}
+
+void CTokenizer::forward()
+{
+	File->seek(File->getPos() + 1);
+}
+
+//! Returns if the tokenizer is at end
+bool CTokenizer::isEnd()
+{
+	return File->getPos() >= File->getSize();
+}
+
 //! Matches the current token
-bool CTokenizer::match(E_TOKEN_TYPE token)
+bool CTokenizer::match(const E_TOKEN_TYPE& token)
 {
 	if (CurrentToken == token)
 	{
@@ -131,13 +161,18 @@ bool CTokenizer::matchComma()
 //! Returns the next token type
 E_TOKEN_TYPE CTokenizer::getNextToken()
 {
+	// Check if not at end
 	if (isEnd())
-		return ETT_UNKNOWN;
+		return ETT_END_OF_FILE;
 
 	// Bypass new lines and spaces
 	char c = read();
 	while (c == ' ' || c == '\n' || c == '\r')
 		c = read();
+
+	// Check if not at end again
+	if (isEnd())
+		return ETT_END_OF_FILE;
 
 	// Switch first token's char
 	switch (c)
@@ -177,11 +212,11 @@ E_TOKEN_TYPE CTokenizer::getNextToken()
 			}
 
 			// Number
-			if (std::isdigit(c))
+			if (std::isdigit(c) || c == '-')
 			{
 				CurrentNumber = stringc(c);
 
-				while ((c = peek()) && (std::isdigit(c) || c == '.'))
+				while ((c = peek()) == '.' || std::isdigit(c) || c == 'e' || c == 'E' || c == '+')
 				{
 					CurrentNumber += c;
 					forward();
