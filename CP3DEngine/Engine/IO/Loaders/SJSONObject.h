@@ -18,6 +18,16 @@ enum E_JSON_OBJECT_TYPE
 	EJOT_ARRAY
 };
 
+//! JSON types
+struct SJSONObjectTree;
+struct SJSONObject;
+
+typedef irr::core::stringc JSONString;
+typedef irr::f64 JSONNumber;
+typedef irr::core::map<irr::core::stringc, SJSONObject*> JSONObjectKeysType;
+typedef irr::core::array<SJSONObject*> JSONArray;
+typedef SJSONObjectTree JSONObject;
+
 //! JSON Object structure
 struct SJSONObject
 {
@@ -34,9 +44,22 @@ public:
 		delete Value;
 	}
 
-	irr::f64 hasNumber()
+	//! Returns if the value is null
+	bool isNull()
+	{
+		return Type == EJOT_NULL;
+	}
+
+	//! Returns value as number
+	JSONNumber hasNumber()
 	{
 		return std::stod(((irr::core::stringc*) Value)->c_str());
+	}
+
+	//! Returns value as string
+	JSONString hasString()
+	{
+		return *(irr::core::stringc*) Value;
 	}
 
 	//! Object's value
@@ -45,13 +68,6 @@ public:
 	//! Object's type
 	E_JSON_OBJECT_TYPE Type;
 };
-
-//! JSON object key type
-struct SJSONObjectTree;
-
-typedef irr::core::map<irr::core::stringc, SJSONObject*> JSONObjectKeysType;
-typedef irr::core::array<SJSONObject*> JSONArray;
-typedef SJSONObjectTree JSONObject;
 
 //! JSON Object tree structure
 struct SJSONObjectTree

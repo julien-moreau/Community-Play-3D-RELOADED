@@ -144,7 +144,7 @@ void CBabylonSceneFileLoader::parseMeshes()
 					{
 						S3DVertex v;
 						v.Pos.set((f32)positions[vi * 3]->hasNumber(), (f32)positions[vi * 3 + 1]->hasNumber(), (f32)positions[vi * 3 + 2]->hasNumber());
-						v.Normal.set((f32)normals[vi * 3]->hasNumber(), (f32)normals[vi * 3 + 1]->hasNumber(), (f32)normals[vi * 3 + 2]->hasNumber()).invert();
+						v.Normal.set((f32)normals[vi * 3]->hasNumber(), (f32)normals[vi * 3 + 1]->hasNumber(), (f32)normals[vi * 3 + 2]->hasNumber());
 
 						if (hasUvs)
 							v.TCoords.set((f32)uvs[vi * 2]->hasNumber(), (f32)uvs[vi * 2 + 1]->hasNumber());
@@ -152,8 +152,12 @@ void CBabylonSceneFileLoader::parseMeshes()
 						meshBuffer->Vertices[vi] = v;
 					}
 
-					for (u32 vi = indexStart; vi < indexCount; vi++)
-						meshBuffer->Indices[vi] = (u16)indices[vi]->hasNumber();
+					for (u32 vi = indexStart; vi < indexCount; vi += 3)
+					{
+						meshBuffer->Indices[vi + 2] = (u16)indices[vi]->hasNumber();
+						meshBuffer->Indices[vi + 1] = (u16)indices[vi + 1]->hasNumber();
+						meshBuffer->Indices[vi] = (u16)indices[vi + 2]->hasNumber();
+					}
 
 					// Finalize sub mesh
 					meshBuffer->recalculateBoundingBox();
