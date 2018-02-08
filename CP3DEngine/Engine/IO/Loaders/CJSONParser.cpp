@@ -11,7 +11,7 @@ using namespace core;
 using namespace io;
 
 /// Ctor
-CJSONParser::CJSONParser(IReadFile* fileToRead)
+CJSONParser::CJSONParser(IReadFile* fileToRead, ILogger* logger) : Logger(logger)
 {
 	Tokenizer = new CTokenizer(fileToRead);
 }
@@ -23,25 +23,22 @@ CJSONParser::~CJSONParser()
 }
 
 //! Parses the JSON file
-SJSONObjectTree* CJSONParser::parse(SJSONObjectTree* tree)
+SJSONObjectTree* CJSONParser::parse()
 {
 	// Init
 	stringc string;
-	stringc key;
 
-	if (!tree)
-		tree = new SJSONObjectTree();
+	SJSONObjectTree* tree = new SJSONObjectTree();
 
 	bool isKey = true;
 
 	// Parse
 	while (!Tokenizer->isEnd())
 	{
-		// New object
+		// New object, usually first bracket
 		if (Tokenizer->matchObjectDefinition())
 		{
-			printf("%s\n", key.c_str());
-			return parse(tree);
+			return parse();
 		}
 		// End object
 		else if (Tokenizer->match(ETT_BRACKET_CLOSE))
@@ -53,8 +50,6 @@ SJSONObjectTree* CJSONParser::parse(SJSONObjectTree* tree)
 		{
 			if (isKey)
 			{
-				key = string;
-
 				if (!Tokenizer->matchAssignation())
 					return 0;
 

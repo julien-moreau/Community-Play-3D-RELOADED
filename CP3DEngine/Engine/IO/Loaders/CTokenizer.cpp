@@ -15,41 +15,44 @@ using namespace io;
 //! \param filePath the path to the file to read
 CTokenizer::CTokenizer(IReadFile* file)
 {
-	File = file;
+	// Read file
+	Content.reserve(file->getSize());
+
+	c8 c;
+	while (file->read(&c, sizeof(c8)) != 0)
+		Content += c;
+
+	// Get first token
 	CurrentToken = getNextToken();
 }
 
 //! Dtor
 CTokenizer::~CTokenizer()
-{ }
+{
+	Content.empty();
+}
 
 //! Peeks the current character
 char CTokenizer::peek()
 {
-	char c = read();
-	File->seek(File->getPos() - 1);
-	
-	return c;
+	return Content[Pos];
 }
 
 //! Reads the character at current position
 char CTokenizer::read()
 {
-	c8 c;
-	File->read(&c, sizeof(c8));
-
-	return c;
+	return Content[Pos++];
 }
 
 void CTokenizer::forward()
 {
-	File->seek(File->getPos() + 1);
+	Pos++;
 }
 
 //! Returns if the tokenizer is at end
 bool CTokenizer::isEnd()
 {
-	return File->getPos() >= File->getSize();
+	return Pos >= Content.size();
 }
 
 //! Matches the current token
@@ -189,7 +192,8 @@ E_TOKEN_TYPE CTokenizer::getNextToken()
 			// Identifier
 			if (c == '_' || std::isalpha(c))
 			{
-				CurrentIdentifier = stringc(c);
+				CurrentIdentifier = "";
+				CurrentIdentifier += c;
 				
 				while ((c = peek()) == '_' || std::isalpha(c) || std::isdigit(c))
 				{
@@ -214,7 +218,8 @@ E_TOKEN_TYPE CTokenizer::getNextToken()
 			// Number
 			if (std::isdigit(c) || c == '-')
 			{
-				CurrentNumber = stringc(c);
+				CurrentNumber = "";
+				CurrentNumber += c;
 
 				while ((c = peek()) == '.' || std::isdigit(c) || c == 'e' || c == 'E' || c == '+')
 				{

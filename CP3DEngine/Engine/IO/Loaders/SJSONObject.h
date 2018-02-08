@@ -34,6 +34,11 @@ public:
 		delete Value;
 	}
 
+	irr::f64 hasNumber()
+	{
+		return std::stod(((irr::core::stringc*) Value)->c_str());
+	}
+
 	//! Object's value
 	void* Value;
 
@@ -42,7 +47,11 @@ public:
 };
 
 //! JSON object key type
+struct SJSONObjectTree;
+
 typedef irr::core::map<irr::core::stringc, SJSONObject*> JSONObjectKeysType;
+typedef irr::core::array<SJSONObject*> JSONArray;
+typedef SJSONObjectTree JSONObject;
 
 //! JSON Object tree structure
 struct SJSONObjectTree
@@ -58,7 +67,27 @@ public:
 		JSONObjectKeysType::Iterator it = Keys.getIterator();
 		for (; !it.atEnd(); it++)
 		{
-			delete it.getNode()->getValue()->Value;
+			SJSONObject* object = it.getNode()->getValue();
+			
+			switch (object->Type)
+			{
+				// Array
+				case EJOT_ARRAY:
+				{
+					irr::core::array<SJSONObject*>& arr = *(irr::core::array<SJSONObject*>*) object->Value;
+					const irr::u32 size = arr.size();
+
+					for (irr::u32 i = 0; i < size; i++)
+						delete arr[i];
+
+				}
+				break;
+
+				// Nothing to do
+				default: break;
+			}
+
+			delete object;
 		}
 
 		Keys.clear();
@@ -66,6 +95,20 @@ public:
 
 	//! JSON object tree keys (key -> value)
 	JSONObjectKeysType Keys;
+
+	//! Returns the JSON object if exists. If not, returns 0
+	bool has(const irr::core::stringc& key)
+	{
+		JSONObjectKeysType::Node* n = Keys.find(key);
+		return n != 0;
+	}
+
+	//! Returns if the given key is null
+	bool isNull(const irr::core::stringc& key)
+	{
+		JSONObjectKeysType::Node* n = Keys.find(key);
+		return n ? n->getValue()->Type == EJOT_NULL : true;
+	}
 
 	//! Returns the given number idenfified by its key in the JSON file
 	irr::f64 getNumber(const irr::core::stringc& key)
@@ -81,11 +124,18 @@ public:
 		return n ? *(irr::core::stringc*) n->getValue()->Value : "";
 	}
 
+	//! Returns the given bool idenfified by its key in the JSON file
+	bool getBool(const irr::core::stringc& key)
+	{
+		JSONObjectKeysType::Node* n = Keys.find(key);
+		return n ? *(irr::core::stringc*) n->getValue()->Value == "true" : false;
+	}
+
 	//! Returns the given array identified by its key in the JSON file
 	irr::core::array<SJSONObject*> getArray(const irr::core::stringc& key)
 	{
 		JSONObjectKeysType::Node* n = Keys.find(key);
-		return n ? *(irr::core::array<SJSONObject*>*) n->getValue()->Value : irr::core::array<SJSONObject*>();
+		return n ? *(irr::core::array<SJSONObject*>*) n->getValue()->Value : 0;
 	}
 
 	//! Returns the given object idenfified by its key in the JSON file

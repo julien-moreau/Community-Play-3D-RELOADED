@@ -15,15 +15,16 @@ class CJSONParser
 {
 public:
 	/// ctor and dtor
-	CJSONParser(irr::io::IReadFile* fileToRead);
+	CJSONParser(irr::io::IReadFile* fileToRead, irr::ILogger* logger);
 
 	~CJSONParser();
 
 	//! Parses the JSON file
-	SJSONObjectTree* parse(SJSONObjectTree* tree = 0);
+	SJSONObjectTree* parse();
 
 private:
 	/// Datas
+	irr::ILogger* Logger;
 	CTokenizer* Tokenizer;
 
 	/// Methods

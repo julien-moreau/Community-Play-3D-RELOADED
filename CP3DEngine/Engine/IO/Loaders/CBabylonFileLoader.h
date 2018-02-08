@@ -3,6 +3,8 @@
 
 #include <irrlicht.h>
 
+#include "SJSONObject.h"
+
 namespace cp3d {
 namespace engine {
 
@@ -12,7 +14,7 @@ class CBabylonSceneFileLoader : public irr::scene::ISceneLoader
 public:
 
 	/// ctor and dtor
-	CBabylonSceneFileLoader(irr::scene::ISceneManager *smgr, irr::io::IFileSystem* fs);
+	CBabylonSceneFileLoader(irr::scene::ISceneManager *smgr, irr::io::IFileSystem* fs, irr::ILogger* logger);
 	virtual ~CBabylonSceneFileLoader();
 
 	//! returns true if the file maybe is able to be loaded by this class
@@ -29,6 +31,18 @@ private:
 	/// Datas
 	irr::scene::ISceneManager *Smgr;
 	irr::io::IFileSystem *FileSystem;
+	irr::ILogger* Logger;
+
+	SJSONObjectTree *Scene;
+
+	irr::core::map<irr::core::stringc, irr::video::SMaterial> Materials;
+
+	/// Methods
+	void parseMaterials();
+	void parseMeshes();
+
+	irr::video::SColorf getColor3(const JSONArray& arr);
+	irr::core::vector3df getVector3(const JSONArray& arr);
 };
 
 } /// end namespace cp3d

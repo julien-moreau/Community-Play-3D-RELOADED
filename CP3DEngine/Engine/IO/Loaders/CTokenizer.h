@@ -74,10 +74,9 @@ public:
 
 private:
 	/// Datas
-	irr::c8 CurrentChar;
+	irr::u32 Pos;
 
-	irr::io::IReadFile *File;
-
+	irr::core::stringc Content;
 	irr::core::stringc CurrentIdentifier;
 	irr::core::stringc CurrentString;
 	irr::core::stringc CurrentNumber;

@@ -85,7 +85,7 @@ CCP3DEngine::CCP3DEngine(IrrlichtDevice *device) : Device(device), DrawGUI(false
 	AnimatedMeshSceneNodeManipulator = new CCP3DAnimatedMeshSceneNodeManipulator(device->getSceneManager());
 
 	// Loaders
-	Rengine->getSceneManager()->addExternalSceneLoader(new CBabylonSceneFileLoader(Rengine->getSceneManager(), Device->getFileSystem()));
+	Rengine->getSceneManager()->addExternalSceneLoader(new CBabylonSceneFileLoader(Rengine->getSceneManager(), Device->getFileSystem(), Device->getLogger()));
 
 	// Finish
 	Gui = device->getGUIEnvironment();
