@@ -37,8 +37,8 @@ bool CBabylonSceneFileLoader::isALoadableFileFormat(IReadFile *file) const
 //! Loads the scene into the scene manager.
 bool CBabylonSceneFileLoader::loadScene(IReadFile* file, ISceneUserDataSerializer* userDataSerializer, ISceneNode* rootNode)
 {
-	CJSONParser *p = new CJSONParser(file, Logger);
-	Scene = p->parse();
+	CJSONParser p(file, Logger);
+	Scene = p.parse();
 
 	if (!Scene)
 		return false;
@@ -51,7 +51,6 @@ bool CBabylonSceneFileLoader::loadScene(IReadFile* file, ISceneUserDataSerialize
 	
 	// Clean & return
 	delete Scene;
-	delete p;
 
 	return true;
 }
@@ -143,20 +142,20 @@ void CBabylonSceneFileLoader::parseMeshes()
 					for (u32 vi = verticesStart; vi < verticesCount; vi++)
 					{
 						S3DVertex v;
-						v.Pos.set((f32)positions[vi * 3]->hasNumber(), (f32)positions[vi * 3 + 1]->hasNumber(), (f32)positions[vi * 3 + 2]->hasNumber());
-						v.Normal.set((f32)normals[vi * 3]->hasNumber(), (f32)normals[vi * 3 + 1]->hasNumber(), (f32)normals[vi * 3 + 2]->hasNumber());
+						v.Pos.set((f32)positions[vi * 3]->toNumber(), (f32)positions[vi * 3 + 1]->toNumber(), (f32)positions[vi * 3 + 2]->toNumber());
+						v.Normal.set((f32)normals[vi * 3]->toNumber(), (f32)normals[vi * 3 + 1]->toNumber(), (f32)normals[vi * 3 + 2]->toNumber());
 
 						if (hasUvs)
-							v.TCoords.set((f32)uvs[vi * 2]->hasNumber(), (f32)uvs[vi * 2 + 1]->hasNumber());
+							v.TCoords.set((f32)uvs[vi * 2]->toNumber(), (f32)uvs[vi * 2 + 1]->toNumber());
 
 						meshBuffer->Vertices[vi] = v;
 					}
 
 					for (u32 vi = indexStart; vi < indexCount; vi += 3)
 					{
-						meshBuffer->Indices[vi + 2] = (u16)indices[vi]->hasNumber();
-						meshBuffer->Indices[vi + 1] = (u16)indices[vi + 1]->hasNumber();
-						meshBuffer->Indices[vi] = (u16)indices[vi + 2]->hasNumber();
+						meshBuffer->Indices[vi + 2] = (u16)indices[vi]->toNumber();
+						meshBuffer->Indices[vi + 1] = (u16)indices[vi + 1]->toNumber();
+						meshBuffer->Indices[vi] = (u16)indices[vi + 2]->toNumber();
 					}
 
 					// Finalize sub mesh
@@ -194,9 +193,9 @@ void CBabylonSceneFileLoader::parseMeshes()
 vector3df CBabylonSceneFileLoader::getVector3(const JSONArray& arr)
 {
 	return vector3df(
-		(f32)arr[0]->hasNumber(),
-		(f32)arr[1]->hasNumber(),
-		(f32)arr[2]->hasNumber()
+		(f32)arr[0]->toNumber(),
+		(f32)arr[1]->toNumber(),
+		(f32)arr[2]->toNumber()
 	);
 }
 
@@ -204,9 +203,9 @@ vector3df CBabylonSceneFileLoader::getVector3(const JSONArray& arr)
 SColorf CBabylonSceneFileLoader::getColor3(const JSONArray& arr)
 {
 	return SColorf(
-		(f32) arr[0]->hasNumber(),
-		(f32) arr[1]->hasNumber(),
-		(f32) arr[2]->hasNumber()
+		(f32) arr[0]->toNumber(),
+		(f32) arr[1]->toNumber(),
+		(f32) arr[2]->toNumber()
 	);
 }
 

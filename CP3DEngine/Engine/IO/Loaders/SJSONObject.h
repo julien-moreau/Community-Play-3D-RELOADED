@@ -51,13 +51,13 @@ public:
 	}
 
 	//! Returns value as number
-	JSONNumber hasNumber()
+	JSONNumber toNumber()
 	{
 		return std::stod(((irr::core::stringc*) Value)->c_str());
 	}
 
 	//! Returns value as string
-	JSONString hasString()
+	JSONString toString()
 	{
 		return *(irr::core::stringc*) Value;
 	}
@@ -127,14 +127,14 @@ public:
 	}
 
 	//! Returns the given number idenfified by its key in the JSON file
-	irr::f64 getNumber(const irr::core::stringc& key)
+	JSONNumber getNumber(const irr::core::stringc& key)
 	{
 		JSONObjectKeysType::Node* n = Keys.find(key);
 		return n ? std::stod((*(irr::core::stringc*) n->getValue()->Value).c_str()) : 0.0;
 	}
 
 	//! Returns the given string idenfified by its key in the JSON file
-	irr::core::stringc getString(const irr::core::stringc& key)
+	JSONString getString(const irr::core::stringc& key)
 	{
 		JSONObjectKeysType::Node* n = Keys.find(key);
 		return n ? *(irr::core::stringc*) n->getValue()->Value : "";
@@ -148,14 +148,14 @@ public:
 	}
 
 	//! Returns the given array identified by its key in the JSON file
-	irr::core::array<SJSONObject*> getArray(const irr::core::stringc& key)
+	JSONArray getArray(const irr::core::stringc& key)
 	{
 		JSONObjectKeysType::Node* n = Keys.find(key);
 		return n ? *(irr::core::array<SJSONObject*>*) n->getValue()->Value : 0;
 	}
 
 	//! Returns the given object idenfified by its key in the JSON file
-	SJSONObjectTree* getObject(const irr::core::stringc& key)
+	JSONObject* getObject(const irr::core::stringc& key)
 	{
 		JSONObjectKeysType::Node* n = Keys.find(key);
 		return n ? (SJSONObjectTree*) n->getValue()->Value : 0;
